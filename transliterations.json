@@ -1,0 +1,75 @@
+{
+	"Scripts": {
+		"Arabic" : {
+		},
+		"Hebrew" : {
+		},
+		"Ethiopic" : {
+         	"IPA" : [
+				{ "name": "Amharic", "direction": "both", "path": "Amharic-IPA.xml" },
+				{ "name": "Ge'ez", "direction": "forward", "path": "Geez-IPA.xml" }
+			],
+			"Latin" : [
+		        {
+		        	"Amharic" : [
+ 						{ "name": "BGN", "direction": "forward", "path": "Amharic-Latin-BGN.xml" },
+						{ "name": "Hamburg", "direction": "forward", "path": "Amharic-Latin-Hamburg.xml" },
+						{ "name": "SERA", "direction": "both", "path": "Amharic-Latin-SERA.xml" } 
+					]
+				 },
+				{
+					"Tigrinya" : [
+						{ "name": "BGN", "direction": "forward", "path": "Tigrinya-Latin-BGN.xml" }
+					]
+				}
+    		]
+		},
+		"Georgian" : {
+			"Latin" : [
+				{ "name": "Latin", "direction": "both", "path": "Georgian-Latin.xml" } ,
+				{ "name": "BGN", "direction": "forward", "path": "Georgian-Latin-BGN.xml" } ,
+				{ "name": "BGN (1981)", "direction": "forward", "path": "Georgian-Latin-BGN_1981.xml" } 
+			]
+		},
+		"Greek" : {
+    		"Latin" : [
+    			{ "name": "Latin", "direction": "both", "path": "Georgian-Latin.xml" },
+    			{ "name": "BGN", "direction": "forward", "path": "Georgian-Latin-BGN.xml" },
+    			{ "name": "UNGEGN", "direction": "both", "path": "Georgian-Latin-UNGEGN.xml" }
+    		]
+ 		},
+ 		"In Script" : {
+ 			"Out Script 1" : [ 
+    			{ "name": "Variant", "direction": "both", "path": "InScript-OutScript1-Variant.xml" }
+ 			],
+ 			"Out Script 2" : [ 
+ 				{
+ 					"Variant 1" : [
+    					{ "name": "SubVariant 1", "direction": "both", "path": "InScript-OutScript2-Variant1-SubVariant1.xml" },
+    					{ "name": "SubVariant 2", "direction": "both", "path": "InScript-OutScript2-Variant1-SubVariant2.xml" }
+    				],
+ 		 	   		"Variant 2" : [
+    					{ "name": "SubVariant 1", "direction": "both", "path": "InScript-OutScript2-Variant2-SubVariant1.xml" }
+    				]
+    			}
+ 			],
+ 			"Out Script 3" : [ 
+    			{ "name": "Variant", "direction": "both", "path": "InScript-OutScript3-Variant.xml" }
+ 			]
+ 		},
+ 		"Out Script 2" : {
+ 		 	"In Script" : [
+ 		 		{
+ 		 	   		"Variant 2" : [
+    					{ "name": "SubVariant 2", "direction": "both", "path": "OutScript2-InScript-Variant2-SubVariant2.xml" }
+    				]
+    			}
+			]
+ 		},
+ 		"Out Script 3" : {
+ 		 	"In Script" : [
+    			{ "name": "Variant", "direction": "both", "path": "OutScript3-InScript-Variant.xml" }
+			]
+ 		}
+	}
+}
