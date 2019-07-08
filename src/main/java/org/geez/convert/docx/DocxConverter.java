@@ -50,7 +50,10 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import org.apache.commons.io.FilenameUtils;
 import org.controlsfx.control.StatusBar;
+import org.geez.convert.Converter;
+import org.geez.convert.text.ConvertText;
 import org.geez.transliterate.XliteratorConfig;
 
 import com.google.gson.JsonArray;
@@ -353,13 +356,19 @@ public final class DocxConverter extends Application {
     }
     
     
-    ConvertDocx converter = null;
+    Converter converter = null;
     private void processFile(File inputFile, Button convertButton, ListView<Label> listView, int listIndex) {
         try {
         	String inputFilePath = inputFile.getPath();
         	String outputFilePath = inputFilePath.replaceAll("\\.docx", "-" + scriptOut.replace( " ", "-" ) + ".docx");
+        	outputFilePath = inputFilePath.replaceAll("\\.txt", "-" + scriptOut.replace( " ", "-" ) + ".txt");
     		File outputFile = new File ( outputFilePath );
-
+    		
+    		String extension = FilenameUtils.getExtension( inputFilePath );
+    		if ( extension.equals( "txt") ) {
+    			converter = new ConvertText( inputFile, outputFile );
+    		}
+    		else {
     		/*
     		switch( systemIn ) {
 		   		case brana:
@@ -407,8 +416,9 @@ public final class DocxConverter extends Application {
 		    		return;
     		}
     		*/
-		
-    		converter.setFont( scriptOut );
+    			converter = new ConvertDocxGenericUnicodeFont(inputFile, outputFile );
+    			// ((ConvertDocxGenericUnicodeFont)converter).setFont( scriptOut );
+    		}
 
     		
     		// references:
@@ -546,7 +556,6 @@ public final class DocxConverter extends Application {
     	createOutVaraintsMenu( scriptOut );
 		convertButton.setDisable( true );
     }
-    
     private void setVariantOut(String variantOut) {
     	this.variantOut = variantOut;
     	variantOutText.setText( variantOut );
