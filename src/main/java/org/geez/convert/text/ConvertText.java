@@ -53,27 +53,15 @@ public class ConvertText extends Converter {
 
 
 	protected Transliterator translit1 = null;
-	protected Transliterator translit2 = null;
 	protected String fontName1 = null;
-	protected String fontName2 = null;
-	protected List<String> targetTypefaces = new  ArrayList<String>();
-	protected Map<String,Transliterator> fontToTransliteratorMap = new HashMap<String,Transliterator>();
-
-	public void initialize(
-		final String table1RulesFile,
-		final String fontName1,
-		final String fontName2)
-	{
+	void initialize( final String tableRulesFile, final String fontName1 ) {
 		try {
 			// specify the transliteration file in the first argument.
 			// read the input, transliterate, and write to output
-			String table1Text = readRules( table1RulesFile  );
+			String rulesText = readRules( tableRulesFile  );
 
-			translit1 = Transliterator.createFromRules( "Ethiopic-ExtendedLatin", table1Text.replace( '\ufeff', ' ' ), Transliterator.REVERSE );
+			translit1 = Transliterator.createFromRules( "Ethiopic-ExtendedLatin", rulesText.replace( '\ufeff', ' ' ), Transliterator.REVERSE );
 			this.fontName1 = fontName1;
-			
-			targetTypefaces.add( fontName1 );
-			fontToTransliteratorMap.put( fontName1, translit1 );
 
 		} catch ( Exception ex ) {
 			System.err.println( ex );
