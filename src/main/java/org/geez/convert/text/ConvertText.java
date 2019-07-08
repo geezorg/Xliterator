@@ -34,7 +34,7 @@ public class ConvertText extends Converter {
     	super( inputFile, outputFile );
     }
 	
-	public String readRules( String fileName ) throws IOException {
+	public String readRulesXML( String fileName ) throws IOException {
 		String line, segment, rules = "";
 
 		ClassLoader classLoader = this.getClass().getClassLoader();
@@ -52,16 +52,19 @@ public class ConvertText extends Converter {
 	}
 
 
-	protected Transliterator translit1 = null;
-	protected String fontName1 = null;
-	void initialize( final String tableRulesFile, final String fontName1 ) {
+	protected Transliterator translit = null;
+	void initialize( final String tableRulesFile, final String direction ) {
 		try {
-			// specify the transliteration file in the first argument.
-			// read the input, transliterate, and write to output
-			String rulesText = readRules( tableRulesFile  );
+			//TODO:  Update readRules to read ICU XML file
+			//
+			
+			String id = tableRulesFile; // remove the file extension
+			int icuDirection = ( direction.equals("both") ) ? Transliterator.FORWARD : Transliterator.REVERSE;
+			
+			
+			String rulesText = readRulesXML( tableRulesFile  );
 
-			translit1 = Transliterator.createFromRules( "Ethiopic-ExtendedLatin", rulesText.replace( '\ufeff', ' ' ), Transliterator.REVERSE );
-			this.fontName1 = fontName1;
+			translit = Transliterator.createFromRules( id, rulesText.replace( '\ufeff', ' ' ), icuDirection );
 
 		} catch ( Exception ex ) {
 			System.err.println( ex );

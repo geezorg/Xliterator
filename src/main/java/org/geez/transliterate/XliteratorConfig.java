@@ -78,7 +78,10 @@ public class XliteratorConfig {
         		//System.exit(1);
         	}
         }
-    	variants.add( variant );
+        JsonObject reverseVariant = variant.deepCopy();
+        reverseVariant.remove( "direction" );
+        reverseVariant.addProperty( "direction", "reverse" );
+    	variants.add( reverseVariant );
     }
     
     
@@ -91,6 +94,11 @@ public class XliteratorConfig {
     	if(! inScript.has( to ) ) {
     		inScript.add( to, new JsonArray() );
     	}
+    	
+        JsonObject reverseSubvariant = subvariant.deepCopy();
+        reverseSubvariant.remove( "direction" );
+        reverseSubvariant.addProperty( "direction", "reverse" );
+    	
     	
     	JsonArray variants = inScript.getAsJsonArray( to );
     	boolean subvariantAdded = false;
@@ -105,12 +113,12 @@ public class XliteratorConfig {
     		}
     			
     		JsonArray subvariants = variant.getAsJsonArray( subVariantKey );
-    		subvariants.add( subvariant );
+    		subvariants.add( reverseSubvariant );
     		subvariantAdded = true;
     	}
     	if( (variants.size() == 0) || (subvariantAdded == false) ) {
     		JsonArray subvariants = new JsonArray();
-    		subvariants.add( subvariant );
+    		subvariants.add( reverseSubvariant );
     		JsonObject oSubvariant = new JsonObject();
     		oSubvariant.add( subVariantKey, subvariants );
     		variants.add( oSubvariant );
