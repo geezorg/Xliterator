@@ -1,7 +1,17 @@
 package org.geez.convert.docx;
 
 import org.geez.convert.Converter;
+import org.w3c.dom.CharacterData;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.EntityResolver;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.docx4j.TraversalUtil;
 import org.docx4j.XmlUtils;
@@ -62,29 +75,10 @@ abstract class ConvertDocx extends Converter {
 	public void setFont(String fontOut) {
 		this.fontOut = fontOut;
 	}
-	
-	public String readRules( String fileName ) throws IOException {
-		String line, segment, rules = "";
-
-		ClassLoader classLoader = this.getClass().getClassLoader();
-		InputStream in = classLoader.getResourceAsStream( "tables/" + fileName ); 
-		BufferedReader ruleFile = new BufferedReader( new InputStreamReader(in, "UTF-8") );
-		while ( (line = ruleFile.readLine()) != null) {
-			if ( line.trim().equals("") || line.charAt(0) == '#' ) {
-				continue;
-			}
-			segment = line.replaceFirst ( "^(.*?)#(.*)$", "$1" );
-			rules += ( segment == null ) ? line : segment;
-		}
-		ruleFile.close();
-		return rules;
-	}
 
 
-	protected Transliterator translit1 = null;
-	protected Transliterator translit2 = null;
-	protected String fontName1 = null;
-	protected String fontName2 = null;
+	protected Transliterator translit = null;
+	protected String fontName = null;
 	protected List<String> targetTypefaces = new  ArrayList<String>();
 	protected Map<String,Transliterator> fontToTransliteratorMap = new HashMap<String,Transliterator>();
 
@@ -97,11 +91,11 @@ abstract class ConvertDocx extends Converter {
 			// read the input, transliterate, and write to output
 			String table1Text = readRules( table1RulesFile  );
 
-			translit1 = Transliterator.createFromRules( "Ethiopic-ExtendedLatin", table1Text.replace( '\ufeff', ' ' ), Transliterator.REVERSE );
-			this.fontName1 = fontName1;
+			translit = Transliterator.createFromRules( "Ethiopic-ExtendedLatin", table1Text.replace( '\ufeff', ' ' ), Transliterator.REVERSE );
+			this.fontName = fontName1;
 			
 			targetTypefaces.add( fontName1 );
-			fontToTransliteratorMap.put( fontName1, translit1 );
+			fontToTransliteratorMap.put( fontName, translit );
 
 		} catch ( Exception ex ) {
 			System.err.println( ex );
@@ -237,7 +231,7 @@ abstract class ConvertDocx extends Converter {
 								String out = convertText( text );
 								text.setValue( out );
 								rObjects.set(i, text);
-						}
+							}
 						}
 					}
 				}
@@ -256,6 +250,13 @@ abstract class ConvertDocx extends Converter {
 		
 		ustFinder.clearResults();
 		new TraversalUtil( part.getContents(), ustFinder );
+	}
+	
+	
+	private void selectFonts( MainDocumentPart documentPart ) {
+		for( String font: documentPart.fontsInUse() ) {
+			System.err.println( "Document Font: " + font);
+		}
 	}
 	
 	
@@ -279,6 +280,7 @@ abstract class ConvertDocx extends Converter {
     		UnstyledTextFinder ustf = new UnstyledTextFinder(targetTypefaces, fontOut);
     		
     		// see: https://stackoverflow.com/questions/34357005/javafx-task-update-progress-from-a-method
+    		selectFonts( documentPart );
 
 			normalizeText( documentPart, stf, ustf );
     		totalNodes = stf.results.size() + ustf.results.size();

@@ -14,9 +14,9 @@ import java.io.File;
 
 public class ConvertDocxGenericUnicodeFont extends ConvertDocx {
 
-	public ConvertDocxGenericUnicodeFont( final File inputFile, final File outputFile ) {
+	public ConvertDocxGenericUnicodeFont( final File inputFile, final File outputFile, String rulesFile ) {
 		super( inputFile, outputFile );
-		this.initialize( "bidirectional/BranaI.txt", "Brana II" );
+		this.initialize( rulesFile, "Brana II" );
 	}
 
 }

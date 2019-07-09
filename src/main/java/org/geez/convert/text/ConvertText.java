@@ -33,23 +33,7 @@ public class ConvertText extends Converter {
     public ConvertText( final File inputFile, final File outputFile ) {
     	super( inputFile, outputFile );
     }
-	
-	public String readRulesXML( String fileName ) throws IOException {
-		String line, segment, rules = "";
 
-		ClassLoader classLoader = this.getClass().getClassLoader();
-		InputStream in = classLoader.getResourceAsStream( "tables/" + fileName ); 
-		BufferedReader ruleFile = new BufferedReader( new InputStreamReader(in, "UTF-8") );
-		while ( (line = ruleFile.readLine()) != null) {
-			if ( line.trim().equals("") || line.charAt(0) == '#' ) {
-				continue;
-			}
-			segment = line.replaceFirst ( "^(.*?)#(.*)$", "$1" );
-			rules += ( segment == null ) ? line : segment;
-		}
-		ruleFile.close();
-		return rules;
-	}
 
 
 	protected Transliterator translit = null;

@@ -76,6 +76,7 @@ public final class Xliterator extends Application {
 	private Menu outVariantMenu = null;
 	private Menu outScriptMenu  = null;
 	private final Button convertButton = new Button("Convert");
+	private String selectedTransliteration = null;
 	
 	private XliteratorConfig config = new XliteratorConfig();
 	
@@ -147,8 +148,9 @@ public final class Xliterator extends Application {
     	    			String name = subvariant.get("name").getAsString();
     	        		RadioMenuItem menuItem = new RadioMenuItem( name );
     	        		menuItem.setToggleGroup( groupVariantOutMenu );
-    	        		menuItem.setOnAction( evt -> setVariantOut( subVariantKey + " - " + name ) );
-    	        		menuItem.setId( subvariant.get( "path" ).getAsString() );
+    	        		String transliterationID = subvariant.get( "path" ).getAsString();
+    	        		menuItem.setOnAction( evt -> { this.selectedTransliteration = transliterationID; setVariantOut( subVariantKey + " - " + name ); });
+    	        		menuItem.setId( transliterationID );
     	        		variantSubMenu.getItems().add( menuItem );
     		    	}
             		outVariantMenu.getItems().add( variantSubMenu );
@@ -158,7 +160,8 @@ public final class Xliterator extends Application {
     			String name = variant.get("name").getAsString();
         		RadioMenuItem menuItem = new RadioMenuItem( name );
         		menuItem.setToggleGroup( groupVariantOutMenu );
-        		menuItem.setOnAction( evt -> setVariantOut( name ) );
+        		String transliterationID = variant.get( "path" ).getAsString();
+        		menuItem.setOnAction( evt -> { this.selectedTransliteration = transliterationID; setVariantOut( name ); } );
         		menuItem.setId( variant.get( "path" ).getAsString() );
         		outVariantMenu.getItems().add( menuItem );
     		}
@@ -167,16 +170,13 @@ public final class Xliterator extends Application {
     		// a json parse error should have occurred, 
     	}
     	
-
-
-
     	return outVariantMenu;
     }
     
     
     @Override
     public void start(final Stage stage) {
-        stage.setTitle("Ethiopic Docx Font Converter");
+        stage.setTitle("Xliterator - An ICU Based Transliterator");
         Image logoImage = new Image( ClassLoader.getSystemResourceAsStream("images/geez-org-avatar.png") );
         stage.getIcons().add( logoImage );
         String osName = System.getProperty("os.name");
@@ -262,7 +262,7 @@ public final class Xliterator extends Application {
 			        link.setOnAction( (event) -> {
 	                    alert.close();
 	                    try {
-		                    URI uri = new URI( "https://github.com/geezorg/DocxConverter/" );
+		                    URI uri = new URI( "https://github.com/geezorg/Xliterator/" );
 		                    desktop.browse( uri );
 	                    }
 	                    catch(Exception ex) {
@@ -417,7 +417,7 @@ public final class Xliterator extends Application {
 		    		return;
     		}
     		*/
-    			converter = new ConvertDocxGenericUnicodeFont(inputFile, outputFile );
+    			converter = new ConvertDocxGenericUnicodeFont(inputFile, outputFile, selectedTransliteration );
     			// ((ConvertDocxGenericUnicodeFont)converter).setFont( scriptOut );
     		}
 
