@@ -35,10 +35,13 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
@@ -216,13 +219,21 @@ public final class Xliterator extends Application {
         if( osName.equals("Mac OS X") ) {
             com.apple.eawt.Application.getApplication().setDockIconImage( SwingFXUtils.fromFXImage(logoImage, null) );      
         }
+        
+        TabPane tabpane = new TabPane();
+        Tab textTab = new Tab( "Convert Text" );
+        Tab filesTab = new Tab( "Convert Files" );
+        Tab editTab = new Tab( "Edit Mapping");
+        tabpane.getTabs().addAll( textTab, filesTab, editTab );
 
         Menu  inScriptMenu =  createInScriptsMenu( stage );
         outScriptMenu = new Menu( "Script _Out" );
         outVariantMenu = new Menu( "_Variant" );
 
 
-
+        final Menu fileMenu = new Menu("_File"); 
+        final FileChooser fileChooser = new FileChooser();
+        
         ListView<Label> listView = new ListView<Label>();
         listView.setEditable(false);
         listView.setPrefHeight( 125 ); // 205 for screenshots
@@ -230,20 +241,9 @@ public final class Xliterator extends Application {
         ObservableList<Label> data = FXCollections.observableArrayList();
         VBox listVBox = new VBox( listView );
         listView.autosize();
-        
-        
-        convertButton.setDisable( true );
-        convertButton.setOnAction( event -> {
-        	convertButton.setDisable( true );
-        	convertFiles( convertButton, listView ); 
-        });
-
-        final Menu fileMenu = new Menu("_File"); 
-        final FileChooser fileChooser = new FileChooser();
-        
         // create menu items 
-        final MenuItem fileMenuItem1 = new MenuItem( "Select Files..." ); 
-        fileMenuItem1.setOnAction(
+        final MenuItem fileMenuItem = new MenuItem( "Select Files..." ); 
+        fileMenuItem.setOnAction(
             new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(final ActionEvent e) {
@@ -267,12 +267,18 @@ public final class Xliterator extends Application {
                 }
             }
         );
-        fileMenu.getItems().add( fileMenuItem1 ); 
-        fileMenu.getItems().add( new SeparatorMenuItem() );
+        fileMenuItem.setDisable( true );
+        
+        MenuItem saveMenuItem = new MenuItem( "Save" );
+        saveMenuItem.setDisable( true );
+        MenuItem saveAsMenuItem = new MenuItem( "Save As..." );
+        saveAsMenuItem.setDisable( true );
+
+       //  fileMenu.getItems().add( new SeparatorMenuItem() );
         
         MenuItem exitMenuItem = new MenuItem("Exit");
         exitMenuItem.setOnAction(actionEvent -> Platform.exit());
-        fileMenu.getItems().add( exitMenuItem ); 
+        fileMenu.getItems().addAll( fileMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), exitMenuItem ); 
         
         
         final Menu helpMenu = new Menu( "Help" );
@@ -315,7 +321,13 @@ public final class Xliterator extends Application {
   
         // add menu to menubar 
         leftBar.getMenus().addAll( fileMenu, inScriptMenu, outScriptMenu , outVariantMenu);
-
+        
+        
+        convertButton.setDisable( true );
+        convertButton.setOnAction( event -> {
+        	convertButton.setDisable( true );
+        	convertFiles( convertButton, listView ); 
+        });
         
         CheckBox openFilesCheckbox = new CheckBox( "Open file(s) after conversion?");
         openFilesCheckbox.selectedProperty().addListener(new ChangeListener<Boolean>() {
@@ -332,36 +344,76 @@ public final class Xliterator extends Application {
         hbottomBox.setPadding(new Insets(4, 0, 4, 0));
         hbottomBox.setAlignment( Pos.CENTER_LEFT );
 
-        
+        VBox filesVbox = new VBox( listVBox, hbottomBox );
+        filesTab.setContent( filesVbox );
         
         TextArea textAreaIn = new TextArea();
         TextArea textAreaOut = new TextArea();
         textAreaIn.setPrefHeight(300);
         textAreaOut.setPrefHeight(300);
         
-        Button convertButtonDown = new Button( "⬇" );
-        convertButtonDown.setStyle( "-fx-font-size: 24;");
+        ClassLoader classLoader = this.getClass().getClassLoader();
+        
+        Button convertButtonDown = new Button(); // ( "⬇" );
+        Image imageDown = new Image(classLoader.getResourceAsStream("images/arrow-circle-down.png"));
+        ImageView imageViewDown = new ImageView( imageDown );
+        imageViewDown.setFitHeight( 24 );
+        imageViewDown.setFitWidth( 24 );
+        convertButtonDown.setGraphic( imageViewDown );
+
+        // convertButtonDown.setStyle( "-fx-font-size: 24;");
         convertButtonDown.setDisable( true );
         convertButtonDown.setOnAction( event -> {
         	convertTextArea( textAreaIn, textAreaOut ); 
         });
-        Button convertButtonUp = new Button( "⬆" );
-        convertButtonUp.setStyle( "-fx-font-size: 24;");
-        convertButtonDown.setDisable( true );
-        convertButtonDown.setOnAction( event -> {
+        Button convertButtonUp = new Button(); // ( "⬆" );
+        Image imageUp = new Image(classLoader.getResourceAsStream("images/arrow-circle-up.png"));
+        ImageView imageViewUp = new ImageView( imageUp );
+        imageViewUp.setFitHeight( 24 );
+        imageViewUp.setFitWidth( 24 );
+        convertButtonUp.setGraphic( imageViewUp );
+        // convertButtonUp.setStyle( "-fx-font-size: 24;");
+        convertButtonUp.setDisable( true );
+        convertButtonUp.setOnAction( event -> {
         	convertTextArea( textAreaOut, textAreaIn ); 
         });
-        HBox hUpDownButtonBox = new HBox( convertButtonDown, convertButtonUp );
+        
+        HBox hUpDownButtonBox = new HBox( convertButtonUp, convertButtonDown );
         hUpDownButtonBox.setAlignment(Pos.CENTER);
         hUpDownButtonBox.setSpacing( 20 );
         
+        VBox textVbox = new VBox( textAreaIn, hUpDownButtonBox, textAreaOut );
+        textTab.setContent( textVbox );
+        // VBox vbottomBox = new VBox( hbottomBox, statusBar,  textAreaIn, hUpDownButtonBox, textAreaOut );
         
-        VBox vbottomBox = new VBox( hbottomBox, statusBar,  textAreaIn, hUpDownButtonBox, textAreaOut );
-
+        textTab.setOnSelectionChanged( evt -> {
+        	if( textTab.isSelected() ) {
+        		fileMenuItem.setDisable( true );
+        		saveMenuItem.setDisable( true );
+        		saveAsMenuItem.setDisable( true );
+        	}
+        } );
+        filesTab.setOnSelectionChanged( evt -> {
+        	if( filesTab.isSelected() ) {
+        		fileMenuItem.setDisable( false );
+        		saveMenuItem.setDisable( false );
+        		saveAsMenuItem.setDisable( false );
+        	}
+        } );
+        editTab.setOnSelectionChanged( evt -> {
+        	if( editTab.isSelected() ) {
+        		fileMenuItem.setDisable( false );
+        		saveMenuItem.setDisable( false );
+        		saveAsMenuItem.setDisable( false );
+        	}
+        } );
+        
+        
+        
+        
         statusBar.setText( "" );
         updateStatusMessage();
-
-        
+     
         MenuBar rightBar = new MenuBar();
         rightBar.getMenus().addAll( helpMenu );
         Region spacer = new Region();
@@ -369,10 +421,12 @@ public final class Xliterator extends Application {
         HBox.setHgrow(spacer, Priority.SOMETIMES);
         HBox menubars = new HBox(leftBar, spacer, rightBar);
  
-        final BorderPane rootGroup =new BorderPane();
+        final BorderPane rootGroup = new BorderPane();
         rootGroup.setTop( menubars );
-        rootGroup.setCenter( listVBox );
-        rootGroup.setBottom( vbottomBox );
+        // rootGroup.setCenter( listVBox );
+        // rootGroup.setBottom( vbottomBox );
+        rootGroup.setCenter( tabpane );
+        rootGroup.setBottom( statusBar );
         rootGroup.setPadding( new Insets(8, 8, 8, 8) );
  
         stage.setScene(new Scene(rootGroup, 500, 800) ); 
