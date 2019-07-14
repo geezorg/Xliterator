@@ -16,7 +16,7 @@ public class ConvertDocxGenericUnicodeFont extends ConvertDocx {
 
 	public ConvertDocxGenericUnicodeFont( final File inputFile, final File outputFile, String rulesFile ) {
 		super( inputFile, outputFile );
-		this.initialize( rulesFile, "Brana II" );
+		this.initialize( rulesFile, "Abyssinica SIL" );
 	}
 
 }

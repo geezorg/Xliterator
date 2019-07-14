@@ -27,28 +27,25 @@ import javafx.beans.property.ReadOnlyDoubleWrapper;
 
 
 public class ConvertText extends Converter {
-	protected Transliterator t = null;
 
-    
-    public ConvertText( final File inputFile, final File outputFile ) {
+    public ConvertText( final File inputFile, final File outputFile,  String rulesFile, String direction ) {
     	super( inputFile, outputFile );
+		this.initialize( rulesFile, direction );
     }
 
 
-
-	protected Transliterator translit = null;
 	void initialize( final String tableRulesFile, final String direction ) {
 		try {
 			//TODO:  Update readRules to read ICU XML file
 			//
 			
 			String id = tableRulesFile; // remove the file extension
-			int icuDirection = ( direction.equals("both") ) ? Transliterator.FORWARD : Transliterator.REVERSE;
+			int icuDirection = ( direction.equals("both") || direction.equals("forward") )? Transliterator.FORWARD : Transliterator.REVERSE;
 			
 			
-			String rulesText = readRulesXML( tableRulesFile  );
+			String rulesText = readRules( tableRulesFile );
 
-			translit = Transliterator.createFromRules( id, rulesText.replace( '\ufeff', ' ' ), icuDirection );
+			t = Transliterator.createFromRules( id, rulesText.replace( '\ufeff', ' ' ), icuDirection );
 
 		} catch ( Exception ex ) {
 			System.err.println( ex );
@@ -81,7 +78,7 @@ public class ConvertText extends Converter {
 
 			// read lines of input file, write to output file
 			BufferedReader in = new BufferedReader(
-					   new InputStreamReader(new FileInputStream(inputFile), "UTF8")
+					new InputStreamReader(new FileInputStream(inputFile), "UTF8")
 			);
 			Writer out = new BufferedWriter(
 					new OutputStreamWriter( new FileOutputStream(outputFile), "UTF8" )
@@ -90,7 +87,7 @@ public class ConvertText extends Converter {
 			String line, converted;
     		while ((line = in.readLine()) != null) {
         		converted = convertText( line );
-        		out.append( converted );
+        		out.append( converted + "\n" );
     		}
     		        
             in.close();
@@ -105,69 +102,5 @@ public class ConvertText extends Converter {
 			System.err.println( ex );
 		}
 	}
-	
 
-	public static void main( String[] args ) {
-		if( args.length != 3 ) {
-			System.err.println( "Exactly 3 arguements are expected: <system> <input file> <output file>" );
-			System.exit(0);
-		}
-
-		String systemIn = args[0];
-		String inputFilepath  = System.getProperty("user.dir") + "/" + args[1];
-		String outputFilepath = System.getProperty("user.dir") + "/" + args[2];
-		File inputFile = new File ( inputFilepath );
-		File outputFile = new File ( outputFilepath );
-
-
-	    ConvertText converter = null;
-	    /*
-		switch( systemIn ) {
-			case "brana":
-				converter = new ConvertDocxBrana( inputFile, outputFile );
-				break;
-					
-			case "geezii":
-				converter = new ConvertDocxFeedelGeezII( inputFile, outputFile );
-				break;				
-    			
-		   	case "geezigna":
-	    		converter = new ConvertDocxFeedelGeezigna( inputFile, outputFile );
-	    		break;
-	
-		   	case "geezbasic":
-	    		converter = new ConvertDocxGeezBasic( inputFile, outputFile );
-	    		break; 
-		
-			case "geeznewab":
-				converter = new ConvertDocxFeedelGeezNewAB( inputFile, outputFile );
-				break;
-
-			case "geeztypenet":
-				converter = new ConvertDocxGeezTypeNet( inputFile, outputFile );
-				break;
-
-			case "powergeez":
-				converter = new ConvertDocxPowerGeez( inputFile, outputFile );
-				break;
-				
-			case "samawerfa":
-				converter = new ConvertDocxSamawerfa( inputFile, outputFile );
-				break;
-
-			case "visualgeez":
-				converter = new ConvertDocxVisualGeez( inputFile, outputFile );
-				break;
-				
-			case "visualgeez2000":
-				converter = new ConvertDocxVisualGeez2000( inputFile, outputFile );
-				break;
-		
-			default:
-				System.err.println( "Unrecognized input system: " + systemIn );
-				System.exit(1);
-		}
-		*/
-		converter.process( inputFile, outputFile );
-	}
 }

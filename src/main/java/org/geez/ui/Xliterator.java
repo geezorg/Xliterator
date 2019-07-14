@@ -71,12 +71,14 @@ public final class Xliterator extends Application {
 	private String variantOut = null;
 	private boolean openOutput = true;
 	private List<File> inputList = null;
+	private File icuFile = null;
 	protected StatusBar statusBar = new StatusBar();
 	private boolean converted = false;
 	private Menu outVariantMenu = null;
 	private Menu outScriptMenu  = null;
 	private final Button convertButton = new Button("Convert");
 	private String selectedTransliteration = null;
+	private String transliterationDirection = null;
 	
 	private XliteratorConfig config = new XliteratorConfig();
 	
@@ -86,17 +88,27 @@ public final class Xliterator extends Application {
         		new File( System.getProperty("user.home") )
         );                 
         fileChooser.getExtensionFilters().add(
-        		new FileChooser.ExtensionFilter("*.docx", "*.docx")
-        );
-        fileChooser.getExtensionFilters().add(
-        		new FileChooser.ExtensionFilter("*.txt", "*.txt")
+        		new FileChooser.ExtensionFilter("*.docx; *.txt", "*.docx", "*.txt")
         );
     }
     
-    private Menu createInScriptsMenu() {
+	
+    private static void configureFileChooserICU( final FileChooser fileChooser ) {      
+    	fileChooser.setTitle("View Word Files");
+        fileChooser.setInitialDirectory(
+        		new File( System.getProperty("user.home") )
+        );                 
+        fileChooser.getExtensionFilters().add(
+        		new FileChooser.ExtensionFilter("*.xml", "*.xml")
+        );
+    }
+    
+    
+    private Menu createInScriptsMenu(final Stage stage) {
     	Menu menu = new Menu( "Script _In" );
         ToggleGroup groupInMenu = new ToggleGroup();
         
+        // Create menu from the scripts in the configuration file:
     	List<String> scripts = config.getInScripts();
     	for(String script: scripts) {
     		RadioMenuItem menuItem = new RadioMenuItem( script );
@@ -104,6 +116,24 @@ public final class Xliterator extends Application {
     		menuItem.setOnAction( evt -> setScriptIn( script ) );
     		menu.getItems().add( menuItem );
     	}
+    	
+    	// Add transliteration file selection option:
+    	menu.getItems().add( new SeparatorMenuItem() );
+		RadioMenuItem fileMenuItem = new RadioMenuItem( "Select File..." );
+		fileMenuItem.setToggleGroup( groupInMenu );
+        fileMenuItem.setOnAction(
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(final ActionEvent e) {
+                        final FileChooser fileChooser = new FileChooser();
+                    	configureFileChooserICU(fileChooser);    
+                        icuFile = fileChooser.showOpenDialog( stage );
+                    }
+                }
+            );
+            menu.getItems().add( fileMenuItem ); 
+            
+		
     	return menu;
     }
     
@@ -149,7 +179,8 @@ public final class Xliterator extends Application {
     	        		RadioMenuItem menuItem = new RadioMenuItem( name );
     	        		menuItem.setToggleGroup( groupVariantOutMenu );
     	        		String transliterationID = subvariant.get( "path" ).getAsString();
-    	        		menuItem.setOnAction( evt -> { this.selectedTransliteration = transliterationID; setVariantOut( subVariantKey + " - " + name ); });
+    	        		String direction = subvariant.get( "direction" ).getAsString();
+    	        		menuItem.setOnAction( evt -> { this.selectedTransliteration = transliterationID; this.transliterationDirection = direction; setVariantOut( subVariantKey + " - " + name ); });
     	        		menuItem.setId( transliterationID );
     	        		variantSubMenu.getItems().add( menuItem );
     		    	}
@@ -161,8 +192,9 @@ public final class Xliterator extends Application {
         		RadioMenuItem menuItem = new RadioMenuItem( name );
         		menuItem.setToggleGroup( groupVariantOutMenu );
         		String transliterationID = variant.get( "path" ).getAsString();
-        		menuItem.setOnAction( evt -> { this.selectedTransliteration = transliterationID; setVariantOut( name ); } );
-        		menuItem.setId( variant.get( "path" ).getAsString() );
+        		String direction = variant.get( "direction" ).getAsString();
+        		menuItem.setOnAction( evt -> { this.selectedTransliteration = transliterationID; this.transliterationDirection = direction; setVariantOut( name ); } );
+        		menuItem.setId( transliterationID );
         		outVariantMenu.getItems().add( menuItem );
     		}
     	}
@@ -184,7 +216,7 @@ public final class Xliterator extends Application {
             com.apple.eawt.Application.getApplication().setDockIconImage( SwingFXUtils.fromFXImage(logoImage, null) );      
         }
 
-        Menu  inScriptMenu =  createInScriptsMenu();
+        Menu  inScriptMenu =  createInScriptsMenu( stage );
         outScriptMenu = new Menu( "Script _Out" );
         outVariantMenu = new Menu( "_Variant" );
 
@@ -367,7 +399,7 @@ public final class Xliterator extends Application {
     		
     		String extension = FilenameUtils.getExtension( inputFilePath );
     		if ( extension.equals( "txt") ) {
-    			converter = new ConvertText( inputFile, outputFile );
+    			converter = new ConvertText( inputFile, outputFile, selectedTransliteration, transliterationDirection );
     		}
     		else {
     		/*
