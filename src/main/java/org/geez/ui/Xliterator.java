@@ -35,6 +35,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
@@ -88,7 +89,7 @@ public final class Xliterator extends Application {
         		new File( System.getProperty("user.home") )
         );                 
         fileChooser.getExtensionFilters().add(
-        		new FileChooser.ExtensionFilter("*.docx; *.txt", "*.docx", "*.txt")
+        		new FileChooser.ExtensionFilter("*.docx & *.txt", "*.docx", "*.txt")
         );
     }
     
@@ -330,7 +331,32 @@ public final class Xliterator extends Application {
         HBox hbottomBox = new HBox( openFilesCheckbox, bottomSpacer, convertButton );
         hbottomBox.setPadding(new Insets(4, 0, 4, 0));
         hbottomBox.setAlignment( Pos.CENTER_LEFT );
-        VBox vbottomBox = new VBox( hbottomBox, statusBar );
+
+        
+        
+        TextArea textAreaIn = new TextArea();
+        TextArea textAreaOut = new TextArea();
+        textAreaIn.setPrefHeight(300);
+        textAreaOut.setPrefHeight(300);
+        
+        Button convertButtonDown = new Button( "⬇" );
+        convertButtonDown.setStyle( "-fx-font-size: 24;");
+        convertButtonDown.setDisable( true );
+        convertButtonDown.setOnAction( event -> {
+        	convertTextArea( textAreaIn, textAreaOut ); 
+        });
+        Button convertButtonUp = new Button( "⬆" );
+        convertButtonUp.setStyle( "-fx-font-size: 24;");
+        convertButtonDown.setDisable( true );
+        convertButtonDown.setOnAction( event -> {
+        	convertTextArea( textAreaOut, textAreaIn ); 
+        });
+        HBox hUpDownButtonBox = new HBox( convertButtonDown, convertButtonUp );
+        hUpDownButtonBox.setAlignment(Pos.CENTER);
+        hUpDownButtonBox.setSpacing( 20 );
+        
+        
+        VBox vbottomBox = new VBox( hbottomBox, statusBar,  textAreaIn, hUpDownButtonBox, textAreaOut );
 
         statusBar.setText( "" );
         updateStatusMessage();
@@ -342,7 +368,6 @@ public final class Xliterator extends Application {
         spacer.getStyleClass().add("menu-bar");
         HBox.setHgrow(spacer, Priority.SOMETIMES);
         HBox menubars = new HBox(leftBar, spacer, rightBar);
-        
  
         final BorderPane rootGroup =new BorderPane();
         rootGroup.setTop( menubars );
@@ -350,7 +375,7 @@ public final class Xliterator extends Application {
         rootGroup.setBottom( vbottomBox );
         rootGroup.setPadding( new Insets(8, 8, 8, 8) );
  
-        stage.setScene(new Scene(rootGroup, 420, 220) ); // 305 for screenshots
+        stage.setScene(new Scene(rootGroup, 500, 800) ); 
         stage.show();
     }
  
@@ -386,6 +411,10 @@ public final class Xliterator extends Application {
              }
             converted = true;
          } 
+    }
+    
+    private void convertTextArea(TextArea textAreaIn, TextArea textAreaOut) {
+    
     }
     
     
