@@ -12,6 +12,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -20,6 +21,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.EntityResolver;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+
+import com.ibm.icu.text.Transliterator;
 
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
@@ -31,9 +34,10 @@ public class Converter  implements Callable<Void> {
     protected final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
 
     protected File inputFile = null, outputFile = null;
+	protected Transliterator t = null;
     
-    DocumentBuilder builder = null; 
-    public void init() {
+    protected static DocumentBuilder builder = null; 
+    {
     	try {
     		builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
     	
@@ -88,14 +92,23 @@ public class Converter  implements Callable<Void> {
 		return rules;	
 	}
 	
-	public String readRules( String rulesFileTXT ) throws IOException {
+	public String readRules( String rulesFile ) throws IOException, SAXException {
+		if( FilenameUtils.getExtension( rulesFile ).equals( "xml" ) ) {
+			return readRulesXML( rulesFile );
+		}
+		else {
+			return readRulesText( rulesFile );
+		}
+	}
+	
+	public String readRulesText( String rulesFileTXT ) throws IOException {
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		InputStream in = classLoader.getResourceAsStream( "tables/" + rulesFileTXT ); 
-		return readRulesFromStream( in );
+		return readRulesFromStream( in );	
 	}
 	
 	
-	public String readRulesXML(String rulesFileXML ) throws Exception {		
+	public String readRulesXML(String rulesFileXML ) throws IOException, SAXException {		
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		if(! rulesFileXML.contains( "/" ) ) {
 			// this is a week test for a path hierarchy, we assume some path for a user defined file
