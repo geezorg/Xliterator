@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -49,6 +50,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
@@ -58,7 +61,8 @@ import org.apache.commons.io.FilenameUtils;
 import org.controlsfx.control.StatusBar;
 import org.geez.convert.Converter;
 import org.geez.convert.docx.ConvertDocxGenericUnicodeFont;
-import org.geez.convert.text.ConvertText;
+import org.geez.convert.text.ConvertTextFile;
+import org.geez.convert.text.ConvertTextString;
 import org.geez.transliterate.XliteratorConfig;
 
 import com.google.gson.JsonArray;
@@ -81,6 +85,7 @@ public final class Xliterator extends Application {
 	private Menu outVariantMenu = null;
 	private Menu outScriptMenu  = null;
 	private final Button convertButton = new Button("Convert");
+	private final Button convertButtonDown = new Button(); // ( "⬇" );
 	private String selectedTransliteration = null;
 	private String transliterationDirection = null;
 	
@@ -221,13 +226,13 @@ public final class Xliterator extends Application {
         }
         
         TabPane tabpane = new TabPane();
-        Tab textTab = new Tab( "Convert Text" );
-        Tab filesTab = new Tab( "Convert Files" );
-        Tab editTab = new Tab( "Edit Mapping");
+        Tab    textTab  = new Tab( "Convert Text" );
+        Tab    filesTab = new Tab( "Convert Files" );
+        Tab    editTab  = new Tab( "Edit Mapping");  // follow: https://tomsondev.bestsolution.at/2015/02/13/how-to-create-an-editor-with-syntax-highlighting-for-java/
         tabpane.getTabs().addAll( textTab, filesTab, editTab );
 
         Menu  inScriptMenu =  createInScriptsMenu( stage );
-        outScriptMenu = new Menu( "Script _Out" );
+        outScriptMenu  = new Menu( "Script _Out" );
         outVariantMenu = new Menu( "_Variant" );
 
 
@@ -322,7 +327,7 @@ public final class Xliterator extends Application {
         // add menu to menubar 
         leftBar.getMenus().addAll( fileMenu, inScriptMenu, outScriptMenu , outVariantMenu);
         
-        
+        //=========================== BEGIN FILES TAB =============================================
         convertButton.setDisable( true );
         convertButton.setOnAction( event -> {
         	convertButton.setDisable( true );
@@ -346,15 +351,19 @@ public final class Xliterator extends Application {
 
         VBox filesVbox = new VBox( listVBox, hbottomBox );
         filesTab.setContent( filesVbox );
+        //=========================== END FILES TAB =============================================
         
+        //=========================== BEGIN TEXT TAB ============================================
         TextArea textAreaIn = new TextArea();
         TextArea textAreaOut = new TextArea();
         textAreaIn.setPrefHeight(300);
         textAreaOut.setPrefHeight(300);
+        if( osName.equals("Mac OS X") ) {
+        	textAreaIn.setFont( Font.font("Kefa", FontWeight.NORMAL, 12) );
+        }
         
         ClassLoader classLoader = this.getClass().getClassLoader();
         
-        Button convertButtonDown = new Button(); // ( "⬇" );
         Image imageDown = new Image(classLoader.getResourceAsStream("images/arrow-circle-down.png"));
         ImageView imageViewDown = new ImageView( imageDown );
         imageViewDown.setFitHeight( 24 );
@@ -378,12 +387,15 @@ public final class Xliterator extends Application {
         	convertTextArea( textAreaOut, textAreaIn ); 
         });
         
+
         HBox hUpDownButtonBox = new HBox( convertButtonUp, convertButtonDown );
         hUpDownButtonBox.setAlignment(Pos.CENTER);
         hUpDownButtonBox.setSpacing( 20 );
         
         VBox textVbox = new VBox( textAreaIn, hUpDownButtonBox, textAreaOut );
         textTab.setContent( textVbox );
+        //=========================== END TEXT TAB ==============================================
+
         // VBox vbottomBox = new VBox( hbottomBox, statusBar,  textAreaIn, hUpDownButtonBox, textAreaOut );
         
         textTab.setOnSelectionChanged( evt -> {
@@ -438,7 +450,6 @@ public final class Xliterator extends Application {
     }
  
     private void convertFiles(Button convertButton, ListView<Label> listView) {
-    	
         if ( inputList != null ) {
         	if( converted ) {
         		// this is a re-run, reset file names;
@@ -467,8 +478,45 @@ public final class Xliterator extends Application {
          } 
     }
     
+    HashMap<String,ConvertTextString> textStringConverts = new HashMap<String,ConvertTextString>();
     private void convertTextArea(TextArea textAreaIn, TextArea textAreaOut) {
-    
+    	String textIn = textAreaIn.getText();
+    	if( textIn == null )
+    		return;
+
+    	if(! textStringConverts.containsKey( selectedTransliteration ) ) {
+    		textStringConverts.put( selectedTransliteration, new ConvertTextString( selectedTransliteration, transliterationDirection ) );
+    	}
+    	
+    	converter = textStringConverts.get( selectedTransliteration );
+    	((ConvertTextString)converter).setText( textIn );
+    	
+    	textAreaOut.clear();
+    	
+        Task<Void> task = new Task<Void>() {
+            @Override protected Void call() throws Exception {
+            	
+            	updateProgress(0.0,1.0);
+            	converter.progressProperty().addListener( 
+            		(obs, oldProgress, newProgress) -> updateProgress( newProgress.doubleValue(), 1.0 )
+            	);
+            	// updateMessage("[" +  (listIndex+1) + "/" + listView.getItems().size() + "]" );
+            	converter.call();
+            	updateProgress(1.0, 1.0);
+
+				done();
+        		return null;
+            } 
+        };
+        
+        statusBar.progressProperty().bind( task.progressProperty() );
+        statusBar.textProperty().bind( task.messageProperty() );
+        
+        Thread convertThread = new Thread(task);
+        convertThread.start();
+        
+    	textAreaOut.setText( ((ConvertTextString)converter).getTextOut() );
+        
     }
     
     
@@ -482,7 +530,7 @@ public final class Xliterator extends Application {
     		
     		String extension = FilenameUtils.getExtension( inputFilePath );
     		if ( extension.equals( "txt") ) {
-    			converter = new ConvertText( inputFile, outputFile, selectedTransliteration, transliterationDirection );
+    			converter = new ConvertTextFile( inputFile, outputFile, selectedTransliteration, transliterationDirection );
     		}
     		else {
     		/*
@@ -664,6 +712,7 @@ public final class Xliterator extends Application {
     	scriptInText.setText( scriptIn );
     	createOutScriptsMenu( scriptIn );
 		convertButton.setDisable( true );
+        convertButtonDown.setDisable( true );
     }
     private void setScriptOut(String scriptOut) {
     	this.scriptOut = scriptOut;
@@ -671,6 +720,7 @@ public final class Xliterator extends Application {
     	variantOutText.setText( " " );
     	createOutVaraintsMenu( scriptOut );
 		convertButton.setDisable( true );
+        convertButtonDown.setDisable( true );
     }
     private void setVariantOut(String variantOut) {
     	this.variantOut = variantOut;
@@ -678,6 +728,7 @@ public final class Xliterator extends Application {
     	if( inputList != null ) {
     		convertButton.setDisable( false );
     	}
+        convertButtonDown.setDisable( false );
     }
 
 }
