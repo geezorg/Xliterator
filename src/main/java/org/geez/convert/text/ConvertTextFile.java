@@ -26,9 +26,9 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 
 
-public class ConvertText extends Converter {
+public class ConvertTextFile extends Converter {
 
-    public ConvertText( final File inputFile, final File outputFile,  String rulesFile, String direction ) {
+    public ConvertTextFile( final File inputFile, final File outputFile,  String rulesFile, String direction ) {
     	super( inputFile, outputFile );
 		this.initialize( rulesFile, direction );
     }

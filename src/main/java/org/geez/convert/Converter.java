@@ -62,6 +62,10 @@ public class Converter  implements Callable<Void> {
     	this.inputFile  = inputFile;
     	this.outputFile = outputFile;
     }
+    
+    
+    public Converter() {
+    }
 
     public ReadOnlyDoubleProperty progressProperty() {
         return progress.getReadOnlyProperty() ;
@@ -78,7 +82,7 @@ public class Converter  implements Callable<Void> {
 	}
 
 	
-	private String readRulesFromStream(InputStream is) throws IOException {
+	private String readRulesFromStream( InputStream is ) throws IOException {
 		String line, segment, rules = "";
 		BufferedReader rulesFile = new BufferedReader( new InputStreamReader(is, "UTF-8") );
 		while ( (line = rulesFile.readLine()) != null) {
@@ -108,7 +112,7 @@ public class Converter  implements Callable<Void> {
 	}
 	
 	
-	public String readRulesXML(String rulesFileXML ) throws IOException, SAXException {		
+	public String readRulesXML( String rulesFileXML ) throws IOException, SAXException {		
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		if(! rulesFileXML.contains( "/" ) ) {
 			// this is a week test for a path hierarchy, we assume some path for a user defined file
@@ -117,7 +121,7 @@ public class Converter  implements Callable<Void> {
 		InputStream xmlStream = classLoader.getResourceAsStream( rulesFileXML );    
 	    
 	    Document doc = builder.parse( xmlStream );
-	    NodeList nodes = doc.getElementsByTagName("tRule");
+	    NodeList nodes = doc.getElementsByTagName( "tRule" );
 	    Element  element = (Element) nodes.item(0); // assume only one
 	    
 	    String rulesString = getCharacterDataFromElement( element );
@@ -126,7 +130,7 @@ public class Converter  implements Callable<Void> {
 		return readRulesFromStream( is );
 	}
 
-	public static String getCharacterDataFromElement(Element e) {
+	public static String getCharacterDataFromElement( Element e ) {
 		Node child = e.getFirstChild();
 		if (child instanceof CharacterData) {
 			CharacterData cd = (CharacterData) child;
