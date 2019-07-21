@@ -48,6 +48,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -59,6 +60,7 @@ import javafx.stage.Stage;
 
 import org.apache.commons.io.FilenameUtils;
 import org.controlsfx.control.StatusBar;
+import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.geez.convert.Converter;
 import org.geez.convert.docx.ConvertDocxGenericUnicodeFont;
 import org.geez.convert.text.ConvertTextFile;
@@ -88,7 +90,10 @@ public final class Xliterator extends Application {
 	private final Button convertButtonDown = new Button(); // ( "⬇" );
 	private String selectedTransliteration = null;
 	private String transliterationDirection = null;
-	
+    private ICUEditor editor = new ICUEditor();
+    private final TextArea textAreaIn = new TextArea();
+    private final TextArea textAreaOut = new TextArea();
+    
 	private XliteratorConfig config = new XliteratorConfig();
 	
     private static void configureFileChooser( final FileChooser fileChooser ) {      
@@ -112,6 +117,37 @@ public final class Xliterator extends Application {
         );
     }
     
+
+    private Menu createFontMenu() {
+    	Menu menu = new Menu( "Font" );
+        ToggleGroup groupInMenu = new ToggleGroup();
+        
+    	for(String font: javafx.scene.text.Font.getFamilies() ) {
+    		RadioMenuItem menuItem = new RadioMenuItem( font );
+    		menuItem.setToggleGroup( groupInMenu );
+    		menuItem.setOnAction( evt -> setFont( font ) );
+    		menu.getItems().add( menuItem );
+    	}
+        
+        return menu;
+    }
+    
+
+    private Menu createFontSizeMenu() {
+    	Menu menu = new Menu( "Font Size" );
+        ToggleGroup groupInMenu = new ToggleGroup();
+        
+    	for(int i=10 ; i < 24; i++ ) {
+    		RadioMenuItem menuItem = new RadioMenuItem( String.valueOf(i) );
+    		menuItem.setToggleGroup( groupInMenu );
+    		String size = String.valueOf(i);
+    		menuItem.setOnAction( evt -> setFontSize( size ) ); 
+    		menu.getItems().add( menuItem );
+    	}
+        
+        return menu;
+    }
+    
     
     private Menu createInScriptsMenu(final Stage stage) {
     	Menu menu = new Menu( "Script _In" );
@@ -126,9 +162,28 @@ public final class Xliterator extends Application {
     		menu.getItems().add( menuItem );
     	}
     	
+    	// Menu for the first edtior tab:
+    	menu.getItems().add( new SeparatorMenuItem() );
+    	RadioMenuItem editTabItem = new RadioMenuItem( "Mapping Editor");
+    	editTabItem.setOnAction( 
+    			new EventHandler<ActionEvent>() {
+    				@Override
+    				public void handle(final ActionEvent e) {
+    					/*
+    					final FileChooser fileChooser = new FileChooser();
+    					configureFileChooserICU(fileChooser);    
+    					icuFile = fileChooser.showOpenDialog( stage );
+    					*/
+    				}	
+    	});
+    	menu.getItems().add( editTabItem );
+    	
+    	
+    	// This should be moved under the top level "File" menu and is 
+
     	// Add transliteration file selection option:
     	menu.getItems().add( new SeparatorMenuItem() );
-		RadioMenuItem fileMenuItem = new RadioMenuItem( "Select File..." );
+		RadioMenuItem fileMenuItem = new RadioMenuItem( "Open ICU File..." );
 		fileMenuItem.setToggleGroup( groupInMenu );
         fileMenuItem.setOnAction(
                 new EventHandler<ActionEvent>() {
@@ -139,8 +194,8 @@ public final class Xliterator extends Application {
                         icuFile = fileChooser.showOpenDialog( stage );
                     }
                 }
-            );
-            menu.getItems().add( fileMenuItem ); 
+        );
+        menu.getItems().add( fileMenuItem ); 
             
 		
     	return menu;
@@ -226,15 +281,18 @@ public final class Xliterator extends Application {
         }
         
         TabPane tabpane = new TabPane();
-        Tab    textTab  = new Tab( "Convert Text" );
-        Tab    filesTab = new Tab( "Convert Files" );
-        Tab    editTab  = new Tab( "Edit Mapping");  // follow: https://tomsondev.bestsolution.at/2015/02/13/how-to-create-an-editor-with-syntax-highlighting-for-java/
-        tabpane.getTabs().addAll( textTab, filesTab, editTab );
+        Tab editTab = new Tab( "Mapping Editor");
+    	Tab textTab = new Tab( "Convert Text" );
+        Tab filesTab = new Tab( "Convert Files" );
+    	
+        tabpane.getTabs().addAll( editTab, textTab, filesTab );
 
         Menu  inScriptMenu =  createInScriptsMenu( stage );
         outScriptMenu  = new Menu( "Script _Out" );
         outVariantMenu = new Menu( "_Variant" );
 
+        Menu fontMenu = createFontMenu();
+        Menu fontSizeMenu = createFontSizeMenu();
 
         final Menu fileMenu = new Menu("_File"); 
         final FileChooser fileChooser = new FileChooser();
@@ -325,7 +383,7 @@ public final class Xliterator extends Application {
         MenuBar leftBar = new MenuBar(); 
   
         // add menu to menubar 
-        leftBar.getMenus().addAll( fileMenu, inScriptMenu, outScriptMenu , outVariantMenu);
+        leftBar.getMenus().addAll( fileMenu, inScriptMenu, outScriptMenu , outVariantMenu, fontMenu, fontSizeMenu );
         
         //=========================== BEGIN FILES TAB =============================================
         convertButton.setDisable( true );
@@ -354,8 +412,7 @@ public final class Xliterator extends Application {
         //=========================== END FILES TAB =============================================
         
         //=========================== BEGIN TEXT TAB ============================================
-        TextArea textAreaIn = new TextArea();
-        TextArea textAreaOut = new TextArea();
+        
         textAreaIn.setPrefHeight(300);
         textAreaOut.setPrefHeight(300);
         if( osName.equals("Mac OS X") ) {
@@ -396,6 +453,12 @@ public final class Xliterator extends Application {
         textTab.setContent( textVbox );
         //=========================== END TEXT TAB ==============================================
 
+        //=========================== END EDITOR TAB ==============================================
+        editTab.setContent( new StackPane( new VirtualizedScrollPane<>( editor ) ) );
+       
+        //=========================== END EDITOR TAB ==============================================
+
+        
         // VBox vbottomBox = new VBox( hbottomBox, statusBar,  textAreaIn, hUpDownButtonBox, textAreaOut );
         
         textTab.setOnSelectionChanged( evt -> {
@@ -442,6 +505,7 @@ public final class Xliterator extends Application {
         rootGroup.setPadding( new Insets(8, 8, 8, 8) );
  
         stage.setScene(new Scene(rootGroup, 500, 800) ); 
+        editor.setStyle( stage.getScene() );
         stage.show();
     }
  
@@ -729,6 +793,24 @@ public final class Xliterator extends Application {
     		convertButton.setDisable( false );
     	}
         convertButtonDown.setDisable( false );
+    }
+    
+    private void setFont(String font) {
+    	editor.setStyle( "-fx-font-family: '" + font + "';" );
+        textAreaIn.setStyle( "-fx-font-family: '" + font + "';" );
+        textAreaOut.setStyle( "-fx-font-family: '" + font + "';" );
+    }
+    
+    private void setFontSize(String size) {
+    	String oldStyle = editor.getStyle();
+    	// consider individual font menus for each text area since this area is fussy
+    	// instead of a font size menu, use big A and small A buttons
+    	
+    	// set an initial font face and size when the components are created, then use a regex to update them:
+    	
+    	editor.setStyle( "-fx-font-size: " + size + ";" );
+        textAreaIn.setStyle( "-fx-font-size: " + size + ";" );
+        textAreaOut.setStyle( "-fx-font-size: " + size + ";" );
     }
 
 }
