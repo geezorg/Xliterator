@@ -27,6 +27,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -93,6 +95,7 @@ public final class Xliterator extends Application {
     private ICUEditor editor = new ICUEditor();
     private final TextArea textAreaIn = new TextArea();
     private final TextArea textAreaOut = new TextArea();
+    private String defaultFont = null;
     
 	private XliteratorConfig config = new XliteratorConfig();
 	
@@ -117,23 +120,36 @@ public final class Xliterator extends Application {
         );
     }
     
-
-    private Menu createFontMenu() {
-    	Menu menu = new Menu( "Font" );
-        ToggleGroup groupInMenu = new ToggleGroup();
-        
+    private ChoiceBox createFontChoiceBox(String component) {
+    	ChoiceBox<String> choiceBox = new ChoiceBox<>();
     	for(String font: javafx.scene.text.Font.getFamilies() ) {
-    		RadioMenuItem menuItem = new RadioMenuItem( font );
-    		menuItem.setToggleGroup( groupInMenu );
-    		menuItem.setOnAction( evt -> setFont( font ) );
-    		menu.getItems().add( menuItem );
+    		choiceBox.getItems().add( font );
     	}
+    	choiceBox.getSelectionModel().select( defaultFont );
+        choiceBox.setOnAction( evt -> setFont( choiceBox.getSelectionModel().getSelectedItem(), component ) );
         
+        return choiceBox;
+    }
+    private Menu createFontMenu(String component) {
+    	Menu menu = new Menu();
+    	menu.setId( "transparent" );
+    	menu.setGraphic( createFontChoiceBox( component ) );
         return menu;
     }
     
 
     private Menu createFontSizeMenu() {
+    	Menu menu = new Menu();
+    	menu.setId( "transparent" );
+    	ChoiceBox<String> choiceBox = new ChoiceBox<>();
+    	for(int i=10 ; i < 24; i++ ) {
+    		String size = String.valueOf(i);
+    		choiceBox.getItems().add( size );
+    	}
+    	choiceBox.getSelectionModel().select( "12" );
+        choiceBox.setOnAction( evt -> setFontSize( choiceBox.getSelectionModel().getSelectedItem() ) );
+    	menu.setGraphic( choiceBox );
+    	/*
     	Menu menu = new Menu( "Font Size" );
         ToggleGroup groupInMenu = new ToggleGroup();
         
@@ -142,8 +158,12 @@ public final class Xliterator extends Application {
     		menuItem.setToggleGroup( groupInMenu );
     		String size = String.valueOf(i);
     		menuItem.setOnAction( evt -> setFontSize( size ) ); 
+    		if( i == 12 ) {
+    			menuItem.setSelected( true );
+    		}
     		menu.getItems().add( menuItem );
     	}
+    	*/
         
         return menu;
     }
@@ -277,7 +297,8 @@ public final class Xliterator extends Application {
         stage.getIcons().add( logoImage );
         String osName = System.getProperty("os.name");
         if( osName.equals("Mac OS X") ) {
-            com.apple.eawt.Application.getApplication().setDockIconImage( SwingFXUtils.fromFXImage(logoImage, null) );      
+            com.apple.eawt.Application.getApplication().setDockIconImage( SwingFXUtils.fromFXImage(logoImage, null) );  
+            defaultFont = "Kefa";
         }
         
         TabPane tabpane = new TabPane();
@@ -291,7 +312,7 @@ public final class Xliterator extends Application {
         outScriptMenu  = new Menu( "Script _Out" );
         outVariantMenu = new Menu( "_Variant" );
 
-        Menu fontMenu = createFontMenu();
+        Menu fontMenu = createFontMenu( "editor" );
         Menu fontSizeMenu = createFontSizeMenu();
 
         final Menu fileMenu = new Menu("_File"); 
@@ -415,16 +436,22 @@ public final class Xliterator extends Application {
         
         textAreaIn.setPrefHeight(300);
         textAreaOut.setPrefHeight(300);
-        if( osName.equals("Mac OS X") ) {
-        	textAreaIn.setFont( Font.font("Kefa", FontWeight.NORMAL, 12) );
-        }
+        textAreaIn.setFont( Font.font( defaultFont, FontWeight.NORMAL, 12) );
         
+       //  Menu textAreaInFontMenu = createFontMenu( "textAreaIn" );
+        
+
+        Button textAreaInIncreaseFontSizeButton = new Button( "+" ); 
+        Button textAreaInDecreaseFontSizeButton = new Button( "-" );
+        HBox textAreaInMenuBox = new HBox( createFontChoiceBox( "textAreaIn" ), textAreaInIncreaseFontSizeButton, textAreaInDecreaseFontSizeButton);
+        textAreaInMenuBox.setPadding(new Insets(2, 2, 2, 2));
+        textAreaInMenuBox.setSpacing(4);
+
         ClassLoader classLoader = this.getClass().getClassLoader();
-        
         Image imageDown = new Image(classLoader.getResourceAsStream("images/arrow-circle-down.png"));
         ImageView imageViewDown = new ImageView( imageDown );
-        imageViewDown.setFitHeight( 24 );
-        imageViewDown.setFitWidth( 24 );
+        imageViewDown.setFitHeight( 18 );
+        imageViewDown.setFitWidth( 18 );
         convertButtonDown.setGraphic( imageViewDown );
 
         // convertButtonDown.setStyle( "-fx-font-size: 24;");
@@ -435,8 +462,8 @@ public final class Xliterator extends Application {
         Button convertButtonUp = new Button(); // ( "⬆" );
         Image imageUp = new Image(classLoader.getResourceAsStream("images/arrow-circle-up.png"));
         ImageView imageViewUp = new ImageView( imageUp );
-        imageViewUp.setFitHeight( 24 );
-        imageViewUp.setFitWidth( 24 );
+        imageViewUp.setFitHeight( 18 );
+        imageViewUp.setFitWidth( 18 );
         convertButtonUp.setGraphic( imageViewUp );
         // convertButtonUp.setStyle( "-fx-font-size: 24;");
         convertButtonUp.setDisable( true );
@@ -444,12 +471,17 @@ public final class Xliterator extends Application {
         	convertTextArea( textAreaOut, textAreaIn ); 
         });
         
-
-        HBox hUpDownButtonBox = new HBox( convertButtonUp, convertButtonDown );
-        hUpDownButtonBox.setAlignment(Pos.CENTER);
-        hUpDownButtonBox.setSpacing( 20 );
+        Button textAreaOutIncreaseFontSizeButton = new Button( "+" ); 
+        Button textAreaOutDecreaseFontSizeButton = new Button( "-" );
+        Region hspacer = new Region();
+        hspacer.prefWidth( 200 );
+        HBox.setHgrow(hspacer, Priority.SOMETIMES);
+        HBox hUpDownButtonBox = new HBox( createFontChoiceBox( "textAreaOut" ), textAreaOutIncreaseFontSizeButton, textAreaOutDecreaseFontSizeButton, hspacer, convertButtonUp, convertButtonDown );
+        hUpDownButtonBox.setAlignment(Pos.CENTER_LEFT);
+        hUpDownButtonBox.setPadding(new Insets(2, 2, 2, 2));
+        hUpDownButtonBox.setSpacing( 4 );
         
-        VBox textVbox = new VBox( textAreaIn, hUpDownButtonBox, textAreaOut );
+        VBox textVbox = new VBox( textAreaInMenuBox, textAreaIn, hUpDownButtonBox, textAreaOut );
         textTab.setContent( textVbox );
         //=========================== END TEXT TAB ==============================================
 
@@ -504,8 +536,10 @@ public final class Xliterator extends Application {
         rootGroup.setBottom( statusBar );
         rootGroup.setPadding( new Insets(8, 8, 8, 8) );
  
-        stage.setScene(new Scene(rootGroup, 500, 800) ); 
-        editor.setStyle( stage.getScene() );
+        Scene scene = new Scene(rootGroup, 500, 800);
+        scene.getStylesheets().add( classLoader.getResource("styles/xliterator.css").toExternalForm()  );
+        stage.setScene( scene ); 
+        editor.setStyle( scene );
         stage.show();
     }
  
@@ -795,22 +829,42 @@ public final class Xliterator extends Application {
         convertButtonDown.setDisable( false );
     }
     
-    private void setFont(String font) {
-    	editor.setStyle( "-fx-font-family: '" + font + "';" );
-        textAreaIn.setStyle( "-fx-font-family: '" + font + "';" );
-        textAreaOut.setStyle( "-fx-font-family: '" + font + "';" );
+
+    private void setFont(String font, String component) {
+    	if( "textAreaIn".equals( component) ) {
+    		textAreaIn.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + textAreaIn.getProperties().get("font-size") + ";" ); 
+    		textAreaIn.getProperties().put( "font-family", font );
+    	}
+    	else if( "textAreaOut".equals( component) ) {
+    		textAreaOut.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + textAreaOut.getProperties().get("font-size") + ";" );
+    		textAreaOut.getProperties().put( "font-family", font );
+    	}
+    	else {
+    		// set the font in all components, unless already set for the text areas
+    		String fontSize = (String) editor.getProperties().get("font-size");
+    		editor.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + fontSize + ";" );
+    		
+    		if( textAreaIn.getProperties().get( "font-family") == null ) {
+    			textAreaIn.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + fontSize + ";" ); 
+    		}
+    		if( textAreaOut.getProperties().get( "font-family") == null ) {
+    			textAreaOut.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + fontSize + ";" ); 
+    		}
+    	}
     }
     
-    private void setFontSize(String size) {
-    	String oldStyle = editor.getStyle();
-    	// consider individual font menus for each text area since this area is fussy
-    	// instead of a font size menu, use big A and small A buttons
-    	
-    	// set an initial font face and size when the components are created, then use a regex to update them:
-    	
-    	editor.setStyle( "-fx-font-size: " + size + ";" );
-        textAreaIn.setStyle( "-fx-font-size: " + size + ";" );
-        textAreaOut.setStyle( "-fx-font-size: " + size + ";" );
+    
+    private void setFontSize(String fontSize) {        
+		String fontFamily = (String) editor.getProperties().get("font-family");
+		editor.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" );
+		editor.getProperties().put( "font-size", fontSize );
+		
+		if( textAreaIn.getProperties().get( "font-size") == null ) {
+			textAreaIn.setStyle( "-fx-font-s: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
+		}
+		if( textAreaOut.getProperties().get( "font-size") == null ) {
+			textAreaOut.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
+		}
     }
 
 }

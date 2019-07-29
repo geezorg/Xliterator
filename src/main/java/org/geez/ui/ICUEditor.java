@@ -135,8 +135,10 @@ public class ICUEditor extends CodeArea {
     public ICUEditor() {
     	String osName = System.getProperty("os.name");
         if( osName.equals("Mac OS X") ) {
-        	this.setStyle( "-fx-font-family: Kefa" );
+        	this.setStyle( "-fx-font-family: Kefa; -fx-font-size: 12;" );
+            this.getProperties().put("font-family", "Kefa");
         }
+        this.getProperties().put("font-size", "12");
     
         setParagraphGraphicFactory( LineNumberFactory.get( this ) );
 
