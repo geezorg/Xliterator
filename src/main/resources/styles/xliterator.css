@@ -1,0 +1,6 @@
+#transparent:hover,
+#transparent:focused,
+#transparent:showing {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+}
