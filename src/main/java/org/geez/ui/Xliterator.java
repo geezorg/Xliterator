@@ -436,7 +436,13 @@ public final class Xliterator extends Application {
         
         textAreaIn.setPrefHeight(300);
         textAreaOut.setPrefHeight(300);
-        textAreaIn.setFont( Font.font( defaultFont, FontWeight.NORMAL, 12) );
+        // textAreaIn.setFont( Font.font( defaultFont, FontWeight.NORMAL, 12) );
+        textAreaIn.setStyle("-fx-font-family: '" + defaultFont + "'; -fx-font-size: 12;"  );
+        textAreaIn.getProperties().put( "font-family", defaultFont );
+        textAreaIn.getProperties().put( "font-size", "12" );
+        textAreaOut.setStyle("-fx-font-family: '" + defaultFont + "'; -fx-font-size: 12;"  );
+        textAreaOut.getProperties().put( "font-family", defaultFont );
+        textAreaOut.getProperties().put( "font-size", "12" );
         
        //  Menu textAreaInFontMenu = createFontMenu( "textAreaIn" );
         
@@ -446,6 +452,13 @@ public final class Xliterator extends Application {
         HBox textAreaInMenuBox = new HBox( createFontChoiceBox( "textAreaIn" ), textAreaInIncreaseFontSizeButton, textAreaInDecreaseFontSizeButton);
         textAreaInMenuBox.setPadding(new Insets(2, 2, 2, 2));
         textAreaInMenuBox.setSpacing(4);
+        textAreaInIncreaseFontSizeButton.setOnAction( event -> {
+        	incrementFontSize( "textAreaIn" );
+        });
+        textAreaInDecreaseFontSizeButton.setOnAction( event -> {
+        	decrementFontSize( "textAreaIn" );
+        });
+        
 
         ClassLoader classLoader = this.getClass().getClassLoader();
         Image imageDown = new Image(classLoader.getResourceAsStream("images/arrow-circle-down.png"));
@@ -473,6 +486,12 @@ public final class Xliterator extends Application {
         
         Button textAreaOutIncreaseFontSizeButton = new Button( "+" ); 
         Button textAreaOutDecreaseFontSizeButton = new Button( "-" );
+        textAreaOutIncreaseFontSizeButton.setOnAction( event -> {
+        	incrementFontSize( "textAreaOut" );
+        });
+        textAreaOutDecreaseFontSizeButton.setOnAction( event -> {
+        	decrementFontSize( "textAreaOut" );
+        });
         Region hspacer = new Region();
         hspacer.prefWidth( 200 );
         HBox.setHgrow(hspacer, Priority.SOMETIMES);
@@ -865,6 +884,30 @@ public final class Xliterator extends Application {
 		if( textAreaOut.getProperties().get( "font-size") == null ) {
 			textAreaOut.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
 		}
+    }
+
+    private void incrementFontSize(String component) {
+    	TextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
+
+    	String fontFamily = (String) textArea.getProperties().get("font-family");
+    	int newSize = Integer.parseInt( (String)textArea.getProperties().get("font-size") ) + 1;
+    	if( newSize <= 24 ) {
+    		String fontSize = String.valueOf( newSize );
+    		textArea.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
+    		textArea.getProperties().put( "font-size", fontSize );
+    	}
+    }
+
+    private void decrementFontSize(String component) {
+    	TextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
+
+    	String fontFamily = (String) textArea.getProperties().get("font-family");
+    	int newSize = Integer.parseInt( (String)textArea.getProperties().get("font-size") ) - 1;
+    	if( newSize >= 10 ) {
+    		String fontSize = String.valueOf( newSize );
+    		textArea.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
+    		textArea.getProperties().put( "font-size", fontSize );
+    	}
     }
 
 }
