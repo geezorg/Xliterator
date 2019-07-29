@@ -4,8 +4,10 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -61,7 +63,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import org.apache.commons.io.FilenameUtils;
+import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.StatusBar;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.EndnotesPart;
+import org.docx4j.openpackaging.parts.WordprocessingML.FootnotesPart;
+import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.geez.convert.Converter;
 import org.geez.convert.docx.ConvertDocxGenericUnicodeFont;
@@ -71,6 +79,7 @@ import org.geez.transliterate.XliteratorConfig;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.ibm.icu.text.Transliterator;
  
 
 public final class Xliterator extends Application {
@@ -96,6 +105,7 @@ public final class Xliterator extends Application {
     private final TextArea textAreaIn = new TextArea();
     private final TextArea textAreaOut = new TextArea();
     private String defaultFont = null;
+    private CheckComboBox documentFontsMenu = new CheckComboBox();
     
 	private XliteratorConfig config = new XliteratorConfig();
 	
@@ -289,6 +299,28 @@ public final class Xliterator extends Application {
     	return outVariantMenu;
     }
     
+
+    private void populateDocumentFontsMenu() {
+    	// List<String> fonts = new ArrayList<String>();
+    	ObservableList<String> fonts = FXCollections.observableArrayList();
+    	
+    	try {
+    	for( File file: inputList) {
+			WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load( file );		
+			MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
+			for( String font: documentPart.fontsInUse() ) {
+				fonts.add( font );
+       		}
+    	}
+    	}
+    	catch( Docx4JException ex ) {
+    		
+    	}
+    	
+    	documentFontsMenu.getItems().addAll( fonts );
+        documentFontsMenu.setDisable( false );
+    }
+    
     
     @Override
     public void start(final Stage stage) {
@@ -347,6 +379,7 @@ public final class Xliterator extends Application {
                     	if( variantOut != null ) {
                     		convertButton.setDisable( false );
                     	}
+                    	populateDocumentFontsMenu();
                     }
                 }
             }
@@ -407,6 +440,11 @@ public final class Xliterator extends Application {
         leftBar.getMenus().addAll( fileMenu, inScriptMenu, outScriptMenu , outVariantMenu, fontMenu, fontSizeMenu );
         
         //=========================== BEGIN FILES TAB =============================================
+        documentFontsMenu.setDisable( true );
+        HBox filesTabMenuBox = new HBox( new Text( "Document Fonts:" ), documentFontsMenu );
+        filesTabMenuBox.setPadding(new Insets(2, 2, 2, 2));
+        filesTabMenuBox.setSpacing(4);
+        filesTabMenuBox.setAlignment( Pos.CENTER_LEFT );
         convertButton.setDisable( true );
         convertButton.setOnAction( event -> {
         	convertButton.setDisable( true );
@@ -428,7 +466,7 @@ public final class Xliterator extends Application {
         hbottomBox.setPadding(new Insets(4, 0, 4, 0));
         hbottomBox.setAlignment( Pos.CENTER_LEFT );
 
-        VBox filesVbox = new VBox( listVBox, hbottomBox );
+        VBox filesVbox = new VBox( filesTabMenuBox, listVBox, hbottomBox );
         filesTab.setContent( filesVbox );
         //=========================== END FILES TAB =============================================
         
