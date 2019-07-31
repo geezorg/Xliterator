@@ -105,7 +105,7 @@ public final class Xliterator extends Application {
     private final TextArea textAreaIn = new TextArea();
     private final TextArea textAreaOut = new TextArea();
     private String defaultFont = null;
-    private CheckComboBox documentFontsMenu = new CheckComboBox();
+    private CheckComboBox<String> documentFontsMenu = new CheckComboBox<String>();
     
 	private XliteratorConfig config = new XliteratorConfig();
 	
@@ -684,6 +684,8 @@ public final class Xliterator extends Application {
     		File outputFile = new File ( outputFilePath );
     		
     		String extension = FilenameUtils.getExtension( inputFilePath );
+    		// a new converter instance is created for each file in a list. since if we can cache and reuse a converter.
+    		// it may be necessary to reset the converter so it is in a neutral state
     		if ( extension.equals( "txt") ) {
     			converter = new ConvertTextFile( inputFile, outputFile, selectedTransliteration, transliterationDirection );
     		}
@@ -736,7 +738,8 @@ public final class Xliterator extends Application {
     		}
     		*/
     			converter = new ConvertDocxGenericUnicodeFont(inputFile, outputFile, selectedTransliteration );
-    			// ((ConvertDocxGenericUnicodeFont)converter).setFont( scriptOut );
+    			ArrayList<String> targetTypefaces = new ArrayList<String>( documentFontsMenu.getCheckModel().getCheckedItems() );
+    			((ConvertDocxGenericUnicodeFont)converter).setTargetTypefaces( targetTypefaces );
     		}
 
     		

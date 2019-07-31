@@ -55,12 +55,12 @@ public class ConvertTextString extends Converter {
 			//
 			
 			String id = tableRulesFile; // remove the file extension
-			int icuDirection = ( direction.equals("both") || direction.equals("forward") )? Transliterator.FORWARD : Transliterator.REVERSE;
+			icuDirection = ( direction.equals("both") || direction.equals("forward") ) ? Transliterator.FORWARD : Transliterator.REVERSE;
 			
 			
 			String rulesText = readRules( tableRulesFile );
 
-			t = Transliterator.createFromRules( id, rulesText.replace( '\ufeff', ' ' ), icuDirection );
+			xlit = Transliterator.createFromRules( id, rulesText.replace( '\ufeff', ' ' ), icuDirection );
 
 		} catch ( Exception ex ) {
 			System.err.println( ex );
@@ -69,7 +69,7 @@ public class ConvertTextString extends Converter {
 
 
 	public String convertText( String text ) {
-		textOut = t.transliterate( text );
+		textOut = xlit.transliterate( text );
 		return textOut;
 	}
 	
