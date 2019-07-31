@@ -34,7 +34,8 @@ public class Converter  implements Callable<Void> {
     protected final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
 
     protected File inputFile = null, outputFile = null;
-	protected Transliterator t = null;
+	protected Transliterator xlit = null;
+	protected int icuDirection = -1;
     
     protected static DocumentBuilder builder = null; 
     {
@@ -62,8 +63,19 @@ public class Converter  implements Callable<Void> {
     	this.inputFile  = inputFile;
     	this.outputFile = outputFile;
     }
+       
+    public Converter( final File inputFile, final File outputFile, String direction ) {
+    	this.inputFile    = inputFile;
+    	this.outputFile   = outputFile;
+		this.icuDirection = ( direction.equals("both") || direction.equals("forward") ) ? Transliterator.FORWARD : Transliterator.REVERSE;
+    }
     
-    
+    public Converter( final File inputFile, final File outputFile, int icuDirection ) {
+    	this.inputFile    = inputFile;
+    	this.outputFile   = outputFile;
+		this.icuDirection = icuDirection; // should throw an exception if not Transliterator.FORWARD or Transliterator.REVERSE;
+    }
+      
     public Converter() {
     }
 

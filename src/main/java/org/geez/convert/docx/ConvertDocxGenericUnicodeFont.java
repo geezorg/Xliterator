@@ -1,6 +1,10 @@
 package org.geez.convert.docx;
 
 import java.io.File;
+import java.util.List;
+import java.util.UUID;
+
+import com.ibm.icu.text.Transliterator;
 
 /*
  * The non-maven way to build the jar file:
@@ -17,6 +21,27 @@ public class ConvertDocxGenericUnicodeFont extends ConvertDocx {
 	public ConvertDocxGenericUnicodeFont( final File inputFile, final File outputFile, String rulesFile ) {
 		super( inputFile, outputFile );
 		this.initialize( rulesFile, "Abyssinica SIL" );
+		
+		try {
+			// specify the transliteration file in the first argument.
+			// read the input, transliterate, and write to output
+			String table1Text = readRules( rulesFile  );
+
+			xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), table1Text.replace( '\ufeff', ' ' ), Transliterator.REVERSE );
+
+		} catch ( Exception ex ) {
+			System.err.println( ex );
+		}
+	}
+	
+	
+	
+	public void setTargetTypefaces(List<String> targetTypefaces) {
+		this.targetTypefaces = targetTypefaces;
+		
+		for(String fontName: targetTypefaces ) {
+			fontToTransliteratorMap.put( fontName, xlit );
+		}
 	}
 
 }

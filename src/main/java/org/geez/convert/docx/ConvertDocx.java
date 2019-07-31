@@ -57,7 +57,6 @@ import javafx.beans.property.ReadOnlyDoubleWrapper;
 
 
 abstract class ConvertDocx extends Converter {
-	protected Transliterator t = null;
 	protected String fontOut = null;
 	protected String fontIn = null;
 	protected char huletNeteb = 0x0;
@@ -77,7 +76,6 @@ abstract class ConvertDocx extends Converter {
 	}
 
 
-	protected Transliterator translit = null;
 	protected String fontName = null;
 	protected List<String> targetTypefaces = new  ArrayList<String>();
 	protected Map<String,Transliterator> fontToTransliteratorMap = new HashMap<String,Transliterator>();
@@ -91,16 +89,17 @@ abstract class ConvertDocx extends Converter {
 			// read the input, transliterate, and write to output
 			String table1Text = readRules( table1RulesFile  );
 
-			translit = Transliterator.createFromRules( "Ethiopic-ExtendedLatin", table1Text.replace( '\ufeff', ' ' ), Transliterator.REVERSE );
+			xlit = Transliterator.createFromRules( "Ethiopic-ExtendedLatin", table1Text.replace( '\ufeff', ' ' ), Transliterator.REVERSE );
 			this.fontName = fontName1;
 			
 			targetTypefaces.add( fontName1 );
-			fontToTransliteratorMap.put( fontName, translit );
+			fontToTransliteratorMap.put( fontName, xlit );
 
 		} catch ( Exception ex ) {
 			System.err.println( ex );
 		}
 	}
+	
 	
 	protected void localCheck( Text text ) {
 		return;
@@ -108,13 +107,20 @@ abstract class ConvertDocx extends Converter {
 
 	public String convertText( Text text ) {
 		localCheck( text );
-		return t.transliterate( text.getValue() );
+		return xlit.transliterate( text.getValue() );
 	}
 
 	public String convertText( String text ) {
-		return t.transliterate( text );
+		return xlit.transliterate( text );
 	}
 	
+	public void setTargetTypefaces(List<String> targetTypefaces) {
+		this.targetTypefaces = targetTypefaces;
+	}
+	
+	public List<String> getTargetTypefaces() {
+		return  targetTypefaces;
+	}
 	
 	public void processStyledObjects( final JaxbXmlPart<?> part, StyledTextFinder stFinder ) throws Docx4JException {
 		if(! stFinder.hasStyles() ) {
@@ -130,7 +136,7 @@ abstract class ConvertDocx extends Converter {
 			double i = progress.get() * totalNodes;
 			for(Text text: textNodes.keySet() ) {
 				fontIn = textNodes.get(text);
-				t = fontToTransliteratorMap.get( fontIn );
+				xlit = fontToTransliteratorMap.get( fontIn );
 				String out = convertText( text );
 				text.setValue( out );
 				progress.set( i / totalNodes );
@@ -140,7 +146,7 @@ abstract class ConvertDocx extends Converter {
 		else {
 			for(Text text: textNodes.keySet() ) {
 				fontIn = textNodes.get(text);
-				t = fontToTransliteratorMap.get( fontIn );
+				xlit = fontToTransliteratorMap.get( fontIn );
 				String out = convertText( text );
 				text.setValue( out );
 			}
@@ -149,7 +155,7 @@ abstract class ConvertDocx extends Converter {
 			HashMap<R.Sym,String> symNodes = (HashMap<R.Sym,String>)stFinder.symResults; 
 			for(R.Sym sym: symNodes.keySet() ) {
 				fontIn = symNodes.get(sym);
-				t = fontToTransliteratorMap.get( fontIn );
+				xlit = fontToTransliteratorMap.get( fontIn );
 				String symChar = sym.getChar();
 				int decimal = Integer.parseInt( symChar, 16 );
 				char ch = (char)decimal;
@@ -188,7 +194,7 @@ abstract class ConvertDocx extends Converter {
 				double i = 0.0;
 				for(Text text: textNodes.keySet() ) {
 					fontIn = textNodes.get(text);
-					t = fontToTransliteratorMap.get( fontIn );
+					xlit = fontToTransliteratorMap.get( fontIn );
 					String out = convertText( text );
 					text.setValue( out );
 					progress.set( i / totalNodes );
@@ -198,7 +204,7 @@ abstract class ConvertDocx extends Converter {
 			else {
 				for(Text text: textNodes.keySet() ) {
 					fontIn = textNodes.get(text);
-					t = fontToTransliteratorMap.get( fontIn );
+					xlit = fontToTransliteratorMap.get( fontIn );
 					String out = convertText( text );
 					text.setValue( out );
 				}
@@ -207,7 +213,7 @@ abstract class ConvertDocx extends Converter {
 				HashMap<R.Sym,String> symNodes = (HashMap<R.Sym,String>)ustFinder.symResults; 
 				for(R.Sym sym: symNodes.keySet() ) {
 					fontIn = symNodes.get(sym);
-					t = fontToTransliteratorMap.get( fontIn );
+					xlit = fontToTransliteratorMap.get( fontIn );
 					String symChar = sym.getChar();
 					int decimal = Integer.parseInt( symChar, 16 );
 					char ch = (char)decimal;
