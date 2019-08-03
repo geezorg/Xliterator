@@ -133,15 +133,19 @@ public final class Xliterator extends Application {
         );
     }
     
-    private ChoiceBox createFontChoiceBox(String component) {
+    private ChoiceBox<String> createFontChoiceBox(String component, String defaultSelection) {  
     	ChoiceBox<String> choiceBox = new ChoiceBox<>();
     	for(String font: javafx.scene.text.Font.getFamilies() ) {
     		choiceBox.getItems().add( font );
     	}
-    	choiceBox.getSelectionModel().select( defaultFont );
+    	choiceBox.getSelectionModel().select( defaultSelection );
         choiceBox.setOnAction( evt -> setFont( choiceBox.getSelectionModel().getSelectedItem(), component ) );
         
-        return choiceBox;
+        return choiceBox;    
+    }
+    
+    private ChoiceBox<String> createFontChoiceBox(String component) {
+    	return createFontChoiceBox(component, defaultFont);
     }
     private Menu createFontMenu(String component) {
     	Menu menu = new Menu();
@@ -445,8 +449,8 @@ public final class Xliterator extends Application {
        // MenuBar fileConverterMenuBar = new MenuBar();
         //Menu fileConverterFontMenu = createFontMenu( "file-converter" );
         //fileConverterMenuBar.getMenus().addAll( fileConverterFontMenu );
-        ChoiceBox<String> outputFontMenu = createFontChoiceBox( "fileConverter" );
-        HBox filesTabMenuBox = new HBox( new Text( "Document Fonts:" ), documentFontsMenu, new Text( "Output Font:" ), outputFontMenu );
+        ChoiceBox<String> outputFontMenu = createFontChoiceBox( "fileConverter", "Arial" );
+        HBox filesTabMenuBox = new HBox( new Text( "Output Font:" ), outputFontMenu, new Text( "Document Fonts:" ), documentFontsMenu );
         filesTabMenuBox.setPadding(new Insets(2, 2, 2, 2));
         filesTabMenuBox.setSpacing(4);
         filesTabMenuBox.setAlignment( Pos.CENTER_LEFT );
@@ -585,8 +589,6 @@ public final class Xliterator extends Application {
         } );
         
         
-        
-        
         statusBar.setText( "" );
         updateStatusMessage();
      
@@ -708,7 +710,7 @@ public final class Xliterator extends Application {
             	String outputFilePath = inputFilePath.replaceAll("\\.docx", "-" + scriptOut.replace( " ", "-" ) + ".docx");
             	outputFile =  new File ( outputFilePath );
 
-    			converter = new ConvertDocxGenericUnicodeFont(inputFile, outputFile, selectedTransliteration );
+    			converter = new ConvertDocxGenericUnicodeFont( inputFile, outputFile, selectedTransliteration, transliterationDirection );
 
     			ArrayList<String> targetTypefaces = new ArrayList<String>( documentFontsMenu.getCheckModel().getCheckedItems() );
     			((ConvertDocxGenericUnicodeFont)converter).setTargetTypefaces( targetTypefaces );
