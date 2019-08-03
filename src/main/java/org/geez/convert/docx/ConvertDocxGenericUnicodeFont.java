@@ -18,16 +18,16 @@ import com.ibm.icu.text.Transliterator;
 
 public class ConvertDocxGenericUnicodeFont extends ConvertDocx {
 
-	public ConvertDocxGenericUnicodeFont( final File inputFile, final File outputFile, String rulesFile ) {
+	public ConvertDocxGenericUnicodeFont( final File inputFile, final File outputFile, String rulesFile, String transliterationDirection ) {
 		super( inputFile, outputFile );
 		
 		try {
 			// specify the transliteration file in the first argument.
 			// read the input, transliterate, and write to output
 			String tableText = readRules( rulesFile  );
+			int direction = ( "reverse".equals( transliterationDirection) ) ? Transliterator.REVERSE : Transliterator.FORWARD ;
 
-			xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), tableText.replace( '\ufeff', ' ' ), Transliterator.FORWARD );
-
+			xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), tableText.replace( '\ufeff', ' ' ), direction );
 		} catch ( Exception ex ) {
 			System.err.println( ex );
 		}
