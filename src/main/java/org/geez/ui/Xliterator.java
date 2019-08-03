@@ -107,6 +107,9 @@ public final class Xliterator extends Application {
     private String defaultFont = null;
     private CheckComboBox<String> documentFontsMenu = new CheckComboBox<String>();
     
+    private final int APP_WIDTH  = 800;
+    private final int APP_HEIGHT = 800;
+    
 	private XliteratorConfig config = new XliteratorConfig();
 	
     private static void configureFileChooser( final FileChooser fileChooser ) {      
@@ -159,6 +162,7 @@ public final class Xliterator extends Application {
     	choiceBox.getSelectionModel().select( "12" );
         choiceBox.setOnAction( evt -> setFontSize( choiceBox.getSelectionModel().getSelectedItem() ) );
     	menu.setGraphic( choiceBox );
+
     	/*
     	Menu menu = new Menu( "Font Size" );
         ToggleGroup groupInMenu = new ToggleGroup();
@@ -301,7 +305,6 @@ public final class Xliterator extends Application {
     
 
     private void populateDocumentFontsMenu() {
-    	// List<String> fonts = new ArrayList<String>();
     	ObservableList<String> fonts = FXCollections.observableArrayList();
     	
     	try {
@@ -343,9 +346,6 @@ public final class Xliterator extends Application {
         Menu  inScriptMenu =  createInScriptsMenu( stage );
         outScriptMenu  = new Menu( "Script _Out" );
         outVariantMenu = new Menu( "_Variant" );
-
-        Menu fontMenu = createFontMenu( "editor" );
-        Menu fontSizeMenu = createFontSizeMenu();
 
         final Menu fileMenu = new Menu("_File"); 
         final FileChooser fileChooser = new FileChooser();
@@ -437,17 +437,23 @@ public final class Xliterator extends Application {
         MenuBar leftBar = new MenuBar(); 
   
         // add menu to menubar 
-        leftBar.getMenus().addAll( fileMenu, inScriptMenu, outScriptMenu , outVariantMenu, fontMenu, fontSizeMenu );
+        leftBar.getMenus().addAll( fileMenu, inScriptMenu, outScriptMenu , outVariantMenu );
+        
         
         //=========================== BEGIN FILES TAB =============================================
         documentFontsMenu.setDisable( true );
-        HBox filesTabMenuBox = new HBox( new Text( "Document Fonts:" ), documentFontsMenu );
+       // MenuBar fileConverterMenuBar = new MenuBar();
+        //Menu fileConverterFontMenu = createFontMenu( "file-converter" );
+        //fileConverterMenuBar.getMenus().addAll( fileConverterFontMenu );
+        ChoiceBox<String> outputFontMenu = createFontChoiceBox( "fileConverter" );
+        HBox filesTabMenuBox = new HBox( new Text( "Document Fonts:" ), documentFontsMenu, new Text( "Output Font:" ), outputFontMenu );
         filesTabMenuBox.setPadding(new Insets(2, 2, 2, 2));
         filesTabMenuBox.setSpacing(4);
         filesTabMenuBox.setAlignment( Pos.CENTER_LEFT );
         convertButton.setDisable( true );
         convertButton.setOnAction( event -> {
         	convertButton.setDisable( true );
+        	convertButton.getProperties().put("fontOut", outputFontMenu.getSelectionModel().getSelectedItem() );
         	convertFiles( convertButton, listView ); 
         });
         
@@ -542,8 +548,14 @@ public final class Xliterator extends Application {
         textTab.setContent( textVbox );
         //=========================== END TEXT TAB ==============================================
 
-        //=========================== END EDITOR TAB ==============================================
-        editTab.setContent( new StackPane( new VirtualizedScrollPane<>( editor ) ) );
+        //=========================== BEGIN EDITOR TAB ===========================================
+
+        Menu editorFontMenu = createFontMenu( "editor" );
+        Menu editorFontSizeMenu = createFontSizeMenu();
+        MenuBar editorMenutBar = new MenuBar();
+        editorMenutBar.getMenus().addAll( editorFontMenu, editorFontSizeMenu );
+        VBox editorVBox = new VBox( editorMenutBar, new StackPane( new VirtualizedScrollPane<>( editor ) ) );
+        editTab.setContent( editorVBox );
        
         //=========================== END EDITOR TAB ==============================================
 
@@ -584,6 +596,8 @@ public final class Xliterator extends Application {
         spacer.getStyleClass().add("menu-bar");
         HBox.setHgrow(spacer, Priority.SOMETIMES);
         HBox menubars = new HBox(leftBar, spacer, rightBar);
+        menubars.setAlignment( Pos.CENTER_LEFT);
+       // menubars.setPadding( new Insets(4, 4, 4, 4) );
  
         final BorderPane rootGroup = new BorderPane();
         rootGroup.setTop( menubars );
@@ -593,10 +607,11 @@ public final class Xliterator extends Application {
         rootGroup.setBottom( statusBar );
         rootGroup.setPadding( new Insets(8, 8, 8, 8) );
  
-        Scene scene = new Scene(rootGroup, 500, 800);
-        scene.getStylesheets().add( classLoader.getResource("styles/xliterator.css").toExternalForm()  );
+        Scene scene = new Scene(rootGroup, APP_WIDTH, APP_HEIGHT);
+        scene.getStylesheets().add( classLoader.getResource("styles/xliterator.css").toExternalForm() );
         stage.setScene( scene ); 
         editor.setStyle( scene );
+        editor.prefHeightProperty().bind( stage.heightProperty().multiply(0.8) );
         stage.show();
     }
  
@@ -677,69 +692,27 @@ public final class Xliterator extends Application {
     
     Converter converter = null;
     private void processFile(File inputFile, Button convertButton, ListView<Label> listView, int listIndex) {
+		File outputFile;
         try {
         	String inputFilePath = inputFile.getPath();
-        	String outputFilePath = inputFilePath.replaceAll("\\.docx", "-" + scriptOut.replace( " ", "-" ) + ".docx");
-        	outputFilePath = inputFilePath.replaceAll("\\.txt", "-" + scriptOut.replace( " ", "-" ) + ".txt");
-    		File outputFile = new File ( outputFilePath );
     		
     		String extension = FilenameUtils.getExtension( inputFilePath );
     		// a new converter instance is created for each file in a list. since if we can cache and reuse a converter.
     		// it may be necessary to reset the converter so it is in a neutral state
     		if ( extension.equals( "txt") ) {
+            	String outputFilePath = inputFilePath.replaceAll("\\.txt", "-" + scriptOut.replace( " ", "-" ) + ".txt");
+            	outputFile =  new File ( outputFilePath );
     			converter = new ConvertTextFile( inputFile, outputFile, selectedTransliteration, transliterationDirection );
     		}
     		else {
-    		/*
-    		switch( systemIn ) {
-		   		case brana:
-		   			converter = new ConvertDocxBrana( inputFile, outputFile );
-		   			break;
-	    			
-			   	case geezii:
-		    		converter = new ConvertDocxFeedelGeezII( inputFile, outputFile );
-		    		break;	
-	    			
-			   	case geezigna:
-		    		converter = new ConvertDocxFeedelGeezigna( inputFile, outputFile );
-		    		break;
-		
-			   	case geezbasic:
-		    		converter = new ConvertDocxGeezBasic( inputFile, outputFile );
-		    		break;    			
-		    			
-		   		case geeznewab:
-	    			converter = new ConvertDocxFeedelGeezNewAB( inputFile, outputFile );
-	    			break;
+            	String outputFilePath = inputFilePath.replaceAll("\\.docx", "-" + scriptOut.replace( " ", "-" ) + ".docx");
+            	outputFile =  new File ( outputFilePath );
 
-		    	case geeztypenet:
-		    		converter = new ConvertDocxGeezTypeNet( inputFile, outputFile );
-		   			break;
-
-		    	case powergeez:
-		    		converter = new ConvertDocxPowerGeez( inputFile, outputFile );
-		   			break;
-
-		    	case samawerfa:
-		    		converter = new ConvertDocxSamawerfa( inputFile, outputFile );
-		   			break;
-		   			
-		    	case visualgeez:
-		    		converter = new ConvertDocxVisualGeez( inputFile, outputFile );
-		    		break;
-		   			
-		    	case visualgeez2000:
-		    		converter = new ConvertDocxVisualGeez2000( inputFile, outputFile );
-		    		break;
-    			
-		    	default:
-		    		System.err.println( "Unrecognized input system: " + systemIn );
-		    		return;
-    		}
-    		*/
     			converter = new ConvertDocxGenericUnicodeFont(inputFile, outputFile, selectedTransliteration );
+
     			ArrayList<String> targetTypefaces = new ArrayList<String>( documentFontsMenu.getCheckModel().getCheckedItems() );
     			((ConvertDocxGenericUnicodeFont)converter).setTargetTypefaces( targetTypefaces );
+    			((ConvertDocxGenericUnicodeFont)converter).setFont( (String)convertButton.getProperties().get("fontOut") );
     		}
 
     		
@@ -898,6 +871,9 @@ public final class Xliterator extends Application {
     	else if( "textAreaOut".equals( component) ) {
     		textAreaOut.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + textAreaOut.getProperties().get("font-size") + ";" );
     		textAreaOut.getProperties().put( "font-family", font );
+    	}
+    	else if( "fileConverter".equals( component) ) {
+    		
     	}
     	else {
     		// set the font in all components, unless already set for the text areas
