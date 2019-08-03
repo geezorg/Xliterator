@@ -65,7 +65,7 @@ abstract class ConvertDocx extends Converter {
 
     private final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
 
-    private File inputFile = null, outputFile = null;
+    // private File inputFile = null, outputFile = null;
     
     public ConvertDocx( final File inputFile, final File outputFile ) {
     	super( inputFile, outputFile );
@@ -286,7 +286,7 @@ abstract class ConvertDocx extends Converter {
     		UnstyledTextFinder ustf = new UnstyledTextFinder(targetTypefaces, fontOut);
     		
     		// see: https://stackoverflow.com/questions/34357005/javafx-task-update-progress-from-a-method
-    		selectFonts( documentPart );
+    		// selectFonts( documentPart );
 
 			normalizeText( documentPart, stf, ustf );
     		totalNodes = stf.results.size() + ustf.results.size();
