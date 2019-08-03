@@ -259,13 +259,6 @@ abstract class ConvertDocx extends Converter {
 	}
 	
 	
-	private void selectFonts( MainDocumentPart documentPart ) {
-		for( String font: documentPart.fontsInUse() ) {
-			System.err.println( "Document Font: " + font);
-		}
-	}
-	
-	
 	@Override
 	public Void call() {
 		process( inputFile, outputFile );
