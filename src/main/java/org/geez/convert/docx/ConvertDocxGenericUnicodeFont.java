@@ -20,14 +20,13 @@ public class ConvertDocxGenericUnicodeFont extends ConvertDocx {
 
 	public ConvertDocxGenericUnicodeFont( final File inputFile, final File outputFile, String rulesFile ) {
 		super( inputFile, outputFile );
-		this.initialize( rulesFile, "Abyssinica SIL" );
 		
 		try {
 			// specify the transliteration file in the first argument.
 			// read the input, transliterate, and write to output
-			String table1Text = readRules( rulesFile  );
+			String tableText = readRules( rulesFile  );
 
-			xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), table1Text.replace( '\ufeff', ' ' ), Transliterator.REVERSE );
+			xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), tableText.replace( '\ufeff', ' ' ), Transliterator.FORWARD );
 
 		} catch ( Exception ex ) {
 			System.err.println( ex );
