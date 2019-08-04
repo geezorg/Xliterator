@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.UUID;
 
 import com.ibm.icu.text.Transliterator;
 
@@ -34,6 +34,22 @@ public class ConvertTextFile extends Converter {
     }
 
 
+    public ConvertTextFile( final File inputFile, final File outputFile,  String editorText ) {
+    	super( inputFile, outputFile );
+		
+		try {
+			String rulesText = editorText;
+			if( editorText.startsWith( "<?xml" ) ) {
+				rulesText = readRulesStringXML( editorText );
+			}
+			xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), rulesText, Transliterator.FORWARD );
+		} catch ( Exception ex ) {
+			// put into dialog
+			System.err.println( ex );
+		}
+	}
+    
+
 	void initialize( final String tableRulesFile, final String direction ) {
 		try {
 			//TODO:  Update readRules to read ICU XML file
@@ -43,7 +59,7 @@ public class ConvertTextFile extends Converter {
 			icuDirection = ( direction.equals("both") || direction.equals("forward") ) ? Transliterator.FORWARD : Transliterator.REVERSE;
 			
 			
-			String rulesText = readRules( tableRulesFile );
+			String rulesText = readRulesResourceFile( tableRulesFile );
 
 			xlit = Transliterator.createFromRules( id, rulesText.replace( '\ufeff', ' ' ), icuDirection );
 

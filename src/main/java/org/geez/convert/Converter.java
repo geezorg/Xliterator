@@ -108,23 +108,23 @@ public class Converter  implements Callable<Void> {
 		return rules;	
 	}
 	
-	public String readRules( String rulesFile ) throws IOException, SAXException {
+	public String readRulesResourceFile( String rulesFile ) throws IOException, SAXException {
 		if( FilenameUtils.getExtension( rulesFile ).equals( "xml" ) ) {
-			return readRulesXML( rulesFile );
+			return readRulesResourceFileXML( rulesFile );
 		}
 		else {
-			return readRulesText( rulesFile );
+			return readRulesResourceFileText( rulesFile );
 		}
 	}
 	
-	public String readRulesText( String rulesFileTXT ) throws IOException {
+	public String readRulesResourceFileText( String rulesFileTXT ) throws IOException {
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		InputStream in = classLoader.getResourceAsStream( "tables/" + rulesFileTXT ); 
 		return readRulesFromStream( in );	
 	}
 	
 	
-	public String readRulesXML( String rulesFileXML ) throws IOException, SAXException {		
+	public String readRulesResourceFileXML( String rulesFileXML ) throws IOException, SAXException {		
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		if(! rulesFileXML.contains( "/" ) ) {
 			// this is a week test for a path hierarchy, we assume some path for a user defined file
@@ -133,6 +133,20 @@ public class Converter  implements Callable<Void> {
 		InputStream xmlStream = classLoader.getResourceAsStream( rulesFileXML );    
 	    
 	    Document doc = builder.parse( xmlStream );
+	    NodeList nodes = doc.getElementsByTagName( "tRule" );
+	    Element  element = (Element) nodes.item(0); // assume only one
+	    
+	    String rulesString = getCharacterDataFromElement( element );
+	    InputStream is = new ByteArrayInputStream( rulesString.getBytes() );
+	    
+		return readRulesFromStream( is );
+	}
+	
+	public String readRulesStringXML( String rulesStringXML ) throws IOException, SAXException {		
+
+		InputStream rulesStream = new ByteArrayInputStream(rulesStringXML.getBytes());
+	    
+	    Document doc = builder.parse( rulesStream );
 	    NodeList nodes = doc.getElementsByTagName( "tRule" );
 	    Element  element = (Element) nodes.item(0); // assume only one
 	    
