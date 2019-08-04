@@ -1,11 +1,18 @@
 package org.geez.ui;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.io.FileUtils;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -250,5 +257,26 @@ public class ICUEditor extends CodeArea {
        
         spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
         return spansBuilder.create();
+    }
+    
+    public void loadResourceFile(String rulesFile) throws UnsupportedEncodingException, IOException {
+		ClassLoader classLoader = this.getClass().getClassLoader();
+		String rulesFilePath = "common/transforms/" + rulesFile ; 
+		InputStream inputStream = classLoader.getResourceAsStream( rulesFilePath ); 
+		
+		BufferedReader br = new BufferedReader( new InputStreamReader(inputStream, "UTF-8") );
+		StringBuffer sb = new StringBuffer();
+		String line = null;
+
+		while ( (line = br.readLine()) != null) {
+			sb.append( line + "\n" );
+		}
+		br.close();
+		replaceText( sb.toString() );
+	
+    }
+    
+    public void loadFile(File icuFile) throws IOException {
+    	replaceText( FileUtils.readFileToString(icuFile, StandardCharsets.UTF_8) );
     }
 }
