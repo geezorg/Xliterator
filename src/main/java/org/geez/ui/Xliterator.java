@@ -1,9 +1,12 @@
 package org.geez.ui;
 
 import java.awt.Desktop;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +65,7 @@ import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.StatusBar;
@@ -111,6 +115,56 @@ public final class Xliterator extends Application {
     private final int APP_HEIGHT = 800;
     
 	private XliteratorConfig config = new XliteratorConfig();
+	
+	private void errorAlert(Exception ex, String header ) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle( "An Exception has occured" );
+        alert.setHeaderText( header );
+        alert.setContentText( ex.getMessage() );
+        alert.showAndWait();
+	}
+
+	
+	private void errorAlert(String title, String message ) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle( title );
+        alert.setHeaderText( message );
+        alert.setContentText( message );
+        alert.showAndWait();
+	}
+	
+	private void saveEditorToFile(String newContent) {
+		try{
+			  // Create file 
+			  FileWriter fstream = new FileWriter( icuFile );
+			  BufferedWriter out = new BufferedWriter(fstream);
+			  out.write("Hello Java");
+			  //Close the output stream
+			  out.close();
+		}
+		catch (Exception ex){
+			errorAlert( "Error occured saving file",  "An error occured while saving the file \"" + icuFile.getPath() + "\":\n" + ex.getMessage() );
+		}
+	}
+	
+	private void saveAsEditorToFile(Stage stage, String newContent) {
+		FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Save ICU File");
+        File file = fileChooser.showSaveDialog( stage );
+        if (file != null) {
+            try {
+  			  // Create file 
+  			  FileWriter fstream = new FileWriter( icuFile );
+  			  BufferedWriter out = new BufferedWriter(fstream);
+  			  out.write("Hello Java");
+  			  //Close the output stream
+  			  out.close();
+  			  icuFile = file;
+            } catch (IOException ex) {
+    			errorAlert( "Error occured saving file",  "An error occured while saving the file \"" + icuFile.getPath() + "\":\n" + ex.getMessage() );
+            }
+        }
+    }
 	
     private static void configureFileChooser( final FileChooser fileChooser ) {      
     	fileChooser.setTitle("View Word Files");
@@ -215,40 +269,16 @@ public final class Xliterator extends Application {
     				}	
     	});
     	menu.getItems().add( editTabItem );
-    	
-    	
-    	// This should be moved under the top level "File" menu and is 
-
-    	// Add transliteration file selection option:
-    	menu.getItems().add( new SeparatorMenuItem() );
-		RadioMenuItem fileMenuItem = new RadioMenuItem( "Open ICU File..." );
-		fileMenuItem.setToggleGroup( groupInMenu );
-        fileMenuItem.setOnAction(
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(final ActionEvent e) {
-                        final FileChooser fileChooser = new FileChooser();
-                    	configureFileChooserICU(fileChooser);    
-                        icuFile = fileChooser.showOpenDialog( stage );
-                    }
-                }
-        );
-        menu.getItems().add( fileMenuItem ); 
-            
-		
+        		
     	return menu;
     }
     
     
     private Menu createOutScriptsMenu(String outScript) {
-    	if( scriptOut != null ) {
-    	 outScriptMenu.getItems().clear();
-    	 scriptOut = null;
-    	}
-    	if( variantOut != null ) {
-    		outVariantMenu.getItems().clear();
-    		variantOut = null;
-    	}
+   	 	outScriptMenu.getItems().clear();
+   	 	scriptOut = null;
+		outVariantMenu.getItems().clear();
+		variantOut = null;
     	
         ToggleGroup groupOutMenu = new ToggleGroup();
         
@@ -264,8 +294,7 @@ public final class Xliterator extends Application {
     
     
     private Menu createOutVaraintsMenu(String outVariant) {
-    	if( variantOut != null )
-    		outVariantMenu.getItems().clear();
+    	outVariantMenu.getItems().clear();
         ToggleGroup groupVariantOutMenu = new ToggleGroup();
              
     	JsonArray variants = config.getVariants(scriptIn, scriptOut);
@@ -389,17 +418,41 @@ public final class Xliterator extends Application {
             }
         );
         fileMenuItem.setDisable( true );
-        
-        MenuItem saveMenuItem = new MenuItem( "Save" );
-        saveMenuItem.setDisable( true );
-        MenuItem saveAsMenuItem = new MenuItem( "Save As..." );
-        saveAsMenuItem.setDisable( true );
+    	// This should be moved under the top level "File" menu and is 
 
-       //  fileMenu.getItems().add( new SeparatorMenuItem() );
+    	// Add transliteration file selection option:
+		RadioMenuItem openMenuItem = new RadioMenuItem( "Open ICU File..." );
+        openMenuItem.setOnAction(
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(final ActionEvent e) {
+                        final FileChooser fileChooser = new FileChooser();
+                    	configureFileChooserICU(fileChooser);    
+                        icuFile = fileChooser.showOpenDialog( stage );
+                        try {
+                        	editor.replaceText( FileUtils.readFileToString(icuFile, StandardCharsets.UTF_8) );
+                        }
+                        catch(IOException ex) {
+                        	errorAlert(ex, "Error opening: " + icuFile.getName() );
+                        }
+                    }
+                }
+        );
+        MenuItem saveMenuItem = new MenuItem( "Save" );
+        MenuItem saveAsMenuItem = new MenuItem( "Save As..." );
+        saveMenuItem.setOnAction( actionEvent ->
+        	{
+        		if( icuFile == null) {
+        			saveAsEditorToFile( stage, editor.getText() );
+        		} {
+        			saveEditorToFile( editor.getText() );
+        		}
+        	}
+        );
         
         MenuItem exitMenuItem = new MenuItem("Exit");
         exitMenuItem.setOnAction(actionEvent -> Platform.exit());
-        fileMenu.getItems().addAll( fileMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), exitMenuItem ); 
+        fileMenu.getItems().addAll( fileMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), exitMenuItem ); 
         
         
         final Menu helpMenu = new Menu( "Help" );
@@ -566,9 +619,18 @@ public final class Xliterator extends Application {
         
         // VBox vbottomBox = new VBox( hbottomBox, statusBar,  textAreaIn, hUpDownButtonBox, textAreaOut );
         
+        editTab.setOnSelectionChanged( evt -> {
+        	if( editTab.isSelected() ) {
+        		fileMenuItem.setDisable( true );
+        		openMenuItem.setDisable( false );
+        		saveMenuItem.setDisable( false );
+        		saveAsMenuItem.setDisable( false );
+        	}
+        } );
         textTab.setOnSelectionChanged( evt -> {
         	if( textTab.isSelected() ) {
         		fileMenuItem.setDisable( true );
+        		openMenuItem.setDisable( true );
         		saveMenuItem.setDisable( true );
         		saveAsMenuItem.setDisable( true );
         	}
@@ -576,15 +638,9 @@ public final class Xliterator extends Application {
         filesTab.setOnSelectionChanged( evt -> {
         	if( filesTab.isSelected() ) {
         		fileMenuItem.setDisable( false );
-        		saveMenuItem.setDisable( false );
-        		saveAsMenuItem.setDisable( false );
-        	}
-        } );
-        editTab.setOnSelectionChanged( evt -> {
-        	if( editTab.isSelected() ) {
-        		fileMenuItem.setDisable( false );
-        		saveMenuItem.setDisable( false );
-        		saveAsMenuItem.setDisable( false );
+        		openMenuItem.setDisable( true );
+        		saveMenuItem.setDisable( true );
+        		saveAsMenuItem.setDisable( true );
         	}
         } );
         
@@ -749,17 +805,11 @@ public final class Xliterator extends Application {
             				desktop.open( outputFile ); 
             			}
             			catch(IOException ex) {
-                			Alert errorAlert = new Alert(AlertType.ERROR);
-                			errorAlert.setHeaderText( "File IO Exception" );
-                			errorAlert.setContentText( "An error has occured opening the file:\n" + ex );
-                			errorAlert.showAndWait();
+            				errorAlert( "File IO Exception", "An error has occured opening the file:\n" + ex  );
             			}
             		}
             		else {
-            			Alert errorAlert = new Alert(AlertType.ERROR);
-            			errorAlert.setHeaderText( "Output file not found" );
-            			errorAlert.setContentText( "The output file \"" + outputFile.getPath() + "\" could not be found.  Conversation has likely failed." );
-            			errorAlert.showAndWait();
+            			errorAlert( "Output file not found", "The output file \"" + outputFile.getPath() + "\" could not be found.  Conversation has likely failed." );
             		}
             	}
             	Label label = listView.getItems().get( listIndex );

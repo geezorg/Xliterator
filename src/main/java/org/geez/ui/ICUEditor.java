@@ -146,7 +146,6 @@ public class ICUEditor extends CodeArea {
             this.setStyleSpans( 0, computeHighlighting(newText) );
         });
         replaceText(0, 0, sampleCode);
-
     }
     
     public void setStyle(Scene scene) {
