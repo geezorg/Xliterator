@@ -24,15 +24,31 @@ public class ConvertDocxGenericUnicodeFont extends ConvertDocx {
 		try {
 			// specify the transliteration file in the first argument.
 			// read the input, transliterate, and write to output
-			String tableText = readRules( rulesFile  );
+			String tableText = readRulesResourceFile( rulesFile  );
 			int direction = ( "reverse".equals( transliterationDirection) ) ? Transliterator.REVERSE : Transliterator.FORWARD ;
 
 			xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), tableText.replace( '\ufeff', ' ' ), direction );
 		} catch ( Exception ex ) {
+			// put into dialog
 			System.err.println( ex );
 		}
 	}
 	
+	public ConvertDocxGenericUnicodeFont( final File inputFile, final File outputFile, String editorText ) {
+		super( inputFile, outputFile );
+		
+		String rulesText = editorText;
+		if( editorText.startsWith( "<?xml" ) ) {
+			rulesText = readRulesStringXML( editorText );
+		}
+		
+		try {
+			xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), rulesText, Transliterator.FORWARD );
+		} catch ( Exception ex ) {
+			// put into dialog
+			System.err.println( ex );
+		}
+	}
 	
 	
 	public void setTargetTypefaces(List<String> targetTypefaces) {

@@ -760,13 +760,24 @@ public final class Xliterator extends Application {
     		if ( extension.equals( "txt") ) {
             	String outputFilePath = inputFilePath.replaceAll("\\.txt", "-" + scriptOut.replace( " ", "-" ) + ".txt");
             	outputFile =  new File ( outputFilePath );
-    			converter = new ConvertTextFile( inputFile, outputFile, selectedTransliteration, transliterationDirection );
+            	
+            	if( selectedTransliteration.equals( "Mapping Editor") ) {
+            		converter = new ConvertTextFile( inputFile, outputFile, editor.getText() );	
+            	}
+            	else {
+            		converter = new ConvertTextFile( inputFile, outputFile, selectedTransliteration, transliterationDirection );
+            	}
     		}
     		else {
             	String outputFilePath = inputFilePath.replaceAll("\\.docx", "-" + scriptOut.replace( " ", "-" ) + ".docx");
             	outputFile =  new File ( outputFilePath );
 
-    			converter = new ConvertDocxGenericUnicodeFont( inputFile, outputFile, selectedTransliteration, transliterationDirection );
+            	if( selectedTransliteration.equals( "Mapping Editor") ) {
+            		converter = new ConvertDocxGenericUnicodeFont( inputFile, outputFile, editor.getText() );	
+            	}
+            	else {
+            		converter = new ConvertDocxGenericUnicodeFont( inputFile, outputFile, selectedTransliteration, transliterationDirection );
+            	}
 
     			ArrayList<String> targetTypefaces = new ArrayList<String>( documentFontsMenu.getCheckModel().getCheckedItems() );
     			((ConvertDocxGenericUnicodeFont)converter).setTargetTypefaces( targetTypefaces );
