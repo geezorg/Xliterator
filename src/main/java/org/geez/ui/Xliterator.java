@@ -110,6 +110,7 @@ public final class Xliterator extends Application {
     private final TextArea textAreaOut = new TextArea();
     private String defaultFont = null;
     private CheckComboBox<String> documentFontsMenu = new CheckComboBox<String>();
+    RadioMenuItem openInternalMenuItem = new RadioMenuItem( "Open Selected Transliteration" );
     
     private final int APP_WIDTH  = 800;
     private final int APP_HEIGHT = 800;
@@ -279,6 +280,8 @@ public final class Xliterator extends Application {
    	 	scriptOut = null;
 		outVariantMenu.getItems().clear();
 		variantOut = null;
+    	scriptOutText.setText( " " );
+    	variantOutText.setText( " " );
     	
         ToggleGroup groupOutMenu = new ToggleGroup();
         
@@ -430,7 +433,22 @@ public final class Xliterator extends Application {
                     	configureFileChooserICU(fileChooser);    
                         icuFile = fileChooser.showOpenDialog( stage );
                         try {
-                        	editor.replaceText( FileUtils.readFileToString(icuFile, StandardCharsets.UTF_8) );
+                        	// editor.replaceText( FileUtils.readFileToString(icuFile, StandardCharsets.UTF_8) );
+                        	editor.loadFile( icuFile );
+                        }
+                        catch(IOException ex) {
+                        	errorAlert(ex, "Error opening: " + icuFile.getName() );
+                        }
+                    }
+                }
+        );
+		
+        openInternalMenuItem.setOnAction(
+                new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(final ActionEvent e) {
+                    	try {
+                        	editor.loadResourceFile( selectedTransliteration );
                         }
                         catch(IOException ex) {
                         	errorAlert(ex, "Error opening: " + icuFile.getName() );
@@ -452,7 +470,7 @@ public final class Xliterator extends Application {
         
         MenuItem exitMenuItem = new MenuItem("Exit");
         exitMenuItem.setOnAction(actionEvent -> Platform.exit());
-        fileMenu.getItems().addAll( fileMenuItem, openMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), exitMenuItem ); 
+        fileMenu.getItems().addAll( fileMenuItem, openMenuItem, openInternalMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), exitMenuItem ); 
         
         
         final Menu helpMenu = new Menu( "Help" );
@@ -623,6 +641,10 @@ public final class Xliterator extends Application {
         	if( editTab.isSelected() ) {
         		fileMenuItem.setDisable( true );
         		openMenuItem.setDisable( false );
+        		if ( variantOut == null )
+        			openInternalMenuItem.setDisable( true );
+        		else
+        			openInternalMenuItem.setDisable( false );
         		saveMenuItem.setDisable( false );
         		saveAsMenuItem.setDisable( false );
         	}
@@ -631,6 +653,7 @@ public final class Xliterator extends Application {
         	if( textTab.isSelected() ) {
         		fileMenuItem.setDisable( true );
         		openMenuItem.setDisable( true );
+        		openInternalMenuItem.setDisable( true );
         		saveMenuItem.setDisable( true );
         		saveAsMenuItem.setDisable( true );
         	}
@@ -639,6 +662,7 @@ public final class Xliterator extends Application {
         	if( filesTab.isSelected() ) {
         		fileMenuItem.setDisable( false );
         		openMenuItem.setDisable( true );
+        		openInternalMenuItem.setDisable( true );
         		saveMenuItem.setDisable( true );
         		saveAsMenuItem.setDisable( true );
         	}
@@ -907,14 +931,17 @@ public final class Xliterator extends Application {
     	createOutScriptsMenu( scriptIn );
 		convertButton.setDisable( true );
         convertButtonDown.setDisable( true );
+        openInternalMenuItem.setDisable( true );
     }
     private void setScriptOut(String scriptOut) {
     	this.scriptOut = scriptOut;
+    	this.variantOut = null;
     	scriptOutText.setText( scriptOut );
     	variantOutText.setText( " " );
     	createOutVaraintsMenu( scriptOut );
 		convertButton.setDisable( true );
         convertButtonDown.setDisable( true );
+        openInternalMenuItem.setDisable( true );
     }
     private void setVariantOut(String variantOut) {
     	this.variantOut = variantOut;
@@ -923,6 +950,7 @@ public final class Xliterator extends Application {
     		convertButton.setDisable( false );
     	}
         convertButtonDown.setDisable( false );
+        openInternalMenuItem.setDisable( false );
     }
     
 

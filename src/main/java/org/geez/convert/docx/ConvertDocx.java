@@ -87,7 +87,7 @@ abstract class ConvertDocx extends Converter {
 		try {
 			// specify the transliteration file in the first argument.
 			// read the input, transliterate, and write to output
-			String table1Text = readRules( table1RulesFile  );
+			String table1Text = readRulesResourceFile( table1RulesFile  );
 
 			xlit = Transliterator.createFromRules( "Ethiopic-ExtendedLatin", table1Text.replace( '\ufeff', ' ' ), Transliterator.REVERSE );
 			this.fontName = fontName1;
