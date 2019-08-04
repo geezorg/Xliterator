@@ -37,12 +37,11 @@ public class ConvertDocxGenericUnicodeFont extends ConvertDocx {
 	public ConvertDocxGenericUnicodeFont( final File inputFile, final File outputFile, String editorText ) {
 		super( inputFile, outputFile );
 		
-		String rulesText = editorText;
-		if( editorText.startsWith( "<?xml" ) ) {
-			rulesText = readRulesStringXML( editorText );
-		}
-		
 		try {
+			String rulesText = editorText;
+			if( editorText.startsWith( "<?xml" ) ) {
+				rulesText = readRulesStringXML( editorText );
+			}
 			xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), rulesText, Transliterator.FORWARD );
 		} catch ( Exception ex ) {
 			// put into dialog
