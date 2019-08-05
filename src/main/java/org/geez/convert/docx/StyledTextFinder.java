@@ -16,7 +16,7 @@ import org.docx4j.wml.RPr;
 import org.docx4j.wml.Text;
 
 
-public class  StyledTextFinder extends CallbackImpl {
+public class StyledTextFinder extends CallbackImpl {
     
     public Map<Text,String> results = new HashMap<Text,String>();
     public Map<R.Sym,String> symResults = new HashMap<R.Sym,String>();
@@ -66,7 +66,7 @@ public class  StyledTextFinder extends CallbackImpl {
 						for(Object robj: rObjects) {
 							Object tobj = XmlUtils.unwrap(robj);
 							if ( tobj instanceof org.docx4j.wml.Text ) {
-								// checkhere if styleIdToFont.get(styleName) might be null -?
+								// chec khere if styleIdToFont.get(styleName) might be null -?
 								results.put( (org.docx4j.wml.Text)tobj, styleIdToFont.get(styleName) );
 								resultsOrdered.add( (org.docx4j.wml.Text)tobj );
 							}
