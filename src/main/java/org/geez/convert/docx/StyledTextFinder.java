@@ -56,11 +56,6 @@ public class  StyledTextFinder extends CallbackImpl {
 			}
 			
 			if( styleIdToFont.containsKey( styleName ) ) {
-				ParaRPr prpr = ppr.getRPr();
-				// if the rpr has an rFonts setting then we have already visited
-				// this text node and should not re-process.  Though it would be
-				// to have both a w:style and w:rFonts set:
-				if ( (prpr != null) && (prpr.getRFonts() != null) ) return null;  // UnstypedTextFinder has been here
 				List<Object> pObjects = p.getContent();
 				for(Object pobj: pObjects) {
 					if( pobj instanceof org.docx4j.wml.R ) {

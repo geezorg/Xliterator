@@ -16,7 +16,7 @@ import org.docx4j.wml.RPr;
 import org.docx4j.wml.Text;
 
 
-public class  UnstyledTextFinder extends CallbackImpl {
+public class UnstyledTextFinder extends CallbackImpl {
     
     public Map<Text,String> results = new HashMap<Text,String>();
     public Map<R.Sym,String> symResults = new HashMap<R.Sym,String>();
@@ -127,10 +127,10 @@ public class  UnstyledTextFinder extends CallbackImpl {
 			P p = (org.docx4j.wml.P)o;
 			PPr ppr = p.getPPr();
 			if (ppr == null ) return null;
-			ParaRPr rpr = ppr.getRPr();
-			if ( (rpr == null) || (rpr.getRFonts() == null) ) return null;
+			ParaRPr prpr = ppr.getRPr();
+			if ( (prpr == null) || (prpr.getRFonts() == null) ) return null;
 
-			String fontIn = checkTargetFont( rpr.getRFonts() );
+			String fontIn = checkTargetFont( prpr.getRFonts() );
 			if ( fontIn == null ) {
 				return null;
 			}
