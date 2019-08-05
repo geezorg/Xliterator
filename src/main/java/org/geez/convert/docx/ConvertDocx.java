@@ -1,28 +1,13 @@
 package org.geez.convert.docx;
 
 import org.geez.convert.Converter;
-import org.w3c.dom.CharacterData;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.EntityResolver;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import java.util.UUID;
 
 import org.docx4j.TraversalUtil;
 import org.docx4j.XmlUtils;
@@ -43,20 +28,11 @@ import com.ibm.icu.text.Transliterator;
 
 // StatusBar Imports:
 
-import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 
-/*
- * The non-maven way to build the jar file:
- *
- * javac -Xlint:deprecation -cp docx4j-6.0.1.jar:dependencies/commons-io-2.5.jar:../icu4j-63_1.jar:dependencies/slf4j-api-1.7.25.jar:slf4j-1.7.25 *.java
- * jar -cvf convert.jar org/geez/convert/docx/*.class org/geez/convert/tables/
- * java -cp convert.jar:docx4j-6.0.1.jar:dependencies/*:../icu4j-63_1.jar:slf4j-1.7.25/slf4j-nop-1.7.25.jar org.geez.convert.docx.ConvertDocx brana myFile-In.docx myFile-Out.docx
- *
- */
 
 
-abstract class ConvertDocx extends Converter {
+public abstract class ConvertDocx extends Converter {
 	protected String fontOut = null;
 	protected String fontIn = null;
 	protected char huletNeteb = 0x0;
@@ -64,8 +40,6 @@ abstract class ConvertDocx extends Converter {
 	private boolean setProgress = true;
 
     private final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
-
-    // private File inputFile = null, outputFile = null;
     
     public ConvertDocx( final File inputFile, final File outputFile ) {
     	super( inputFile, outputFile );
@@ -80,22 +54,34 @@ abstract class ConvertDocx extends Converter {
 	protected List<String> targetTypefaces = new  ArrayList<String>();
 	protected Map<String,Transliterator> fontToTransliteratorMap = new HashMap<String,Transliterator>();
 
-	public void initialize(
-		final String table1RulesFile,
-		final String fontName1)
+	public void initialize( final String rulesFile, final String fontName )
 	{
+		// reverse because DocxConvert maps are defined Ethiopic -> Latin
+		initialize( rulesFile, fontName, "reverse" );
+	}
+
+	public void initialize( final String rulesFile, final String fontName, final String transliterationDirection )
+	{
+		
 		try {
-			// specify the transliteration file in the first argument.
-			// read the input, transliterate, and write to output
-			String table1Text = readRulesResourceFile( table1RulesFile  );
+			String tableText = readRulesResourceFile( rulesFile  );
+			int direction = ( "reverse".equals( transliterationDirection) ) ? Transliterator.REVERSE : Transliterator.FORWARD ;
 
-			xlit = Transliterator.createFromRules( "Ethiopic-ExtendedLatin", table1Text.replace( '\ufeff', ' ' ), Transliterator.REVERSE );
-			this.fontName = fontName1;
+			String id;
+			if( IDs == null ) {
+				id = "Xliterator-" + UUID.randomUUID();
+			}
+			else {
+				id = IDs[0];
+			}
+			xlit = Transliterator.createFromRules( id, tableText.replace( '\ufeff', ' ' ), direction );
 			
-			targetTypefaces.add( fontName1 );
+			this.fontName = fontName;
+			
+			targetTypefaces.add( fontName );
 			fontToTransliteratorMap.put( fontName, xlit );
-
 		} catch ( Exception ex ) {
+			// put into dialog
 			System.err.println( ex );
 		}
 	}
@@ -359,7 +345,7 @@ abstract class ConvertDocx extends Converter {
 		}
 	}
 	
-
+    /*
 	public static void main( String[] args ) {
 		if( args.length != 3 ) {
 			System.err.println( "Exactly 3 arguements are expected: <system> <input file> <output file>" );
@@ -374,7 +360,7 @@ abstract class ConvertDocx extends Converter {
 
 
 	    ConvertDocx converter = null;
-	    /*
+
 		switch( systemIn ) {
 			case "brana":
 				converter = new ConvertDocxBrana( inputFile, outputFile );
@@ -389,7 +375,7 @@ abstract class ConvertDocx extends Converter {
 	    		break;
 	
 		   	case "geezbasic":
-	    		converter = new ConvertDocxGeezBasic( inputFile, outputFile );
+	    		converter = new ConvertDocxGeezFont( inputFile, outputFile );
 	    		break; 
 		
 			case "geeznewab":
@@ -420,7 +406,8 @@ abstract class ConvertDocx extends Converter {
 				System.err.println( "Unrecognized input system: " + systemIn );
 				System.exit(1);
 		}
-		*/
+
 		converter.process( inputFile, outputFile );
 	}
+	*/
 }
