@@ -1,16 +1,58 @@
 {
 	"Scripts": {
-		"Arabic" : {
+		"Any" : {
+			"Any" : [
+				{ "name": "Accents", "direction": "both", "path": "Any-Accents.xml" } ,
+				{ "name": "Publishing", "direction": "both", "path": "Any-Publishing.xml" }
+			]
 		},
-		"Hebrew" : {
+		"Arabic" : {
+			"Latin" : [
+				{ "name": "Latin", "direction": "both", "path": "Arabic-Latin.xml" } ,
+				{ "name": "BGN", "direction": "forward", "path": "Arabic-Latin-BGN.xml" }
+			]
+		},
+		"Armenian" : {
+			"Latin" : [
+				{ "name": "BGN", "direction": "forward", "path": "Armenian-Latin-BGN.xml" }
+			]
+		},
+		"Azerbaijani" : {
+			"Latin" : [
+				{ "name": "BGN", "direction": "forward", "path": "Azerbaijani-Latin-BGN.xml" }
+			]
+		},
+		"Belarusian" : {
+			"Latin" : [
+				{ "name": "BGN", "direction": "forward", "path": "Belarusian-Latin-BGN.xml" }
+			]
+		},
+		"Cyrillic" : {
+			"Latin" : [
+				{
+				 "BGN" : [
+					{ "name": "Mongolian", "direction": "forward", "path": "Mongolian-Latin-BGN.xml" },
+					{ "name": "Serbian", "direction": "forward", "path": "Serbian-Latin-BGN.xml" },
+					{ "name": "Russian", "direction": "forward", "path": "Russian-Latin-BGN.xml" },
+					{ "name": "Ukrainian", "direction": "forward", "path": "Ukrainian-Latin-BGN.xml" },
+					{ "name": "Turkmen", "direction": "forward", "path": "Turkmen-Latin-BGN.xml" },
+					{ "name": "Uzbek", "direction": "forward", "path": "Uzbek-Latin-BGN.xml" }
+				]
+				},
+			        {
+				 "Mongolian" : [
+						{ "name": "BGN", "direction": "forward", "path": "Mongolian-Latin-BGN.xml" },
+						{ "name": "MNS", "direction": "forward", "path": "mn-mn_Latn-MNS.xml" }
+					]
+				}
+			]
 		},
 		"Ethiopic" : {
-         	"IPA" : [
-				{ "name": "Amharic", "direction": "both", "path": "Amharic-IPA.xml" },
-				{ "name": "Ge'ez", "direction": "forward", "path": "Geez-IPA.xml" }
+         		"IPA" : [
+				{ "name": "Amharic", "direction": "both", "path": "am-am-FONIPA.xml" }
 			],
 			"Latin" : [
-		        {
+		        	{
 		        	"Amharic" : [
  						{ "name": "BGN", "direction": "forward", "path": "Amharic-Latin-BGN.xml" },
 						{ "name": "Hamburg", "direction": "forward", "path": "Amharic-Latin-Hamburg.xml" },
@@ -18,11 +60,11 @@
 					]
 				 },
 				{
-					"Tigrinya" : [
+				"Tigrinya" : [
 						{ "name": "BGN", "direction": "forward", "path": "Tigrinya-Latin-BGN.xml" }
 					]
 				}
-    		]
+    			]
 		},
 		"Georgian" : {
 			"Latin" : [
@@ -32,12 +74,52 @@
 			]
 		},
 		"Greek" : {
-    		"Latin" : [
-    			{ "name": "Latin", "direction": "both", "path": "Georgian-Latin.xml" },
-    			{ "name": "BGN", "direction": "forward", "path": "Georgian-Latin-BGN.xml" },
-    			{ "name": "UNGEGN", "direction": "both", "path": "Georgian-Latin-UNGEGN.xml" }
-    		]
+    			"Latin" : [
+    				{ "name": "Latin", "direction": "both", "path": "Georgian-Latin.xml" },
+    				{ "name": "BGN", "direction": "forward", "path": "Georgian-Latin-BGN.xml" },
+    				{ "name": "UNGEGN", "direction": "both", "path": "Georgian-Latin-UNGEGN.xml" }
+    			]
  		},
+		"Hangul" : {
+			"Latin" : [
+				{ "name": "BGN", "direction": "forward", "path": "Korean-Latin-BGN.xml" }
+			]
+		},
+		"Hani" : {
+			"Latin" : [
+				{ "name": "Latin", "direction": "forward", "path": "Han-Latin-BGN.xml" }
+			]
+		},
+		"Hebrew" : {
+			"Latin" : [
+				{ "name": "Latin", "direction": "both", "path": "Hebrew-Latin.xml" } ,
+				{ "name": "BGN", "direction": "forward", "path": "Hebrew-Latin-BGN.xml" }
+			]
+		},
+		"Latin" : {
+			"ASCII" : [
+				{ "name": "ASCII", "direction": "both", "path": "Latin-ASCII.xml" }
+			],
+			"Armenian" : [
+				{ "name": "Armenian", "direction": "both", "path": "Latin-Armenian.xml" }
+			],
+			"Azerbaijani" : [
+				{ "name": "Lower", "direction": "forward", "path": "az-Lower.xml" },
+				{ "name": "Title", "direction": "forward", "path": "az-Title.xml" },
+				{ "name": "Upper", "direction": "forward", "path": "az-Upper.xml" }
+			],
+			"Bopopmofo" : [
+				{ "name": "Bopopmofo", "direction": "both", "path": "Latin-Bopopmofo.xml" }
+			],
+			"Ethiopic" : [
+				{ "name": "Ethiopic", "direction": "both", "path": "Latin-Ethiopic.xml" }
+			]
+		},
+		"Thaana" : {
+			"Latin" : [
+				{ "name": "BGN", "direction": "forward", "path": "Maldivian-Latin-BGN.xml" }
+			]
+		},
  		"In Script" : {
  			"Out Script 1" : [ 
     			{ "name": "Variant", "direction": "both", "path": "InScript-OutScript1-Variant.xml" }
