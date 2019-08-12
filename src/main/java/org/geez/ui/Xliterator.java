@@ -95,7 +95,7 @@ public final class Xliterator extends Application {
 	private String scriptOut = null;
 	private String variantOut = null;
 	private boolean openOutput = true;
-	private List<File> inputList = null;
+	private List<File> inputFileList = null;
 	private File icuFile = null;
 	protected StatusBar statusBar = new StatusBar();
 	private boolean converted = false;
@@ -341,19 +341,21 @@ public final class Xliterator extends Application {
     
 
     private void populateDocumentFontsMenu() {
-    	ObservableList<String> fonts = FXCollections.observableArrayList();
-    	
+    	ObservableList<String> fonts = FXCollections.observableArrayList();  	
     	try {
-    	for( File file: inputList) {
-			WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load( file );		
-			MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
-			for( String font: documentPart.fontsInUse() ) {
-				fonts.add( font );
-       		}
-    	}
+	    	for( File file: inputFileList) {
+	    		String extension = FilenameUtils.getExtension( file.getPath() );
+	    		if( "docx".equals( extension) ) {
+					WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load( file );		
+					MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
+					for( String font: documentPart.fontsInUse() ) {
+						fonts.add( font );
+		       		}
+	    		}
+	    	}
     	}
     	catch( Docx4JException ex ) {
-    		
+    		errorAlert(ex, "An error occured while reading documents." );
     	}
     	
     	documentFontsMenu.getItems().addAll( fonts );
@@ -401,10 +403,10 @@ public final class Xliterator extends Application {
                 public void handle(final ActionEvent e) {
                 	listView.getItems().clear();
                 	configureFileChooser(fileChooser);    
-                    inputList = fileChooser.showOpenMultipleDialog( stage );
+                    inputFileList = fileChooser.showOpenMultipleDialog( stage );
                     
-                    if ( inputList != null ) {
-                    	for( File file: inputList) {
+                    if ( inputFileList != null ) {
+                    	for( File file: inputFileList) {
                     		Label rowLabel = new Label( file.getName() );
                     		data.add( rowLabel );
                     		Tooltip tooltip = new Tooltip( file.getPath() );
@@ -528,7 +530,7 @@ public final class Xliterator extends Application {
         convertButton.setDisable( true );
         convertButton.setOnAction( event -> {
         	convertButton.setDisable( true );
-        	convertButton.getProperties().put("fontOut", outputFontMenu.getSelectionModel().getSelectedItem() );
+        	convertButton.getProperties().put( "fontOut", outputFontMenu.getSelectionModel().getSelectedItem() );
         	convertFiles( convertButton, listView ); 
         });
         
@@ -702,7 +704,7 @@ public final class Xliterator extends Application {
     }
  
     private void convertFiles(Button convertButton, ListView<Label> listView) {
-        if ( inputList != null ) {
+        if ( inputFileList != null ) {
         	if( converted ) {
         		// this is a re-run, reset file names;
         		for(Label label: listView.getItems()) {
@@ -713,7 +715,7 @@ public final class Xliterator extends Application {
         		converted = false;
         	}
             int i = 0;
-            for (File file : inputList) {
+            for (File file : inputFileList) {
                 processFile( file, convertButton, listView, i );
                 i++;
                 
@@ -946,7 +948,7 @@ public final class Xliterator extends Application {
     private void setVariantOut(String variantOut) {
     	this.variantOut = variantOut;
     	variantOutText.setText( variantOut );
-    	if( inputList != null ) {
+    	if( inputFileList != null ) {
     		convertButton.setDisable( false );
     	}
         convertButtonDown.setDisable( false );
