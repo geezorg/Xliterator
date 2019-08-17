@@ -2,10 +2,11 @@ package org.geez.convert;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-
+import java.util.concurrent.Callable;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,10 +24,17 @@ import org.xml.sax.SAXException;
 
 import com.ibm.icu.text.Transliterator;
 
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.ReadOnlyDoubleWrapper;
 
-public abstract class Converter {
+public class OldConverter  implements Callable<Void> {
 	protected char huletNeteb = 0x0;
-	public Transliterator xlit = null;
+	protected boolean setProgress = true;
+
+    protected final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper();
+
+    protected File inputFile = null, outputFile = null;
+	protected Transliterator xlit = null;
 	protected int icuDirection = -1;
 	public static String[] IDs = null;
     
@@ -39,7 +47,7 @@ public abstract class Converter {
     			public InputSource resolveEntity(String publicId, String systemId) throws SAXException, IOException {
     				if (systemId.contains("ldmlSupplemental.dtd")) {
     					ClassLoader classLoader = this.getClass().getClassLoader();
-    					InputStream dtdStream = classLoader.getResourceAsStream( "common/dtd/ldmlSupplemental.dtd" );
+    					InputStream dtdStream = classLoader.getResourceAsStream("common/dtd/ldmlSupplemental.dtd");
     					return new InputSource(dtdStream);
     				} else {
     					return null;
@@ -51,29 +59,47 @@ public abstract class Converter {
     		System.err.println( ex );
     	}
     }
-
-    public Converter() {
+    
+    public OldConverter( final File inputFile, final File outputFile ) {
+    	setFiles( inputFile, outputFile );
     }
        
-    public Converter( String direction ) {
-    	setDirection( direction );
+    public OldConverter( final File inputFile, final File outputFile, String direction ) {
+    	setFiles( inputFile, outputFile );
+		this.icuDirection = ( direction.equals("both") || direction.equals("forward") ) ? Transliterator.FORWARD : Transliterator.REVERSE;
     }
     
-    public Converter( int  icuDirection ) {
-    	setDirection( icuDirection );
-    }
-    
-    public void setDirection( String direction ) {
-		this.icuDirection = ( direction.equals("both") || direction.equals("forward") ) ? Transliterator.FORWARD : Transliterator.REVERSE;	
-    }
-    
-    public void setDirection( int icuDirection ) {
+    public OldConverter( final File inputFile, final File outputFile, int icuDirection ) {
+    	setFiles( inputFile, outputFile );
 		this.icuDirection = icuDirection; // should throw an exception if not Transliterator.FORWARD or Transliterator.REVERSE;
+    }
+      
+    public OldConverter() {
+    }
+
+    public void setFiles( final File inputFile, final File outputFile ) {
+    	this.inputFile  = inputFile;
+    	this.outputFile = outputFile;
     }
     
     public String[] getIDs() {
     	return IDs;
     }
+    
+    public ReadOnlyDoubleProperty progressProperty() {
+        return progress.getReadOnlyProperty() ;
+    }   
+    
+    public final double getProgress() {
+        return progressProperty().get();
+    }
+    
+	@Override
+	public Void call() throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 	private String readRulesFromStream( InputStream is ) throws IOException {
 		String line, segment, rules = "";
@@ -144,10 +170,6 @@ public abstract class Converter {
 			return cd.getData();
 		}
 		return "";
-	}
-	
-	public boolean isSpacePreservableSymbol(String space) {
-		return false;
 	}
 
 }

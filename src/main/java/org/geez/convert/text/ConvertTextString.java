@@ -1,5 +1,7 @@
 package org.geez.convert.text;
 
+import java.util.UUID;
+
 import org.geez.convert.Converter;
 
 import com.ibm.icu.text.Transliterator;
@@ -7,20 +9,35 @@ import com.ibm.icu.text.Transliterator;
 
 
 public class ConvertTextString extends Converter {
-	private String text = null;
+	private String textIn = null;
 	private String textOut = null;
 
     public ConvertTextString( String rulesFile, String direction ) {
 		this.initialize( rulesFile, direction );
     }
+    
 
 
-    public void setText( String text ) {
-    	this.text = text;
+    public ConvertTextString( String editorText ) {	
+		try {
+			String rulesText = editorText;
+			if( editorText.startsWith( "<?xml" ) ) {
+				rulesText = readRulesStringXML( editorText );
+			}
+			xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), rulesText, Transliterator.FORWARD );
+		} catch ( Exception ex ) {
+			// put into dialog
+			System.err.println( ex );
+		}
+	}
+
+
+    public void setText( String textIn ) {
+    	this.textIn = textIn;
     }
     
     public String getText() {
-    	return text;
+    	return textIn;
     }
     
     
@@ -48,34 +65,17 @@ public class ConvertTextString extends Converter {
 	}
 
 
-	public String convertText( String text ) {
-		textOut = xlit.transliterate( text );
+	public String convert() {
+		if( textIn == null )
+			return null;
+		
+		textOut = xlit.transliterate( textIn );
 		return textOut;
 	}
-	
-	
-	@Override
-	public Void call() {
-		process( text );
-        return null;
+	public String convertText( String text ) {
+		setText( text );
+		return convert();
 	}
-	public void process( String text )
-	{
-		try {
-			setProgress = true;
-			progress.set( 0.0 );
-			Thread.sleep(100);
 
-			convertText( text );
-				
-    		
-       		setProgress = false;
-            
-
-		}
-		catch ( Exception ex ) {
-			System.err.println( ex );
-		}
-	}
 
 }
