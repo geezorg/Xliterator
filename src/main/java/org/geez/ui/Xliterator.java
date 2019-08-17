@@ -761,8 +761,8 @@ public final class Xliterator extends Application {
     
     
     Converter converter = null;
+	DocumentProcessor processor = null;
     private void processFile(File inputFile, Button convertButton, ListView<Label> listView, int listIndex) {
-    	DocumentProcessor processor = null;
 		File outputFile;
 		
         try {
@@ -781,8 +781,8 @@ public final class Xliterator extends Application {
             	else {
             		converter = new ConvertTextString( selectedTransliteration, transliterationDirection );
             	}
+        		processorTxt.addConverter( (ConvertTextString)converter );
     			processor = processorTxt;
-        		processorDocx.addConverter( (ConvertTextString)converter );
     		}
     		else {
             	String outputFilePath = inputFilePath.replaceAll("\\.docx", "-" + scriptOut.replace( " ", "-" ) + ".docx");
