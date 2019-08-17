@@ -30,10 +30,7 @@ public class ConvertFontSystem extends Converter {
 	public ConvertFontSystem( int icuDirection ) {
 	 	super( icuDirection );
 	}
-	/*
-	public void setFont(String fontOut) {
-		this.fontOut = fontOut;
-	}*/
+	
 	
 	protected String fontName = null;
 	protected List<String> targetTypefaces = new  ArrayList<String>();

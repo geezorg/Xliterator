@@ -1,11 +1,18 @@
 package org.geez.convert.text;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.docx4j.TraversalUtil;
 import org.docx4j.XmlUtils;
@@ -72,13 +79,35 @@ public class TextFileProcessor extends DocumentProcessor {
     	this.converter = converter;
     }
 
+    public void process() {
+    	// iterate over inputFileList
+    }
 	public void process( final File inputFile, final File outputFile )
 	{
 		try {
-			
+			setProgress = true;
+			totalNodes = 0.0;
+			progress.set( 0.0 );
+			Thread.sleep(100);
+
+	        Stream<String> lines = Files.lines(Paths.get( inputFile.getPath()) );
+
+	            // Formatting like \r\n will be lost
+	            // String content = lines.collect(Collectors.joining());
+
+	            // UNIX \n, WIndows \r\n
+	            String content = lines.collect(Collectors.joining(System.lineSeparator()));
+	            lines.close();
+	            
+	            converter.convertText( content );
+	            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
+	            writer.write( content );
+	             
+	            writer.close();
+		       
 		}
 		catch(Exception ex) {
-			
+			System.err.println( ex );
 		}
 	}
     

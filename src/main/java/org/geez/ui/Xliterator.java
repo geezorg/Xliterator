@@ -78,7 +78,7 @@ import org.fxmisc.flowless.VirtualizedScrollPane;
 
 import org.geez.convert.Converter;
 import org.geez.convert.DocumentProcessor;
-import org.geez.convert.docx.DocxProcessor;
+import org.geez.convert.docx.DocxFileProcessor;
 import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
 import org.geez.convert.fontsystem.ConvertFontSystem;
 import org.geez.convert.text.ConvertTextString;
@@ -121,7 +121,7 @@ public final class Xliterator extends Application {
     private final int APP_HEIGHT = 800;
     
 	private XliteratorConfig config = new XliteratorConfig();
-	private DocxProcessor processorDocx = new DocxProcessor();
+	private DocxFileProcessor processorDocx = new DocxFileProcessor();
 	private TextFileProcessor processorTxt = new TextFileProcessor();
 
 	
