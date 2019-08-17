@@ -482,8 +482,8 @@ public final class Xliterator extends Application {
                 @Override
                 public void handle(final ActionEvent e) {
 			        Alert alert = new Alert(AlertType.INFORMATION);
-			        alert.setTitle( "About Legacy Ethiopic Docx Converter" );
-			        alert.setHeaderText( "Legacy Ethiopic Font Converter for Docx " + VERSION );
+			        alert.setTitle( "About The Xliterator" );
+			        alert.setHeaderText( "An ICU based transliteration utility " + VERSION );
 			        
 			        FlowPane fp = new FlowPane();
 			        Label label = new Label( "Visit the project homepage on" );
