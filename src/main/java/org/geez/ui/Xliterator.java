@@ -6,13 +6,30 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.apache.commons.io.FilenameUtils;
+import org.controlsfx.control.CheckComboBox;
+import org.controlsfx.control.StatusBar;
+import org.docx4j.openpackaging.exceptions.Docx4JException;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
+import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.geez.convert.Converter;
+import org.geez.convert.DocumentProcessor;
+import org.geez.convert.docx.DocxFileProcessor;
+import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
+import org.geez.convert.fontsystem.ConvertFontSystem;
+import org.geez.convert.text.ConvertTextString;
+import org.geez.convert.text.TextFileProcessor;
+import org.geez.transliterate.XliteratorConfig;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -33,7 +50,6 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -58,36 +74,10 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.controlsfx.control.CheckComboBox;
-import org.controlsfx.control.StatusBar;
-import org.docx4j.openpackaging.exceptions.Docx4JException;
-import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.docx4j.openpackaging.parts.WordprocessingML.EndnotesPart;
-import org.docx4j.openpackaging.parts.WordprocessingML.FootnotesPart;
-import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
-import org.fxmisc.flowless.VirtualizedScrollPane;
-
-import org.geez.convert.Converter;
-import org.geez.convert.DocumentProcessor;
-import org.geez.convert.docx.DocxFileProcessor;
-import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
-import org.geez.convert.fontsystem.ConvertFontSystem;
-import org.geez.convert.text.ConvertTextString;
-import org.geez.convert.text.TextFileProcessor;
-import org.geez.transliterate.XliteratorConfig;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.ibm.icu.text.Transliterator;
 
  
 
@@ -288,8 +278,8 @@ public final class Xliterator extends Application {
    	 	scriptOut = null;
 		outVariantMenu.getItems().clear();
 		variantOut = null;
-    	scriptOutText.setText( " " );
-    	variantOutText.setText( " " );
+    	scriptOutText.setText( "[None]" );
+    	variantOutText.setText( "[None]" );
     	
         ToggleGroup groupOutMenu = new ToggleGroup();
         
@@ -866,9 +856,9 @@ public final class Xliterator extends Application {
     }
     
 
-    Text scriptInText = new Text( scriptIn );
-    Text scriptOutText = new Text( scriptOut );
-    Text variantOutText = new Text( variantOut );
+    Text scriptInText = new Text( "[None]" );
+    Text scriptOutText = new Text( "[None]" );
+    Text variantOutText = new Text( "[None]" );
     // status bar reference:
     // https://jar-download.com/artifacts/org.controlsfx/controlsfx-samples/8.40.14/source-code/org/controlsfx/samples/HelloStatusBar.java
     private void updateStatusMessage() {
@@ -936,7 +926,7 @@ public final class Xliterator extends Application {
     	this.scriptOut = scriptOut;
     	this.variantOut = null;
     	scriptOutText.setText( scriptOut );
-    	variantOutText.setText( " " );
+    	variantOutText.setText( "[None]" );
     	createOutVaraintsMenu( scriptOut );
 		convertButton.setDisable( true );
         convertButtonDown.setDisable( true );

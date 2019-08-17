@@ -80,30 +80,61 @@ public class TextFileProcessor extends DocumentProcessor {
     }
 
     public void process() {
-    	// iterate over inputFileList
+    	int size = inputFileList.size();
+    	
+		try {
+			setProgress = true;
+			totalNodes = 0.0;
+			progress.set( 0.0 );
+	    	for( int i=0; i<size; i++ ) {
+	    			File inputFile = inputFileList.get(i);
+	            	String inputFilePath = inputFile.getPath();
+	            	String outputFilePath = inputFilePath.replaceAll("\\.docx", "-" + "Out.docx");
+	            	outputFile =  new File ( outputFilePath );
+
+	    	        Stream<String> lines = Files.lines(Paths.get( inputFile.getPath()) );
+
+	                String content = lines.collect( Collectors.joining(System.lineSeparator()) );
+	                lines.close();
+	                
+	                converter.convertText( content );
+	                BufferedWriter writer = new BufferedWriter( new FileWriter(outputFile) );
+	                writer.write( content );
+	    			progress.set( (i+1)/size );
+	                
+	                writer.close();
+	    			Thread.sleep(100);   
+	    	}
+		}
+		catch(Exception ex) {
+			System.err.println( ex );
+		}
     }
+    
+    
 	public void process( final File inputFile, final File outputFile )
 	{
 		try {
 			setProgress = true;
 			totalNodes = 0.0;
 			progress.set( 0.0 );
-			Thread.sleep(100);
 
 	        Stream<String> lines = Files.lines(Paths.get( inputFile.getPath()) );
 
-	            // Formatting like \r\n will be lost
-	            // String content = lines.collect(Collectors.joining());
+            // Formatting like \r\n will be lost
+            // String content = lines.collect(Collectors.joining());
 
-	            // UNIX \n, WIndows \r\n
-	            String content = lines.collect(Collectors.joining(System.lineSeparator()));
-	            lines.close();
-	            
-	            converter.convertText( content );
-	            BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
-	            writer.write( content );
-	             
-	            writer.close();
+            // UNIX \n, WIndows \r\n
+            String content = lines.collect( Collectors.joining(System.lineSeparator()) );
+            lines.close();
+            
+            converter.convertText( content );
+            BufferedWriter writer = new BufferedWriter( new FileWriter(outputFile) );
+            writer.write( content );
+			progress.set( 1.0 );
+             
+            writer.close();
+            // Thread.sleep(100);
 		       
 		}
 		catch(Exception ex) {
