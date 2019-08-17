@@ -75,15 +75,20 @@ import org.docx4j.openpackaging.parts.WordprocessingML.EndnotesPart;
 import org.docx4j.openpackaging.parts.WordprocessingML.FootnotesPart;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.fxmisc.flowless.VirtualizedScrollPane;
+
 import org.geez.convert.Converter;
-import org.geez.convert.docx.ConvertDocxGenericUnicodeFont;
-import org.geez.convert.text.ConvertTextFile;
+import org.geez.convert.DocumentProcessor;
+import org.geez.convert.docx.DocxProcessor;
+import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
+import org.geez.convert.fontsystem.ConvertFontSystem;
 import org.geez.convert.text.ConvertTextString;
+import org.geez.convert.text.TextFileProcessor;
 import org.geez.transliterate.XliteratorConfig;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.ibm.icu.text.Transliterator;
+
  
 
 public final class Xliterator extends Application {
@@ -116,6 +121,9 @@ public final class Xliterator extends Application {
     private final int APP_HEIGHT = 800;
     
 	private XliteratorConfig config = new XliteratorConfig();
+	private DocxProcessor processorDocx = new DocxProcessor();
+	private TextFileProcessor processorTxt = new TextFileProcessor();
+
 	
 	private void errorAlert(Exception ex, String header ) {
         Alert alert = new Alert(AlertType.ERROR);
@@ -742,41 +750,21 @@ public final class Xliterator extends Application {
     		textStringConverts.put( selectedTransliteration, new ConvertTextString( selectedTransliteration, transliterationDirection ) );
     	}
     	
-    	converter = textStringConverts.get( selectedTransliteration );
-    	((ConvertTextString)converter).setText( textIn );
+    	ConvertTextString stringConverter = textStringConverts.get( selectedTransliteration );
+    	stringConverter.setText( textIn );
     	
     	textAreaOut.clear();
-    	
-        Task<Void> task = new Task<Void>() {
-            @Override protected Void call() throws Exception {
-            	
-            	updateProgress(0.0,1.0);
-            	converter.progressProperty().addListener( 
-            		(obs, oldProgress, newProgress) -> updateProgress( newProgress.doubleValue(), 1.0 )
-            	);
-            	// updateMessage("[" +  (listIndex+1) + "/" + listView.getItems().size() + "]" );
-            	converter.call();
-            	updateProgress(1.0, 1.0);
-
-				done();
-        		return null;
-            } 
-        };
         
-        statusBar.progressProperty().bind( task.progressProperty() );
-        statusBar.textProperty().bind( task.messageProperty() );
-        
-        Thread convertThread = new Thread(task);
-        convertThread.start();
-        
-    	textAreaOut.setText( ((ConvertTextString)converter).getTextOut() );
+    	textAreaOut.setText( stringConverter.convertText(textIn) );
         
     }
     
     
     Converter converter = null;
     private void processFile(File inputFile, Button convertButton, ListView<Label> listView, int listIndex) {
+    	DocumentProcessor processor = null;
 		File outputFile;
+		
         try {
         	String inputFilePath = inputFile.getPath();
     		
@@ -788,28 +776,37 @@ public final class Xliterator extends Application {
             	outputFile =  new File ( outputFilePath );
             	
             	if( selectedTransliteration.equals( "Mapping Editor") ) {
-            		converter = new ConvertTextFile( inputFile, outputFile, editor.getText() );	
+            		converter = new ConvertTextString( editor.getText() );	
             	}
             	else {
-            		converter = new ConvertTextFile( inputFile, outputFile, selectedTransliteration, transliterationDirection );
+            		converter = new ConvertTextString( selectedTransliteration, transliterationDirection );
             	}
+    			processor = processorTxt;
+        		processorDocx.addConverter( (ConvertTextString)converter );
     		}
     		else {
             	String outputFilePath = inputFilePath.replaceAll("\\.docx", "-" + scriptOut.replace( " ", "-" ) + ".docx");
             	outputFile =  new File ( outputFilePath );
 
             	if( selectedTransliteration.equals( "Mapping Editor") ) {
-            		converter = new ConvertDocxGenericUnicodeFont( inputFile, outputFile, editor.getText() );	
+            		converter = new ConvertDocxGenericUnicodeFont( editor.getText() );	
             	}
             	else {
-            		converter = new ConvertDocxGenericUnicodeFont( inputFile, outputFile, selectedTransliteration, transliterationDirection );
+            		converter = new ConvertDocxGenericUnicodeFont( selectedTransliteration, transliterationDirection );
             	}
+
 
     			ArrayList<String> targetTypefaces = new ArrayList<String>( documentFontsMenu.getCheckModel().getCheckedItems() );
     			((ConvertDocxGenericUnicodeFont)converter).setTargetTypefaces( targetTypefaces );
-    			((ConvertDocxGenericUnicodeFont)converter).setFont( (String)convertButton.getProperties().get("fontOut") );
-    		}
 
+    			processorDocx.setFontOut( (String)convertButton.getProperties().get("fontOut") );
+        		processorDocx.addConverter( (ConvertFontSystem)converter );
+    			processor = processorDocx;
+    		}
+    		
+    		processor.setFiles( inputFile, outputFile );
+
+    		
     		
     		// references:
     		// https://stackoverflow.com/questions/49222017/javafx-make-threads-wait-and-threadsave-gui-update
@@ -818,11 +815,11 @@ public final class Xliterator extends Application {
                 @Override protected Void call() throws Exception {
                 	
                 	updateProgress(0.0,1.0);
-                	converter.progressProperty().addListener( 
+                	processor.progressProperty().addListener( 
                 		(obs, oldProgress, newProgress) -> updateProgress( newProgress.doubleValue(), 1.0 )
                 	);
                 	updateMessage("[" +  (listIndex+1) + "/" + listView.getItems().size() + "]" );
-                	converter.call();
+                	processor.call();
                 	updateProgress(1.0, 1.0);
 
     				done();
