@@ -25,7 +25,7 @@ import org.geez.convert.DocumentProcessor;
 import org.geez.convert.fontsystem.ConvertFontSystem;
 
 
-public class DocxProcessor extends DocumentProcessor {
+public class DocxFileProcessor extends DocumentProcessor {
 	
 	protected double totalNodes = 0;
 	
@@ -259,6 +259,7 @@ public class DocxProcessor extends DocumentProcessor {
 
 		}
 		catch ( Exception ex ) {
+			//should throw this and catch in a dialog
 			System.err.println( ex );
 		}
 	}
@@ -276,29 +277,29 @@ public class DocxProcessor extends DocumentProcessor {
     	this.fontOut = fontOut;
     }
 
-    public DocxProcessor() {
+    public DocxFileProcessor() {
     	super();
     }	
 
-    public DocxProcessor(String fontOut) {
+    public DocxFileProcessor(String fontOut) {
     	super();
     	setFontOut( fontOut );
     }
 
-    public DocxProcessor( List<File> inputFileList ) {
+    public DocxFileProcessor( List<File> inputFileList ) {
     	super( inputFileList );
     }
 
-    public DocxProcessor( final File inputFile, final File outputFile ) {
+    public DocxFileProcessor( final File inputFile, final File outputFile ) {
     	super( inputFile, outputFile );
     }
     
-    public DocxProcessor( List<File> inputFileList, String fontOut ) {
+    public DocxFileProcessor( List<File> inputFileList, String fontOut ) {
     	super( inputFileList );
     	this.fontOut = fontOut;
     }
 
-    public DocxProcessor( final File inputFile, final File outputFile, String fontOut  ) {
+    public DocxFileProcessor( final File inputFile, final File outputFile, String fontOut  ) {
     	super( inputFile, outputFile );
     	this.fontOut = fontOut;
     }
