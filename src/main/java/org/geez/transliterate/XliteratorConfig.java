@@ -135,24 +135,24 @@ public class XliteratorConfig {
         JsonObject targetScripts = targetObject.getAsJsonObject("Scripts");
         
         for(String inScriptKey: scripts.keySet() ) {
-        	System.out.println( inScriptKey  );
+        	// System.out.println( inScriptKey  );
         	JsonObject inScript = scripts.getAsJsonObject( inScriptKey );
         	for(String outScript: inScript.keySet()) {
-            	System.out.println( "\t" + outScript  );
+            	// System.out.println( "\t" + outScript  );
                 JsonArray variants = inScript.getAsJsonArray( outScript );
                 for (int i = 0; i < variants.size(); i++) {
                 	
                     JsonObject variant = variants.get(i).getAsJsonObject();
 
                 	if( variant.has( "name" ) ) {
-                		System.out.println( "\t\t" + variant.get("name").getAsString() );
+                		// System.out.println( "\t\t" + variant.get("name").getAsString() );
                 		if( variant.get("direction").getAsString().equals( "both" ) ) {
                 			addVariantReverseEntry( targetScripts, outScript, inScriptKey, variant );
                 		}
                 	}
                 	else {
                 		for(String subVariantKey: variant.keySet()) {
-                			System.out.println( "\t\t\t" + subVariantKey );
+                			// System.out.println( "\t\t\t" + subVariantKey );
                 			if(! variant.get( subVariantKey ).isJsonArray() ) {
                 				// unknown
                         		System.err.println( "Unrecognized structure." );
@@ -162,7 +162,7 @@ public class XliteratorConfig {
                             for (int j = 0; j < subvariants.size(); j++) {
                                 JsonObject subvariant = subvariants.get(j).getAsJsonObject();
                             	if( subvariant.has( "name" ) ) {
-                            		System.out.println( "\t\t\t\t" + subvariant.get("name").getAsString() );
+                            		// System.out.println( "\t\t\t\t" + subvariant.get("name").getAsString() );
                             		if( subvariant.get("direction").getAsString().equals( "both" ) ) {
                             			addSubVariantReverseEntry( targetScripts, outScript, inScriptKey, subvariant, subVariantKey );
                             		}
@@ -180,7 +180,7 @@ public class XliteratorConfig {
         }
         
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        System.out.println( gson.toJson( targetObject ) );
+        // System.out.println( gson.toJson( targetObject ) );
         
     }
     

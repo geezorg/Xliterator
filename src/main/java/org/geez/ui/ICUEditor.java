@@ -13,16 +13,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
-import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
 
 import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class ICUEditor extends CodeArea {
     private static final String[] KEYWORDS = new String[] {
@@ -62,7 +58,7 @@ public class ICUEditor extends CodeArea {
     private static final int GROUP_CDATA_CONTENT  = 2;
     private static final int GROUP_CDATA_CLOSE_BRACKET = 3;
     
-    private static final int GROUP_ICU_VARIABLE  = 1;
+    private static final int GROUP_ICU_VARIABLE = 1;
     private static final int GROUP_ICU_COMMENT  = 2;
     private static final int GROUP_ICU_DIRECTIVE_SYMBOL = 7;
     private static final int GROUP_ICU_DIRECTIVE_TERM = 8;
@@ -87,7 +83,8 @@ public class ICUEditor extends CodeArea {
     		"				<shots>2</shots>",
     		"				<iced>false</iced>",
     		"				<orderNumber>1</orderNumber>",
-    		// "               <hello><![CDATA[ Hello World ]]></hello>",
+//    		"               <hello><![CDATA[ #Hello ]]></hello>",
+    		
     		"               <![CDATA[",
     		":: [ሀ-᎙] ;",
     		":: NFD (NFC) ;",
@@ -115,6 +112,7 @@ public class ICUEditor extends CodeArea {
     		"ህ → hi ; # ETHIOPIC SYLLABLE HE",
     		"ሆ → ho ; # ETHIOPIC SYLLABLE HO",
     		"               ]]>",
+    		
     		"			</Item>",
     		"			<Item>",
     		"				<type>CAPPUCCINO</type>",
@@ -169,61 +167,39 @@ public class ICUEditor extends CodeArea {
     }
 
     private static StyleSpans<Collection<String>> computeHighlighting(String text) {
-    	
+    	if( ! text.contains( "<?xml " ) ) {
+    		return computeHighlightingPlainText( text ); 
+    	}
         Matcher matcher = XML_TAG.matcher(text);
         int lastKwEnd = 0;
         StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
-        while(matcher.find()) {
-        	
+        while(matcher.find()) {	
         	spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
         	if(matcher.group("COMMENT") != null) {
         		spansBuilder.add(Collections.singleton("comment"), matcher.end() - matcher.start());
         	}
         	else if(matcher.group("CDATA") != null) {
+        		// "(<!\\[CDATA\\[\\h*)(.*)(\\h*\\]\\]>)"
         		Matcher cMatcher = CDATA_PATTERN.matcher( matcher.group(0) );
         		cMatcher.find();
 
         		lastKwEnd = 0;
-        		spansBuilder.add(Collections.emptyList(), cMatcher.start() - lastKwEnd);
-        		spansBuilder.add(Collections.singleton("cdata"), cMatcher.end(GROUP_CDATA_OPEN_BRACKET) - cMatcher.start(GROUP_CDATA_OPEN_BRACKET));        		
+        		spansBuilder.add( Collections.emptyList(), cMatcher.start() - lastKwEnd );
+        		spansBuilder.add( Collections.singleton("cdata"), cMatcher.end(GROUP_CDATA_OPEN_BRACKET) - cMatcher.start(GROUP_CDATA_OPEN_BRACKET) );   
+        		//                                                           10                                      0
+        		System.out.println( "Start: " +  cMatcher.end(GROUP_CDATA_OPEN_BRACKET) + " / " + cMatcher.start(GROUP_CDATA_OPEN_BRACKET) );
         		
-        		// String data = cMatcher.group(GROUP_CDATA_CONTENT);
-        		Matcher iMatcher = ICU.matcher( cMatcher.group(GROUP_CDATA_CONTENT) );
-        		lastKwEnd = 0;
-        		while( iMatcher.find() ) {
-        			// data = iMatcher.group(GROUP_ICU_COMMENT);
-   				 	spansBuilder.add( Collections.emptyList(), iMatcher.start() - lastKwEnd);
-        			if(iMatcher.group("VARIABLE") != null) {
-        				 spansBuilder.add( Collections.singleton("variable"), iMatcher.end() - iMatcher.start() );
-        			}
-        			else if(iMatcher.group("COMMENT") != null) {
-                		spansBuilder.add( Collections.singleton("comment"), iMatcher.end() - iMatcher.start() );
-        			}
-        			else if(iMatcher.group("DIRECTIVE") != null) {
-                		spansBuilder.add( Collections.singleton("paren"), iMatcher.end(GROUP_ICU_DIRECTIVE_SYMBOL) - iMatcher.start(GROUP_ICU_DIRECTIVE_SYMBOL) );
-                		spansBuilder.add( Collections.singleton("directive"), iMatcher.end(GROUP_ICU_DIRECTIVE_TERM) - iMatcher.start(GROUP_ICU_DIRECTIVE_TERM) );
-                		spansBuilder.add( Collections.singleton("paren"), iMatcher.end(GROUP_ICU_DIRECTIVE_END) - iMatcher.start(GROUP_ICU_DIRECTIVE_END) );
-
-        			}
-        			else if(iMatcher.group("ID") != null) {
-        				System.out.println( "ID: " + iMatcher.groupCount() );
-        				System.out.println( "ID: "
-        				+ iMatcher.group(9) + " / "
-        				+ iMatcher.group(10) + " / "
-        				+ iMatcher.group(11) + " / "
-        				+ iMatcher.group(12) + " / "
-        				);
-                		spansBuilder.add( Collections.singleton("paren"), iMatcher.end(GROUP_ICU_ID_OPEN) - iMatcher.start(GROUP_ICU_ID_OPEN) );
-                		spansBuilder.add( Collections.singleton("identifier"), iMatcher.end(GROUP_ICU_ID_TERM) - iMatcher.start(GROUP_ICU_ID_TERM) );
-                		spansBuilder.add( Collections.singleton("paren"), iMatcher.end(GROUP_ICU_ID_CLOSE) - iMatcher.start(GROUP_ICU_ID_CLOSE) );
-        			}
-					lastKwEnd = iMatcher.end();
-        		}		
+        		String cdataContent = cMatcher.group(GROUP_CDATA_CONTENT);
         		
-        		spansBuilder.add(Collections.singleton("cdata"), cMatcher.end(GROUP_CDATA_CLOSE_BRACKET) - cMatcher.start(GROUP_CDATA_CLOSE_BRACKET));
+        		if(! cdataContent.isEmpty() ) {
+        			lastKwEnd = highlightIcuText( spansBuilder, cdataContent );
+        		}
         		
     			lastKwEnd = cMatcher.end(GROUP_CDATA_CLOSE_BRACKET);
-        		// lastKwEnd = cMatcher.end();
+    			
+        		spansBuilder.add( Collections.singleton("cdata"), lastKwEnd - cMatcher.start(GROUP_CDATA_CLOSE_BRACKET) );
+        		//                                                        19                                                  16
+        		System.out.println( "End: " +  cMatcher.end(GROUP_CDATA_CLOSE_BRACKET) + " / " + cMatcher.start(GROUP_CDATA_CLOSE_BRACKET) );
     		}
         	else if(matcher.group("ELEMENT") != null) {
         			
@@ -257,6 +233,54 @@ public class ICUEditor extends CodeArea {
        
         spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
         return spansBuilder.create();
+    }
+    
+    private static StyleSpans<Collection<String>> computeHighlightingPlainText(String text) {
+        StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
+		highlightIcuText( spansBuilder, text );
+        return spansBuilder.create();
+    }
+    
+    private static int highlightIcuText(StyleSpansBuilder<Collection<String>> spansBuilder, String text) {
+
+        		Matcher iMatcher = ICU.matcher( text );
+
+        		int lastKwEnd = 0;
+        		while( iMatcher.find() ) {
+        			System.out.println( "Found ICU Data" );
+   				 	spansBuilder.add( Collections.emptyList(), iMatcher.start() - lastKwEnd);
+        			if(iMatcher.group("VARIABLE") != null) {
+        				 spansBuilder.add( Collections.singleton("variable"), iMatcher.end() - iMatcher.start() );
+        			}
+        			else if(iMatcher.group("COMMENT") != null) {
+                		spansBuilder.add( Collections.singleton("comment"), iMatcher.end() - iMatcher.start() );
+        			}
+        			else if(iMatcher.group("DIRECTIVE") != null) {
+                		spansBuilder.add( Collections.singleton("paren"),     iMatcher.end(GROUP_ICU_DIRECTIVE_SYMBOL) - iMatcher.start(GROUP_ICU_DIRECTIVE_SYMBOL) );
+                		spansBuilder.add( Collections.singleton("directive"), iMatcher.end(GROUP_ICU_DIRECTIVE_TERM)   - iMatcher.start(GROUP_ICU_DIRECTIVE_TERM) );
+                		spansBuilder.add( Collections.singleton("paren"),     iMatcher.end(GROUP_ICU_DIRECTIVE_END)    - iMatcher.start(GROUP_ICU_DIRECTIVE_END) );
+
+        			}
+        			else if(iMatcher.group("ID") != null) {
+        				System.out.println( "ID: " + iMatcher.groupCount() );
+        				System.out.println( "ID: "
+        				+ iMatcher.group(9) + " / "
+        				+ iMatcher.group(10) + " / "
+        				+ iMatcher.group(11) + " / "
+        				+ iMatcher.group(12) + " / "
+        				);
+                		spansBuilder.add( Collections.singleton("paren"),      iMatcher.end(GROUP_ICU_ID_OPEN)  - iMatcher.start(GROUP_ICU_ID_OPEN) );
+                		spansBuilder.add( Collections.singleton("identifier"), iMatcher.end(GROUP_ICU_ID_TERM)  - iMatcher.start(GROUP_ICU_ID_TERM) );
+                		spansBuilder.add( Collections.singleton("paren"),      iMatcher.end(GROUP_ICU_ID_CLOSE) - iMatcher.start(GROUP_ICU_ID_CLOSE) );
+        			}
+					lastKwEnd = iMatcher.end();
+        		}
+				if(text.length() > lastKwEnd) {
+					spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
+				}
+
+
+    		return lastKwEnd;
     }
     
     public void loadResourceFile(String rulesFile) throws UnsupportedEncodingException, IOException {

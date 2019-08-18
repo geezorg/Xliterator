@@ -41,7 +41,7 @@ public class ConvertTextString extends Converter {
 	void initialize( final String tableRulesFile, final String direction ) {
 		icuDirection = (direction.equals("both") || direction.equals("forward"))
 					 ? Transliterator.FORWARD 
-					 : Transliterator.REVERSE  //  || direction.equals("reverse") 
+					 : Transliterator.REVERSE // || direction.equals("reverse") 
 					 ;
 
 		initialize( tableRulesFile, icuDirection );
