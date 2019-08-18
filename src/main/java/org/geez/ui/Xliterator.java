@@ -98,6 +98,7 @@ public final class Xliterator extends Application {
 	private Menu outScriptMenu  = null;
 	private final Button convertButton = new Button("Convert");
 	private final Button convertButtonDown = new Button(); // ( "⬇" );
+    private final Button convertButtonUp = new Button(); // ( "⬆" );
 	private String selectedTransliteration = null;
 	private String transliterationDirection = null;
     private ICUEditor editor = new ICUEditor();
@@ -589,9 +590,9 @@ public final class Xliterator extends Application {
         // convertButtonDown.setStyle( "-fx-font-size: 24;");
         convertButtonDown.setDisable( true );
         convertButtonDown.setOnAction( event -> {
-        	convertTextArea( textAreaIn, textAreaOut ); 
+        	convertTextArea( textAreaIn, textAreaOut, "forward" ); 
         });
-        Button convertButtonUp = new Button(); // ( "⬆" );
+        
         Image imageUp = new Image(classLoader.getResourceAsStream("images/arrow-circle-up.png"));
         ImageView imageViewUp = new ImageView( imageUp );
         imageViewUp.setFitHeight( 18 );
@@ -600,7 +601,7 @@ public final class Xliterator extends Application {
         // convertButtonUp.setStyle( "-fx-font-size: 24;");
         convertButtonUp.setDisable( true );
         convertButtonUp.setOnAction( event -> {
-        	convertTextArea( textAreaOut, textAreaIn ); 
+        	convertTextArea( textAreaOut, textAreaIn, "reverse" ); 
         });
         
         Button textAreaOutIncreaseFontSizeButton = new Button( "+" ); 
@@ -614,7 +615,7 @@ public final class Xliterator extends Application {
         Region hspacer = new Region();
         hspacer.prefWidth( 200 );
         HBox.setHgrow(hspacer, Priority.SOMETIMES);
-        HBox hUpDownButtonBox = new HBox( createFontChoiceBox( "textAreaOut" ), textAreaOutIncreaseFontSizeButton, textAreaOutDecreaseFontSizeButton, hspacer, convertButtonUp, convertButtonDown );
+        HBox hUpDownButtonBox = new HBox( createFontChoiceBox( "textAreaOut" ), textAreaOutIncreaseFontSizeButton, textAreaOutDecreaseFontSizeButton, hspacer, convertButtonDown, convertButtonUp );
         hUpDownButtonBox.setAlignment(Pos.CENTER_LEFT);
         hUpDownButtonBox.setPadding(new Insets(2, 2, 2, 2));
         hUpDownButtonBox.setSpacing( 4 );
@@ -730,23 +731,27 @@ public final class Xliterator extends Application {
          } 
     }
     
-    HashMap<String,ConvertTextString> textStringConverts = new HashMap<String,ConvertTextString>();
-    private void convertTextArea(TextArea textAreaIn, TextArea textAreaOut) {
+    HashMap<String,ConvertTextString> textStringConverts = new HashMap<String,ConvertTextString>();    
+    private void convertTextArea(TextArea textAreaIn, TextArea textAreaOut, String direction) {
     	String textIn = textAreaIn.getText();
     	if( textIn == null )
     		return;
+    	
+    	String transliterationKey = selectedTransliteration + "-" + direction ;
 
-    	if(! textStringConverts.containsKey( selectedTransliteration ) ) {
-    		textStringConverts.put( selectedTransliteration, new ConvertTextString( selectedTransliteration, transliterationDirection ) );
+    	if(! textStringConverts.containsKey( transliterationKey ) ) {
+    		textStringConverts.put( transliterationKey, new ConvertTextString( selectedTransliteration, direction ) );
     	}
     	
-    	ConvertTextString stringConverter = textStringConverts.get( selectedTransliteration );
+    	ConvertTextString stringConverter = textStringConverts.get( transliterationKey );
     	stringConverter.setText( textIn );
     	
     	textAreaOut.clear();
         
-    	textAreaOut.setText( stringConverter.convertText(textIn) );
-        
+    	textAreaOut.setText( stringConverter.convertText( textIn ) );
+    	if( "both".equals( transliterationDirection ) ) {
+    		convertButtonUp.setDisable( false );
+    	}  
     }
     
     
@@ -940,6 +945,12 @@ public final class Xliterator extends Application {
     	}
         convertButtonDown.setDisable( false );
         openInternalMenuItem.setDisable( false );
+        if( "both".equals( transliterationDirection ) ) {
+        	convertButtonUp.setDisable( false );
+        }
+        else {
+        	convertButtonUp.setDisable( true );        	
+        }
     }
     
 

@@ -49,7 +49,7 @@
 		},
 		"Ethiopic" : {
          		"IPA" : [
-				{ "name": "Amharic", "direction": "both", "path": "am-am-FONIPA.xml" }
+				{ "name": "Amharic", "direction": "both", "path": "am-am_FONIPA.xml" }
 			],
 			"Latin" : [
 		        	{

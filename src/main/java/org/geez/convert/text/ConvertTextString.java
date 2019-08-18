@@ -12,10 +12,15 @@ public class ConvertTextString extends Converter {
 	private String textIn = null;
 	private String textOut = null;
 
+	
     public ConvertTextString( String rulesFile, String direction ) {
 		this.initialize( rulesFile, direction );
-    }
-    
+    }  
+
+	
+    public ConvertTextString( String rulesFile, int icuDirection ) {
+		this.initialize( rulesFile, icuDirection );
+    }  
 
 
     public ConvertTextString( String editorText ) {	
@@ -25,8 +30,32 @@ public class ConvertTextString extends Converter {
 				rulesText = readRulesStringXML( editorText );
 			}
 			xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), rulesText, Transliterator.FORWARD );
-		} catch ( Exception ex ) {
+		}
+		catch ( Exception ex ) {
 			// put into dialog
+			System.err.println( ex );
+		}
+	}
+
+    
+	void initialize( final String tableRulesFile, final String direction ) {
+		icuDirection = (direction.equals("both") || direction.equals("forward"))
+					 ? Transliterator.FORWARD 
+					 : Transliterator.REVERSE  //  || direction.equals("reverse") 
+					 ;
+
+		initialize( tableRulesFile, icuDirection );
+	}
+	    
+	void initialize( final String tableRulesFile, final int icuDirection ) {
+		try {
+			String id = tableRulesFile; // remove the file extension
+			
+			String rulesText = this.readRulesResourceFile( tableRulesFile );
+
+			xlit = Transliterator.createFromRules( id, rulesText.replace( '\ufeff', ' ' ), icuDirection );
+		}
+		catch ( Exception ex ) {
 			System.err.println( ex );
 		}
 	}
@@ -39,30 +68,10 @@ public class ConvertTextString extends Converter {
     public String getText() {
     	return textIn;
     }
-    
-    
+      
     public String getTextOut() {
     	return textOut;
     }
-    
-    
-	void initialize( final String tableRulesFile, final String direction ) {
-		try {
-			//TODO:  Update readRules to read ICU XML file
-			//
-			
-			String id = tableRulesFile; // remove the file extension
-			icuDirection = ( direction.equals("both") || direction.equals("forward") ) ? Transliterator.FORWARD : Transliterator.REVERSE;
-			
-			
-			String rulesText = this.readRulesResourceFile( tableRulesFile);
-
-			xlit = Transliterator.createFromRules( id, rulesText.replace( '\ufeff', ' ' ), icuDirection );
-
-		} catch ( Exception ex ) {
-			System.err.println( ex );
-		}
-	}
 
 
 	public String convert() {
