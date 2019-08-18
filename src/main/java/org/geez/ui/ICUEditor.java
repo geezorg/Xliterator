@@ -26,10 +26,15 @@ public class ICUEditor extends CodeArea {
     		"M", "N"
     };
     
-    private static final Pattern XML_TAG = Pattern.compile(
+    private static final Pattern XML_TAG_WITH_CDATA = Pattern.compile(
     		"(?<ELEMENT>(</?\\h*)(\\w+)([^<>]*)(\\h*/?>))"
     		+ "|(?<COMMENT><!--[^<>]+-->)"
     		+ "|(?<CDATA>(<!\\[CDATA\\[)(.+)(\\]\\]>))",  Pattern.DOTALL)
+    ;
+    private static final Pattern XML_TAG_WITHOUT_CDATA = Pattern.compile(
+    		// "(?<TRULE>(<tRule>)(.*?)(</tRule>))"
+    		"(?<ELEMENT>(</?\\h*)(\\w+)([^<>]*)(\\h*/?>))"
+    		+ "|(?<COMMENT><!--[^<>]+-->)",  Pattern.DOTALL)
     ;
     
     private static final Pattern CDATA_PATTERN = Pattern.compile(
@@ -67,75 +72,10 @@ public class ICUEditor extends CodeArea {
     private static final int GROUP_ICU_ID_TERM = 12;
     private static final int GROUP_ICU_ID_CLOSE = 13;
     
-    // TODO: When the editor opens, have an example ICU transliteration loaded that the user
-    // can experiment with and replace with their own.  Read from a resource file
-    // The tab label can use the filename.
-    // The "Scripts" menu should have a section list the tab labels as input sources
+    private static final int GROUP_TRULE_OPEN     = 2;
+    private static final int GROUP_TRULE_CONTENT  = 3;
+    private static final int GROUP_TRULE_CLOSE    = 4;
 
-    private static final String sampleCode = String.join("\n", new String[] {
-    		"<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>",
-    		"<!-- Sample XML -->",
-    		"< orders >",
-    		"	<Order number=\"1\" table=\"center\">",
-    		"		<items>",
-    		"			<Item>",
-    		"				<type>ESPRESSO</type>",
-    		"				<shots>2</shots>",
-    		"				<iced>false</iced>",
-    		"				<orderNumber>1</orderNumber>",
-//    		"               <hello><![CDATA[ #Hello ]]></hello>",
-    		
-    		"               <![CDATA[",
-    		":: [ሀ-᎙] ;",
-    		":: NFD (NFC) ;",
-"",
-"",
-    		"$ejective = ’;",
-    		"$glottal  = ’;",
-    		"$pharyngeal = ‘;",
-"",
-"",
-    		"# Use this $wordBoundary until bug 2034 is fixed in ICU:", 
-    		"# http://bugs.icu-project.org/trac/ticket/2034",
-    		"$wordBoundary =  [^[:L:][:M:][:N:]] ;",
-"",
-"",
-    		"########################################################################",
-    		"# Start of Syllabic Transformations",
-    		"########################################################################",
-"",
-    		"ሀ → hā ; # ETHIOPIC SYLLABLE HA",
-    		"ሁ → hu ; # ETHIOPIC SYLLABLE HU",
-    		"ሂ → hī ; # ETHIOPIC SYLLABLE HI",
-    		"ሃ → ha ; # ETHIOPIC SYLLABLE HAA",
-    		"ሄ → hē ; # ETHIOPIC SYLLABLE HEE",
-    		"ህ → hi ; # ETHIOPIC SYLLABLE HE",
-    		"ሆ → ho ; # ETHIOPIC SYLLABLE HO",
-    		"               ]]>",
-    		
-    		"			</Item>",
-    		"			<Item>",
-    		"				<type>CAPPUCCINO</type>",
-    		"				<shots>1</shots>",
-    		"				<iced>false</iced>",
-    		"				<orderNumber>1</orderNumber>",
-    		"			</Item>",
-    		"			<Item>",
-    		"			<type>LATTE</type>",
-    		"				<shots>2</shots>",
-    		"				<iced>false</iced>",
-    		"				<orderNumber>1</orderNumber>",
-    		"			</Item>",
-    		"			<Item>",
-    		"				<type>MOCHA</type>",
-    		"				<shots>3</shots>",
-    		"				<iced>true</iced>",
-    		"				<orderNumber>1</orderNumber>",
-    		"			</Item>",
-    		"		</items>",
-    		"	</Order>",
-    		"</orders>"
-    		});
 
     public ICUEditor() {
     	String osName = System.getProperty("os.name");
@@ -150,7 +90,7 @@ public class ICUEditor extends CodeArea {
         textProperty().addListener((obs, oldText, newText) -> {
             this.setStyleSpans( 0, computeHighlighting(newText) );
         });
-        replaceText(0, 0, sampleCode);
+        // replaceText(0, 0, sampleCode);
     }
     
     public void setStyle(Scene scene) {
@@ -170,24 +110,31 @@ public class ICUEditor extends CodeArea {
     	if( ! text.contains( "<?xml " ) ) {
     		return computeHighlightingPlainText( text ); 
     	}
-        Matcher matcher = XML_TAG.matcher(text);
+    	else if( text.contains( "<![CDATA[" ) ) {
+    		return computeHighlightingWithCDATA( text );
+    	}
+    	
+    	//  Assume a <tRule> is present w/o CDATA
+    		
+    	return computeHighlightingWithoutCDATA( text );
+    }
+    
+    private static StyleSpans<Collection<String>> computeHighlightingWithCDATA(String text) {
+        Matcher matcher = XML_TAG_WITH_CDATA.matcher(text);
         int lastKwEnd = 0;
         StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
         while(matcher.find()) {	
-        	spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
-        	if(matcher.group("COMMENT") != null) {
-        		spansBuilder.add(Collections.singleton("comment"), matcher.end() - matcher.start());
+        	spansBuilder.add( Collections.emptyList(), matcher.start() - lastKwEnd );
+        	if(matcher.group( "COMMENT" ) != null) {
+        		spansBuilder.add( Collections.singleton("comment"), matcher.end() - matcher.start() );
         	}
         	else if(matcher.group("CDATA") != null) {
-        		// "(<!\\[CDATA\\[\\h*)(.*)(\\h*\\]\\]>)"
         		Matcher cMatcher = CDATA_PATTERN.matcher( matcher.group(0) );
         		cMatcher.find();
 
         		lastKwEnd = 0;
         		spansBuilder.add( Collections.emptyList(), cMatcher.start() - lastKwEnd );
         		spansBuilder.add( Collections.singleton("cdata"), cMatcher.end(GROUP_CDATA_OPEN_BRACKET) - cMatcher.start(GROUP_CDATA_OPEN_BRACKET) );   
-        		//                                                           10                                      0
-        		System.out.println( "Start: " +  cMatcher.end(GROUP_CDATA_OPEN_BRACKET) + " / " + cMatcher.start(GROUP_CDATA_OPEN_BRACKET) );
         		
         		String cdataContent = cMatcher.group(GROUP_CDATA_CONTENT);
         		
@@ -198,15 +145,13 @@ public class ICUEditor extends CodeArea {
     			lastKwEnd = cMatcher.end(GROUP_CDATA_CLOSE_BRACKET);
     			
         		spansBuilder.add( Collections.singleton("cdata"), lastKwEnd - cMatcher.start(GROUP_CDATA_CLOSE_BRACKET) );
-        		//                                                        19                                                  16
-        		System.out.println( "End: " +  cMatcher.end(GROUP_CDATA_CLOSE_BRACKET) + " / " + cMatcher.start(GROUP_CDATA_CLOSE_BRACKET) );
     		}
-        	else if(matcher.group("ELEMENT") != null) {
+        	else if( matcher.group("ELEMENT") != null ) {
         			
         			String attributesText = matcher.group(GROUP_ATTRIBUTES_SECTION);
         			
         			spansBuilder.add(Collections.singleton("tagmark"), matcher.end(GROUP_OPEN_BRACKET) - matcher.start(GROUP_OPEN_BRACKET));
-        			spansBuilder.add(Collections.singleton("anytag"), matcher.end(GROUP_ELEMENT_NAME) - matcher.end(GROUP_OPEN_BRACKET));
+        			spansBuilder.add(Collections.singleton("anytag"),  matcher.end(GROUP_ELEMENT_NAME) - matcher.end(GROUP_OPEN_BRACKET));
 
         			if(!attributesText.isEmpty()) {
         				
@@ -220,8 +165,9 @@ public class ICUEditor extends CodeArea {
         					spansBuilder.add(Collections.singleton("avalue"), amatcher.end(GROUP_ATTRIBUTE_VALUE) - amatcher.end(GROUP_EQUAL_SYMBOL));
         					lastKwEnd = amatcher.end();
         				}
-        				if(attributesText.length() > lastKwEnd)
+        				if(attributesText.length() > lastKwEnd) {
         					spansBuilder.add(Collections.emptyList(), attributesText.length() - lastKwEnd);
+        				}
         			}
 
         			lastKwEnd = matcher.end(GROUP_ATTRIBUTES_SECTION);
@@ -235,6 +181,77 @@ public class ICUEditor extends CodeArea {
         return spansBuilder.create();
     }
     
+    
+    private static StyleSpans<Collection<String>> computeHighlightingWithoutCDATA(String text) {
+        Matcher matcher = XML_TAG_WITHOUT_CDATA.matcher(text);
+        int lastKwEnd = 0;
+        StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
+        
+        boolean open = true;
+        int tRuleDelta;
+        while(matcher.find()) {	
+        	spansBuilder.add( Collections.emptyList(), matcher.start() - lastKwEnd );
+        	tRuleDelta = 0;
+        	
+        	if(matcher.group( "COMMENT" ) != null) {
+        		spansBuilder.add( Collections.singleton("comment"), matcher.end() - matcher.start()) ;
+        	}
+        	else if( matcher.group("ELEMENT") != null ) {
+        			
+        			String attributesText = matcher.group(GROUP_ATTRIBUTES_SECTION);
+        			String element = matcher.group(GROUP_ELEMENT_NAME);
+        			
+        			spansBuilder.add( Collections.singleton("tagmark"), matcher.end(GROUP_OPEN_BRACKET) - matcher.start(GROUP_OPEN_BRACKET) );
+        			//
+        			// if elementName = "tRule", extract the text between GROUP_OPEN_BRACKET and GROUP_ELEMENT_NAME and send to the ICU highlighter
+        			// or does this text get highlighted in the attributesText.length() > lastKwEnd) section
+        			// between lastKwEnd and attributesText.length ?
+
+        			if( "tRule".equals( element ) && open ) { 
+        				spansBuilder.add( Collections.singleton("anytag"), matcher.end(GROUP_ELEMENT_NAME) - matcher.end(GROUP_OPEN_BRACKET) );  				
+            			spansBuilder.add(Collections.singleton("tagmark"), matcher.end(GROUP_CLOSE_BRACKET) - matcher.start(GROUP_CLOSE_BRACKET));
+            			
+        				String test = text.substring( matcher.end(GROUP_CLOSE_BRACKET), text.length() );
+        				String icuText = test.substring( 0, test.indexOf( "</tRule>" ) );
+        				highlightIcuText( spansBuilder, icuText );
+        				tRuleDelta = icuText.length();
+        				open = false;
+        			}
+        			else {
+        				if( "tRule".equals( element ) ) { open = true; }
+        				spansBuilder.add( Collections.singleton("anytag"), matcher.end(GROUP_ELEMENT_NAME) - matcher.end(GROUP_OPEN_BRACKET) );
+        			
+
+	        			if( (attributesText != null) && !attributesText.isEmpty() ) {
+	        				
+	        				lastKwEnd = 0;
+	        				
+	        				Matcher amatcher = ATTRIBUTES.matcher(attributesText);
+	        				while(amatcher.find()) {
+	        					spansBuilder.add(Collections.emptyList(), amatcher.start() - lastKwEnd);
+	        					spansBuilder.add(Collections.singleton("attribute"), amatcher.end(GROUP_ATTRIBUTE_NAME) - amatcher.start(GROUP_ATTRIBUTE_NAME));
+	        					spansBuilder.add(Collections.singleton("tagmark"), amatcher.end(GROUP_EQUAL_SYMBOL) - amatcher.end(GROUP_ATTRIBUTE_NAME));
+	        					spansBuilder.add(Collections.singleton("avalue"), amatcher.end(GROUP_ATTRIBUTE_VALUE) - amatcher.end(GROUP_EQUAL_SYMBOL));
+	        					lastKwEnd = amatcher.end();
+	        				}
+	        				if(attributesText.length() > lastKwEnd)
+	        					spansBuilder.add(Collections.emptyList(), attributesText.length() - lastKwEnd);
+	        				// probably highlight the ICU text here
+	        			}
+	
+	        			lastKwEnd = matcher.end(GROUP_ATTRIBUTES_SECTION);
+	        			
+	        			spansBuilder.add(Collections.singleton("tagmark"), matcher.end(GROUP_CLOSE_BRACKET) - lastKwEnd);
+        			}
+        		}
+              lastKwEnd = matcher.end() + tRuleDelta;
+        }
+       
+        // spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
+        return spansBuilder.create();
+    }
+    
+    
     private static StyleSpans<Collection<String>> computeHighlightingPlainText(String text) {
         StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
 		highlightIcuText( spansBuilder, text );
@@ -247,7 +264,6 @@ public class ICUEditor extends CodeArea {
 
         		int lastKwEnd = 0;
         		while( iMatcher.find() ) {
-        			System.out.println( "Found ICU Data" );
    				 	spansBuilder.add( Collections.emptyList(), iMatcher.start() - lastKwEnd);
         			if(iMatcher.group("VARIABLE") != null) {
         				 spansBuilder.add( Collections.singleton("variable"), iMatcher.end() - iMatcher.start() );
@@ -259,7 +275,6 @@ public class ICUEditor extends CodeArea {
                 		spansBuilder.add( Collections.singleton("paren"),     iMatcher.end(GROUP_ICU_DIRECTIVE_SYMBOL) - iMatcher.start(GROUP_ICU_DIRECTIVE_SYMBOL) );
                 		spansBuilder.add( Collections.singleton("directive"), iMatcher.end(GROUP_ICU_DIRECTIVE_TERM)   - iMatcher.start(GROUP_ICU_DIRECTIVE_TERM) );
                 		spansBuilder.add( Collections.singleton("paren"),     iMatcher.end(GROUP_ICU_DIRECTIVE_END)    - iMatcher.start(GROUP_ICU_DIRECTIVE_END) );
-
         			}
         			else if(iMatcher.group("ID") != null) {
         				System.out.println( "ID: " + iMatcher.groupCount() );
