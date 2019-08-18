@@ -94,6 +94,7 @@ public final class Xliterator extends Application {
 	private File icuFile = null;
 	protected StatusBar statusBar = new StatusBar();
 	private boolean converted = false;
+	private Menu inScriptMenu  = null;
 	private Menu outVariantMenu = null;
 	private Menu outScriptMenu  = null;
 	private final Button convertButton = new Button("Convert");
@@ -380,7 +381,7 @@ public final class Xliterator extends Application {
     	
         tabpane.getTabs().addAll( editTab, textTab, filesTab );
 
-        Menu  inScriptMenu =  createInScriptsMenu( stage );
+        inScriptMenu =  createInScriptsMenu( stage );
         outScriptMenu  = new Menu( "Script _Out" );
         outVariantMenu = new Menu( "_Variant" );
 
@@ -508,6 +509,9 @@ public final class Xliterator extends Application {
             }
         );
         
+        final MenuItem demoMenuItem = new MenuItem( "Load Demo" );
+        helpMenu.getItems().add( demoMenuItem );
+        demoMenuItem.setOnAction( evt -> loadDemo() );
         
         // create a menubar 
         MenuBar leftBar = new MenuBar(); 
@@ -1016,6 +1020,47 @@ public final class Xliterator extends Application {
     		textArea.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
     		textArea.getProperties().put( "font-size", fontSize );
     	}
+    }
+    
+    private void loadDemo() {
+    	textAreaIn.clear();
+    	textAreaOut.clear();
+    	textAreaIn.setText( "ሰላም ዓለም" );
+    	
+    	setScriptIn( "Ethiopic" );
+    	setScriptOut( "IPA" );
+    	setVariantOut( "Amharic" );
+    	selectedTransliteration = "am-am_FONIPA.xml";
+    	transliterationDirection = "both";
+    	
+    	for(MenuItem item: inScriptMenu.getItems() ) {
+    		if( item.getClass() == RadioMenuItem.class ) {
+	    		RadioMenuItem rItem = (RadioMenuItem)item;
+	    		if ( "Ethiopic".equals( rItem.getText() ) ) {
+	    			rItem.setSelected( true );
+	    		}
+    		}
+    	}
+    	for(MenuItem item: outScriptMenu.getItems() ) {
+    		RadioMenuItem rItem = (RadioMenuItem)item;
+    		if ( "IPA".equals( rItem.getText() ) ) {
+    			rItem.setSelected( true );
+    		}
+    	}
+    	for(MenuItem item: outVariantMenu.getItems() ) {
+    		RadioMenuItem rItem = (RadioMenuItem)item;
+    		if ( "Amharic".equals( rItem.getText() ) ) {
+    			rItem.setSelected( true );
+    		}
+    	}
+    	
+    	try {
+        	editor.loadResourceFile( selectedTransliteration );
+        }
+        catch(IOException ex) {
+        	errorAlert(ex, "Error opening: " + icuFile.getName() );
+        }
+
     }
 
 }
