@@ -374,8 +374,8 @@ public final class Xliterator extends Application {
         }
         
         TabPane tabpane = new TabPane();
-        Tab editTab = new Tab( "Mapping Editor");
-    	Tab textTab = new Tab( "Convert Text" );
+        Tab editTab  = new Tab( "Mapping Editor" );
+    	Tab textTab  = new Tab( "Convert Text" );
         Tab filesTab = new Tab( "Convert Files" );
     	
         tabpane.getTabs().addAll( editTab, textTab, filesTab );
@@ -581,7 +581,7 @@ public final class Xliterator extends Application {
         
 
         ClassLoader classLoader = this.getClass().getClassLoader();
-        Image imageDown = new Image(classLoader.getResourceAsStream("images/arrow-circle-down.png"));
+        Image imageDown = new Image( classLoader.getResourceAsStream( "images/arrow-circle-down.png" ) );
         ImageView imageViewDown = new ImageView( imageDown );
         imageViewDown.setFitHeight( 18 );
         imageViewDown.setFitWidth( 18 );
@@ -593,7 +593,7 @@ public final class Xliterator extends Application {
         	convertTextArea( textAreaIn, textAreaOut, "forward" ); 
         });
         
-        Image imageUp = new Image(classLoader.getResourceAsStream("images/arrow-circle-up.png"));
+        Image imageUp = new Image( classLoader.getResourceAsStream( "images/arrow-circle-up.png" ) );
         ImageView imageViewUp = new ImageView( imageUp );
         imageViewUp.setFitHeight( 18 );
         imageViewUp.setFitWidth( 18 );
