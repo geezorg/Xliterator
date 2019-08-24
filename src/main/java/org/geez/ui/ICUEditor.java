@@ -87,7 +87,7 @@ public class ICUEditor extends CodeArea {
     
         setParagraphGraphicFactory( LineNumberFactory.get( this ) );
 
-        textProperty().addListener((obs, oldText, newText) -> {
+        textProperty().addListener( (obs, oldText, newText) -> {
             this.setStyleSpans( 0, computeHighlighting(newText) );
         });
         // replaceText(0, 0, sampleCode);
