@@ -10,6 +10,10 @@
 			"Latin" : [
 				{ "name": "Latin", "direction": "both", "path": "Arabic-Latin.xml" } ,
 				{ "name": "BGN", "direction": "forward", "path": "Arabic-Latin-BGN.xml" }
+			],
+			"IPA" : [
+				{ "name": "Farsi", "direction": "forward", "path": "fa-fa_FONIPA.xml" },
+				{ "name": "Uyghur", "direction": "forward", "path": "ug-ug_FONIPA.xml" }
 			]
 		},
 		"Armenian" : {
@@ -37,7 +41,13 @@
 					{ "name": "Ukrainian", "direction": "forward", "path": "Ukrainian-Latin-BGN.xml" },
 					{ "name": "Turkmen", "direction": "forward", "path": "Turkmen-Latin-BGN.xml" },
 					{ "name": "Uzbek", "direction": "forward", "path": "Uzbek-Latin-BGN.xml" }
-				]
+				 ],
+				 "BGN (1947)" : [
+					{ "name": "Russian", "direction": "forward", "path": "ru_Latn-ru-BGN.xml" }
+				 ],
+				 "IPA" : [
+					{ "name": "Kazakh", "direction": "forward", "path": "kk-kk_FONIPA.xml" }
+				 ]
 				},
 			        {
 				 "Mongolian" : [
@@ -54,16 +64,9 @@
 			"Latin" : [
 		        	{
 		        	"Amharic" : [
- 						{ "name": "BGN", "direction": "forward", "path": "Amharic-Latin-BGN.xml" },
-						{ "name": "Hamburg", "direction": "forward", "path": "Amharic-Latin-Hamburg.xml" },
-						{ "name": "SERA", "direction": "both", "path": "Amharic-Latin-SERA.xml" } 
+ 						{ "name": "BGN", "direction": "forward", "path": "Amharic-Latin-BGN.xml" }
 					]
-				 },
-				{
-				"Tigrinya" : [
-						{ "name": "BGN", "direction": "forward", "path": "Tigrinya-Latin-BGN.xml" }
-					]
-				}
+				 }
     			]
 		},
 		"Georgian" : {
@@ -75,9 +78,9 @@
 		},
 		"Greek" : {
     			"Latin" : [
-    				{ "name": "Latin", "direction": "both", "path": "Georgian-Latin.xml" },
-    				{ "name": "BGN", "direction": "forward", "path": "Georgian-Latin-BGN.xml" },
-    				{ "name": "UNGEGN", "direction": "both", "path": "Georgian-Latin-UNGEGN.xml" }
+    				{ "name": "Latin", "direction": "both", "path": "Greek-Latin.xml" },
+    				{ "name": "BGN", "direction": "forward", "path": "Greek-Latin-BGN.xml" },
+    				{ "name": "UNGEGN", "direction": "both", "path": "Greek_Latin_UNGEGN.xml" }
     			]
  		},
 		"Hangul" : {
@@ -111,47 +114,27 @@
 			"Bopopmofo" : [
 				{ "name": "Bopopmofo", "direction": "both", "path": "Latin-Bopopmofo.xml" }
 			],
+			"IPA" : [
+				{ "name": "Chamorro", "direction": "forward", "path": "chr-chr_FONIPA.xml" },
+				{ "name": "Czech", "direction": "forward", "path": "cs-cs_FONIPA.xml" },
+				{ "name": "Esperanto", "direction": "forward", "path": "eo-eo_FONIPA.xml" },
+				{ "name": "Romanian", "direction": "forward", "path": "ro-ro_FONIPA.xml" },
+				{ "name": "Venetian", "direction": "forward", "path": "vec-vec_FONIPA.xml" },
+				{ "name": "isiZulu", "direction": "forward", "path": "zu-zu_FONIPA.xml" }
+			],
 			"Ethiopic" : [
 				{ "name": "Ethiopic", "direction": "both", "path": "Latin-Ethiopic.xml" }
+			]
+		},
+		"Sinhala" : {
+			"IPA" : [
+				{ "name": "Sinhalese", "direction": "forward", "path": "si-si_FONIPA.xml" }
 			]
 		},
 		"Thaana" : {
 			"Latin" : [
 				{ "name": "BGN", "direction": "forward", "path": "Maldivian-Latin-BGN.xml" }
 			]
-		},
- 		"In Script" : {
- 			"Out Script 1" : [ 
-    			{ "name": "Variant", "direction": "both", "path": "InScript-OutScript1-Variant.xml" }
- 			],
- 			"Out Script 2" : [ 
- 				{
- 					"Variant 1" : [
-    					{ "name": "SubVariant 1", "direction": "both", "path": "InScript-OutScript2-Variant1-SubVariant1.xml" },
-    					{ "name": "SubVariant 2", "direction": "both", "path": "InScript-OutScript2-Variant1-SubVariant2.xml" }
-    				],
- 		 	   		"Variant 2" : [
-    					{ "name": "SubVariant 1", "direction": "both", "path": "InScript-OutScript2-Variant2-SubVariant1.xml" }
-    				]
-    			}
- 			],
- 			"Out Script 3" : [ 
-    			{ "name": "Variant", "direction": "both", "path": "InScript-OutScript3-Variant.xml" }
- 			]
- 		},
- 		"Out Script 2" : {
- 		 	"In Script" : [
- 		 		{
- 		 	   		"Variant 2" : [
-    					{ "name": "SubVariant 2", "direction": "both", "path": "OutScript2-InScript-Variant2-SubVariant2.xml" }
-    				]
-    			}
-			]
- 		},
- 		"Out Script 3" : {
- 		 	"In Script" : [
-    			{ "name": "Variant", "direction": "both", "path": "OutScript3-InScript-Variant.xml" }
-			]
- 		}
+		}
 	}
 }

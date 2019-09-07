@@ -33,3 +33,15 @@
 .identifier {
 	-fx-fill: yellow;
 }
+.forwardArrow {
+	-fx-font-weight: bold;
+	-fx-fill: lawngreen;
+}
+.reverseArrow {
+	-fx-font-weight: bold;
+	-fx-fill: orangered;
+}
+.bothArrow {
+	-fx-font-weight: bold;
+	-fx-fill: mediumvioletred;
+}

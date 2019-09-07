@@ -11,6 +11,8 @@ import org.docx4j.wml.P;
 import org.docx4j.wml.PPr;
 import org.docx4j.wml.PPrBase.PStyle;
 import org.docx4j.wml.R;
+import org.docx4j.wml.RFonts;
+import org.docx4j.wml.RPr;
 import org.docx4j.wml.Text;
 
 
@@ -20,9 +22,9 @@ public class DocxStyledTextFinder extends CallbackImpl {
     public Map<R.Sym,String> symResults = new HashMap<R.Sym,String>();
     
     public List<Text> resultsOrdered = new ArrayList<Text>();
-    private Map<String,String> styleIdToFont = null;
+    private Map<String,Map<String,String>> styleIdToFont = null;
     
-    public DocxStyledTextFinder( Map<String,String> styleIdToFont ) {
+    public DocxStyledTextFinder( Map<String,Map<String,String>> styleIdToFont ) {
     	super();
     	this.styleIdToFont = styleIdToFont;
     }
@@ -55,16 +57,48 @@ public class DocxStyledTextFinder extends CallbackImpl {
 			}
 			
 			if( styleIdToFont.containsKey( styleName ) ) {
+				Map<String,String> encodingToFont = styleIdToFont.get( styleName );
+				String targetFont = encodingToFont.get( "ascii" );
+				if( targetFont == null ) {
+					targetFont = encodingToFont.get( "hAnsi" );
+					if( targetFont == null ) {
+						targetFont = encodingToFont.get( "cs" );
+						if( targetFont == null ) {
+							targetFont = encodingToFont.get( "eastAsia" );
+						}
+					}
+				}
 				List<Object> pObjects = p.getContent();
 				for(Object pobj: pObjects) {
 					if( pobj instanceof org.docx4j.wml.R ) {
 						R r = (org.docx4j.wml.R)pobj;
+						RPr rpr = r.getRPr();
+						
+						// Check if the rFont is overriding the the target font in one of the encoding options,
+						// if so, do not capture this node:
+						if ( (rpr != null) && (rpr.getRFonts() != null) ) {
+							RFonts rfonts = rpr.getRFonts();
+							if( encodingToFont.containsKey( "ascii") ) {
+								String targetAsciiFont = encodingToFont.get( "ascii" );
+								String encoding = rfonts.getAscii();
+								if( (encoding != null) && !encoding.equals( targetAsciiFont ) ) {
+									continue; // an override has occurred
+								}	
+							}
+							if( encodingToFont.containsKey( "hAnsi") ) {
+								String targethAnsiFont = encodingToFont.get( "hAnsi" );
+								String encoding = rfonts.getAscii();
+								if( (encoding != null) && !encoding.equals( targethAnsiFont ) ) {
+									continue; // an override has occurred
+								}	
+							}
+						}
 						//
 						// RPr rpr = r.getRPr();
 						// if ( (rpr != null) && (rpr.getRFonts() != null) ) continue;  // UnstypedTextFinder has been here
 						//
 						// this check doesn't go far enough.  it may be the case that the rpr defines only the font
-						// for on of the 4 encodings, like w:cs, and not w:hAnsi or w:ascii where an Ethopic font might be set,
+						// for one of the 4 encodings, like w:cs, and not w:hAnsi or w:ascii where an Ethopic font might be set,
 						// thus this is not an override and UnstyledTextFinder also may not have found anything.  An example:
 						/*
 						 * document/styles.xml
@@ -98,12 +132,12 @@ public class DocxStyledTextFinder extends CallbackImpl {
 							Object tobj = XmlUtils.unwrap(robj);
 							if ( tobj instanceof org.docx4j.wml.Text ) {
 								// check here if styleIdToFont.get(styleName) might be null -?
-								results.put( (org.docx4j.wml.Text)tobj, styleIdToFont.get(styleName) );
+								results.put( (org.docx4j.wml.Text)tobj, targetFont );
 								resultsOrdered.add( (org.docx4j.wml.Text)tobj );
 							}
 							else if( tobj instanceof org.docx4j.wml.R.Sym ) {
 								R.Sym sym = (org.docx4j.wml.R.Sym)tobj;
-								if( styleIdToFont.containsValue( sym.getFont() ) ) {
+								if( encodingToFont.containsValue( sym.getFont() ) ) {
 									symResults.put( sym, sym.getFont() );
 								}
 							}
@@ -113,7 +147,7 @@ public class DocxStyledTextFinder extends CallbackImpl {
 						// w:t node is a direct child of the w:p node:
 						Object tobj = XmlUtils.unwrap(pobj);
 						if( tobj instanceof org.docx4j.wml.Text ) {
-							results.put( (org.docx4j.wml.Text)tobj, styleIdToFont.get(styleName) );
+							results.put( (org.docx4j.wml.Text)tobj, targetFont );
 							resultsOrdered.add( (org.docx4j.wml.Text)tobj );
 						}
 					}
