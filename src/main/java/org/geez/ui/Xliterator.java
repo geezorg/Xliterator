@@ -359,7 +359,7 @@ public final class Xliterator extends Application {
     @Override
     public void start(final Stage stage) {
         stage.setTitle("Xliterator - An ICU Based Transliterator");
-        Image logoImage = new Image( ClassLoader.getSystemResourceAsStream("images/geez-org-avatar.png") );
+        Image logoImage = new Image( ClassLoader.getSystemResourceAsStream("images/Xliterator.png") );
         stage.getIcons().add( logoImage );
         String osName = System.getProperty("os.name");
         if( osName.equals("Mac OS X") ) {
