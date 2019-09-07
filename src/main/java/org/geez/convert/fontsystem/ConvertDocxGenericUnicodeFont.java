@@ -1,10 +1,7 @@
 package org.geez.convert.fontsystem;
 
-import java.io.File;
 import java.util.List;
 import java.util.UUID;
-
-import org.geez.convert.docx.ConvertDocx;
 
 import com.ibm.icu.text.Transliterator;
 

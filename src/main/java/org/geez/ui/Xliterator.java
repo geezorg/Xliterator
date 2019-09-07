@@ -21,7 +21,7 @@ import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.geez.convert.Converter;
 import org.geez.convert.DocumentProcessor;
-import org.geez.convert.docx.DocxFileProcessor;
+import org.geez.convert.docx.DocxProcessor;
 import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
 import org.geez.convert.fontsystem.ConvertFontSystem;
 import org.geez.convert.text.ConvertTextString;
@@ -61,6 +61,7 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
@@ -83,7 +84,7 @@ import javafx.stage.Stage;
 
 public final class Xliterator extends Application {
  
-	private static final String VERSION = "v0.1.0";
+	private static final String VERSION = "v0.5.0";
     private Desktop desktop = Desktop.getDesktop();
 
 	private String scriptIn  = null; // alphabetic based default
@@ -107,13 +108,13 @@ public final class Xliterator extends Application {
     private final TextArea textAreaOut = new TextArea();
     private String defaultFont = null;
     private CheckComboBox<String> documentFontsMenu = new CheckComboBox<String>();
-    RadioMenuItem openInternalMenuItem = new RadioMenuItem( "Open Selected Transliteration" );
+    RadioMenuItem openInternalMenuItem = new RadioMenuItem( "Load Selected Transliteration" );
     
     private final int APP_WIDTH  = 800;
     private final int APP_HEIGHT = 800;
     
 	private XliteratorConfig config = new XliteratorConfig();
-	private DocxFileProcessor processorDocx = new DocxFileProcessor();
+	private DocxProcessor processorDocx = new DocxProcessor();
 	private TextFileProcessor processorTxt = new TextFileProcessor();
 
 	
@@ -134,36 +135,27 @@ public final class Xliterator extends Application {
         alert.showAndWait();
 	}
 	
-	private void saveEditorToFile(String newContent) {
-		try{
-			  // Create file 
-			  FileWriter fstream = new FileWriter( icuFile );
-			  BufferedWriter out = new BufferedWriter(fstream);
-			  out.write("Hello Java");
-			  //Close the output stream
-			  out.close();
-		}
-		catch (Exception ex){
-			errorAlert( "Error occured saving file",  "An error occured while saving the file \"" + icuFile.getPath() + "\":\n" + ex.getMessage() );
-		}
+	private void saveEditorToFile(String newContent) throws IOException {
+		  // Create file 
+		  FileWriter fstream = new FileWriter( icuFile );
+		  BufferedWriter out = new BufferedWriter( fstream );
+		  out.write( newContent );
+		  //Close the output stream
+		  out.close();
 	}
 	
-	private void saveAsEditorToFile(Stage stage, String newContent) {
+	private void saveAsEditorToFile(Stage stage, String newContent) throws IOException {
 		FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save ICU File");
         File file = fileChooser.showSaveDialog( stage );
         if (file != null) {
-            try {
   			  // Create file 
-  			  FileWriter fstream = new FileWriter( icuFile );
-  			  BufferedWriter out = new BufferedWriter(fstream);
-  			  out.write("Hello Java");
+  			  FileWriter fstream = new FileWriter( file );
+  			  BufferedWriter out = new BufferedWriter (fstream );
+  			  out.write( newContent );
   			  //Close the output stream
   			  out.close();
   			  icuFile = file;
-            } catch (IOException ex) {
-    			errorAlert( "Error occured saving file",  "An error occured while saving the file \"" + icuFile.getPath() + "\":\n" + ex.getMessage() );
-            }
         }
     }
 	
@@ -378,8 +370,15 @@ public final class Xliterator extends Application {
         Tab editTab  = new Tab( "Mapping Editor" );
     	Tab textTab  = new Tab( "Convert Text" );
         Tab filesTab = new Tab( "Convert Files" );
+        editTab.setClosable( false ); // future set to true when multiple editors are supported
+        textTab.setClosable( false );
+        filesTab.setClosable( false );
     	
         tabpane.getTabs().addAll( editTab, textTab, filesTab );
+        
+        editor.textProperty().addListener( (obs, oldText, newText) -> {
+            editTab.setText( "*Mapping Editor" );
+        });
 
         inScriptMenu =  createInScriptsMenu( stage );
         outScriptMenu  = new Menu( "Script _Out" );
@@ -459,16 +458,32 @@ public final class Xliterator extends Application {
                 }
         );
         MenuItem saveMenuItem = new MenuItem( "Save" );
-        MenuItem saveAsMenuItem = new MenuItem( "Save As..." );
         saveMenuItem.setOnAction( actionEvent ->
         	{
-        		if( icuFile == null) {
-        			saveAsEditorToFile( stage, editor.getText() );
-        		} {
-        			saveEditorToFile( editor.getText() );
+        		try {
+	        		if( icuFile == null) {
+	        			saveAsEditorToFile( stage, editor.getText() );
+	        		} 
+	        		else {
+	        			saveEditorToFile( editor.getText() );
+	        		}
+	        		editTab.setText( "Mapping Editor" );
         		}
-        	}
-        );
+	        	catch (Exception ex){
+	        		errorAlert( "Error occured saving file",  "An error occured while saving the file \"" + icuFile.getPath() + "\":\n" + ex.getMessage() );
+	        	}
+        	});
+        MenuItem saveAsMenuItem = new MenuItem( "Save As..." );
+        saveAsMenuItem.setOnAction( actionEvent ->
+	    	{
+	    		try {
+	        		saveAsEditorToFile( stage, editor.getText() );
+	        		editTab.setText( "Mapping Editor" );
+	    		}
+	        	catch (Exception ex){
+	        		errorAlert( "Error occured saving file",  "An error occured while saving the file \"" + icuFile.getPath() + "\":\n" + ex.getMessage() );
+	        	}
+	    	});
         
         MenuItem exitMenuItem = new MenuItem("Exit");
         exitMenuItem.setOnAction(actionEvent -> Platform.exit());
@@ -991,7 +1006,7 @@ public final class Xliterator extends Application {
 		editor.getProperties().put( "font-size", fontSize );
 		
 		if( textAreaIn.getProperties().get( "font-size") == null ) {
-			textAreaIn.setStyle( "-fx-font-s: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
+			textAreaIn.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
 		}
 		if( textAreaOut.getProperties().get( "font-size") == null ) {
 			textAreaOut.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 

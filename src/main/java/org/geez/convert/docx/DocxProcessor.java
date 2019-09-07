@@ -23,9 +23,10 @@ import org.docx4j.wml.R;
 import org.docx4j.wml.Text;
 import org.geez.convert.DocumentProcessor;
 import org.geez.convert.fontsystem.ConvertFontSystem;
+import org.geez.convert.fontsystem.ConvertFontSystemDiacriticalSystem;
 
 
-public class DocxFileProcessor extends DocumentProcessor {
+public class DocxProcessor extends DocumentProcessor {
 	
 	protected double totalNodes = 0;
 	
@@ -154,8 +155,144 @@ public class DocxFileProcessor extends DocumentProcessor {
 			}
 	}
 	
+	/*
+	 * Previously this normalizeText was done by the diacrtical based converter, this works fine so long as
+	 * a document is in a single font system. Since multi-font system documents have been found (diacritical mixed
+	 * with non-diacrtical), we normalize the text outside of a converter.  This needs a re-think, the benefit of
+	 * iterating outside of a converter is that only a single iteration is needed.  Alternatively, each converter
+	 * in play could run the text node iteration individually.
+	 * 
+	 * We need to first "normalize" the text before processing it.  This avoids inserting lots of confusing
+	 * complexity that would be needed to check for diacritical marks separated by xml elements from their
+	 * bases.  This process will check if the first letter of run text is a diacritical mark, if so, then 
+	 * move it to the last character of the previous run.  Thus <w:t>....b</w:t> ... <w:t>u...</w:t>
+	 * becomes <w:t>...bu</w:t> ... <w:t>...</w:t> and "bu" will be converted properly to "ቡ".
+	 * 
+	 * There are two scenarios to check for and correct. The first is when in the Ethiopic font is specified
+	 * in adjacent w:rFonts properties, and not in a named style. For example:
+	 * 
+	 * <w:r>
+	 *  <w:rPr>
+	 *    <w:rFonts w:ascii="..." w:ansi="..."/>
+	 *  <w:rPr>
+	 *  <w:t>b</w:t>
+	 * </w:r>
+	 * <w:r>
+	 *  <w:rPr>
+	 *    <w:rFonts w:ascii="..." w:ansi="..."/>
+	 *  <w:rPr>
+	 *  <w:t>u</w:t>
+	 * </w:r>
+	 * 
+	 * The 2nd scenario is when an Ethiopic font is defined in a style, and no rFonts are present.  For example:
+	 * 
+	 * <w:p>
+	 *   <w:pPr><w:pStyle w:val="BodyText"/><w:rPr><w:sz w:val="20"/></w:rPr></w:pPr>
+	 *   <w:r>
+	 *     <w:rPr>
+	 *      <w:sz w:val="20"/>
+	 *     <w:rPr>
+	 *     <w:t>b</w:t>
+	 *   </w:r>
+	 *   <w:r>
+	 *    <w:rPr>
+	 *      <w:sz w:val="20"/>
+	 *    <w:rPr>
+	 *    <w:t>u</w:t>
+	 *   </w:r>
+	 * </w:p>
+	 * 
+	 */
+	public void normalizeText( final JaxbXmlPart<?> part, DocxStyledTextFinder stFinder, DocxUnstyledTextFinder ustFinder ) throws Docx4JException {
 
-	// make this an abstract method
+		if( stFinder.hasStyles() ) {
+			stFinder.clearResults();
+		
+			new TraversalUtil( part.getContents(), stFinder );
+			// fix styled text nodes:
+		
+			Map<Text,String> styledText = stFinder.results;
+			List<Text> styledTextOrdered = stFinder.resultsOrdered;
+			int size = styledTextOrdered.size();
+			for ( int i=1; i<size; i++ ) {
+				Text text1 = styledTextOrdered.get(i);
+				String value1 = text1.getValue();
+				if( value1.length() > 0 ) {
+					char firstChar = value1.charAt(0);
+					String fontIn = styledText.get( text1 );
+					ConvertFontSystem converter = fontToConverterMap.get( fontIn );
+					if( converter instanceof ConvertFontSystemDiacriticalSystem ) {
+						ConvertFontSystemDiacriticalSystem diaConverter = (ConvertFontSystemDiacriticalSystem)converter;
+						if( diaConverter.isDiacritic( fontIn, String.valueOf(firstChar) ) )  {
+							Text text0 = styledTextOrdered.get( i-1 );
+							// check here if text0 is under the same font
+							if( fontIn.equals( styledText.get( text0 ) ) ) {
+								String value0 = text0.getValue();
+							
+								text0.setValue( value0 + firstChar );   // append to previous node as last char
+								text1.setValue( value1.substring(1) );  // remove from current node
+							}
+						}
+						else if( diaConverter.combinesWithHuletNeteb( firstChar ) ) {
+							Text text0 = styledTextOrdered.get( i-1 );
+							// check here if text0 is under the same font
+							if( fontIn.equals( styledText.get( text0 ) ) ) {
+								String value0 = text0.getValue();
+								if( ( value0.length() > 0 ) && ( ( value0.charAt( value0.length() - 1) ) == diaConverter.getHuletNeteb() ) ) {
+									text0.setValue( value0 + firstChar );   // append to previous node as last char
+									text1.setValue( value1.substring(1) );  // remove from current node	
+								}
+							}
+						}
+				}
+				}
+			}
+		}
+		
+		ustFinder.clearResults();
+		new TraversalUtil( part.getContents(), ustFinder );
+		
+		Map<Text,String> unstyledText = ustFinder.results;
+		List<Text> unstyledTextOrdered = ustFinder.resultsOrdered;
+		int size = unstyledTextOrdered.size();
+		for ( int i=1; i<size; i++ ) {
+			Text text1 = unstyledTextOrdered.get(i);
+			String value1 = text1.getValue();
+			if( value1.length() > 0 ) {
+				char firstChar = value1.charAt(0);
+				String fontIn = unstyledText.get( text1 );
+				ConvertFontSystem converter = fontToConverterMap.get( fontIn );
+				if( converter instanceof ConvertFontSystemDiacriticalSystem ) {
+					ConvertFontSystemDiacriticalSystem diaConverter = (ConvertFontSystemDiacriticalSystem)converter;
+					if( diaConverter.isDiacritic( fontIn, String.valueOf(firstChar) ) )  {
+						Text text0 = unstyledTextOrdered.get( i-1 );
+						// check here if text0 is under the same font
+						if( fontIn.equals( unstyledText.get( text0 ) ) ) {
+							String value0 = text0.getValue();
+							
+							text0.setValue( value0 + firstChar );   // append to previous node as last char
+							text1.setValue( value1.substring(1) );  // remove from current node
+						}
+					}
+					else if( diaConverter.combinesWithHuletNeteb( firstChar ) ) {
+						Text text0 = unstyledTextOrdered.get( i-1 );
+						// check here if text0 is under the same font
+						if( fontIn.equals( unstyledText.get( text0 ) ) ) {
+							String value0 = text0.getValue();
+							if( ( value0.length() > 0 ) && ( ( value0.charAt( value0.length() - 1) ) == diaConverter.getHuletNeteb() ) ) {
+								text0.setValue( value0 + firstChar );   // append to previous node as last char
+								text1.setValue( value1.substring(1) );  // remove from current node	
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	
+
+	/*
+	 * 
 	public void normalizeText( final JaxbXmlPart<?> part, DocxStyledTextFinder stFinder, DocxUnstyledTextFinder ustFinder ) throws Docx4JException {
 		if( stFinder.hasStyles() ) {
 			stFinder.clearResults();
@@ -167,6 +304,7 @@ public class DocxFileProcessor extends DocumentProcessor {
 		ustFinder.clearResults();
 		new TraversalUtil( part.getContents(), ustFinder );
 	}
+	*/
 
 	public void process( final File inputFile, final File outputFile )
 	{
@@ -178,8 +316,8 @@ public class DocxFileProcessor extends DocumentProcessor {
 			WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load( inputFile );		
 			MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
 			
-       		Map<String,String> styleIdToFont  = DocxUtils.readStyles(wordMLPackage, targetTypefaces, fontOut);
-       		DocxStyledTextFinder stf = new DocxStyledTextFinder( styleIdToFont );
+       		Map<String,Map<String,String>> styleIdToFont = DocxUtils.readStyles(wordMLPackage, targetTypefaces, fontOut);
+       		DocxStyledTextFinder    stf = new DocxStyledTextFinder( styleIdToFont );
     		DocxUnstyledTextFinder ustf = new DocxUnstyledTextFinder(targetTypefaces, fontOut);
     		
     		// see: https://stackoverflow.com/questions/34357005/javafx-task-update-progress-from-a-method
@@ -259,7 +397,6 @@ public class DocxFileProcessor extends DocumentProcessor {
 
 		}
 		catch ( Exception ex ) {
-			//should throw this and catch in a dialog
 			System.err.println( ex );
 		}
 	}
@@ -277,29 +414,29 @@ public class DocxFileProcessor extends DocumentProcessor {
     	this.fontOut = fontOut;
     }
 
-    public DocxFileProcessor() {
+    public DocxProcessor() {
     	super();
     }	
 
-    public DocxFileProcessor(String fontOut) {
+    public DocxProcessor(String fontOut) {
     	super();
     	setFontOut( fontOut );
     }
 
-    public DocxFileProcessor( List<File> inputFileList ) {
+    public DocxProcessor( List<File> inputFileList ) {
     	super( inputFileList );
     }
 
-    public DocxFileProcessor( final File inputFile, final File outputFile ) {
+    public DocxProcessor( final File inputFile, final File outputFile ) {
     	super( inputFile, outputFile );
     }
     
-    public DocxFileProcessor( List<File> inputFileList, String fontOut ) {
+    public DocxProcessor( List<File> inputFileList, String fontOut ) {
     	super( inputFileList );
     	this.fontOut = fontOut;
     }
 
-    public DocxFileProcessor( final File inputFile, final File outputFile, String fontOut  ) {
+    public DocxProcessor( final File inputFile, final File outputFile, String fontOut  ) {
     	super( inputFile, outputFile );
     	this.fontOut = fontOut;
     }

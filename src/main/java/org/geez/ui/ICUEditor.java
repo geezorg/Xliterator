@@ -46,6 +46,9 @@ public class ICUEditor extends CodeArea {
     		+ "|(?<COMMENT>#.*\n)" 
     		+ "|(?<DIRECTIVE>(::)(.*)(;))"
     		+ "|(?<ID>(\\[:)(\\w+)(:\\]))"
+    		+ "|(?<FORWARDARROW>(→))"
+    		+ "|(?<REVERSEARROW>(←))"
+    		+ "|(?<BOTHARROW>(↔))"
     		)
     ;
 
@@ -277,16 +280,25 @@ public class ICUEditor extends CodeArea {
                 		spansBuilder.add( Collections.singleton("paren"),     iMatcher.end(GROUP_ICU_DIRECTIVE_END)    - iMatcher.start(GROUP_ICU_DIRECTIVE_END) );
         			}
         			else if(iMatcher.group("ID") != null) {
-        				System.out.println( "ID: " + iMatcher.groupCount() );
+        				/* System.out.println( "ID: " + iMatcher.groupCount() );
         				System.out.println( "ID: "
         				+ iMatcher.group(9) + " / "
         				+ iMatcher.group(10) + " / "
         				+ iMatcher.group(11) + " / "
         				+ iMatcher.group(12) + " / "
-        				);
+        				); */
                 		spansBuilder.add( Collections.singleton("paren"),      iMatcher.end(GROUP_ICU_ID_OPEN)  - iMatcher.start(GROUP_ICU_ID_OPEN) );
                 		spansBuilder.add( Collections.singleton("identifier"), iMatcher.end(GROUP_ICU_ID_TERM)  - iMatcher.start(GROUP_ICU_ID_TERM) );
                 		spansBuilder.add( Collections.singleton("paren"),      iMatcher.end(GROUP_ICU_ID_CLOSE) - iMatcher.start(GROUP_ICU_ID_CLOSE) );
+        			}
+        			else if(iMatcher.group("FORWARDARROW") != null) {
+                		spansBuilder.add( Collections.singleton("forwardArrow"), iMatcher.end() - iMatcher.start() );
+        			}
+        			else if(iMatcher.group("REVERSEARROW") != null) {
+                		spansBuilder.add( Collections.singleton("reverseArrow"), iMatcher.end() - iMatcher.start() );
+        			}
+        			else if(iMatcher.group("BOTHARROW") != null) {
+                		spansBuilder.add( Collections.singleton("bothArrow"), iMatcher.end() - iMatcher.start() );
         			}
 					lastKwEnd = iMatcher.end();
         		}

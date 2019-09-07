@@ -30,7 +30,7 @@ public class ConvertFontSystem extends Converter {
 	public ConvertFontSystem( int icuDirection ) {
 	 	super( icuDirection );
 	}
-	
+
 	
 	protected String fontName = null;
 	protected List<String> targetTypefaces = new  ArrayList<String>();
@@ -94,5 +94,9 @@ public class ConvertFontSystem extends Converter {
 	
 	public List<String> getTargetTypefaces() {
 		return targetTypefaces;
+	}
+	
+	public char getHuletNeteb() {
+		return huletNeteb;
 	}
 }
