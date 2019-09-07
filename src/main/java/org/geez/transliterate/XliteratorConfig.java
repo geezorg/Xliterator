@@ -75,7 +75,6 @@ public class XliteratorConfig {
         for (int i = 0; i < variants.size(); i++) {
         	if( variants.get(i).getAsJsonObject().get( "name" ) != null  ) {
         		System.err.println( "Duplicate entry found at this level: " + variants.get(i).getAsJsonObject().get( "name" ).getAsString() );
-        		//System.exit(1);
         	}
         }
         JsonObject reverseVariant = variant.deepCopy();
