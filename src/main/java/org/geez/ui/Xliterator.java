@@ -61,7 +61,6 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
@@ -108,7 +107,7 @@ public final class Xliterator extends Application {
     private final TextArea textAreaOut = new TextArea();
     private String defaultFont = null;
     private CheckComboBox<String> documentFontsMenu = new CheckComboBox<String>();
-    RadioMenuItem openInternalMenuItem = new RadioMenuItem( "Load Selected Transliteration" );
+    RadioMenuItem loadInternalMenuItem = new RadioMenuItem( "Load Selected Transliteration" );
     
     private final int APP_WIDTH  = 800;
     private final int APP_HEIGHT = 800;
@@ -144,7 +143,7 @@ public final class Xliterator extends Application {
 		  out.close();
 	}
 	
-	private void saveAsEditorToFile(Stage stage, String newContent) throws IOException {
+	private String saveAsEditorToFile(Stage stage, String newContent) throws IOException {
 		FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save ICU File");
         File file = fileChooser.showSaveDialog( stage );
@@ -157,6 +156,7 @@ public final class Xliterator extends Application {
   			  out.close();
   			  icuFile = file;
         }
+        return file.getName();
     }
 	
     private static void configureFileChooser( final FileChooser fileChooser ) {      
@@ -249,11 +249,12 @@ public final class Xliterator extends Application {
     	
     	// Menu for the first edtior tab:
     	menu.getItems().add( new SeparatorMenuItem() );
-    	RadioMenuItem editTabItem = new RadioMenuItem( "Mapping Editor");
+    	RadioMenuItem editTabItem = new RadioMenuItem( "Use Editor" );
     	editTabItem.setOnAction( 
     			new EventHandler<ActionEvent>() {
     				@Override
     				public void handle(final ActionEvent e) {
+    					// TBD toggle off all other menu
     					/*
     					final FileChooser fileChooser = new FileChooser();
     					configureFileChooserICU(fileChooser);    
@@ -354,7 +355,7 @@ public final class Xliterator extends Application {
         documentFontsMenu.setDisable( false );
     }
     
-    
+    private Tab editTab  = new Tab( "Mapping Editor" );
     @Override
     public void start(final Stage stage) {
         stage.setTitle("Xliterator - An ICU Based Transliterator");
@@ -367,7 +368,6 @@ public final class Xliterator extends Application {
         }
         
         TabPane tabpane = new TabPane();
-        Tab editTab  = new Tab( "Mapping Editor" );
     	Tab textTab  = new Tab( "Convert Text" );
         Tab filesTab = new Tab( "Convert Files" );
         editTab.setClosable( false ); // future set to true when multiple editors are supported
@@ -377,7 +377,17 @@ public final class Xliterator extends Application {
         tabpane.getTabs().addAll( editTab, textTab, filesTab );
         
         editor.textProperty().addListener( (obs, oldText, newText) -> {
-            editTab.setText( "*Mapping Editor" );
+    		String label = editTab.getText();
+        	if( editor.hasContentChanged(newText) ) {
+        		if( label.charAt(0) != '*' ) {
+        			editTab.setText( "*" + editTab.getText() );
+        		}
+        	}
+        	else {
+        		if( label.charAt(0) == '*' ) {
+        			editTab.setText( editTab.getText().substring(1) );
+        		}
+        	}
         });
 
         inScriptMenu =  createInScriptsMenu( stage );
@@ -436,6 +446,7 @@ public final class Xliterator extends Application {
                         try {
                         	// editor.replaceText( FileUtils.readFileToString(icuFile, StandardCharsets.UTF_8) );
                         	editor.loadFile( icuFile );
+                        	editTab.setText( icuFile.getName() );
                         }
                         catch(IOException ex) {
                         	errorAlert(ex, "Error opening: " + icuFile.getName() );
@@ -444,12 +455,13 @@ public final class Xliterator extends Application {
                 }
         );
 		
-        openInternalMenuItem.setOnAction(
+        loadInternalMenuItem.setOnAction(
                 new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(final ActionEvent e) {
                     	try {
                         	editor.loadResourceFile( selectedTransliteration );
+                        	editTab.setText( selectedTransliteration );
                         }
                         catch(IOException ex) {
                         	errorAlert(ex, "Error opening: " + icuFile.getName() );
@@ -467,7 +479,7 @@ public final class Xliterator extends Application {
 	        		else {
 	        			saveEditorToFile( editor.getText() );
 	        		}
-	        		editTab.setText( "Mapping Editor" );
+	        		editTab.setText( editTab.getText().substring(1) );
         		}
 	        	catch (Exception ex){
 	        		errorAlert( "Error occured saving file",  "An error occured while saving the file \"" + icuFile.getPath() + "\":\n" + ex.getMessage() );
@@ -477,8 +489,8 @@ public final class Xliterator extends Application {
         saveAsMenuItem.setOnAction( actionEvent ->
 	    	{
 	    		try {
-	        		saveAsEditorToFile( stage, editor.getText() );
-	        		editTab.setText( "Mapping Editor" );
+	        		String newFileName = saveAsEditorToFile( stage, editor.getText() );
+	        		editTab.setText( newFileName );
 	    		}
 	        	catch (Exception ex){
 	        		errorAlert( "Error occured saving file",  "An error occured while saving the file \"" + icuFile.getPath() + "\":\n" + ex.getMessage() );
@@ -487,7 +499,7 @@ public final class Xliterator extends Application {
         
         MenuItem exitMenuItem = new MenuItem("Exit");
         exitMenuItem.setOnAction(actionEvent -> Platform.exit());
-        fileMenu.getItems().addAll( fileMenuItem, openMenuItem, openInternalMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), exitMenuItem ); 
+        fileMenu.getItems().addAll( fileMenuItem, openMenuItem, loadInternalMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), exitMenuItem ); 
         
         
         final Menu helpMenu = new Menu( "Help" );
@@ -662,9 +674,9 @@ public final class Xliterator extends Application {
         		fileMenuItem.setDisable( true );
         		openMenuItem.setDisable( false );
         		if ( variantOut == null )
-        			openInternalMenuItem.setDisable( true );
+        			loadInternalMenuItem.setDisable( true );
         		else
-        			openInternalMenuItem.setDisable( false );
+        			loadInternalMenuItem.setDisable( false );
         		saveMenuItem.setDisable( false );
         		saveAsMenuItem.setDisable( false );
         	}
@@ -673,7 +685,7 @@ public final class Xliterator extends Application {
         	if( textTab.isSelected() ) {
         		fileMenuItem.setDisable( true );
         		openMenuItem.setDisable( true );
-        		openInternalMenuItem.setDisable( true );
+        		loadInternalMenuItem.setDisable( true );
         		saveMenuItem.setDisable( true );
         		saveAsMenuItem.setDisable( true );
         	}
@@ -682,7 +694,7 @@ public final class Xliterator extends Application {
         	if( filesTab.isSelected() ) {
         		fileMenuItem.setDisable( false );
         		openMenuItem.setDisable( true );
-        		openInternalMenuItem.setDisable( true );
+        		loadInternalMenuItem.setDisable( true );
         		saveMenuItem.setDisable( true );
         		saveAsMenuItem.setDisable( true );
         	}
@@ -789,7 +801,7 @@ public final class Xliterator extends Application {
             	String outputFilePath = inputFilePath.replaceAll("\\.txt", "-" + scriptOut.replace( " ", "-" ) + ".txt");
             	outputFile =  new File ( outputFilePath );
             	
-            	if( selectedTransliteration.equals( "Mapping Editor") ) {
+            	if( selectedTransliteration.equals( "Use Editor") ) {
             		converter = new ConvertTextString( editor.getText() );	
             	}
             	else {
@@ -802,7 +814,7 @@ public final class Xliterator extends Application {
             	String outputFilePath = inputFilePath.replaceAll("\\.docx", "-" + scriptOut.replace( " ", "-" ) + ".docx");
             	outputFile =  new File ( outputFilePath );
 
-            	if( selectedTransliteration.equals( "Mapping Editor") ) {
+            	if( selectedTransliteration.equals( "Use Editor") ) {
             		converter = new ConvertDocxGenericUnicodeFont( editor.getText() );	
             	}
             	else {
@@ -944,7 +956,7 @@ public final class Xliterator extends Application {
     	createOutScriptsMenu( scriptIn );
 		convertButton.setDisable( true );
         convertButtonDown.setDisable( true );
-        openInternalMenuItem.setDisable( true );
+        loadInternalMenuItem.setDisable( true );
     }
     private void setScriptOut(String scriptOut) {
     	this.scriptOut = scriptOut;
@@ -954,7 +966,7 @@ public final class Xliterator extends Application {
     	createOutVaraintsMenu( scriptOut );
 		convertButton.setDisable( true );
         convertButtonDown.setDisable( true );
-        openInternalMenuItem.setDisable( true );
+        loadInternalMenuItem.setDisable( true );
     }
     private void setVariantOut(String variantOut) {
     	this.variantOut = variantOut;
@@ -963,7 +975,7 @@ public final class Xliterator extends Application {
     		convertButton.setDisable( false );
     	}
         convertButtonDown.setDisable( false );
-        openInternalMenuItem.setDisable( false );
+        loadInternalMenuItem.setDisable( false );
         if( "both".equals( transliterationDirection ) ) {
         	convertButtonUp.setDisable( false );
         }
@@ -1051,31 +1063,43 @@ public final class Xliterator extends Application {
     	for(MenuItem item: inScriptMenu.getItems() ) {
     		if( item.getClass() == RadioMenuItem.class ) {
 	    		RadioMenuItem rItem = (RadioMenuItem)item;
-	    		if ( "Ethiopic".equals( rItem.getText() ) ) {
+	    		if ( "Use Editor".equals( rItem.getText() ) ) {
 	    			rItem.setSelected( true );
+	    		}
+	    		else {
+	    			rItem.setSelected( false );
 	    		}
     		}
     	}
+    	
+
     	for(MenuItem item: outScriptMenu.getItems() ) {
+    		((RadioMenuItem)item).setSelected( false );
+    		/*
     		RadioMenuItem rItem = (RadioMenuItem)item;
     		if ( "IPA".equals( rItem.getText() ) ) {
     			rItem.setSelected( true );
     		}
+    		*/
     	}
     	for(MenuItem item: outVariantMenu.getItems() ) {
+    		((RadioMenuItem)item).setSelected( false );
+    		/*
     		RadioMenuItem rItem = (RadioMenuItem)item;
     		if ( "Amharic".equals( rItem.getText() ) ) {
     			rItem.setSelected( true );
     		}
+    		*/
     	}
+    	
     	
     	try {
         	editor.loadResourceFile( selectedTransliteration );
+        	editTab.setText( selectedTransliteration );
         }
         catch(IOException ex) {
         	errorAlert(ex, "Error opening: " + icuFile.getName() );
         }
-
     }
 
 }

@@ -79,6 +79,7 @@ public class ICUEditor extends CodeArea {
     private static final int GROUP_TRULE_CONTENT  = 3;
     private static final int GROUP_TRULE_CLOSE    = 4;
 
+    private String originalText = null;
 
     public ICUEditor() {
     	String osName = System.getProperty("os.name");
@@ -323,11 +324,18 @@ public class ICUEditor extends CodeArea {
 			sb.append( line + "\n" );
 		}
 		br.close();
-		replaceText( sb.toString() );
-	
+		originalText = sb.toString();
+		replaceText( originalText  );
+
     }
     
     public void loadFile(File icuFile) throws IOException {
-    	replaceText( FileUtils.readFileToString(icuFile, StandardCharsets.UTF_8) );
+    	originalText = FileUtils.readFileToString(icuFile, StandardCharsets.UTF_8);
+		replaceText( originalText  );
+    }
+    
+    
+    public boolean hasContentChanged(String newText) {
+    	return (! originalText.equals(newText) );
     }
 }

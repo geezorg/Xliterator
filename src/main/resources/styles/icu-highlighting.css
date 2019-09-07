@@ -35,7 +35,7 @@
 }
 .forwardArrow {
 	-fx-font-weight: bold;
-	-fx-fill: lawngreen;
+	-fx-fill: #008e00;
 }
 .reverseArrow {
 	-fx-font-weight: bold;
