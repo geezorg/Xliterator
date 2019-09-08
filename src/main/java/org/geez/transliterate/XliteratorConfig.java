@@ -1,11 +1,23 @@
 package org.geez.transliterate;
 
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import com.google.gson.Gson;
@@ -17,15 +29,16 @@ import com.google.gson.JsonParser;
 
 public class XliteratorConfig {
 	
-	private String defaultConfigFilePath = "transliterations.json";
+	private String userConfigFilePath = "transliterations.json";
+	private String transformsIndex = "common/transforms/index.json";
 	
 	private JsonObject config;
     
-	public XliteratorConfig() {
-		load( defaultConfigFilePath );
+	public XliteratorConfig()  throws URISyntaxException, IOException {
+		load( userConfigFilePath );
 	}
 	
-	public XliteratorConfig( String configFilePath ) {
+	public XliteratorConfig( String configFilePath )  throws URISyntaxException, IOException {
 		load( configFilePath );
 	}
 	
@@ -125,8 +138,28 @@ public class XliteratorConfig {
     }
     
     
-    public void load ( String configFilePath ) {
-    	String json = readLineByLineJava8( configFilePath );
+    public void load ( String configFilePath ) throws URISyntaxException, IOException {
+    	String json = null;
+    	File configFile = new File( configFilePath );
+    	Path configPath = null;
+    	if( configFile.exists() ) {
+    		//configPath = Paths.get( configFilePath );
+    		json = readLineByLineJava8( configFilePath );
+    	} else {
+    		ClassLoader classLoader = this.getClass().getClassLoader();
+    	
+    		InputStream inputStream = classLoader.getResourceAsStream( transformsIndex ); 
+    		BufferedReader br = new BufferedReader( new InputStreamReader(inputStream, "UTF-8") );
+    		StringBuffer sb = new StringBuffer();
+    		String line = null;
+    		while ( (line = br.readLine()) != null) {
+    			sb.append( line + "\n" );
+    		}
+    		br.close();
+    		json = sb.toString();
+    		// configPath = Paths.get( classLoader.getResource( transformsIndex ).toURI() );
+    	}
+		
         config = new JsonParser().parse(json).getAsJsonObject();
         JsonObject targetObject = config.deepCopy();
 
@@ -178,7 +211,7 @@ public class XliteratorConfig {
         	}
         }
         
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        // Gson gson = new GsonBuilder().setPrettyPrinting().create();
         // System.out.println( gson.toJson( targetObject ) );
         
     }
