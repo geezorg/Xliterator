@@ -112,7 +112,7 @@ public final class Xliterator extends Application {
     private final int APP_WIDTH  = 800;
     private final int APP_HEIGHT = 800;
     
-	private XliteratorConfig config = new XliteratorConfig();
+	private XliteratorConfig config = null;
 	private DocxProcessor processorDocx = new DocxProcessor();
 	private TextFileProcessor processorTxt = new TextFileProcessor();
 
@@ -358,6 +358,13 @@ public final class Xliterator extends Application {
     private Tab editTab  = new Tab( "Mapping Editor" );
     @Override
     public void start(final Stage stage) {
+    	try {
+    		config = new XliteratorConfig(); 
+    	}
+    	catch(Exception ex) {
+    		System.err.println( ex );
+    		System.exit(0);
+    	}
         stage.setTitle("Xliterator - An ICU Based Transliterator");
         Image logoImage = new Image( ClassLoader.getSystemResourceAsStream("images/Xliterator.png") );
         stage.getIcons().add( logoImage );

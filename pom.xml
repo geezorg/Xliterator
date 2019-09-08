@@ -57,7 +57,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>org.geez.convert.transliterate.Xliterator</mainClass>
+							<mainClass>org.geez.ui.Xliterator</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
