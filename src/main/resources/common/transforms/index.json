@@ -1,11 +1,5 @@
 {
 	"Scripts": {
-		"Any" : {
-			"Any" : [
-				{ "name": "Accents", "direction": "both", "path": "Any-Accents.xml" } ,
-				{ "name": "Publishing", "direction": "both", "path": "Any-Publishing.xml" }
-			]
-		},
 		"Arabic" : {
 			"Latin" : [
 				{ "name": "Latin", "direction": "both", "path": "Arabic-Latin.xml" } ,
@@ -112,7 +106,7 @@
 				{ "name": "Upper", "direction": "forward", "path": "az-Upper.xml" }
 			],
 			"Bopopmofo" : [
-				{ "name": "Bopopmofo", "direction": "both", "path": "Latin-Bopopmofo.xml" }
+				{ "name": "Bopomofo", "direction": "both", "path": "Latin-Bopomofo.xml" }
 			],
 			"IPA" : [
 				{ "name": "Chamorro", "direction": "forward", "path": "chr-chr_FONIPA.xml" },
