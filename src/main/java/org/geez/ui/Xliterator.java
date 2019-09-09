@@ -107,7 +107,7 @@ public final class Xliterator extends Application {
     private final TextArea textAreaOut = new TextArea();
     private String defaultFont = null;
     private CheckComboBox<String> documentFontsMenu = new CheckComboBox<String>();
-    RadioMenuItem loadInternalMenuItem = new RadioMenuItem( "Load Selected Transliteration" );
+    MenuItem loadInternalMenuItem = new MenuItem( "Load Selected Transliteration" );
     
     private final int APP_WIDTH  = 800;
     private final int APP_HEIGHT = 800;
@@ -134,8 +134,13 @@ public final class Xliterator extends Application {
         alert.showAndWait();
 	}
 	
+	// TODO: Disable "Save", "Save As" menus until the editor has content
+	// Do not change the Editor Tab title if a file has never been loaded
+	// Do not use FileWriter( icuFile ); if icuFile is still null
 	private void saveEditorToFile(String newContent) throws IOException {
 		  // Create file 
+		  if( editor.getContent() == null )
+			  return;
 		  FileWriter fstream = new FileWriter( icuFile );
 		  BufferedWriter out = new BufferedWriter( fstream );
 		  out.write( newContent );
@@ -442,7 +447,7 @@ public final class Xliterator extends Application {
     	// This should be moved under the top level "File" menu and is 
 
     	// Add transliteration file selection option:
-		RadioMenuItem openMenuItem = new RadioMenuItem( "Open ICU File..." );
+		MenuItem openMenuItem = new MenuItem( "Open ICU File..." );
         openMenuItem.setOnAction(
                 new EventHandler<ActionEvent>() {
                     @Override
@@ -462,6 +467,7 @@ public final class Xliterator extends Application {
                 }
         );
 		
+        loadInternalMenuItem.setDisable( true );
         loadInternalMenuItem.setOnAction(
                 new EventHandler<ActionEvent>() {
                     @Override
