@@ -49,6 +49,7 @@ public class ICUEditor extends CodeArea {
     		+ "|(?<FORWARDARROW>(→))"
     		+ "|(?<REVERSEARROW>(←))"
     		+ "|(?<BOTHARROW>(↔))"
+    		+ "|(?<THING>\\$\\w+)"
     		)
     ;
 
@@ -269,8 +270,11 @@ public class ICUEditor extends CodeArea {
         		int lastKwEnd = 0;
         		while( iMatcher.find() ) {
    				 	spansBuilder.add( Collections.emptyList(), iMatcher.start() - lastKwEnd);
-        			if(iMatcher.group("VARIABLE") != null) {
+        			if( (iMatcher.group("VARIABLE") != null) /* || (iMatcher.group("XARIABLE") != null) */ ) {
         				 spansBuilder.add( Collections.singleton("variable"), iMatcher.end() - iMatcher.start() );
+        			}
+        			else if( (iMatcher.group("THING") != null) ) {
+       				 	spansBuilder.add( Collections.singleton("variable"), iMatcher.end() - iMatcher.start() );
         			}
         			else if(iMatcher.group("COMMENT") != null) {
                 		spansBuilder.add( Collections.singleton("comment"), iMatcher.end() - iMatcher.start() );
