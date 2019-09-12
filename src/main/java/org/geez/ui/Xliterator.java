@@ -459,6 +459,15 @@ public final class Xliterator extends Application {
                         	// editor.replaceText( FileUtils.readFileToString(icuFile, StandardCharsets.UTF_8) );
                         	editor.loadFile( icuFile );
                         	editTab.setText( icuFile.getName() );
+                        	setUseEditor(); // TBD: set transliteration direction?
+                            convertButtonDown.setDisable( false );
+                            convertButtonUp.setDisable( true );
+                        	if( editor.getText().contains( "↔" ) ) {
+                        		transliterationDirection = "both";
+                                convertButtonUp.setDisable( false );
+                        	} else {
+                        		transliterationDirection = "forward"; // TODO: confirm this, it might be reverse only
+                        	}
                         }
                         catch(IOException ex) {
                         	errorAlert(ex, "Error opening: " + icuFile.getName() );
@@ -781,13 +790,27 @@ public final class Xliterator extends Application {
     	if( textIn == null )
     		return;
     	
-    	String transliterationKey = selectedTransliteration + "-" + direction ;
-
-    	if(! textStringConverts.containsKey( transliterationKey ) ) {
-    		textStringConverts.put( transliterationKey, new ConvertTextString( selectedTransliteration, direction ) );
+    	ConvertTextString stringConverter = null;
+    	if( "Use Editor".equals( selectedTransliteration ) ) {
+    		// do not save the converter because the text may change:
+    		try {
+    			stringConverter = new ConvertTextString( editor.getText() );
+    		}
+    		catch(Exception ex) {
+            	errorAlert(ex, "Translteration Defition Error. Correct to Proceed." );
+    			return;
+    		}
+    	}
+    	else {
+	    	String transliterationKey = selectedTransliteration + "-" + direction ;
+	    	
+	    	if(! textStringConverts.containsKey( transliterationKey ) ) {
+	    		textStringConverts.put( transliterationKey, new ConvertTextString( selectedTransliteration, direction ) );
+	    	}
+	    	stringConverter = textStringConverts.get( transliterationKey );
     	}
     	
-    	ConvertTextString stringConverter = textStringConverts.get( transliterationKey );
+
     	stringConverter.setText( textIn );
     	
     	textAreaOut.clear();
@@ -1062,6 +1085,21 @@ public final class Xliterator extends Application {
     	}
     }
     
+    private void setUseEditor() {    	
+    	for(MenuItem item: inScriptMenu.getItems() ) {
+    		if( item.getClass() == RadioMenuItem.class ) {
+	    		RadioMenuItem rItem = (RadioMenuItem)item;
+	    		if ( "Use Editor".equals( rItem.getText() ) ) {
+	    			rItem.setSelected( true );
+	    	    	selectedTransliteration = rItem.getText();
+	    		}
+	    		else {
+	    			rItem.setSelected( false );
+	    		}
+    		}
+    	}
+    }
+    
     private void loadDemo() {
     	textAreaIn.clear();
     	textAreaOut.clear();
@@ -1072,19 +1110,8 @@ public final class Xliterator extends Application {
     	setVariantOut( "Amharic" );
     	selectedTransliteration = "am-am_FONIPA.xml";
     	transliterationDirection = "both";
-    	
-    	for(MenuItem item: inScriptMenu.getItems() ) {
-    		if( item.getClass() == RadioMenuItem.class ) {
-	    		RadioMenuItem rItem = (RadioMenuItem)item;
-	    		if ( "Use Editor".equals( rItem.getText() ) ) {
-	    			rItem.setSelected( true );
-	    		}
-	    		else {
-	    			rItem.setSelected( false );
-	    		}
-    		}
-    	}
-    	
+
+    	setUseEditor();
 
     	for(MenuItem item: outScriptMenu.getItems() ) {
     		((RadioMenuItem)item).setSelected( false );

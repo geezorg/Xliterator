@@ -25,13 +25,13 @@
 	-fx-fill: blue;
 }
 .variable {
-	-fx-fill: aqua;
+	-fx-fill: cyan;
 }
 .directive {
 	-fx-fill: black;
 }
 .identifier {
-	-fx-fill: yellow;
+	-fx-fill: orange;
 }
 .forwardArrow {
 	-fx-font-weight: bold;

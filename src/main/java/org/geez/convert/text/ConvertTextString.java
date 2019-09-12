@@ -23,18 +23,12 @@ public class ConvertTextString extends Converter {
     }  
 
 
-    public ConvertTextString( String editorText ) {	
-		try {
-			String rulesText = editorText;
-			if( editorText.startsWith( "<?xml" ) ) {
-				rulesText = readRulesStringXML( editorText );
-			}
-			xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), rulesText, Transliterator.FORWARD );
+    public ConvertTextString( String editorText ) throws Exception {	
+		String rulesText = editorText;
+		if( editorText.startsWith( "<?xml" ) ) {
+			rulesText = readRulesStringXML( editorText );
 		}
-		catch ( Exception ex ) {
-			// put into dialog
-			System.err.println( ex );
-		}
+		xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), rulesText, Transliterator.FORWARD );
 	}
 
     
