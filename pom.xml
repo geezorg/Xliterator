@@ -63,7 +63,7 @@
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
 					</descriptorRefs>
-					<finalName>${project.artifactId}-${project.version}-beta</finalName>
+					<finalName>${project.artifactId}-${project.version}-full-gui</finalName>
 					<appendAssemblyId>false</appendAssemblyId>
 				</configuration>
 			</plugin>
