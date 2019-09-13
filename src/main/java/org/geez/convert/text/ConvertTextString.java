@@ -23,12 +23,16 @@ public class ConvertTextString extends Converter {
     }  
 
 
-    public ConvertTextString( String editorText ) throws Exception {	
+    public ConvertTextString( String editorText, String direction, boolean isEditor ) throws Exception {	
 		String rulesText = editorText;
 		if( editorText.startsWith( "<?xml" ) ) {
 			rulesText = readRulesStringXML( editorText );
 		}
-		xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), rulesText, Transliterator.FORWARD );
+		icuDirection = (direction.equals("both") || direction.equals("forward"))
+				 ? Transliterator.FORWARD 
+				 : Transliterator.REVERSE // || direction.equals("reverse") 
+				 ;
+		xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), rulesText, icuDirection );
 	}
 
     

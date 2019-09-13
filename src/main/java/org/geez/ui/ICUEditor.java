@@ -80,7 +80,7 @@ public class ICUEditor extends CodeArea {
     private static final int GROUP_TRULE_CONTENT  = 3;
     private static final int GROUP_TRULE_CLOSE    = 4;
 
-    private String originalText = null;
+    private String originalText = "";
 
     public ICUEditor() {
     	String osName = System.getProperty("os.name");
@@ -93,6 +93,9 @@ public class ICUEditor extends CodeArea {
         setParagraphGraphicFactory( LineNumberFactory.get( this ) );
 
         textProperty().addListener( (obs, oldText, newText) -> {
+        	if( "".equals(newText) ) {
+        		return;
+        	}
             this.setStyleSpans( 0, computeHighlighting(newText) );
         });
         // replaceText(0, 0, sampleCode);
@@ -335,7 +338,7 @@ public class ICUEditor extends CodeArea {
     
     public void loadFile(File icuFile) throws IOException {
     	originalText = FileUtils.readFileToString(icuFile, StandardCharsets.UTF_8);
-		replaceText( originalText  );
+		replaceText( originalText );
     }
     
     
