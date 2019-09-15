@@ -365,6 +365,7 @@ public final class Xliterator extends Application {
     		errorAlert(ex, "An error occured while reading documents." );
     	}
     	
+    	documentFontsMenu.getItems().clear();
     	documentFontsMenu.getItems().addAll( fonts );
         documentFontsMenu.setDisable( false );
     }
@@ -442,6 +443,7 @@ public final class Xliterator extends Application {
 	        	}
 	    	});
         saveAsMenuItem.setDisable(true);
+        saveAsMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN));
         
         editor.textProperty().addListener( (obs, oldText, newText) -> {
     		String label = editTab.getText();
@@ -538,6 +540,7 @@ public final class Xliterator extends Application {
                     }
                 }
         );
+        openMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN));
 		
         loadInternalMenuItem.setDisable( true );
         loadInternalMenuItem.setOnAction(
@@ -556,6 +559,7 @@ public final class Xliterator extends Application {
                     }
                 }
         );
+        loadInternalMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.SHORTCUT_DOWN));
         
         MenuItem exitMenuItem = new MenuItem("Exit");
         exitMenuItem.setOnAction(actionEvent -> Platform.exit());
@@ -830,35 +834,36 @@ public final class Xliterator extends Application {
     	if( textIn == null )
     		return;
     	
-    	ConvertTextString stringConverter = null;
-    	if( "Use Editor".equals( selectedTransliteration ) ) {
-    		// do not save the converter because the text may change:
-    		try {
-    			stringConverter = new ConvertTextString( editor.getText(), direction, true );
-    		}
-    		catch(Exception ex) {
-            	errorAlert(ex, "Translteration Defition Error. Correct to Proceed." );
-    			return;
-    		}
-    	}
-    	else {
-	    	String transliterationKey = selectedTransliteration + "-" + direction ;
-	    	
-	    	if(! textStringConverts.containsKey( transliterationKey ) ) {
-	    		textStringConverts.put( transliterationKey, new ConvertTextString( selectedTransliteration, direction ) );
+    	try {
+	    	ConvertTextString stringConverter = null;
+	    	if( "Use Editor".equals( selectedTransliteration ) ) {
+	    		// do not save the converter because the text may change:
+	    		stringConverter = new ConvertTextString( editor.getText(), direction, true );
+	
 	    	}
-	    	stringConverter = textStringConverts.get( transliterationKey );
-    	}
-    	
-
-    	stringConverter.setText( textIn );
-    	
-    	textAreaOut.clear();
-        
-    	textAreaOut.setText( stringConverter.convertText( textIn ) );
-    	if( "both".equals( transliterationDirection ) ) {
-    		convertButtonUp.setDisable( false );
-    	}  
+	    	else {
+		    	String transliterationKey = selectedTransliteration + "-" + direction ;
+		    	
+		    	if(! textStringConverts.containsKey( transliterationKey ) ) {
+		    		textStringConverts.put( transliterationKey, new ConvertTextString( selectedTransliteration, direction ) );
+		    	}
+		    	stringConverter = textStringConverts.get( transliterationKey );
+	    	}
+	    	
+	
+	    	stringConverter.setText( textIn );
+	    	
+	    	textAreaOut.clear();
+	        
+	    	textAreaOut.setText( stringConverter.convertText( textIn ) );
+	    	if( "both".equals( transliterationDirection ) ) {
+	    		convertButtonUp.setDisable( false );
+	    	}
+		}
+		catch(Exception ex) {
+        	errorAlert(ex, "Translteration Defition Error. Correct to Proceed." );
+			return;
+		}
     }
     
     

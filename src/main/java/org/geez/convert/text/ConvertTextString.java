@@ -13,12 +13,12 @@ public class ConvertTextString extends Converter {
 	private String textOut = null;
 
 	
-    public ConvertTextString( String rulesFile, String direction ) {
+    public ConvertTextString( String rulesFile, String direction ) throws Exception  {
 		this.initialize( rulesFile, direction );
     }  
 
 	
-    public ConvertTextString( String rulesFile, int icuDirection ) {
+    public ConvertTextString( String rulesFile, int icuDirection ) throws Exception  {
 		this.initialize( rulesFile, icuDirection );
     }  
 
@@ -36,7 +36,7 @@ public class ConvertTextString extends Converter {
 	}
 
     
-	void initialize( final String tableRulesFile, final String direction ) {
+	void initialize( final String tableRulesFile, final String direction ) throws Exception {
 		icuDirection = (direction.equals("both") || direction.equals("forward"))
 					 ? Transliterator.FORWARD 
 					 : Transliterator.REVERSE // || direction.equals("reverse") 
@@ -45,17 +45,12 @@ public class ConvertTextString extends Converter {
 		initialize( tableRulesFile, icuDirection );
 	}
 	    
-	void initialize( final String tableRulesFile, final int icuDirection ) {
-		try {
+	void initialize( final String tableRulesFile, final int icuDirection ) throws Exception {
 			String id = tableRulesFile; // remove the file extension
 			
 			String rulesText = this.readRulesResourceFile( tableRulesFile );
 
 			xlit = Transliterator.createFromRules( id, rulesText.replace( '\ufeff', ' ' ), icuDirection );
-		}
-		catch ( Exception ex ) {
-			System.err.println( ex );
-		}
 	}
 
 
