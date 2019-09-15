@@ -61,7 +61,7 @@
  						{ "name": "BGN", "direction": "forward", "path": "Amharic-Latin-BGN.xml" }
 					]
 				 },
-				 { "name": "Aethiopica", "direction": "forward", "path": "Ethiopic-Latin-Aethiopica.xml" }
+				 { "name": "Aethiopica", "direction": "both", "path": "Ethiopic-Latin-Aethiopica.xml" }
     			]
 		},
 		"Georgian" : {
