@@ -98,14 +98,8 @@ public final class XliteratorNew extends Application {
 	private Menu inScriptMenu  = null;
 	private Menu outVariantMenu = null;
 	private Menu outScriptMenu  = null;
-	// private final Button convertButton = new Button("Convert");
-	// private final Button convertButtonDown = new Button(); // ( "⬇" );
-    // private final Button convertButtonUp = new Button(); // ( "⬆" );
 	private String selectedTransliteration = null;
 	private String transliterationDirection = null;
-    //private ICUEditor editor = new ICUEditor();
-    // private final TextArea textAreaIn = new TextArea();
-    // private final TextArea textAreaOut = new TextArea();
     private String defaultFont = null;
     MenuItem loadInternalMenuItem = new MenuItem( "Load Selected Transliteration" );
     private EditorTab editTab  = new EditorTab( "Mapping Editor" );
@@ -302,11 +296,12 @@ public final class XliteratorNew extends Application {
             defaultFont = "Kefa";
         }
         
-        // Setup the tabs:
-        TabPane tabpane = new TabPane();
-        tabpane.getTabs().addAll( editTab, textTab, filesTab );
-        
         // Create and configure menus:
+        
+        
+        //
+        //=========================== BEGIN FILE MENU =============================================
+        //
         final Menu fileMenu = new Menu("_File");
         
         // create menu items
@@ -360,32 +355,8 @@ public final class XliteratorNew extends Application {
         saveAsMenuItem.setDisable(true);
         saveAsMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN));
 
-        
-        //=========================== BEGIN FILES TAB ===========================================
-        filesTab.setClosable( false );
-        filesTab.setProcessor(processorManager);
-        filesTab.setComponents(fileMenuItem, statusBar, stage);
-        //=========================== END FILES TAB =============================================
-
-        //=========================== BEGIN EDITOR TAB ===========================================
-        editTab.setDefaultFont( defaultFont );
-        editTab.setClosable( false ); // future set to true when multiple editors are supported
-        editTab.setup(saveMenuItem, saveAsMenuItem);
-        //=========================== END EDITOR TAB ==============================================
-        
-        //=========================== BEGIN TEXT TAB ============================================
-        textTab.setup( editTab.getEditor() );
-        textTab.setDefaultFont( defaultFont );
-        textTab.setClosable( false );
-        //=========================== END TEXT TAB =============================================
 
 
-        inScriptMenu =  createInScriptsMenu( stage );
-        outScriptMenu  = new Menu( "Script _Out" );
-        outVariantMenu = new Menu( "_Variant" );
-
-        
-    	// This should be moved under the top level "File" menu and is 
 
     	// Add transliteration file selection option:
 		MenuItem openMenuItem = new MenuItem( "Open ICU File..." );
@@ -444,9 +415,88 @@ public final class XliteratorNew extends Application {
         
         MenuItem exitMenuItem = new MenuItem("Exit");
         exitMenuItem.setOnAction(actionEvent -> Platform.exit());
+        
         fileMenu.getItems().addAll( fileMenuItem, openMenuItem, loadInternalMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), exitMenuItem ); 
         
+        //
+        //=========================== END FILE MENU =============================================
         
+        
+        //
+        // We have prerequisite objects to configure the tabs and tabpane, lets do so now:
+        //
+        //=========================== BEGIN FILES TAB ===========================================
+        filesTab.setClosable( false );
+        filesTab.setProcessor(processorManager);
+        filesTab.setComponents(fileMenuItem, statusBar, stage);
+        filesTab.setOnSelectionChanged( evt -> {
+        	if( filesTab.isSelected() ) {
+        		fileMenuItem.setDisable( false );
+        		openMenuItem.setDisable( true );
+        		loadInternalMenuItem.setDisable( true );
+        		saveMenuItem.setDisable( true );
+        		saveAsMenuItem.setDisable( true );
+        	}
+        } );
+        //=========================== END FILES TAB =============================================
+
+        //=========================== BEGIN EDITOR TAB ===========================================
+        editTab.setDefaultFont( defaultFont );
+        editTab.setClosable( false ); // future set to true when multiple editors are supported
+        editTab.setup(saveMenuItem, saveAsMenuItem);
+        editTab.setOnSelectionChanged( evt -> {
+        	if( editTab.isSelected() ) {
+        		fileMenuItem.setDisable( true );
+        		openMenuItem.setDisable( false );
+        		if ( variantOut == null )
+        			loadInternalMenuItem.setDisable( true );
+        		else
+        			loadInternalMenuItem.setDisable( false );
+        		if(! "".equals( editTab.getEditor().getText() ) ) {
+        			saveMenuItem.setDisable( false );
+        			saveAsMenuItem.setDisable( false );
+        		}
+        	}
+        } );
+        //=========================== END EDITOR TAB ==============================================
+        
+        //=========================== BEGIN TEXT TAB ============================================
+        textTab.setup( editTab.getEditor() );
+        textTab.setDefaultFont( defaultFont );
+        textTab.setClosable( false );
+        textTab.setOnSelectionChanged( evt -> {
+        	if( textTab.isSelected() ) {
+        		fileMenuItem.setDisable( true );
+        		openMenuItem.setDisable( true );
+        		loadInternalMenuItem.setDisable( true );
+        		saveMenuItem.setDisable( true );
+        		saveAsMenuItem.setDisable( true );
+        	}
+        } );
+        //=========================== END TEXT TAB =============================================
+        
+        // Setup the tabs:
+        TabPane tabpane = new TabPane();
+        tabpane.getTabs().addAll( editTab, textTab, filesTab );
+        //
+        //  End of Tab & TabPane setup
+        //
+        
+        
+        //
+        //=========================== BEGIN SCRIPT MENUS =============================================
+        // 
+        inScriptMenu =  createInScriptsMenu( stage );
+        outScriptMenu  = new Menu( "Script _Out" );
+        outVariantMenu = new Menu( "_Variant" );
+        //
+        //=========================== END SCRIPT MENUS =============================================
+        //
+        
+        
+        //
+        //=========================== BEGIN HELP MENU =============================================
+        //
         final Menu helpMenu = new Menu( "Help" );
         final MenuItem aboutMenuItem = new MenuItem( "About" );
         helpMenu.getItems().add( aboutMenuItem );
@@ -484,6 +534,10 @@ public final class XliteratorNew extends Application {
         final MenuItem demoMenuItem = new MenuItem( "Load Demo" );
         helpMenu.getItems().add( demoMenuItem );
         demoMenuItem.setOnAction( evt -> { loadDemo(); saveMenuItem.setDisable(false); saveAsMenuItem.setDisable(false); } );
+        //
+        //=========================== BEGIN HELP MENU =============================================
+        //
+        
         
         // create a menubar 
         MenuBar leftBar = new MenuBar();  
@@ -491,42 +545,6 @@ public final class XliteratorNew extends Application {
         // add menu to menubar 
         leftBar.getMenus().addAll( fileMenu, inScriptMenu, outScriptMenu , outVariantMenu );
 
-        
-        // VBox vbottomBox = new VBox( hbottomBox, statusBar,  textAreaIn, hUpDownButtonBox, textAreaOut );
-        
-        editTab.setOnSelectionChanged( evt -> {
-        	if( editTab.isSelected() ) {
-        		fileMenuItem.setDisable( true );
-        		openMenuItem.setDisable( false );
-        		if ( variantOut == null )
-        			loadInternalMenuItem.setDisable( true );
-        		else
-        			loadInternalMenuItem.setDisable( false );
-        		if(! "".equals( editTab.getEditor().getText() ) ) {
-        			saveMenuItem.setDisable( false );
-        			saveAsMenuItem.setDisable( false );
-        		}
-        	}
-        } );
-        textTab.setOnSelectionChanged( evt -> {
-        	if( textTab.isSelected() ) {
-        		fileMenuItem.setDisable( true );
-        		openMenuItem.setDisable( true );
-        		loadInternalMenuItem.setDisable( true );
-        		saveMenuItem.setDisable( true );
-        		saveAsMenuItem.setDisable( true );
-        	}
-        } );
-        filesTab.setOnSelectionChanged( evt -> {
-        	if( filesTab.isSelected() ) {
-        		fileMenuItem.setDisable( false );
-        		openMenuItem.setDisable( true );
-        		loadInternalMenuItem.setDisable( true );
-        		saveMenuItem.setDisable( true );
-        		saveAsMenuItem.setDisable( true );
-        	}
-        } );
-        
         
         statusBar.setText( "" );
         updateStatusMessage();
@@ -538,12 +556,9 @@ public final class XliteratorNew extends Application {
         HBox.setHgrow(spacer, Priority.SOMETIMES);
         HBox menubars = new HBox(leftBar, spacer, rightBar);
         menubars.setAlignment( Pos.CENTER_LEFT);
-       // menubars.setPadding( new Insets(4, 4, 4, 4) );
  
         final BorderPane rootGroup = new BorderPane();
         rootGroup.setTop( menubars );
-        // rootGroup.setCenter( listVBox );
-        // rootGroup.setBottom( vbottomBox );
         rootGroup.setCenter( tabpane );
         rootGroup.setBottom( statusBar );
         rootGroup.setPadding( new Insets(8, 8, 8, 8) );
@@ -557,10 +572,12 @@ public final class XliteratorNew extends Application {
         stage.show();
     }
  
+    
     public static void main(String[] args) {
         Application.launch(args);
     }
 
+    
     Text scriptInText = new Text( "[None]" );
     Text scriptOutText = new Text( "[None]" );
     Text variantOutText = new Text( "[None]" );
