@@ -99,15 +99,17 @@ public final class XliteratorNew extends Application {
 	private Menu outVariantMenu = null;
 	private Menu outScriptMenu  = null;
 	// private final Button convertButton = new Button("Convert");
-	private final Button convertButtonDown = new Button(); // ( "⬇" );
-    private final Button convertButtonUp = new Button(); // ( "⬆" );
+	// private final Button convertButtonDown = new Button(); // ( "⬇" );
+    // private final Button convertButtonUp = new Button(); // ( "⬆" );
 	private String selectedTransliteration = null;
 	private String transliterationDirection = null;
     //private ICUEditor editor = new ICUEditor();
-    private final TextArea textAreaIn = new TextArea();
-    private final TextArea textAreaOut = new TextArea();
+    // private final TextArea textAreaIn = new TextArea();
+    // private final TextArea textAreaOut = new TextArea();
     private String defaultFont = null;
     MenuItem loadInternalMenuItem = new MenuItem( "Load Selected Transliteration" );
+    private EditorTab editTab  = new EditorTab( "Mapping Editor" );
+	ConvertTextTab textTab  = new ConvertTextTab( "Convert Text" );
 	ConvertFilesTab filesTab = new ConvertFilesTab( "Convert Files" );
 	ProcessorManager processorManager = new ProcessorManager();
     
@@ -181,22 +183,6 @@ public final class XliteratorNew extends Application {
         );
     }
     
-    private ChoiceBox<String> createFontChoiceBox(String component, String defaultSelection) {  
-    	ChoiceBox<String> choiceBox = new ChoiceBox<>();
-    	for(String font: javafx.scene.text.Font.getFamilies() ) {
-    		choiceBox.getItems().add( font );
-    	}
-    	choiceBox.getSelectionModel().select( defaultSelection );
-        // choiceBox.setOnAction( evt -> setFont( choiceBox.getSelectionModel().getSelectedItem(), component ) );
-        
-        return choiceBox;    
-    }
-    
-    private ChoiceBox<String> createFontChoiceBox(String component) {
-    	return createFontChoiceBox(component, defaultFont);
-    }
-
-    
     private Menu createInScriptsMenu(final Stage stage) {
     	Menu menu = new Menu( "Script _In" );
         ToggleGroup groupInMenu = new ToggleGroup();
@@ -213,18 +199,21 @@ public final class XliteratorNew extends Application {
     	// Menu for the first edtior tab:
     	menu.getItems().add( new SeparatorMenuItem() );
     	RadioMenuItem editTabItem = new RadioMenuItem( "Use Editor" );
+    	editTabItem.setOnAction( evt -> setUseEditor() );
+    	/*
     	editTabItem.setOnAction( 
     			new EventHandler<ActionEvent>() {
     				@Override
     				public void handle(final ActionEvent e) {
     					// TODO toggle off all other menu
-    					/*
+    					//
     					final FileChooser fileChooser = new FileChooser();
     					configureFileChooserICU(fileChooser);    
     					icuFile = fileChooser.showOpenDialog( stage );
-    					*/
+    					//
     				}	
     	});
+    	*/
     	menu.getItems().add( editTabItem );
         		
     	return menu;
@@ -295,7 +284,6 @@ public final class XliteratorNew extends Application {
     	return outVariantMenu;
     }
     
-    private EditorTab editTab  = new EditorTab( "Mapping Editor" );
     @Override
     public void start(final Stage stage) {
     	try {
@@ -315,12 +303,7 @@ public final class XliteratorNew extends Application {
         }
         
         TabPane tabpane = new TabPane();
-    	Tab textTab  = new Tab( "Convert Text" );
-        textTab.setClosable( false );
-        editTab.setDefaultFont( defaultFont );
-        editTab.setClosable( false ); // future set to true when multiple editors are supported
 
-    	
         tabpane.getTabs().addAll( editTab, textTab, filesTab );
         
         MenuItem saveMenuItem = new MenuItem( "_Save" );
@@ -495,78 +478,14 @@ public final class XliteratorNew extends Application {
         leftBar.getMenus().addAll( fileMenu, inScriptMenu, outScriptMenu , outVariantMenu );
         
         //=========================== BEGIN TEXT TAB ============================================
-        
-        textAreaIn.setPrefHeight(300);
-        textAreaOut.setPrefHeight(300);
-        // textAreaIn.setFont( Font.font( defaultFont, FontWeight.NORMAL, 12) );
-        textAreaIn.setStyle("-fx-font-family: '" + defaultFont + "'; -fx-font-size: 12;"  );
-        textAreaIn.getProperties().put( "font-family", defaultFont );
-        textAreaIn.getProperties().put( "font-size", "12" );
-        textAreaOut.setStyle("-fx-font-family: '" + defaultFont + "'; -fx-font-size: 12;"  );
-        textAreaOut.getProperties().put( "font-family", defaultFont );
-        textAreaOut.getProperties().put( "font-size", "12" );
-        
-       //  Menu textAreaInFontMenu = createFontMenu( "textAreaIn" );
-        
-
-        Button textAreaInIncreaseFontSizeButton = new Button( "+" ); 
-        Button textAreaInDecreaseFontSizeButton = new Button( "-" );
-        HBox textAreaInMenuBox = new HBox( createFontChoiceBox( "textAreaIn" ), textAreaInIncreaseFontSizeButton, textAreaInDecreaseFontSizeButton);
-        textAreaInMenuBox.setPadding(new Insets(2, 2, 2, 2));
-        textAreaInMenuBox.setSpacing(4);
-        textAreaInIncreaseFontSizeButton.setOnAction( event -> {
-        	incrementFontSize( "textAreaIn" );
-        });
-        textAreaInDecreaseFontSizeButton.setOnAction( event -> {
-        	decrementFontSize( "textAreaIn" );
-        });
-        
-
-        ClassLoader classLoader = this.getClass().getClassLoader();
-        Image imageDown = new Image( classLoader.getResourceAsStream( "images/arrow-circle-down.png" ) );
-        ImageView imageViewDown = new ImageView( imageDown );
-        imageViewDown.setFitHeight( 18 );
-        imageViewDown.setFitWidth( 18 );
-        convertButtonDown.setGraphic( imageViewDown );
-
-        // convertButtonDown.setStyle( "-fx-font-size: 24;");
-        convertButtonDown.setDisable( true );
-        convertButtonDown.setOnAction( event -> {
-        	convertTextArea( textAreaIn, textAreaOut, "forward" ); 
-        });
-        
-        Image imageUp = new Image( classLoader.getResourceAsStream( "images/arrow-circle-up.png" ) );
-        ImageView imageViewUp = new ImageView( imageUp );
-        imageViewUp.setFitHeight( 18 );
-        imageViewUp.setFitWidth( 18 );
-        convertButtonUp.setGraphic( imageViewUp );
-        // convertButtonUp.setStyle( "-fx-font-size: 24;");
-        convertButtonUp.setDisable( true );
-        convertButtonUp.setOnAction( event -> {
-        	convertTextArea( textAreaOut, textAreaIn, "reverse" ); 
-        });
-        
-        Button textAreaOutIncreaseFontSizeButton = new Button( "+" ); 
-        Button textAreaOutDecreaseFontSizeButton = new Button( "-" );
-        textAreaOutIncreaseFontSizeButton.setOnAction( event -> {
-        	incrementFontSize( "textAreaOut" );
-        });
-        textAreaOutDecreaseFontSizeButton.setOnAction( event -> {
-        	decrementFontSize( "textAreaOut" );
-        });
-        Region hspacer = new Region();
-        hspacer.prefWidth( 200 );
-        HBox.setHgrow(hspacer, Priority.SOMETIMES);
-        HBox hUpDownButtonBox = new HBox( createFontChoiceBox( "textAreaOut" ), textAreaOutIncreaseFontSizeButton, textAreaOutDecreaseFontSizeButton, hspacer, convertButtonDown, convertButtonUp );
-        hUpDownButtonBox.setAlignment(Pos.CENTER_LEFT);
-        hUpDownButtonBox.setPadding(new Insets(2, 2, 2, 2));
-        hUpDownButtonBox.setSpacing( 4 );
-        
-        VBox textVbox = new VBox( textAreaInMenuBox, textAreaIn, hUpDownButtonBox, textAreaOut );
-        textTab.setContent( textVbox );
+        textTab.setup( editTab.getEditor() );
+        textTab.setDefaultFont( defaultFont );
+        textTab.setClosable( false );
         //=========================== END TEXT TAB ==============================================
 
         //=========================== BEGIN EDITOR TAB ===========================================
+        editTab.setDefaultFont( defaultFont );
+        editTab.setClosable( false ); // future set to true when multiple editors are supported
         editTab.setup(saveMenuItem, saveAsMenuItem);
         //=========================== END EDITOR TAB ==============================================
 
@@ -628,6 +547,7 @@ public final class XliteratorNew extends Application {
         rootGroup.setPadding( new Insets(8, 8, 8, 8) );
  
         Scene scene = new Scene(rootGroup, APP_WIDTH, APP_HEIGHT);
+        ClassLoader classLoader = this.getClass().getClassLoader();
         scene.getStylesheets().add( classLoader.getResource("styles/xliterator.css").toExternalForm() );
         stage.setScene( scene ); 
         editTab.getEditor().setStyle( scene );
@@ -638,45 +558,6 @@ public final class XliteratorNew extends Application {
     public static void main(String[] args) {
         Application.launch(args);
     }
-    
-    HashMap<String,ConvertTextString> textStringConverts = new HashMap<String,ConvertTextString>();    
-    private void convertTextArea(TextArea textAreaIn, TextArea textAreaOut, String direction) {
-    	String textIn = textAreaIn.getText();
-    	if( textIn == null )
-    		return;
-    	
-    	try {
-	    	ConvertTextString stringConverter = null;
-	    	if( "Use Editor".equals( selectedTransliteration ) ) {
-	    		// do not save the converter because the text may change:
-	    		stringConverter = new ConvertTextString( editTab.getEditor().getText(), direction, true );
-	
-	    	}
-	    	else {
-		    	String transliterationKey = selectedTransliteration + "-" + direction ;
-		    	
-		    	if(! textStringConverts.containsKey( transliterationKey ) ) {
-		    		textStringConverts.put( transliterationKey, new ConvertTextString( selectedTransliteration, direction ) );
-		    	}
-		    	stringConverter = textStringConverts.get( transliterationKey );
-	    	}
-	    	
-	
-	    	stringConverter.setText( textIn );
-	    	
-	    	textAreaOut.clear();
-	        
-	    	textAreaOut.setText( stringConverter.convertText( textIn ) );
-	    	if( "both".equals( transliterationDirection ) ) {
-	    		convertButtonUp.setDisable( false );
-	    	}
-		}
-		catch(Exception ex) {
-        	errorAlert(ex, "Translteration Defition Error. Correct to Proceed." );
-			return;
-		}
-    }
-    
 
     Text scriptInText = new Text( "[None]" );
     Text scriptOutText = new Text( "[None]" );
@@ -740,9 +621,9 @@ public final class XliteratorNew extends Application {
     	this.scriptIn = scriptIn;
     	scriptInText.setText( scriptIn );
     	createOutScriptsMenu( scriptIn );
-    	filesTab.setScriptIn( scriptIn );
-        convertButtonDown.setDisable( true );
         loadInternalMenuItem.setDisable( true );
+    	filesTab.setScriptIn( scriptIn );
+    	textTab.setScriptIn( scriptIn );
     }
     private void setScriptOut(String scriptOut) {
     	this.scriptOut = scriptOut;
@@ -750,46 +631,16 @@ public final class XliteratorNew extends Application {
     	scriptOutText.setText( scriptOut );
     	variantOutText.setText( "[None]" );
     	createOutVaraintsMenu( scriptOut );
-    	filesTab.setScriptOut( scriptIn );
-        convertButtonDown.setDisable( true );
         loadInternalMenuItem.setDisable( true );
+    	filesTab.setScriptOut( scriptIn );
+    	textTab.setScriptOut(scriptOut);
     }
     private void setVariantOut(String variantOut) {
     	this.variantOut = variantOut;
     	variantOutText.setText( variantOut );
-    	filesTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection );
-        convertButtonDown.setDisable( false );
         loadInternalMenuItem.setDisable( false );
-        if( "both".equals( transliterationDirection ) ) {
-        	convertButtonUp.setDisable( false );
-        }
-        else {
-        	convertButtonUp.setDisable( true );        	
-        }
-    }
-
-    private void incrementFontSize(String component) {
-    	TextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
-
-    	String fontFamily = (String) textArea.getProperties().get("font-family");
-    	int newSize = Integer.parseInt( (String)textArea.getProperties().get("font-size") ) + 1;
-    	if( newSize <= 24 ) {
-    		String fontSize = String.valueOf( newSize );
-    		textArea.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
-    		textArea.getProperties().put( "font-size", fontSize );
-    	}
-    }
-
-    private void decrementFontSize(String component) {
-    	TextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
-
-    	String fontFamily = (String) textArea.getProperties().get("font-family");
-    	int newSize = Integer.parseInt( (String)textArea.getProperties().get("font-size") ) - 1;
-    	if( newSize >= 10 ) {
-    		String fontSize = String.valueOf( newSize );
-    		textArea.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
-    		textArea.getProperties().put( "font-size", fontSize );
-    	}
+    	filesTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection );
+    	textTab.setVariantOut(variantOut, variantOut, variantOut);
     }
     
     private void setUseEditor() {    	
@@ -808,9 +659,8 @@ public final class XliteratorNew extends Application {
     }
     
     private void loadDemo() {
-    	textAreaIn.clear();
-    	textAreaOut.clear();
-    	textAreaIn.setText( "ሰላም ዓለም" );
+    	textTab.clearAll();
+    	textTab.setTextIn( "ሰላም ዓለም" );
     	
     	setScriptIn( "Ethiopic" );
     	setScriptOut( "IPA" );
@@ -820,23 +670,10 @@ public final class XliteratorNew extends Application {
 
     	for(MenuItem item: outScriptMenu.getItems() ) {
     		((RadioMenuItem)item).setSelected( false );
-    		/*
-    		RadioMenuItem rItem = (RadioMenuItem)item;
-    		if ( "IPA".equals( rItem.getText() ) ) {
-    			rItem.setSelected( true );
-    		}
-    		*/
     	}
     	for(MenuItem item: outVariantMenu.getItems() ) {
     		((RadioMenuItem)item).setSelected( false );
-    		/*
-    		RadioMenuItem rItem = (RadioMenuItem)item;
-    		if ( "Amharic".equals( rItem.getText() ) ) {
-    			rItem.setSelected( true );
-    		}
-    		*/
     	}
-    	
     	
     	try {
     		editTab.getEditor().loadResourceFile( selectedTransliteration );
