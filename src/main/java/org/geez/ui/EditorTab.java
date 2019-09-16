@@ -84,22 +84,6 @@ public class EditorTab extends Tab {
     	choiceBox.getSelectionModel().select( "12" );
         choiceBox.setOnAction( evt -> setFontSize( choiceBox.getSelectionModel().getSelectedItem() ) );
     	menu.setGraphic( choiceBox );
-
-    	/*
-    	Menu menu = new Menu( "Font Size" );
-        ToggleGroup groupInMenu = new ToggleGroup();
-        
-    	for(int i=10 ; i < 24; i++ ) {
-    		RadioMenuItem menuItem = new RadioMenuItem( String.valueOf(i) );
-    		menuItem.setToggleGroup( groupInMenu );
-    		String size = String.valueOf(i);
-    		menuItem.setOnAction( evt -> setFontSize( size ) ); 
-    		if( i == 12 ) {
-    			menuItem.setSelected( true );
-    		}
-    		menu.getItems().add( menuItem );
-    	}
-    	*/
         
         return menu;
     }
@@ -127,23 +111,5 @@ public class EditorTab extends Tab {
     		String fontSize = (String) editor.getProperties().get("font-size");
     		editor.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + fontSize + ";" );
     }
-    
-    public void bindSaveMenus(MenuItem saveMenuItem, MenuItem saveAsMenuItem) {
-        this.getEditor().textProperty().addListener( (obs, oldText, newText) -> {
-    		String label = this.getText();
-        	if( editor.hasContentChanged(newText) ) {
-        		if( label.charAt(0) != '*' ) {
-        			this.setText( "*" + this.getText() );
-        			saveMenuItem.setDisable( false );
-        		}
-        	}
-        	else {
-        		if( label.charAt(0) == '*' ) {
-        			this.setText( this.getText().substring(1) );
-        			saveMenuItem.setDisable( true );
-        		}
-        	}
-			saveAsMenuItem.setDisable( false );
-        });
-    }
+
 }

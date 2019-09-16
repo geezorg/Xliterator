@@ -302,9 +302,16 @@ public final class XliteratorNew extends Application {
             defaultFont = "Kefa";
         }
         
+        // Setup the tabs:
         TabPane tabpane = new TabPane();
-
         tabpane.getTabs().addAll( editTab, textTab, filesTab );
+        
+        // Create and configure menus:
+        final Menu fileMenu = new Menu("_File");
+        
+        // create menu items
+        final MenuItem fileMenuItem = new MenuItem( "Select Files..." ); 
+        fileMenuItem.setDisable( true );
         
         MenuItem saveMenuItem = new MenuItem( "_Save" );
         saveMenuItem.setOnAction( actionEvent ->
@@ -352,18 +359,7 @@ public final class XliteratorNew extends Application {
 	    	});
         saveAsMenuItem.setDisable(true);
         saveAsMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN));
-        
-        editTab.bindSaveMenus( saveMenuItem, saveAsMenuItem );
 
-        inScriptMenu =  createInScriptsMenu( stage );
-        outScriptMenu  = new Menu( "Script _Out" );
-        outVariantMenu = new Menu( "_Variant" );
-
-        final Menu fileMenu = new Menu("_File"); 
-        
-        // create menu items 
-        final MenuItem fileMenuItem = new MenuItem( "Select Files..." ); 
-        fileMenuItem.setDisable( true );
         
         //=========================== BEGIN FILES TAB ===========================================
         filesTab.setClosable( false );
@@ -371,6 +367,24 @@ public final class XliteratorNew extends Application {
         filesTab.setComponents(fileMenuItem, statusBar, stage);
         //=========================== END FILES TAB =============================================
 
+        //=========================== BEGIN EDITOR TAB ===========================================
+        editTab.setDefaultFont( defaultFont );
+        editTab.setClosable( false ); // future set to true when multiple editors are supported
+        editTab.setup(saveMenuItem, saveAsMenuItem);
+        //=========================== END EDITOR TAB ==============================================
+        
+        //=========================== BEGIN TEXT TAB ============================================
+        textTab.setup( editTab.getEditor() );
+        textTab.setDefaultFont( defaultFont );
+        textTab.setClosable( false );
+        //=========================== END TEXT TAB =============================================
+
+
+        inScriptMenu =  createInScriptsMenu( stage );
+        outScriptMenu  = new Menu( "Script _Out" );
+        outVariantMenu = new Menu( "_Variant" );
+
+        
     	// This should be moved under the top level "File" menu and is 
 
     	// Add transliteration file selection option:
@@ -476,18 +490,6 @@ public final class XliteratorNew extends Application {
   
         // add menu to menubar 
         leftBar.getMenus().addAll( fileMenu, inScriptMenu, outScriptMenu , outVariantMenu );
-        
-        //=========================== BEGIN TEXT TAB ============================================
-        textTab.setup( editTab.getEditor() );
-        textTab.setDefaultFont( defaultFont );
-        textTab.setClosable( false );
-        //=========================== END TEXT TAB ==============================================
-
-        //=========================== BEGIN EDITOR TAB ===========================================
-        editTab.setDefaultFont( defaultFont );
-        editTab.setClosable( false ); // future set to true when multiple editors are supported
-        editTab.setup(saveMenuItem, saveAsMenuItem);
-        //=========================== END EDITOR TAB ==============================================
 
         
         // VBox vbottomBox = new VBox( hbottomBox, statusBar,  textAreaIn, hUpDownButtonBox, textAreaOut );
@@ -617,6 +619,7 @@ public final class XliteratorNew extends Application {
         
         statusBar.getLeftItems().add( hbox );
     }
+    
     private void setScriptIn(String scriptIn) {
     	this.scriptIn = scriptIn;
     	scriptInText.setText( scriptIn );
