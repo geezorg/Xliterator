@@ -6,27 +6,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-import org.apache.commons.io.FilenameUtils;
-import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.StatusBar;
-import org.docx4j.openpackaging.exceptions.Docx4JException;
-import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
-import org.fxmisc.flowless.VirtualizedScrollPane;
-import org.geez.convert.Converter;
-import org.geez.convert.DocumentProcessor;
 import org.geez.convert.ProcessorManager;
-import org.geez.convert.docx.DocxProcessor;
-import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
-import org.geez.convert.fontsystem.ConvertFontSystem;
-import org.geez.convert.text.ConvertTextString;
-import org.geez.convert.text.TextFileProcessor;
 import org.geez.transliterate.XliteratorConfig;
 
 import com.google.gson.JsonArray;
@@ -34,11 +17,6 @@ import com.google.gson.JsonObject;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -48,25 +26,17 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -75,8 +45,6 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
@@ -194,20 +162,6 @@ public final class XliteratorNew extends Application {
     	menu.getItems().add( new SeparatorMenuItem() );
     	RadioMenuItem editTabItem = new RadioMenuItem( "Use Editor" );
     	editTabItem.setOnAction( evt -> setUseEditor() );
-    	/*
-    	editTabItem.setOnAction( 
-    			new EventHandler<ActionEvent>() {
-    				@Override
-    				public void handle(final ActionEvent e) {
-    					// TODO toggle off all other menu
-    					//
-    					final FileChooser fileChooser = new FileChooser();
-    					configureFileChooserICU(fileChooser);    
-    					icuFile = fileChooser.showOpenDialog( stage );
-    					//
-    				}	
-    	});
-    	*/
     	menu.getItems().add( editTabItem );
         		
     	return menu;
@@ -277,6 +231,7 @@ public final class XliteratorNew extends Application {
     	
     	return outVariantMenu;
     }
+    
     
     @Override
     public void start(final Stage stage) {
@@ -604,12 +559,10 @@ public final class XliteratorNew extends Application {
         Text vout = new Text("Variant: ");
         vout.setStyle("-fx-font-weight: bold;");
         
-        
         flowIn.getChildren().addAll(in, scriptInText );
         flowOut.getChildren().addAll(out, scriptOutText );
         flowVOut.getChildren().addAll(vout, variantOutText );
        
-        
         Separator separator1 = new Separator();
         separator1.setOrientation(Orientation.VERTICAL);
         separator1.setPadding( new Insets(0,0,0,6) );
@@ -618,11 +571,9 @@ public final class XliteratorNew extends Application {
         separator2.setOrientation(Orientation.VERTICAL);
         separator2.setPadding( new Insets(0,0,0,6) );
         
-        
         Separator separator3 = new Separator();
         separator2.setOrientation(Orientation.VERTICAL);
         separator2.setPadding( new Insets(0,0,0,6) );
-        
         
         HBox hbox = new HBox();
         hbox.getChildren().addAll( flowIn, separator1, flowOut, separator2, flowVOut, separator3 );
