@@ -41,7 +41,6 @@ public class ConvertTextTab extends Tab {
 		super( title );
 	}
 
-    
     public void setDefaultFont(String defaultFont) {
     	this.defaultFont = defaultFont;
     }
@@ -253,8 +252,26 @@ public class ConvertTextTab extends Tab {
     	this.transliterationDirection = transliterationDirection;
 		convertButtonUp.setDisable( false );
 		convertButtonDown.setDisable( false );
+        if( "both".equals( transliterationDirection ) ) {
+        	convertButtonUp.setDisable( false );
+        }
+        else {
+        	convertButtonUp.setDisable( true );        	
+        }
     }
     
+    public void clearAll() {
+    	textAreaIn.clear();
+    	textAreaOut.clear();
+    }
+    
+    public void setTextIn(String text) {
+    	textAreaIn.setText(  text );
+    }
+    
+    public void setTextOut(String text) {
+    	textAreaOut.setText(  text );
+    }
 
 	
 	private void errorAlert( Exception ex, String header ) {
