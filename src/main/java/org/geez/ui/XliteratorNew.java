@@ -375,11 +375,11 @@ public final class XliteratorNew extends Application {
                         	editTab.getEditor().loadFile( externalIcuFile );
                         	editTab.setText( externalIcuFile.getName() );
                         	setUseEditor(); // TODO: set transliteration direction?
-                            convertButtonDown.setDisable( false );
-                            convertButtonUp.setDisable( true );
+                        	textTab.enableConvertForward( true );
+                        	textTab.enableConvertReverse( false );
                         	if( editTab.getEditor().getText().contains( "↔" ) ) {
                         		transliterationDirection = "both";
-                                convertButtonUp.setDisable( false );
+                                textTab.enableConvertBoth( true );
                         	} else {
                         		transliterationDirection = "forward"; // TODO: confirm this, it might be reverse only
                         	}

@@ -273,6 +273,18 @@ public class ConvertTextTab extends Tab {
     	textAreaOut.setText(  text );
     }
 
+    public void enableConvertForward(boolean enable) {
+    	convertButtonDown.setDisable( !enable );
+    }
+
+    public void enableConvertReverse(boolean enable) {
+    	convertButtonUp.setDisable( !enable );
+    }
+
+    public void enableConvertBoth(boolean enable) {
+    	convertButtonDown.setDisable( !enable );
+    	convertButtonUp.setDisable( !enable );
+    }
 	
 	private void errorAlert( Exception ex, String header ) {
         Alert alert = new Alert(AlertType.ERROR);
