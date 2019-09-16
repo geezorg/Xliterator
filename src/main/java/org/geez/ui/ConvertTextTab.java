@@ -35,13 +35,12 @@ public class ConvertTextTab extends Tab {
 	private String selectedTransliteration = null;
 	private String transliterationDirection = null;
 
-
+	private ICUEditor editor = null; // used to get a handle on rules text
+	
 	public ConvertTextTab(String title) {
 		super( title );
 	}
-	
-    
-	
+
     
     public void setDefaultFont(String defaultFont) {
     	this.defaultFont = defaultFont;
@@ -115,8 +114,11 @@ public class ConvertTextTab extends Tab {
 	    	ConvertTextString stringConverter = null;
 	    	if( "Use Editor".equals( selectedTransliteration ) ) {
 	    		// do not save the converter because the text may change:
-	    		stringConverter = new ConvertTextString( editTab.getEditor().getText(), direction, true );
-	
+	    		// The ConvertTextString constructor needs to be reworked here, see notes within its source file:
+	    		// stringConverter = new ConvertTextString( editor.getText(), direction, true );
+	    		
+	    		stringConverter = new ConvertTextString();
+	    		stringConverter.setRules( editor.getText(), direction );
 	    	}
 	    	else {
 		    	String transliterationKey = selectedTransliteration + "-" + direction ;
@@ -143,8 +145,8 @@ public class ConvertTextTab extends Tab {
 		}
     }
     
-    public void setup() {
-        
+    public void setup(ICUEditor editor) {
+        this.editor = editor;
         textAreaIn.setPrefHeight(300);
         textAreaOut.setPrefHeight(300);
         // textAreaIn.setFont( Font.font( defaultFont, FontWeight.NORMAL, 12) );
@@ -235,18 +237,22 @@ public class ConvertTextTab extends Tab {
     
     void setScriptIn(String scriptIn ) {
     	this.scriptIn = scriptIn;
-		convertButton.setDisable( true );
+		convertButtonUp.setDisable( true );
+		convertButtonDown.setDisable( true );
     }
     
     void setScriptOut(String scriptOut ) {
     	this.scriptOut = scriptOut;
-		convertButton.setDisable( true );
+		convertButtonUp.setDisable( true );
+		convertButtonDown.setDisable( true );
     }
       
     void setVariantOut(String variantOut, String selectedTransliteration, String transliterationDirection ) {
     	this.variantOut = variantOut;
     	this.selectedTransliteration = selectedTransliteration;
     	this.transliterationDirection = transliterationDirection;
+		convertButtonUp.setDisable( false );
+		convertButtonDown.setDisable( false );
     }
     
 
