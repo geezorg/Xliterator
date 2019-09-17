@@ -581,8 +581,8 @@ public final class XliteratorNew extends Application {
         hbox.setPadding( new Insets(2,0,0,0) );
         hbox.setSpacing(0.0);
         
-        // working with a single flow leads to bad visual effects when the app size changes when the
-        // font name changes, so we use an hbox instead
+        // working with a single flow leads to bad visual effects when the app size changes or
+        //  when the font name changes, so we use an hbox instead
         // flow.getChildren().addAll( in, systemInText, separator1, out, systemOutText, separator2 );
         
         statusBar.getLeftItems().add( hbox );
