@@ -17,8 +17,14 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
+import org.fxmisc.wellbehaved.event.EventPattern;
+import org.fxmisc.wellbehaved.event.InputMap;
+import org.fxmisc.wellbehaved.event.Nodes;
 
 import javafx.scene.Scene;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseButton;
 
 public class ICUEditor extends CodeArea {
     private static final String[] KEYWORDS = new String[] {
@@ -99,6 +105,48 @@ public class ICUEditor extends CodeArea {
             this.setStyleSpans( 0, computeHighlighting(newText) );
         });
         // replaceText(0, 0, sampleCode);
+        
+        
+        // 
+    	MenuItem arrow1 = new MenuItem( "↔" );
+    	MenuItem arrow2 = new MenuItem( "→" );
+    	MenuItem arrow3 = new MenuItem( "←" );
+
+        
+        arrow1.setOnAction( evt -> {
+        	this.insertText( this.getCaretPosition(), "↔" );
+        	
+        });
+        arrow2.setOnAction( evt -> {
+        	this.insertText( this.getCaretPosition(), "→" );
+        	
+        });
+        arrow3.setOnAction( evt -> {
+        	this.insertText( this.getCaretPosition(), "←" );
+        	
+        });
+        
+        // better would be to reference these styles by name from the icu-highlighting.css
+        arrow1.setStyle( "-fx-font-weight: bold; -fx-text-fill: mediumvioletred;" );
+        arrow2.setStyle( "-fx-font-weight: bold; -fx-text-fill: #008e00;" );
+        arrow3.setStyle( "-fx-font-weight: bold; -fx-text-fill: orangered;" );
+        
+        ContextMenu menu = new ContextMenu();
+        menu.getItems().addAll( arrow1, arrow2, arrow3 );
+
+        
+        // add an input mapping that shows that context menu when you 
+        //  right click somewhere in the area
+        Nodes.addInputMap(this, 
+                InputMap.consume(
+                    EventPattern.mouseClicked(MouseButton.SECONDARY),
+                    e -> {
+                        // show the area using the mouse event's screen x & y values
+                        menu.show(this, e.getScreenX(), e.getScreenY());
+                    }
+                )
+        );
+        
     }
     
     public void setStyle(Scene scene) {
