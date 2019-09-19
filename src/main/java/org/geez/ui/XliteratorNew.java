@@ -236,28 +236,31 @@ public final class XliteratorNew extends Application {
         final Menu fileMenu = new Menu("_File");
         
 
+		final Menu newMenu = new Menu( "New File" );
+		final MenuItem xmlMenuItem = new MenuItem( "XML" );
+		xmlMenuItem.setOnAction( evt -> createNewFile( "Untitled", "XML" ) );
+		xmlMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN));
+		final MenuItem txtMenuItem = new MenuItem( "TXT" );
+		txtMenuItem.setOnAction( evt -> createNewFile( "Untitled", "TXT" ) );
+		newMenu.getItems().addAll( xmlMenuItem, txtMenuItem );
 
-    	// Add transliteration file selection option:
-		MenuItem newMenuItem = new MenuItem( "New File" );
-        newMenuItem.setOnAction( evt -> createNewFile( "Untitled" ) );
-        newMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN));
 
         final MenuItem fileMenuItem = new MenuItem( "Select Files..." ); 
         fileMenuItem.setDisable( true );
         
-        MenuItem saveMenuItem = new MenuItem( "_Save" );
+        final MenuItem saveMenuItem = new MenuItem( "_Save" );
         saveMenuItem.setOnAction( actionEvent -> editTab.saveContent( stage, false ) );
         saveMenuItem.setDisable(true);
         saveMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN));
         
-        MenuItem saveAsMenuItem = new MenuItem( "Save As..." );
+        final MenuItem saveAsMenuItem = new MenuItem( "Save As..." );
         saveAsMenuItem.setOnAction( actionEvent ->  editTab.saveContent( stage, true ) );
         saveAsMenuItem.setDisable(true);
         saveAsMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN) );
 
 
     	// Add transliteration file selection option:
-		MenuItem openMenuItem = new MenuItem( "Open ICU File..." );
+		final MenuItem openMenuItem = new MenuItem( "Open ICU File..." );
         openMenuItem.setOnAction(
                 new EventHandler<ActionEvent>() {
                     @Override
@@ -324,7 +327,7 @@ public final class XliteratorNew extends Application {
         });
         
         
-        fileMenu.getItems().addAll( fileMenuItem, openMenuItem, loadInternalMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), quitMenuItem ); 
+        fileMenu.getItems().addAll( newMenu, fileMenuItem, openMenuItem, loadInternalMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), quitMenuItem ); 
         
         //
         //=========================== END FILE MENU =============================================
@@ -450,12 +453,20 @@ public final class XliteratorNew extends Application {
         
         final Menu preferencesMenu = new Menu( "Preferences" );
         final MenuItem makeDefaultMenuItem = new MenuItem( "Save Default Mapping" );
-        preferencesMenu.getItems().add( makeDefaultMenuItem );
+
         makeDefaultMenuItem.setOnAction( evt -> saveDefaultMapping() );
+        final Menu caseConversionMenu = new Menu( "Convert Case" );
+        final RadioMenuItem lowercaseMenuItem = new RadioMenuItem( "lowercase" );
+        final RadioMenuItem uppercaseMenuItem = new RadioMenuItem( "UPPERCASE" );
+        final ToggleGroup caseGroup = new ToggleGroup();
+        lowercaseMenuItem.setToggleGroup( caseGroup );
+        uppercaseMenuItem.setToggleGroup( caseGroup );
+        caseConversionMenu.getItems().addAll( lowercaseMenuItem, uppercaseMenuItem );
         
+        preferencesMenu.getItems().addAll( makeDefaultMenuItem, caseConversionMenu ); 
         
         // create a menubar 
-        MenuBar leftBar = new MenuBar();  
+        final MenuBar leftBar = new MenuBar();  
   
         // add menu to menubar 
         leftBar.getMenus().addAll( fileMenu, inScriptMenu, outScriptMenu , outVariantMenu );
@@ -464,7 +475,7 @@ public final class XliteratorNew extends Application {
         statusBar.setText( "" );
         updateStatusMessage();
      
-        MenuBar rightBar = new MenuBar();
+        final MenuBar rightBar = new MenuBar();
         rightBar.getMenus().addAll( preferencesMenu, helpMenu );
         Region spacer = new Region();
         spacer.getStyleClass().add("menu-bar");
@@ -718,11 +729,25 @@ public final class XliteratorNew extends Application {
     }
     
     
-    private void createNewFile(String title) {
+    private void createNewFile(String title, String type) {
     	if(! checkUnsavedChanges() ) {
     		return;
     	}
-    	editTab.reset( "Untitled" );
+
+    	
+    	String template = ( "XML".equals(type) )
+    			? "templates/icu-xml-template.xml"
+    			: "templates/icu-text-template.txt" 
+    	;
+    	try {
+	    	editTab.getEditor().loadResourceFile( template );
+
+	    	editTab.reset( "Untitled" );
+    	}
+    	catch(Exception ex) {
+        	errorAlert(ex, "Error opening: " + template );
+    	}
+    	
     }
     
     

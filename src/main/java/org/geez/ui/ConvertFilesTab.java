@@ -53,6 +53,7 @@ public class ConvertFilesTab extends Tab {
 	
 	private final Button convertButton = new Button("Convert");
 	private boolean openOutput = true;
+	private boolean appendOutput = true;
     private CheckComboBox<String> documentFontsMenu = new CheckComboBox<String>();
 	// private DocumentProcessor processor = null;
 	private List<File> inputFileList = null;
@@ -239,9 +240,22 @@ public class ConvertFilesTab extends Tab {
         });
         openFilesCheckbox.setSelected(true);
         
+        
+        CheckBox appendOutputCheckbox = new CheckBox( "Append transliterated output?");
+        openFilesCheckbox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            public void changed(ObservableValue<? extends Boolean> ov,
+                Boolean old_val, Boolean new_val) {
+                    appendOutput = new_val.booleanValue();
+            }
+        });
+        
+        
         Region bottomSpacer = new Region();
         HBox.setHgrow(bottomSpacer, Priority.SOMETIMES);
-        HBox hbottomBox = new HBox( openFilesCheckbox, bottomSpacer, convertButton );
+        Region optionSpacer = new Region();
+        optionSpacer.setMinWidth( 10 );
+        optionSpacer.setMaxWidth( 10 );
+        HBox hbottomBox = new HBox( openFilesCheckbox, optionSpacer, appendOutputCheckbox, bottomSpacer, convertButton );
         hbottomBox.setPadding(new Insets(4, 0, 4, 0));
         hbottomBox.setAlignment( Pos.CENTER_LEFT );
 
