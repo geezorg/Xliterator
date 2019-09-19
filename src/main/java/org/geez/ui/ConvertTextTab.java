@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import org.geez.convert.text.ConvertTextString;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Alert;
@@ -146,8 +148,8 @@ public class ConvertTextTab extends Tab {
     
     public void setup(ICUEditor editor) {
         this.editor = editor;
-        textAreaIn.setPrefHeight(300);
-        textAreaOut.setPrefHeight(300);
+        textAreaIn.setPrefHeight(313);
+        textAreaOut.setPrefHeight(313);
         // textAreaIn.setFont( Font.font( defaultFont, FontWeight.NORMAL, 12) );
         textAreaIn.setStyle("-fx-font-family: '" + defaultFont + "'; -fx-font-size: 12;"  );
         textAreaIn.getProperties().put( "font-family", defaultFont );
@@ -161,7 +163,7 @@ public class ConvertTextTab extends Tab {
 
         Button textAreaInIncreaseFontSizeButton = new Button( "+" ); 
         Button textAreaInDecreaseFontSizeButton = new Button( "-" );
-        HBox textAreaInMenuBox = new HBox( createFontChoiceBox( "textAreaIn" ), textAreaInIncreaseFontSizeButton, textAreaInDecreaseFontSizeButton);
+        HBox textAreaInMenuBox = new HBox( createFontChoiceBox( "textAreaIn" ), textAreaInIncreaseFontSizeButton, textAreaInDecreaseFontSizeButton );
         textAreaInMenuBox.setPadding(new Insets(2, 2, 2, 2));
         textAreaInMenuBox.setSpacing(4);
         textAreaInIncreaseFontSizeButton.setOnAction( event -> {
@@ -170,6 +172,7 @@ public class ConvertTextTab extends Tab {
         textAreaInDecreaseFontSizeButton.setOnAction( event -> {
         	decrementFontSize( "textAreaIn" );
         });
+        // textAreaInMenuBox.setPrefHeight( 32.0 );
         
 
         ClassLoader classLoader = this.getClass().getClassLoader();
@@ -213,7 +216,25 @@ public class ConvertTextTab extends Tab {
         hUpDownButtonBox.setSpacing( 4 );
         
         VBox textVbox = new VBox( textAreaInMenuBox, textAreaIn, hUpDownButtonBox, textAreaOut );
+        textVbox.autosize();
         this.setContent( textVbox );
+        
+        textAreaIn.autosize();
+        textAreaOut.autosize();
+        
+       
+        textVbox.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+            	int newHeight = Integer.parseInt(newSceneHeight.toString().split("\\.")[0] );
+            	int taHeight = 312 + (newHeight-692)/2;
+                textAreaIn.setPrefHeight( taHeight );
+                textAreaOut.setPrefHeight( taHeight );
+                // System.out.println( "Height: " + newHeight + " Area: " + taHeight + " MenuBox: " + textAreaInMenuBox.getHeight()
+                // + " ButtonBox: " + hUpDownButtonBox.getHeight() );
+                
+            }
+        });
     }
     
     
@@ -231,7 +252,6 @@ public class ConvertTextTab extends Tab {
     private ChoiceBox<String> createFontChoiceBox(String component) {
     	return createFontChoiceBox(component, defaultFont);
     }
-
     
     
     void setScriptIn(String scriptIn ) {
