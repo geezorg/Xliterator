@@ -366,7 +366,7 @@ public class ICUEditor extends CodeArea {
     
     public void loadResourceFile(String rulesFile) throws UnsupportedEncodingException, IOException {
 		ClassLoader classLoader = this.getClass().getClassLoader();
-		String rulesFilePath = "common/transforms/" + rulesFile ; 
+		String rulesFilePath = (rulesFile.contains( "/" ) ) ? rulesFile : "common/transforms/" + rulesFile ; 
 		InputStream inputStream = classLoader.getResourceAsStream( rulesFilePath ); 
 		
 		BufferedReader br = new BufferedReader( new InputStreamReader(inputStream, "UTF-8") );
