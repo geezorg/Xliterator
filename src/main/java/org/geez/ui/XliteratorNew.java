@@ -61,14 +61,14 @@ public final class XliteratorNew extends Application {
 	private static final String VERSION = "v0.6.0";
     private Desktop desktop = Desktop.getDesktop();
 
-	private String scriptIn  = null; // alphabetic based default
-	private String scriptOut = null;
+	private String scriptIn   = null; // alphabetic based default
+	private String scriptOut  = null;
 	private String variantOut = null;
 	protected StatusBar statusBar = new StatusBar();
-	private Menu inScriptMenu  = null;
+	private Menu inScriptMenu   = null;
 	private Menu outVariantMenu = null;
 	private Menu outScriptMenu  = null;
-	private String selectedTransliteration = null;
+	private String selectedTransliteration  = null;
 	private String transliterationDirection = null;
     private String defaultFont    = null;
     MenuItem loadInternalMenuItem = new MenuItem( "Load Selected Transliteration" );
@@ -85,6 +85,14 @@ public final class XliteratorNew extends Application {
     private final String variantOutPreference = "org.geez.preferences.variantOut";
     private final String transliterationIdPreference        = "org.geez.preferences.transliterationId";
     private final String transliterationDirectionPreference = "org.geez.preferences.transliterationDirection";
+    
+    private final String editorFontFace = "org.geez.preferences.editor.font.face";
+    private final String editorFontSize = "org.geez.preferences.editor.font.size";
+    private final String textAreaInFontFace = "org.geez.preferences.textAreaIn.font.face";
+    private final String textAreaInFontSize = "org.geez.preferences.textAreaIn.font.size";
+    private final String textAreaOutFontFace = "org.geez.preferences.textAreaOut.font.face";
+    private final String textAreaOutFontSize = "org.geez.preferences.textAreaOut.font.size";
+    private final String fileOutFont = "org.geez.preferences.fileOut.font";
     
 	private XliteratorConfig config = null;
 
@@ -454,9 +462,12 @@ public final class XliteratorNew extends Application {
         
         
         final Menu preferencesMenu = new Menu( "Preferences" );
-        final MenuItem makeDefaultMenuItem = new MenuItem( "Save Default Mapping" );
+        final MenuItem makeDefaultMappingMenuItem = new MenuItem( "Save Default Mapping" );
+        final MenuItem makeDefaultFontsMenuItem = new MenuItem( "Save Font Selections" );
 
-        makeDefaultMenuItem.setOnAction( evt -> saveDefaultMapping() );
+        makeDefaultMappingMenuItem.setOnAction( evt -> saveDefaultMapping() );
+        makeDefaultFontsMenuItem.setOnAction( evt -> saveDefaultFontSelections() );
+        
         final Menu caseConversionMenu = new Menu( "Convert Case" );
         final RadioMenuItem lowercaseMenuItem = new RadioMenuItem( "lowercase" );
         final RadioMenuItem uppercaseMenuItem = new RadioMenuItem( "UPPERCASE" );
@@ -471,7 +482,7 @@ public final class XliteratorNew extends Application {
         titlecaseMenuItem.setOnAction( evt -> setCaseOption( titlecaseMenuItem ) );
         caseConversionMenu.getItems().addAll( lowercaseMenuItem, uppercaseMenuItem, titlecaseMenuItem );
         
-        preferencesMenu.getItems().addAll( makeDefaultMenuItem, caseConversionMenu ); 
+        preferencesMenu.getItems().addAll( makeDefaultMappingMenuItem, makeDefaultFontsMenuItem, caseConversionMenu ); 
         
         // create a menubar 
         final MenuBar leftBar = new MenuBar();  
@@ -596,6 +607,20 @@ public final class XliteratorNew extends Application {
         prefs.put( variantOutPreference, variantOut );
         prefs.put( transliterationIdPreference, selectedTransliteration );
         prefs.put( transliterationDirectionPreference, transliterationDirection );
+    }
+    
+
+    private void saveDefaultFontSelections() {
+        // Retrieve the user preference node for the package com.mycompany
+        Preferences prefs = Preferences.userNodeForPackage( org.geez.transliterate.XliteratorConfig.class );
+
+        prefs.put( editorFontFace, scriptIn );
+        prefs.put( editorFontSize, scriptIn );
+        prefs.put( textAreaInFontFace, scriptOut );
+        prefs.put( textAreaInFontSize, scriptOut );
+        prefs.put( textAreaOutFontFace, variantOut );
+        prefs.put( textAreaOutFontSize, variantOut );
+        prefs.put( fileOutFont, selectedTransliteration );
     }
     
     private void checkPreferences() {

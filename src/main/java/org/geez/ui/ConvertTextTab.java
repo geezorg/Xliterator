@@ -2,18 +2,14 @@ package org.geez.ui;
 
 import java.util.HashMap;
 
+import org.fxmisc.richtext.StyleClassedTextArea;
 import org.geez.convert.text.ConvertTextString;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -21,68 +17,22 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
-public class ConvertTextTab extends Tab {
+public class ConvertTextTab extends XliteratorTab {
 	
-    private final TextArea textAreaIn = new TextArea();
-    private final TextArea textAreaOut = new TextArea();
+    private final StyleClassedTextArea textAreaIn = new StyleClassedTextArea();
+    private final StyleClassedTextArea textAreaOut = new StyleClassedTextArea();
 	private final Button convertButtonDown = new Button(); // ( "⬇" );
     private final Button convertButtonUp = new Button(); // ( "⬆" );
-    
-    private String defaultFont = null;
-    
-	private boolean converted = false;
-	private String scriptIn = null;
-	private String scriptOut = null;
-	private String variantOut = null;
-	private String selectedTransliteration = null;
-	private String transliterationDirection = null;
-	private String caseOption = null;
+
 
 	private ICUEditor editor = null; // used to get a handle on rules text
 	
 	public ConvertTextTab(String title) {
 		super( title );
-	}
-
-    public void setDefaultFont(String defaultFont) {
-    	this.defaultFont = defaultFont;
-    }
-    
-    private void setFontSize(String fontSize) {	
-		if( textAreaIn.getProperties().get( "font-size") == null ) {
-			textAreaIn.setStyle( "-fx-font-family: '" + textAreaIn.getProperties().get("font-family") + "'; -fx-font-size: " + fontSize + ";" ); 
-		}
-		if( textAreaOut.getProperties().get( "font-size") == null ) {
-			textAreaOut.setStyle( "-fx-font-family: '" + textAreaOut.getProperties().get("font-family") + "'; -fx-font-size: " + fontSize + ";" ); 
-		}
-    }
-    
-    
-    private void setFont(String font, String component) {
-    	if( "textAreaIn".equals( component) ) {
-    		textAreaIn.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + textAreaIn.getProperties().get("font-size") + ";" ); 
-    		textAreaIn.getProperties().put( "font-family", font );
-    	}
-    	else if( "textAreaOut".equals( component) ) {
-    		textAreaOut.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + textAreaOut.getProperties().get("font-size") + ";" );
-    		textAreaOut.getProperties().put( "font-family", font );
-    	}
-    	else {
-    		// how can we reach here?s
-    		/*
-    		if( textAreaIn.getProperties().get( "font-family") == null ) {
-    			textAreaIn.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + fontSize + ";" ); 
-    		}
-    		if( textAreaOut.getProperties().get( "font-family") == null ) {
-    			textAreaOut.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + fontSize + ";" ); 
-    		}
-    		*/
-    	}
-    }
-    
+	}    
 
     private void incrementFontSize(String component) {
-    	TextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
+    	StyleClassedTextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
 
     	String fontFamily = (String) textArea.getProperties().get("font-family");
     	int newSize = Integer.parseInt( (String)textArea.getProperties().get("font-size") ) + 1;
@@ -94,7 +44,7 @@ public class ConvertTextTab extends Tab {
     }
 
     private void decrementFontSize(String component) {
-    	TextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
+    	StyleClassedTextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
 
     	String fontFamily = (String) textArea.getProperties().get("font-family");
     	int newSize = Integer.parseInt( (String)textArea.getProperties().get("font-size") ) - 1;
@@ -107,7 +57,7 @@ public class ConvertTextTab extends Tab {
     
     
     HashMap<String,ConvertTextString> textStringConverts = new HashMap<String,ConvertTextString>();    
-    private void convertTextArea(TextArea textAreaIn, TextArea textAreaOut, String direction) {
+    private void convertTextArea(StyleClassedTextArea textAreaIn, StyleClassedTextArea textAreaOut, String direction) {
     	String textIn = textAreaIn.getText();
     	if( textIn == null )
     		return;
@@ -136,7 +86,7 @@ public class ConvertTextTab extends Tab {
 	    	
 	    	textAreaOut.clear();
 	        
-	    	textAreaOut.setText( stringConverter.convertText( textIn ) );
+	    	textAreaOut.replaceText( stringConverter.convertText( textIn ) );
 	    	if( "both".equals( transliterationDirection ) ) {
 	    		convertButtonUp.setDisable( false );
 	    	}
@@ -164,7 +114,7 @@ public class ConvertTextTab extends Tab {
 
         Button textAreaInIncreaseFontSizeButton = new Button( "+" ); 
         Button textAreaInDecreaseFontSizeButton = new Button( "-" );
-        HBox textAreaInMenuBox = new HBox( createFontChoiceBox( "textAreaIn" ), textAreaInIncreaseFontSizeButton, textAreaInDecreaseFontSizeButton );
+        HBox textAreaInMenuBox = new HBox( createFontChoiceBox( textAreaIn ), textAreaInIncreaseFontSizeButton, textAreaInDecreaseFontSizeButton );
         textAreaInMenuBox.setPadding(new Insets(2, 2, 2, 2));
         textAreaInMenuBox.setSpacing(4);
         textAreaInIncreaseFontSizeButton.setOnAction( event -> {
@@ -211,7 +161,7 @@ public class ConvertTextTab extends Tab {
         Region hspacer = new Region();
         hspacer.prefWidth( 200 );
         HBox.setHgrow(hspacer, Priority.SOMETIMES);
-        HBox hUpDownButtonBox = new HBox( createFontChoiceBox( "textAreaOut" ), textAreaOutIncreaseFontSizeButton, textAreaOutDecreaseFontSizeButton, hspacer, convertButtonDown, convertButtonUp );
+        HBox hUpDownButtonBox = new HBox( createFontChoiceBox( textAreaOut ), textAreaOutIncreaseFontSizeButton, textAreaOutDecreaseFontSizeButton, hspacer, convertButtonDown, convertButtonUp );
         hUpDownButtonBox.setAlignment(Pos.CENTER_LEFT);
         hUpDownButtonBox.setPadding(new Insets(2, 2, 2, 2));
         hUpDownButtonBox.setSpacing( 4 );
@@ -237,40 +187,21 @@ public class ConvertTextTab extends Tab {
             }
         });
     }
-    
-    
-    private ChoiceBox<String> createFontChoiceBox(String component, String defaultSelection) {  
-    	ChoiceBox<String> choiceBox = new ChoiceBox<>();
-    	for(String font: javafx.scene.text.Font.getFamilies() ) {
-    		choiceBox.getItems().add( font );
-    	}
-    	choiceBox.getSelectionModel().select( defaultSelection );
-        choiceBox.setOnAction( evt -> setFont( choiceBox.getSelectionModel().getSelectedItem(), component ) );
-        
-        return choiceBox;    
-    }
-    
-    private ChoiceBox<String> createFontChoiceBox(String component) {
-    	return createFontChoiceBox(component, defaultFont);
-    }
-    
-    
-    void setScriptIn(String scriptIn ) {
-    	this.scriptIn = scriptIn;
+   
+    public void setScriptIn(String scriptIn ) {
+    	super.setScriptIn(scriptIn);
 		convertButtonUp.setDisable( true );
 		convertButtonDown.setDisable( true );
     }
     
-    void setScriptOut(String scriptOut ) {
-    	this.scriptOut = scriptOut;
+    public void setScriptOut(String scriptOut ) {
+    	super.setScriptOut(scriptOut);
 		convertButtonUp.setDisable( true );
 		convertButtonDown.setDisable( true );
     }
       
-    void setVariantOut(String variantOut, String selectedTransliteration, String transliterationDirection ) {
-    	this.variantOut = variantOut;
-    	this.selectedTransliteration = selectedTransliteration;
-    	this.transliterationDirection = transliterationDirection;
+    public void setVariantOut(String variantOut, String selectedTransliteration, String transliterationDirection ) {
+    	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection);
 		convertButtonUp.setDisable( false );
 		convertButtonDown.setDisable( false );
         if( "both".equals( transliterationDirection ) ) {
@@ -287,11 +218,11 @@ public class ConvertTextTab extends Tab {
     }
     
     public void setTextIn(String text) {
-    	textAreaIn.setText(  text );
+    	textAreaIn.replaceText( text );
     }
     
     public void setTextOut(String text) {
-    	textAreaOut.setText(  text );
+    	textAreaOut.replaceText( text );
     }
 
     public void enableConvertForward(boolean enable) {
@@ -306,25 +237,5 @@ public class ConvertTextTab extends Tab {
     	convertButtonDown.setDisable( !enable );
     	convertButtonUp.setDisable( !enable );
     }
-    
-    public void setCaseOption(String caseOption) {
-    	this.caseOption = caseOption;
-    }
-	
-	private void errorAlert( Exception ex, String header ) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle( "An Exception has occured" );
-        alert.setHeaderText( header );
-        alert.setContentText( ex.getMessage() );
-        alert.showAndWait();
-	}
-	
-	
-	private void errorAlert( String title, String message ) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle( title );
-        alert.setHeaderText( message );
-        alert.setContentText( message );
-        alert.showAndWait();
-	}
+
 }
