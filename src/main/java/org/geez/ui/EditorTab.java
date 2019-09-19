@@ -24,8 +24,16 @@ public class EditorTab extends Tab {
 	private boolean unsavedChanges = false;
     
 
-	public EditorTab(String title) {
+	public EditorTab( String title ) {
 		super(title);
+	}
+	
+	public void reset( String title ) {
+		setText( title );
+		externalIcuFile = null;
+		unsavedChanges = false;
+		editor = null;
+		editor = new ICUEditor();
 	}
 	
 	
@@ -74,6 +82,7 @@ public class EditorTab extends Tab {
 			saveAsMenuItem.setDisable( false );
         });
 	}
+	
 	
     private Menu createFontMenu( String component ) {
     	Menu menu = new Menu();

@@ -1,9 +1,7 @@
 package org.geez.ui;
 
 import java.awt.Desktop;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
@@ -18,7 +16,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -238,7 +235,13 @@ public final class XliteratorNew extends Application {
         //
         final Menu fileMenu = new Menu("_File");
         
-        // create menu items
+
+
+    	// Add transliteration file selection option:
+		MenuItem newMenuItem = new MenuItem( "New File" );
+        newMenuItem.setOnAction( evt -> createNewFile( "Untitled" ) );
+        newMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN));
+
         final MenuItem fileMenuItem = new MenuItem( "Select Files..." ); 
         fileMenuItem.setDisable( true );
         
@@ -313,13 +316,15 @@ public final class XliteratorNew extends Application {
         );
         loadInternalMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.SHORTCUT_DOWN));
         
-        MenuItem exitMenuItem = new MenuItem( "Exit" );
-        exitMenuItem.setOnAction( evt -> {
+        MenuItem quitMenuItem = new MenuItem( "_Quit Xliterator" );
+        quitMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN));
+        quitMenuItem.setOnAction( evt -> {
     			Window window = primaryStage.getScene().getWindow();
     			window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
         });
         
-        fileMenu.getItems().addAll( fileMenuItem, openMenuItem, loadInternalMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), exitMenuItem ); 
+        
+        fileMenu.getItems().addAll( fileMenuItem, openMenuItem, loadInternalMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), quitMenuItem ); 
         
         //
         //=========================== END FILE MENU =============================================
@@ -712,7 +717,19 @@ public final class XliteratorNew extends Application {
     	}
     }
     
+    
+    private void createNewFile(String title) {
+    	if(! checkUnsavedChanges() ) {
+    		return;
+    	}
+    	editTab.reset( "Untitled" );
+    }
+    
+    
     private void loadDemo() {
+    	if(! checkUnsavedChanges() ) {
+    		return;
+    	}
     	textTab.clearAll();
     	textTab.setTextIn( "ሰላም ዓለም" );
     	
