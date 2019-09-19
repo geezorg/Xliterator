@@ -1,8 +1,6 @@
 package org.geez.ui;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 
 import org.fxmisc.flowless.VirtualizedScrollPane;
@@ -16,7 +14,6 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class EditorTab extends Tab {

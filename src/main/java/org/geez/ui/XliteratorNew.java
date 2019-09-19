@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 import org.controlsfx.control.StatusBar;
 import org.geez.convert.ProcessorManager;
@@ -52,6 +53,8 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import javafx.stage.WindowEvent;
 
  
 
@@ -198,6 +201,7 @@ public final class XliteratorNew extends Application {
     	return outVariantMenu;
     }
     
+    Stage primaryStage = null;
     
     @Override
     public void start(final Stage stage) {
@@ -208,6 +212,8 @@ public final class XliteratorNew extends Application {
     		System.err.println( ex );
     		System.exit(0);
     	}
+    	primaryStage = stage;
+    	
         stage.setTitle( "Xliterator - An ICU Based Transliterator" );
         Image logoImage = new Image( ClassLoader.getSystemResourceAsStream( "images/Xliterator.png" ) );
         stage.getIcons().add( logoImage );
@@ -240,14 +246,15 @@ public final class XliteratorNew extends Application {
         saveAsMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN) );
 
 
-
-
     	// Add transliteration file selection option:
 		MenuItem openMenuItem = new MenuItem( "Open ICU File..." );
         openMenuItem.setOnAction(
                 new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(final ActionEvent e) {
+                    	if(! checkUnsavedChanges() ) {
+                    		return;
+                    	}
                         final FileChooser fileChooser = new FileChooser();
                     	configureFileChooserICU(fileChooser);    
                     	File externalIcuFile = fileChooser.showOpenDialog( stage );
@@ -282,6 +289,9 @@ public final class XliteratorNew extends Application {
                 new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(final ActionEvent e) {
+                    	if(! checkUnsavedChanges() ) {
+                    		return;
+                    	}
                     	try {
                     		editTab.getEditor().loadResourceFile( selectedTransliteration );
                         	editTab.setText( selectedTransliteration );
@@ -296,8 +306,11 @@ public final class XliteratorNew extends Application {
         );
         loadInternalMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.SHORTCUT_DOWN));
         
-        MenuItem exitMenuItem = new MenuItem("Exit");
-        exitMenuItem.setOnAction(actionEvent -> Platform.exit());
+        MenuItem exitMenuItem = new MenuItem( "Exit" );
+        exitMenuItem.setOnAction( evt -> {
+    			Window window = primaryStage.getScene().getWindow();
+    			window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
+        });
         
         fileMenu.getItems().addAll( fileMenuItem, openMenuItem, loadInternalMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), exitMenuItem ); 
         
@@ -453,42 +466,79 @@ public final class XliteratorNew extends Application {
         editTab.getEditor().setStyle( scene );
         editTab.getEditor().prefHeightProperty().bind( stage.heightProperty().multiply(0.8) );
 
-        
-        stage.setOnCloseRequest( evt -> {
-        	if( editTab.hasUnsavedChanges() ) {
-        		saveAndExitAlert( "Confirm Exit", "Exit without saving?" );
-        		System.exit(0);
-        	}
-        });
+        scene.getWindow().addEventFilter( WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent );
         	
         stage.show();
     }
     
-    private Alert saveAndExitAlert(String title, String message) {
-        ButtonType buttonTypeSaveAndExit = new ButtonType( "Save and Exit" );
-        ButtonType buttonTypeExit = new ButtonType( "Exit" );
+    private void closeWindowEvent(WindowEvent event) {
+    	if( editTab.hasUnsavedChanges() ) {
+    		Alert alert = saveAndExitAlert( "Confirm Exit", "Exit without saving?", "Unsaved changes will be lost." );
+            alert.initOwner( primaryStage.getOwner() );
+            Optional<ButtonType> response = alert.showAndWait();
+
+            if( response.isPresent() ) {
+            	ButtonType type = response.get();
+                if( type.getButtonData() == ButtonData.CANCEL_CLOSE ) {
+                    event.consume();
+                }
+                else if( type.getButtonData() == ButtonData.YES ) {
+                	editTab.saveContent( primaryStage, false );
+                }
+            }
+    	}
+    }
+
+    
+    private Alert saveAndExitAlert(String title, String header, String message) {
+        ButtonType buttonTypeSaveAndExit = new ButtonType( "Save and Exit", ButtonData.YES );
+        ButtonType buttonTypeExit = new ButtonType( "Exit", ButtonData.NO );
         ButtonType buttonTypeCancel = new ButtonType( "Cancel", ButtonData.CANCEL_CLOSE );
 
-
-        
     	Alert alert = new Alert(AlertType.CONFIRMATION);
     	alert.setTitle( title );
-    	alert.setHeaderText( message );
+    	alert.setHeaderText( header );
     	alert.setContentText( message );
     	
         alert.getButtonTypes().setAll( buttonTypeSaveAndExit, buttonTypeExit, buttonTypeCancel );
     	
     	return alert;
     }
-
     
-    private Alert confirmationAlert(String title, String message) {
+    private Alert saveOrContinue(String title, String header, String message) {
+        ButtonType buttonTypeSave = new ButtonType( "Yes", ButtonData.YES );
+        ButtonType buttonTypeContinue = new ButtonType( "No", ButtonData.NO );
+        ButtonType buttonTypeCancel = new ButtonType( "Cancel", ButtonData.CANCEL_CLOSE );
+
     	Alert alert = new Alert(AlertType.CONFIRMATION);
     	alert.setTitle( title );
-    	alert.setHeaderText( message );
+    	alert.setHeaderText( header );
     	alert.setContentText( message );
     	
+        alert.getButtonTypes().setAll( buttonTypeSave, buttonTypeCancel, buttonTypeContinue );
+    	
     	return alert;
+    }
+
+    
+    private boolean checkUnsavedChanges() {
+    	if( editTab.hasUnsavedChanges() ) {
+    		Alert alert = saveOrContinue( "Confirm Replace", "Save changes before loading?", "Unsaved changes will be lost." );
+            alert.initOwner( primaryStage.getOwner() );
+            Optional<ButtonType> response = alert.showAndWait();
+
+            if( response.isPresent() ) {
+            	ButtonType type = response.get();
+                if( type.getButtonData() == ButtonData.CANCEL_CLOSE ) {
+                	return false;
+                }
+                if( type.getButtonData() == ButtonData.YES ) {
+                	editTab.saveContent( primaryStage, false );
+                }
+            } 
+    	}
+    	
+    	return true;
     }
  
     
@@ -546,7 +596,7 @@ public final class XliteratorNew extends Application {
         hbox.setSpacing(0.0);
         
         // working with a single flow leads to bad visual effects when the app size changes or
-        //  when the font name changes, so we use an hbox instead
+        // when the font name changes, so we use an hbox instead
         // flow.getChildren().addAll( in, systemInText, separator1, out, systemOutText, separator2 );
         
         statusBar.getLeftItems().add( hbox );

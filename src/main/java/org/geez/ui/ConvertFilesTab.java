@@ -14,14 +14,13 @@ import org.controlsfx.control.StatusBar;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
-import org.geez.convert.Converter;
+
 import org.geez.convert.DocumentProcessor;
 import org.geez.convert.ProcessorManager;
 import org.geez.convert.docx.DocxProcessor;
 import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
 import org.geez.convert.fontsystem.ConvertFontSystem;
-import org.geez.convert.text.ConvertTextString;
-import org.geez.convert.text.TextFileProcessor;
+
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
