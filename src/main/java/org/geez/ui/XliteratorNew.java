@@ -26,6 +26,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -61,7 +63,6 @@ public final class XliteratorNew extends Application {
 	private String scriptIn  = null; // alphabetic based default
 	private String scriptOut = null;
 	private String variantOut = null;
-	private File externalIcuFile = null;
 	protected StatusBar statusBar = new StatusBar();
 	private Menu inScriptMenu  = null;
 	private Menu outVariantMenu = null;
@@ -81,7 +82,7 @@ public final class XliteratorNew extends Application {
 	private XliteratorConfig config = null;
 
 	
-	private void errorAlert(Exception ex, String header ) {
+	private void errorAlert( Exception ex, String header ) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle( "An Exception has occured" );
         alert.setHeaderText( header );
@@ -90,7 +91,7 @@ public final class XliteratorNew extends Application {
 	}
 
 	
-	private void errorAlert(String title, String message ) {
+	private void errorAlert( String title, String message ) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle( title );
         alert.setHeaderText( message );
@@ -98,52 +99,17 @@ public final class XliteratorNew extends Application {
         alert.showAndWait();
 	}
 	
-	// Do not change the Editor Tab title if a file has never been loaded
-	// Do not use FileWriter( icuFile ); if icuFile is still null
-	private String saveEditorToFile(String newContent) throws IOException {
-		  // Create file 
-		  if( editTab.getEditor().getContent() == null )
-			  return null;
-		  FileWriter fstream = new FileWriter( externalIcuFile );
-		  BufferedWriter out = new BufferedWriter( fstream );
-		  out.write( newContent );
-		  //Close the output stream
-		  out.close();
-		  
-		  return externalIcuFile.getName();
-	}
-	
-	private String saveAsEditorToFile(Stage stage, String newContent, String fileName) throws IOException {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Save ICU File");
-		if( fileName != null ) {
-			fileChooser.setInitialFileName( fileName );
-		}
-		File file = fileChooser.showSaveDialog( stage );
-		if (file == null) {
-			return null;
-		}
-		// Create file 
-		FileWriter fstream = new FileWriter( file );
-		BufferedWriter out = new BufferedWriter (fstream );
-		out.write( newContent );
-		//Close the output stream
-		out.close();
-		externalIcuFile = file;
-		
-		return file.getName();
-    }
-    
 	
     private static void configureFileChooserICU( final FileChooser fileChooser ) {      
-    	fileChooser.setTitle("View Word Files");
+    	fileChooser.setTitle( "View Word Files" );
         fileChooser.setInitialDirectory(
-        		new File( System.getProperty("user.home") )
+        		new File( System.getProperty( "user.home" ) )
         );                 
         fileChooser.getExtensionFilters().add(
-        		new FileChooser.ExtensionFilter("*.xml", "*.xml")
+        		new FileChooser.ExtensionFilter( "*.xml", "*.xml" )
         );
     }
+    
     
     private Menu createInScriptsMenu(final Stage stage) {
     	Menu menu = new Menu( "Script _In" );
@@ -242,8 +208,8 @@ public final class XliteratorNew extends Application {
     		System.err.println( ex );
     		System.exit(0);
     	}
-        stage.setTitle("Xliterator - An ICU Based Transliterator");
-        Image logoImage = new Image( ClassLoader.getSystemResourceAsStream("images/Xliterator.png") );
+        stage.setTitle( "Xliterator - An ICU Based Transliterator" );
+        Image logoImage = new Image( ClassLoader.getSystemResourceAsStream( "images/Xliterator.png" ) );
         stage.getIcons().add( logoImage );
         String osName = System.getProperty("os.name");
         if( osName.equals("Mac OS X") ) {
@@ -264,51 +230,14 @@ public final class XliteratorNew extends Application {
         fileMenuItem.setDisable( true );
         
         MenuItem saveMenuItem = new MenuItem( "_Save" );
-        saveMenuItem.setOnAction( actionEvent ->
-        	{
-        		try {
-        			String newFileName = null;
-	        		if( externalIcuFile == null) {
-	        			if( "*Mapping Editor".equals( editTab.getText() ) ) {
-	        				newFileName = saveAsEditorToFile( stage, editTab.getEditor().getText(), null );
-	        			}
-	        			else { // probably loaded from a resource
-	        				newFileName = editTab.getText();
-	        				if( newFileName.charAt(0) == '*' ) {
-	        					newFileName = newFileName.substring(1);
-	        				}
-	        				newFileName = saveAsEditorToFile( stage, editTab.getEditor().getText(), newFileName );
-	        			}
-	        		} 
-	        		else {
-	        			newFileName = saveEditorToFile( editTab.getEditor().getText() );
-	        		}
-	        		if( newFileName != null ) { // the user cancelled
-	        			editTab.setText( editTab.getText().substring(1) );
-	        		}
-        		}
-	        	catch (Exception ex){
-	        		errorAlert( "Error occured saving file",  "An error occured while saving the file \"" + externalIcuFile.getPath() + "\":\n" + ex.getMessage() );
-	        	}
-        	});
+        saveMenuItem.setOnAction( actionEvent -> editTab.saveContent( stage, false ) );
         saveMenuItem.setDisable(true);
         saveMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN));
         
         MenuItem saveAsMenuItem = new MenuItem( "Save As..." );
-        saveAsMenuItem.setOnAction( actionEvent ->
-	    	{
-	    		try {
-	        		String newFileName = saveAsEditorToFile( stage, editTab.getEditor().getText(), editTab.getText() );
-	        		if( newFileName != null ) {
-	        			editTab.setText( newFileName );
-	        		}
-	    		}
-	        	catch (Exception ex){
-	        		errorAlert( "Error occured saving file",  "An error occured while saving the file \"" + externalIcuFile.getPath() + "\":\n" + ex.getMessage() );
-	        	}
-	    	});
+        saveAsMenuItem.setOnAction( actionEvent ->  editTab.saveContent( stage, true ) );
         saveAsMenuItem.setDisable(true);
-        saveAsMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN));
+        saveAsMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN) );
 
 
 
@@ -321,14 +250,13 @@ public final class XliteratorNew extends Application {
                     public void handle(final ActionEvent e) {
                         final FileChooser fileChooser = new FileChooser();
                     	configureFileChooserICU(fileChooser);    
-                    	externalIcuFile = fileChooser.showOpenDialog( stage );
+                    	File externalIcuFile = fileChooser.showOpenDialog( stage );
                         if( externalIcuFile == null ) {
                         	return;
                         }
                         try {
                         	// editor.replaceText( FileUtils.readFileToString(icuFile, StandardCharsets.UTF_8) );
-                        	editTab.getEditor().loadFile( externalIcuFile );
-                        	editTab.setText( externalIcuFile.getName() );
+                        	editTab.loadFile( externalIcuFile );
                         	setUseEditor(); // TODO: set transliteration direction?
                         	textTab.enableConvertForward( true );
                         	textTab.enableConvertReverse( false );
@@ -361,7 +289,7 @@ public final class XliteratorNew extends Application {
                         	saveAsMenuItem.setDisable(false);
                         }
                         catch(IOException ex) {
-                        	errorAlert(ex, "Error opening: " + externalIcuFile.getName() );
+                        	errorAlert(ex, "Error opening: " + selectedTransliteration );
                         }
                     }
                 }
@@ -524,7 +452,43 @@ public final class XliteratorNew extends Application {
         stage.setScene( scene ); 
         editTab.getEditor().setStyle( scene );
         editTab.getEditor().prefHeightProperty().bind( stage.heightProperty().multiply(0.8) );
+
+        
+        stage.setOnCloseRequest( evt -> {
+        	if( editTab.hasUnsavedChanges() ) {
+        		saveAndExitAlert( "Confirm Exit", "Exit without saving?" );
+        		System.exit(0);
+        	}
+        });
+        	
         stage.show();
+    }
+    
+    private Alert saveAndExitAlert(String title, String message) {
+        ButtonType buttonTypeSaveAndExit = new ButtonType( "Save and Exit" );
+        ButtonType buttonTypeExit = new ButtonType( "Exit" );
+        ButtonType buttonTypeCancel = new ButtonType( "Cancel", ButtonData.CANCEL_CLOSE );
+
+
+        
+    	Alert alert = new Alert(AlertType.CONFIRMATION);
+    	alert.setTitle( title );
+    	alert.setHeaderText( message );
+    	alert.setContentText( message );
+    	
+        alert.getButtonTypes().setAll( buttonTypeSaveAndExit, buttonTypeExit, buttonTypeCancel );
+    	
+    	return alert;
+    }
+
+    
+    private Alert confirmationAlert(String title, String message) {
+    	Alert alert = new Alert(AlertType.CONFIRMATION);
+    	alert.setTitle( title );
+    	alert.setHeaderText( message );
+    	alert.setContentText( message );
+    	
+    	return alert;
     }
  
     
@@ -653,7 +617,7 @@ public final class XliteratorNew extends Application {
         	setUseEditor();
         }
         catch(IOException ex) {
-        	errorAlert(ex, "Error opening: " + externalIcuFile.getName() );
+        	errorAlert(ex, "Error opening: " + selectedTransliteration );
         }
     }
 

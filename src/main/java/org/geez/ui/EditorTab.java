@@ -1,19 +1,30 @@
 package org.geez.ui;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.fxmisc.flowless.VirtualizedScrollPane;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class EditorTab extends Tab {
 	
     private ICUEditor editor = new ICUEditor();
     private String defaultFont = null;
+	private File externalIcuFile = null;
+	private boolean unsavedChanges = false;
     
 
 	public EditorTab(String title) {
@@ -26,12 +37,12 @@ public class EditorTab extends Tab {
 	}
 	
     
-    public void setDefaultFont(String defaultFont) {
+    public void setDefaultFont( String defaultFont ) {
     	this.defaultFont = defaultFont;
     }
     
     
-    private void setFontSize(String fontSize) {        
+    private void setFontSize( String fontSize ) {        
 		String fontFamily = (String) editor.getProperties().get("font-family");
 		editor.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" );
 		editor.getProperties().put( "font-size", fontSize );
@@ -53,12 +64,14 @@ public class EditorTab extends Tab {
         		if( label.charAt(0) != '*' ) {
         			this.setText( "*" + this.getText() );
         			saveMenuItem.setDisable( false );
+        			unsavedChanges = true;
         		}
         	}
         	else {
         		if( label.charAt(0) == '*' ) {
         			this.setText( this.getText().substring(1) );
         			saveMenuItem.setDisable( true );
+        			unsavedChanges = false;
         		}
         	}
 			saveAsMenuItem.setDisable( false );
@@ -89,7 +102,7 @@ public class EditorTab extends Tab {
     }
     
     
-    private ChoiceBox<String> createFontChoiceBox(String component, String defaultSelection) {  
+    private ChoiceBox<String> createFontChoiceBox( String component, String defaultSelection ) {  
     	ChoiceBox<String> choiceBox = new ChoiceBox<>();
     	for(String font: javafx.scene.text.Font.getFamilies() ) {
     		choiceBox.getItems().add( font );
@@ -100,16 +113,75 @@ public class EditorTab extends Tab {
         return choiceBox;    
     }
     
-    private ChoiceBox<String> createFontChoiceBox(String component) {
+    
+    private ChoiceBox<String> createFontChoiceBox( String component ) {
     	return createFontChoiceBox(component, defaultFont);
     }
     
     
 
-    private void setFont(String font, String component) {
+    private void setFont( String font, String component ) {
     		// set the font in all components, unless already set for the text areas
     		String fontSize = (String) editor.getProperties().get("font-size");
     		editor.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + fontSize + ";" );
     }
-
+    
+    
+    public void saveContent( Stage stage, boolean saveToNewFile ) {
+    	if( editor.getText() == null ) {
+    		// this shouldn't happen, the Save and Save As menu items should be disabled:
+    		errorAlert( "No Data Error", "The editor contains no content." );
+    		return;
+    	}
+		try {
+			String newFileName = null;
+			if( saveToNewFile ) {
+        		newFileName = editor.saveContentToNewFile( stage );
+        		if( newFileName != null ) {
+        			setText( newFileName );
+        		}
+			}
+			else {
+				// this may or may not be the initial save
+				if( editor.isInitialSave() ) {
+	        		newFileName = editor.saveContentToNewFile( stage );
+	        		if( newFileName != null ) {
+	        			setText( newFileName );
+	        		}
+				}
+				else {
+					newFileName = editor.saveContentToFile();
+				}
+			}
+			
+    		if( newFileName != null ) {
+    			setText( newFileName );
+    		}
+    		unsavedChanges = false;
+		}
+    	catch (Exception ex){
+    		errorAlert( "Error occured saving file",  "An error occured while saving the file \"" + externalIcuFile.getPath() + "\":\n" + ex.getMessage() );
+    	}
+	}
+    
+    
+    public void loadFile( File editorFile ) throws IOException {
+    	editor.loadFile( editorFile );
+    	setText( editorFile.getName() );
+    }
+    
+	
+	private void errorAlert( String title, String message ) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle( title );
+        alert.setHeaderText( message );
+        alert.setContentText( message );
+        alert.showAndWait();
+	}
+	
+	
+	public boolean hasUnsavedChanges() {
+		// we need to make sure this is set right when a file is loaded.
+		return unsavedChanges;
+	}
 }
