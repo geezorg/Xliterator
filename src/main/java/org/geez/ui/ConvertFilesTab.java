@@ -67,6 +67,7 @@ public class ConvertFilesTab extends Tab {
 	private String variantOut = null;
 	private String selectedTransliteration = null;
 	private String transliterationDirection = null;
+	private String caseOption = null;
 
 	public ConvertFilesTab(String title) {
 		super( title );
@@ -362,5 +363,9 @@ public class ConvertFilesTab extends Tab {
     	if( inputFileList != null ) {
     		convertButton.setDisable( false );
     	}
+    }
+    
+    public void setCaseOption(String caseOption) {
+    	this.caseOption = caseOption;
     }
 }
