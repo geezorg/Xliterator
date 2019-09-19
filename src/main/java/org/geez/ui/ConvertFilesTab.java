@@ -14,13 +14,11 @@ import org.controlsfx.control.StatusBar;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
-
 import org.geez.convert.DocumentProcessor;
 import org.geez.convert.ProcessorManager;
 import org.geez.convert.docx.DocxProcessor;
 import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
 import org.geez.convert.fontsystem.ConvertFontSystem;
-
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -31,16 +29,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
 import javafx.scene.control.Tooltip;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -49,7 +44,7 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-public class ConvertFilesTab extends Tab {
+public class ConvertFilesTab extends XliteratorTab {
 	
 	private final Button convertButton = new Button("Convert");
 	private boolean openOutput = true;
@@ -61,20 +56,16 @@ public class ConvertFilesTab extends Tab {
     private Desktop desktop = Desktop.getDesktop();
 	private StatusBar statusBar = null;
 	
-	private boolean converted = false;
-	private String scriptIn = null;
-	private String scriptOut = null;
-	private String variantOut = null;
-	private String selectedTransliteration = null;
-	private String transliterationDirection = null;
-	private String caseOption = null;
+
 
 	public ConvertFilesTab(String title) {
 		super( title );
 	}
-	
     
-    private ChoiceBox<String> createFontChoiceBox(String component, String defaultSelection) {  
+	
+    // this is identical to the method in XliteratorTab, with the only difference being the
+	// commented out .setOnAction line, see if this can be revised.
+    protected ChoiceBox<String> createFontChoiceBox(String component, String defaultSelection) {  
     	ChoiceBox<String> choiceBox = new ChoiceBox<>();
     	for(String font: javafx.scene.text.Font.getFamilies() ) {
     		choiceBox.getItems().add( font );
@@ -85,7 +76,7 @@ public class ConvertFilesTab extends Tab {
         return choiceBox;    
     }
     
-
+    
     ProcessorManager processorManager = null;
     public void setProcessor(ProcessorManager processorManager) {
     	this.processorManager = processorManager;
@@ -292,24 +283,6 @@ public class ConvertFilesTab extends Tab {
         
         documentFontsMenu.setDisable( true );
 	}
-
-	
-	private void errorAlert( Exception ex, String header ) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle( "An Exception has occured" );
-        alert.setHeaderText( header );
-        alert.setContentText( ex.getMessage() );
-        alert.showAndWait();
-	}
-	
-	
-	private void errorAlert( String title, String message ) {
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle( title );
-        alert.setHeaderText( message );
-        alert.setContentText( message );
-        alert.showAndWait();
-	}
 	
 	
     private static void configureFileChooser( final FileChooser fileChooser ) {      
@@ -346,27 +319,23 @@ public class ConvertFilesTab extends Tab {
     	documentFontsMenu.getItems().addAll( fonts );
         documentFontsMenu.setDisable( false );
     }
+
     
-    void setScriptIn(String scriptIn ) {
-    	this.scriptIn = scriptIn;
+    public void setScriptIn(String scriptIn ) {
+    	super.setScriptIn(scriptIn);
 		convertButton.setDisable( true );
     }
     
-    void setScriptOut(String scriptOut ) {
-    	this.scriptOut = scriptOut;
+    public void setScriptOut(String scriptOut ) {
+    	super.setScriptOut(scriptOut);
 		convertButton.setDisable( true );
     }
       
-    void setVariantOut(String variantOut, String selectedTransliteration, String transliterationDirection ) {
-    	this.variantOut = variantOut;
-    	this.selectedTransliteration = selectedTransliteration;
-    	this.transliterationDirection = transliterationDirection;
+    public void setVariantOut(String variantOut, String selectedTransliteration, String transliterationDirection ) {
+    	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection);
+
     	if( inputFileList != null ) {
     		convertButton.setDisable( false );
     	}
-    }
-    
-    public void setCaseOption(String caseOption) {
-    	this.caseOption = caseOption;
     }
 }
