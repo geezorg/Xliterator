@@ -1,7 +1,9 @@
 package org.geez.ui;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -25,8 +27,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseButton;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class ICUEditor extends CodeArea {
+    private File icuFile = null;
+    private String internalFileName = null;
+    
     private static final String[] KEYWORDS = new String[] {
     		"NFC", "NFD",
     		"M", "N"
@@ -107,7 +114,6 @@ public class ICUEditor extends CodeArea {
         // replaceText(0, 0, sampleCode);
         
         
-        // 
     	MenuItem arrow1 = new MenuItem( "↔" );
     	MenuItem arrow2 = new MenuItem( "→" );
     	MenuItem arrow3 = new MenuItem( "←" );
@@ -142,7 +148,7 @@ public class ICUEditor extends CodeArea {
                     EventPattern.mouseClicked(MouseButton.SECONDARY),
                     e -> {
                         // show the area using the mouse event's screen x & y values
-                        menu.show(this, e.getScreenX(), e.getScreenY());
+                        menu.show( this, e.getScreenX(), e.getScreenY() );
                     }
                 )
         );
@@ -305,8 +311,7 @@ public class ICUEditor extends CodeArea {
        
         // spansBuilder.add(Collections.emptyList(), text.length() - lastKwEnd);
         return spansBuilder.create();
-    }
-    
+    }   
     
     private static StyleSpans<Collection<String>> computeHighlightingPlainText(String text) {
         StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
@@ -381,16 +386,74 @@ public class ICUEditor extends CodeArea {
 		br.close();
 		originalText = sb.toString();
 		replaceText( originalText  );
-
+		
+		internalFileName = rulesFile;
+		icuFile = null;
     }
     
     public void loadFile(File icuFile) throws IOException {
+    	this.icuFile = icuFile;
+		internalFileName = null;
     	originalText = FileUtils.readFileToString(icuFile, StandardCharsets.UTF_8);
 		replaceText( originalText );
     }
     
-    
+	public String saveContentToFile() throws IOException {
+		return saveContentToFile( getText() );
+	}
+		
+	public String saveContentToFile(String newContent) throws IOException {
+		  if( this.getContent() == null )
+			  return null;
+		  
+		  FileWriter fstream = new FileWriter( icuFile );
+		  BufferedWriter out = new BufferedWriter( fstream );
+		  
+		  out.write( newContent );
+		  
+		  //Close the output stream
+		  out.close();
+		  
+		  originalText = newContent; // save a new baseline for comparison
+		  
+		  return icuFile.getName();
+	}
+		
+	public String saveContentToNewFile(Stage stage) throws IOException {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle( "Save ICU File" );
+		
+		if( icuFile != null ) {
+			fileChooser.setInitialFileName( icuFile.getName() );
+		} else if( internalFileName != null ) {
+			fileChooser.setInitialFileName( internalFileName );
+		}
+		File file = fileChooser.showSaveDialog( stage );
+		if (file == null) {  // the user cancelled the save
+			return null;
+		}
+		// Create file 
+		FileWriter fstream = new FileWriter( file );
+		BufferedWriter out = new BufferedWriter (fstream );
+		
+		String content = getText(); // a check for null content was made by the EditorTab
+		out.write( content );
+		
+		//Close the output stream
+		out.close();
+		
+		originalText = content; // save a new baseline for comparison
+		icuFile = file;
+		internalFileName = null;
+		
+		return file.getName();
+    }
+       
     public boolean hasContentChanged(String newText) {
     	return (! originalText.equals(newText) );
+    }
+       
+    public boolean isInitialSave() {
+    	return (icuFile == null);
     }
 }
