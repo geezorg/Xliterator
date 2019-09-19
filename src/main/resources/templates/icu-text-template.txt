@@ -1,0 +1,9 @@
+########################################################################
+# TRANSLITERATION System
+#
+# The TRANSLITERATION system for SCRIPT IN was designed for...
+#
+# http://example.com/path/to/documentation.html
+#
+# Originally prepared by YOUR NAME <your@address.com>
+########################################################################
