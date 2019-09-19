@@ -466,9 +466,9 @@ public final class XliteratorNew extends Application {
         uppercaseMenuItem.setToggleGroup( caseGroup );
         titlecaseMenuItem.setToggleGroup( caseGroup );
         
-        lowercaseMenuItem.setOnAction( evt -> setCaseOption( "lowercase" ) );
-        uppercaseMenuItem.setOnAction( evt -> setCaseOption( "uppercase" ) );
-        titlecaseMenuItem.setOnAction( evt -> setCaseOption( "titlecase" ) );
+        lowercaseMenuItem.setOnAction( evt -> setCaseOption( lowercaseMenuItem ) );
+        uppercaseMenuItem.setOnAction( evt -> setCaseOption( uppercaseMenuItem ) );
+        titlecaseMenuItem.setOnAction( evt -> setCaseOption( titlecaseMenuItem ) );
         caseConversionMenu.getItems().addAll( lowercaseMenuItem, uppercaseMenuItem, titlecaseMenuItem );
         
         preferencesMenu.getItems().addAll( makeDefaultMenuItem, caseConversionMenu ); 
@@ -707,7 +707,17 @@ public final class XliteratorNew extends Application {
     	textTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection );
     	setMenuItemSelection( outVariantMenu, variantOut );
     }
-    private void setCaseOption(String caseOption) {
+    private String caseOption = null;
+    private void setCaseOption(RadioMenuItem menuItem) {
+    	String label = menuItem.getText().toLowerCase();
+    	if( label.equals( caseOption ) ) {
+    		// already selected, so this is a toggle off:
+    		caseOption = null;
+    		menuItem.setSelected( false );
+    	}
+    	else {
+    		caseOption = label;
+    	}
     	textTab.setCaseOption( caseOption );
     	filesTab.setCaseOption( caseOption );
     }

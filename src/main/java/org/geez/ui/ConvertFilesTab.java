@@ -113,6 +113,7 @@ public class ConvertFilesTab extends Tab {
     			DocxProcessor docxProcessor = (DocxProcessor)processor;
     			ConvertDocxGenericUnicodeFont converter = (ConvertDocxGenericUnicodeFont)docxProcessor.getStashedConverter();
     			converter.setTargetTypefaces( targetTypefaces );
+    			converter.setCaseOption( caseOption );
     			docxProcessor.setFontOut( (String)convertButton.getProperties().get("fontOut") );
     			docxProcessor.addConverter( (ConvertFontSystem)converter );
     		}
