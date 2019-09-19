@@ -226,6 +226,8 @@ public final class XliteratorNew extends Application {
             com.apple.eawt.Application.getApplication().setDockIconImage( SwingFXUtils.fromFXImage(logoImage, null) );  
             defaultFont = "Kefa";
         }
+        textTab.setDefaultFont( defaultFont );
+        
         
         // Create and configure menus:
         
@@ -458,10 +460,16 @@ public final class XliteratorNew extends Application {
         final Menu caseConversionMenu = new Menu( "Convert Case" );
         final RadioMenuItem lowercaseMenuItem = new RadioMenuItem( "lowercase" );
         final RadioMenuItem uppercaseMenuItem = new RadioMenuItem( "UPPERCASE" );
+        final RadioMenuItem titlecaseMenuItem = new RadioMenuItem( "Title Case" );
         final ToggleGroup caseGroup = new ToggleGroup();
         lowercaseMenuItem.setToggleGroup( caseGroup );
         uppercaseMenuItem.setToggleGroup( caseGroup );
-        caseConversionMenu.getItems().addAll( lowercaseMenuItem, uppercaseMenuItem );
+        titlecaseMenuItem.setToggleGroup( caseGroup );
+        
+        lowercaseMenuItem.setOnAction( evt -> setCaseOption( "lowercase" ) );
+        uppercaseMenuItem.setOnAction( evt -> setCaseOption( "uppercase" ) );
+        titlecaseMenuItem.setOnAction( evt -> setCaseOption( "titlecase" ) );
+        caseConversionMenu.getItems().addAll( lowercaseMenuItem, uppercaseMenuItem, titlecaseMenuItem );
         
         preferencesMenu.getItems().addAll( makeDefaultMenuItem, caseConversionMenu ); 
         
@@ -604,13 +612,15 @@ public final class XliteratorNew extends Application {
         	setScriptOut( scriptOut );
         }
         
+        
+        selectedTransliteration  = prefs.get( transliterationIdPreference, null );
+        transliterationDirection = prefs.get( transliterationDirectionPreference, null );
+        
         variantOut = prefs.get( variantOutPreference, null );
         if( variantOut != null) {
         	setVariantOut( variantOut );
         }
-        
-        selectedTransliteration  = prefs.get( transliterationIdPreference, null );
-        transliterationDirection = prefs.get( transliterationDirectionPreference, null );
+
 
     }
     
@@ -694,8 +704,12 @@ public final class XliteratorNew extends Application {
     	variantOutText.setText( variantOut );
         loadInternalMenuItem.setDisable( false );
     	filesTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection );
-    	textTab.setVariantOut(variantOut, variantOut, variantOut);
+    	textTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection );
     	setMenuItemSelection( outVariantMenu, variantOut );
+    }
+    private void setCaseOption(String caseOption) {
+    	textTab.setCaseOption( caseOption );
+    	filesTab.setCaseOption( caseOption );
     }
     
     private void setUseEditor() {    	

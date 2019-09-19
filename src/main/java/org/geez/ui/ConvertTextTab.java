@@ -36,6 +36,7 @@ public class ConvertTextTab extends Tab {
 	private String variantOut = null;
 	private String selectedTransliteration = null;
 	private String transliterationDirection = null;
+	private String caseOption = null;
 
 	private ICUEditor editor = null; // used to get a handle on rules text
 	
@@ -130,7 +131,7 @@ public class ConvertTextTab extends Tab {
 		    	stringConverter = textStringConverts.get( transliterationKey );
 	    	}
 	    	
-	
+	    	stringConverter.setCaseOption( caseOption );
 	    	stringConverter.setText( textIn );
 	    	
 	    	textAreaOut.clear();
@@ -304,6 +305,10 @@ public class ConvertTextTab extends Tab {
     public void enableConvertBoth(boolean enable) {
     	convertButtonDown.setDisable( !enable );
     	convertButtonUp.setDisable( !enable );
+    }
+    
+    public void setCaseOption(String caseOption) {
+    	this.caseOption = caseOption;
     }
 	
 	private void errorAlert( Exception ex, String header ) {
