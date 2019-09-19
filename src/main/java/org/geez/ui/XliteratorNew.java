@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.prefs.Preferences;
 
 import org.controlsfx.control.StatusBar;
 import org.geez.convert.ProcessorManager;
@@ -72,15 +73,21 @@ public final class XliteratorNew extends Application {
 	private Menu outScriptMenu  = null;
 	private String selectedTransliteration = null;
 	private String transliterationDirection = null;
-    private String defaultFont = null;
+    private String defaultFont    = null;
     MenuItem loadInternalMenuItem = new MenuItem( "Load Selected Transliteration" );
-    private EditorTab editTab  = new EditorTab( "Mapping Editor" );
-	ConvertTextTab textTab  = new ConvertTextTab( "Convert Text" );
-	ConvertFilesTab filesTab = new ConvertFilesTab( "Convert Files" );
+    private EditorTab editTab     = new EditorTab( "Mapping Editor" );
+	ConvertTextTab textTab        = new ConvertTextTab( "Convert Text" );
+	ConvertFilesTab filesTab      = new ConvertFilesTab( "Convert Files" );
 	ProcessorManager processorManager = new ProcessorManager();
     
     private final int APP_WIDTH  = 800;
     private final int APP_HEIGHT = 800;
+    
+    private final String scriptInPreference   = "org.geez.preferences.scriptIn";
+    private final String scriptOutPreference  = "org.geez.preferences.scriptOut";
+    private final String variantOutPreference = "org.geez.preferences.variantOut";
+    private final String transliterationIdPreference        = "org.geez.preferences.transliterationId";
+    private final String transliterationDirectionPreference = "org.geez.preferences.transliterationDirection";
     
 	private XliteratorConfig config = null;
 
@@ -396,6 +403,7 @@ public final class XliteratorNew extends Application {
         final Menu helpMenu = new Menu( "Help" );
         final MenuItem aboutMenuItem = new MenuItem( "About" );
         helpMenu.getItems().add( aboutMenuItem );
+
         
         aboutMenuItem.setOnAction(
             new EventHandler<ActionEvent>() {
@@ -431,8 +439,14 @@ public final class XliteratorNew extends Application {
         helpMenu.getItems().add( demoMenuItem );
         demoMenuItem.setOnAction( evt -> { loadDemo(); saveMenuItem.setDisable(false); saveAsMenuItem.setDisable(false); } );
         //
-        //=========================== BEGIN HELP MENU =============================================
+        //=========================== END HELP MENU =============================================
         //
+        
+        
+        final Menu preferencesMenu = new Menu( "Preferences" );
+        final MenuItem makeDefaultMenuItem = new MenuItem( "Save Default Mapping" );
+        preferencesMenu.getItems().add( makeDefaultMenuItem );
+        makeDefaultMenuItem.setOnAction( evt -> saveDefaultMapping() );
         
         
         // create a menubar 
@@ -446,7 +460,7 @@ public final class XliteratorNew extends Application {
         updateStatusMessage();
      
         MenuBar rightBar = new MenuBar();
-        rightBar.getMenus().addAll( helpMenu );
+        rightBar.getMenus().addAll( preferencesMenu, helpMenu );
         Region spacer = new Region();
         spacer.getStyleClass().add("menu-bar");
         HBox.setHgrow(spacer, Priority.SOMETIMES);
@@ -467,6 +481,9 @@ public final class XliteratorNew extends Application {
         editTab.getEditor().prefHeightProperty().bind( stage.heightProperty().multiply(0.8) );
 
         scene.getWindow().addEventFilter( WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent );
+        
+        // Check for a saved user menu preference:
+        checkPreferences();
         	
         stage.show();
     }
@@ -546,6 +563,40 @@ public final class XliteratorNew extends Application {
         Application.launch(args);
     }
 
+    private void saveDefaultMapping() {
+        // Retrieve the user preference node for the package com.mycompany
+        Preferences prefs = Preferences.userNodeForPackage( org.geez.transliterate.XliteratorConfig.class );
+
+        prefs.put( scriptInPreference, scriptIn );
+        prefs.put( scriptOutPreference, scriptOut );
+        prefs.put( variantOutPreference, variantOut );
+        prefs.put( transliterationIdPreference, selectedTransliteration );
+        prefs.put( transliterationDirectionPreference, transliterationDirection );
+    }
+    
+    private void checkPreferences() {
+        // Retrieve the user preference node for the package com.mycompany
+        Preferences prefs = Preferences.userNodeForPackage( org.geez.transliterate.XliteratorConfig.class );
+
+        scriptIn   = prefs.get( scriptInPreference, null );
+        if( scriptIn != null) {
+        	setScriptIn( scriptIn );
+        }
+        
+        scriptOut  = prefs.get( scriptOutPreference, null );
+        if( scriptOut != null) {
+        	setScriptOut( scriptOut );
+        }
+        
+        variantOut = prefs.get( variantOutPreference, null );
+        if( variantOut != null) {
+        	setVariantOut( variantOut );
+        }
+        
+        selectedTransliteration  = prefs.get( transliterationIdPreference, null );
+        transliterationDirection = prefs.get( transliterationDirectionPreference, null );
+
+    }
     
     Text scriptInText = new Text( "[None]" );
     Text scriptOutText = new Text( "[None]" );
@@ -609,6 +660,7 @@ public final class XliteratorNew extends Application {
         loadInternalMenuItem.setDisable( true );
     	filesTab.setScriptIn( scriptIn );
     	textTab.setScriptIn( scriptIn );
+    	setMenuItemSelection( inScriptMenu, scriptIn );
     }
     private void setScriptOut(String scriptOut) {
     	this.scriptOut = scriptOut;
@@ -619,6 +671,7 @@ public final class XliteratorNew extends Application {
         loadInternalMenuItem.setDisable( true );
     	filesTab.setScriptOut( scriptIn );
     	textTab.setScriptOut(scriptOut);
+    	setMenuItemSelection( outScriptMenu, scriptOut );
     }
     private void setVariantOut(String variantOut) {
     	this.variantOut = variantOut;
@@ -626,6 +679,7 @@ public final class XliteratorNew extends Application {
         loadInternalMenuItem.setDisable( false );
     	filesTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection );
     	textTab.setVariantOut(variantOut, variantOut, variantOut);
+    	setMenuItemSelection( outVariantMenu, variantOut );
     }
     
     private void setUseEditor() {    	
@@ -635,6 +689,21 @@ public final class XliteratorNew extends Application {
 	    		if ( "Use Editor".equals( rItem.getText() ) ) {
 	    			rItem.setSelected( true );
 	    	    	selectedTransliteration = rItem.getText();
+	    		}
+	    		else {
+	    			rItem.setSelected( false );
+	    		}
+    		}
+    	}
+    }
+    
+    
+    private void setMenuItemSelection(Menu menu, String selection) {    	
+    	for(MenuItem item: menu.getItems() ) {
+    		if( item.getClass() == RadioMenuItem.class ) {
+	    		RadioMenuItem rItem = (RadioMenuItem)item;
+	    		if ( selection.equals( rItem.getText() ) ) {
+	    			rItem.setSelected( true );
 	    		}
 	    		else {
 	    			rItem.setSelected( false );
