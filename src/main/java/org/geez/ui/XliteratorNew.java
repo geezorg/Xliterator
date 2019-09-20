@@ -73,9 +73,9 @@ public final class XliteratorNew extends Application {
 	private Menu outScriptMenu  = null;
 	private String selectedTransliteration  = null;
 	private String transliterationDirection = null;
-    private String defaultFont    = null;
+    private String defaultFontFamily      = null;
     private MenuItem loadInternalMenuItem = new MenuItem( "Load Selected Transliteration" );
-    private EditorTab editTab     = new EditorTab( "Mapping Editor" );
+    private EditorTab editTab             = new EditorTab( "Mapping Editor" );
     private ConvertTextTab textTab        = new ConvertTextTab( "Convert Text" );
     private ConvertFilesTab filesTab      = new ConvertFilesTab( "Convert Files" );
     private ProcessorManager processorManager = new ProcessorManager();
@@ -227,9 +227,9 @@ public final class XliteratorNew extends Application {
         String osName = System.getProperty("os.name");
         if( osName.equals("Mac OS X") ) {
             com.apple.eawt.Application.getApplication().setDockIconImage( SwingFXUtils.fromFXImage(logoImage, null) );  
-            defaultFont = "Kefa";
+            defaultFontFamily = "Kefa";
         }
-        textTab.setDefaultFont( defaultFont );
+        textTab.setDefaultFontFamily( defaultFontFamily );
         
         
         // Create and configure menus:
@@ -357,7 +357,7 @@ public final class XliteratorNew extends Application {
         //=========================== END FILES TAB =============================================
 
         //=========================== BEGIN EDITOR TAB ===========================================
-        editTab.setDefaultFont( defaultFont );
+        editTab.setDefaultFontFamily( defaultFontFamily );
         editTab.setClosable( false ); // future set to true when multiple editors are supported
         editTab.setup(saveMenuItem, saveAsMenuItem);
         editTab.setOnSelectionChanged( evt -> {
@@ -378,7 +378,7 @@ public final class XliteratorNew extends Application {
         
         //=========================== BEGIN TEXT TAB ============================================
         textTab.setup( editTab.getEditor() );
-        textTab.setDefaultFont( defaultFont );
+        textTab.setDefaultFontFamily( defaultFontFamily );
         textTab.setClosable( false );
         textTab.setOnSelectionChanged( evt -> {
         	if( textTab.isSelected() ) {

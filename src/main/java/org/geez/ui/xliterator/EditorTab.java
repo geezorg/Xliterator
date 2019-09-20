@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.prefs.Preferences;
 
 import org.fxmisc.flowless.VirtualizedScrollPane;
-import org.fxmisc.richtext.StyleClassedTextArea;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -132,7 +131,7 @@ public class EditorTab extends XliteratorTab {
         	prefs.put( editorFontFamilyPref, fontFamily );
         }
         if( fontSize != null ) {
-        	prefs.put( editorFontSizePref, fontSize );
+        	prefs.put( editorFontSizePref, (fontSize==null) ? defaultFontSize : fontSize );
         }
     }
     

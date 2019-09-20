@@ -85,12 +85,12 @@ public class ConvertTextTab extends XliteratorTab {
         textAreaOut.setPrefHeight(313);
         // textAreaIn.setFont( Font.font( defaultFont, FontWeight.NORMAL, 12) );
 		if(! checkPreferences() ) {
-	        textAreaIn.setStyle("-fx-font-family: '" + defaultFont + "'; -fx-font-size: 12;"  );
-	        textAreaIn.getProperties().put( "font-family", defaultFont );
-	        textAreaIn.getProperties().put( "font-size", "12" );
-	        textAreaOut.setStyle("-fx-font-family: '" + defaultFont + "'; -fx-font-size: 12;"  );
-	        textAreaOut.getProperties().put( "font-family", defaultFont );
-	        textAreaOut.getProperties().put( "font-size", "12" );
+	        textAreaIn.setStyle("-fx-font-family: '" + defaultFontFamily + "'; -fx-font-size: " + defaultFontSize + ";"  );
+	        textAreaIn.getProperties().put( "font-family", defaultFontFamily );
+	        textAreaIn.getProperties().put( "font-size", defaultFontSize );
+	        textAreaOut.setStyle("-fx-font-family: '" + defaultFontFamily + "'; -fx-font-size:" + defaultFontSize + ";"  );
+	        textAreaOut.getProperties().put( "font-family", defaultFontFamily );
+	        textAreaOut.getProperties().put( "font-size", defaultFontSize );
 		}
         
        //  Menu textAreaInFontMenu = createFontMenu( "textAreaIn" );
@@ -145,12 +145,12 @@ public class ConvertTextTab extends XliteratorTab {
         Region hspacer = new Region();
         hspacer.prefWidth( 200 );
         HBox.setHgrow(hspacer, Priority.SOMETIMES);
-        HBox hUpDownButtonBox = new HBox( createFontChoiceBox( textAreaOut ), textAreaOutIncreaseFontSizeButton, textAreaOutDecreaseFontSizeButton, hspacer, convertButtonDown, convertButtonUp );
-        hUpDownButtonBox.setAlignment(Pos.CENTER_LEFT);
-        hUpDownButtonBox.setPadding(new Insets(2, 2, 2, 2));
-        hUpDownButtonBox.setSpacing( 4 );
+        HBox textAreaOutMenuBox = new HBox( createFontChoiceBox( textAreaOut ), textAreaOutIncreaseFontSizeButton, textAreaOutDecreaseFontSizeButton, hspacer, convertButtonDown, convertButtonUp );
+        textAreaOutMenuBox.setAlignment(Pos.CENTER_LEFT);
+        textAreaOutMenuBox.setPadding(new Insets(2, 2, 2, 2));
+        textAreaOutMenuBox.setSpacing( 4 );
         
-        VBox textVbox = new VBox( textAreaInMenuBox, textAreaIn, hUpDownButtonBox, textAreaOut );
+        VBox textVbox = new VBox( textAreaInMenuBox, textAreaIn, textAreaOutMenuBox, textAreaOut );
         textVbox.autosize();
         this.setContent( textVbox );
         

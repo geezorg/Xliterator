@@ -22,7 +22,6 @@ import org.geez.convert.docx.DocxProcessor;
 import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
 import org.geez.convert.fontsystem.ConvertFontSystem;
 import org.geez.ui.Xliterator;
-import org.geez.ui.XliteratorNew;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -65,7 +64,7 @@ public class ConvertFilesTab extends XliteratorTab {
 
 	public ConvertFilesTab(String title) {
 		super( title );
-		this.defaultFont = "Arial";
+		this.defaultFontFamily = "Arial";
 		checkPreferences();
 	}
     
@@ -225,7 +224,7 @@ public class ConvertFilesTab extends XliteratorTab {
         VBox listVBox = new VBox( listView );
         listView.autosize();
         
-        ChoiceBox<String> outputFontMenu = createFontChoiceBox( null, (fontFamily==null)? defaultFont : fontFamily );
+        ChoiceBox<String> outputFontMenu = createFontChoiceBox( null, (fontFamily==null)? defaultFontFamily : fontFamily );
         HBox filesTabMenuBox = new HBox( new Text( "Output Font:" ), outputFontMenu, new Text( "Document Fonts:" ), documentFontsMenu );
         filesTabMenuBox.setPadding(new Insets(2, 2, 2, 2));
         filesTabMenuBox.setSpacing(4);
