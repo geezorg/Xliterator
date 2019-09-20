@@ -40,7 +40,9 @@ import javafx.scene.control.Separator;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -455,10 +457,12 @@ public final class XliteratorNew extends Application {
         //=========================== END HELP MENU =============================================
         //
         
-        
+        //
+        //=========================== BEGIN PREFERENCES MENU ====================================
+        //
         final Menu preferencesMenu = new Menu( "Preferences" );
         final MenuItem makeDefaultMappingMenuItem = new MenuItem( "Save Default Mapping" );
-        final MenuItem makeDefaultFontsMenuItem = new MenuItem( "Save Font Selections" );
+        final MenuItem makeDefaultFontsMenuItem   = new MenuItem( "Save Font Selections" );
 
         makeDefaultMappingMenuItem.setOnAction( evt -> saveDefaultMapping() );
         makeDefaultFontsMenuItem.setOnAction( evt -> saveDefaultFontSelections() );
@@ -477,13 +481,62 @@ public final class XliteratorNew extends Application {
         titlecaseMenuItem.setOnAction( evt -> setCaseOption( titlecaseMenuItem ) );
         caseConversionMenu.getItems().addAll( lowercaseMenuItem, uppercaseMenuItem, titlecaseMenuItem );
         
-        preferencesMenu.getItems().addAll( makeDefaultMappingMenuItem, makeDefaultFontsMenuItem, caseConversionMenu ); 
+        preferencesMenu.getItems().addAll( makeDefaultMappingMenuItem, makeDefaultFontsMenuItem, caseConversionMenu );
+        //
+        //=========================== END PREFERENCES MENU ======================================
+        //
+        
+        
+        //
+        //=========================== BEGIN TABS MENU ===========================================
+        //
+        final Menu tabsMenu = new Menu( "Tabs" );
+        MenuItem editorTabMenuItem = new MenuItem( "Editor" );
+        MenuItem fileConverterTabMenuItem = new MenuItem( "File Converter" );
+        MenuItem textConverterTabMenuItem = new MenuItem( "Text Converter" );
+        
+        Image visibleIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
+        ImageView fileConverterOnView = new ImageView( visibleIcon );
+        ImageView textConverterOnView = new ImageView( visibleIcon );
+        ImageView editorOnView = new ImageView( visibleIcon );
+        
+        editorTabMenuItem.setGraphic( editorOnView );
+        textConverterTabMenuItem.setGraphic( textConverterOnView );
+
+
+        
+        tabsMenu.getItems().addAll( editorTabMenuItem, fileConverterTabMenuItem, textConverterTabMenuItem );
+        
+        ColorAdjust monochrome = new ColorAdjust();
+        monochrome.setSaturation(-1);
+        
+        ImageView fileConverterOffView = new ImageView( visibleIcon );
+        fileConverterOffView.setEffect(monochrome);
+        ImageView textConverterOffView = new ImageView( visibleIcon );
+        textConverterOffView.setEffect(monochrome);
+        ImageView editorOffView = new ImageView( visibleIcon );
+        editorOffView.setEffect(monochrome);
+        
+        fileConverterTabMenuItem.setGraphic( fileConverterOffView );
+    	fileConverterTabMenuItem.getProperties().put( "show", false );
+    	
+        fileConverterTabMenuItem.setOnAction( evt -> {
+        	boolean show = (boolean)fileConverterTabMenuItem.getProperties().get( "show" );
+        	show =! show;
+        	fileConverterTabMenuItem.getProperties().put( "show", show );
+        	fileConverterTabMenuItem.setGraphic( (show) ? fileConverterOnView : fileConverterOffView );
+        });
+        
+        //
+        //=========================== END TABS MENU =============================================
+        //
+        
         
         // create a menubar 
         final MenuBar leftBar = new MenuBar();  
   
         // add menu to menubar 
-        leftBar.getMenus().addAll( fileMenu, inScriptMenu, outScriptMenu , outVariantMenu );
+        leftBar.getMenus().addAll( fileMenu, tabsMenu, inScriptMenu, outScriptMenu , outVariantMenu );
 
         
         statusBar.setText( "" );
