@@ -17,7 +17,8 @@ public abstract class XliteratorTab extends Tab {
 	protected String selectedTransliteration = null;
 	protected String transliterationDirection = null;
 	protected String caseOption = null;
-	protected String defaultFont = null;
+	protected String defaultFontFamily = null;
+	protected String defaultFontSize = "12";
 	protected String fontFamily = null;
 	protected String fontSize = null;
 	
@@ -26,8 +27,14 @@ public abstract class XliteratorTab extends Tab {
 		super(title);
 	}
 
-    public void setDefaultFont(String defaultFont) {
-    	this.defaultFont = defaultFont;
+    public void setDefaultFontFamily(String defaultFontFamily) {
+    	this.defaultFontFamily = defaultFontFamily;
+    }
+    
+
+    public void setDefaultFontFamily(String defaultFontFamily, String defaultFontSize) {
+    	this.defaultFontFamily = defaultFontFamily;
+    	this.defaultFontSize = defaultFontSize;
     }
 
     
@@ -83,11 +90,11 @@ public abstract class XliteratorTab extends Tab {
     	Menu menu = new Menu();
     	menu.setId( "transparent" );
     	ChoiceBox<String> choiceBox = new ChoiceBox<>();
-    	for(int i=10 ; i <= 24; i++ ) {
+    	for(int i = 10 ; i <= 24; i++ ) {
     		String size = String.valueOf(i);
     		choiceBox.getItems().add( size );
     	}
-    	choiceBox.getSelectionModel().select( "12" );
+    	choiceBox.getSelectionModel().select( (fontSize==null) ? defaultFontSize : fontSize );
         choiceBox.setOnAction( evt -> setFontSize( component, choiceBox.getSelectionModel().getSelectedItem() ) );
     	menu.setGraphic( choiceBox );
         
@@ -108,7 +115,11 @@ public abstract class XliteratorTab extends Tab {
     
     
     protected ChoiceBox<String> createFontChoiceBox( StyleClassedTextArea component ) {
-    	return createFontChoiceBox(component, defaultFont);
+    	String defaultSelection = (String)component.getProperties().get( "font-family" );
+    	if( defaultSelection == null ) {
+    		defaultSelection = (fontFamily==null) ? defaultFontFamily : fontFamily ;
+    	}
+    	return createFontChoiceBox(component, defaultSelection);
     }
     
     
@@ -122,7 +133,7 @@ public abstract class XliteratorTab extends Tab {
       
     public void setVariantOut( String variantOut, String selectedTransliteration, String transliterationDirection ) {
     	this.variantOut = variantOut;
-    	this.selectedTransliteration = selectedTransliteration;
+    	this.selectedTransliteration  = selectedTransliteration;
     	this.transliterationDirection = transliterationDirection;
     }
     
