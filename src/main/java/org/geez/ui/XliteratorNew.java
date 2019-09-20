@@ -77,8 +77,9 @@ public final class XliteratorNew extends Application {
 	private String selectedTransliteration  = null;
 	private String transliterationDirection = null;
     private String defaultFontFamily      = null;
+    TabPane tabpane = new TabPane();
     private MenuItem loadInternalMenuItem = new MenuItem( "Load Selected Transliteration" );
-    private EditorTab editorTab             = new EditorTab( "Mapping Editor" );
+    private EditorTab editorTab           = new EditorTab( "Mapping Editor" );
     private ConvertTextTab textTab        = new ConvertTextTab( "Convert Text" );
     private ConvertFilesTab filesTab      = new ConvertFilesTab( "Convert Files" );
     private ProcessorManager processorManager = new ProcessorManager();
@@ -146,7 +147,7 @@ public final class XliteratorNew extends Application {
     	return menu;
     }
     
-    private void tabToggler( MenuItem menuItem, XliteratorTab tab , TabPane tabpane, ImageView onView, ImageView offFile){
+    private void tabToggler( MenuItem menuItem, XliteratorTab tab, ImageView onView, ImageView offFile){
     	boolean show = (boolean)menuItem.getProperties().get( "show" );
     	show =! show;
     	menuItem.getProperties().put( "show", show );
@@ -393,7 +394,10 @@ public final class XliteratorNew extends Application {
         			saveAsMenuItem.setDisable( false );
         		}
         	}
+    		System.out.println( "Selected: " + editorTab.getText() + " isSelected: " + editorTab.isSelected() );
         } );
+
+
         //=========================== END EDITOR TAB ==============================================
         
         //=========================== BEGIN TEXT TAB ============================================
@@ -412,7 +416,6 @@ public final class XliteratorNew extends Application {
         //=========================== END TEXT TAB =============================================
         
         // Setup the tabs:
-        TabPane tabpane = new TabPane();
         tabpane.getTabs().addAll( textTab );
         //
         //  End of Tab & TabPane setup
@@ -515,43 +518,40 @@ public final class XliteratorNew extends Application {
 
         tabsMenu.getItems().addAll( editorTabMenuItem, fileConverterTabMenuItem, textConverterTabMenuItem );
         
+        Image visibleIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
         ColorAdjust monochrome = new ColorAdjust();
         monochrome.setSaturation(-1);
         
-        
-        Image visibleIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
 
         ImageView fileConverterOnView = new ImageView( visibleIcon );
         ImageView fileConverterOffView = new ImageView( visibleIcon );
         fileConverterOffView.setEffect( monochrome );
         fileConverterTabMenuItem.setGraphic( fileConverterOffView );
     	fileConverterTabMenuItem.getProperties().put( "show", false );	
-        fileConverterTabMenuItem.setOnAction( evt -> tabToggler(fileConverterTabMenuItem, filesTab, tabpane,  fileConverterOnView, fileConverterOffView) );
+        fileConverterTabMenuItem.setOnAction( evt -> tabToggler(fileConverterTabMenuItem, filesTab, fileConverterOnView, fileConverterOffView) );
    
         ImageView textConverterOnView = new ImageView( visibleIcon );
         ImageView textConverterOffView = new ImageView( visibleIcon );
         textConverterOffView.setEffect( monochrome );
         textConverterTabMenuItem.setGraphic( textConverterOnView );
         textConverterTabMenuItem.getProperties().put( "show", true );	
-        textConverterTabMenuItem.setOnAction( evt -> tabToggler(textConverterTabMenuItem, textTab, tabpane,  textConverterOnView, textConverterOffView) );
+        textConverterTabMenuItem.setOnAction( evt -> tabToggler(textConverterTabMenuItem, textTab, textConverterOnView, textConverterOffView) );
 
         ImageView editorOnView = new ImageView( visibleIcon );
         ImageView editorOffView = new ImageView( visibleIcon );
         editorOffView.setEffect( monochrome );
         editorTabMenuItem.setGraphic( editorOffView );
         editorTabMenuItem.getProperties().put( "show", false );	
-        editorTabMenuItem.setOnAction( evt -> tabToggler(editorTabMenuItem, editorTab, tabpane,  editorOnView, editorOffView) );
-
-        
+        editorTabMenuItem.setOnAction( evt -> tabToggler(editorTabMenuItem, editorTab, editorOnView, editorOffView) );
         //
         //=========================== END TABS MENU =============================================
         //
         
         
-        // create a menubar 
+        // create the left menubar 
         final MenuBar leftBar = new MenuBar();  
   
-        // add menu to menubar 
+        // add menus to the left menubar 
         leftBar.getMenus().addAll( fileMenu, tabsMenu, inScriptMenu, outScriptMenu , outVariantMenu );
 
         
@@ -576,6 +576,7 @@ public final class XliteratorNew extends Application {
         ClassLoader classLoader = this.getClass().getClassLoader();
         scene.getStylesheets().add( classLoader.getResource("styles/xliterator.css").toExternalForm() );
         stage.setScene( scene ); 
+        
         editorTab.getEditor().setStyle( scene );
         editorTab.getEditor().prefHeightProperty().bind( stage.heightProperty().multiply(0.8) );
 
@@ -845,9 +846,37 @@ public final class XliteratorNew extends Application {
     			: "templates/icu-text-template.txt" 
     	;
     	try {
-	    	editorTab.getEditor().loadResourceFile( template );
+    		EditorTab newTab = new EditorTab( "Untitled" );
+            // editorTab.setup(saveMenuItem, saveAsMenuItem);
+    		newTab.getEditor().loadResourceFile( template );
+    		tabpane.getTabs().add( newTab );
+    		
+    		newTab.setOnSelectionChanged( evt ->
+    			System.out.println( "Selected: " + newTab.getText() + " isSelected: " + newTab.isSelected() )
+    		);
+    		editorTab = newTab;
+    	}
+    	catch(Exception ex) {
+        	errorAlert(ex, "Error opening: " + template );
+    	}
+    	
+    }
+    
+    
+    private void loadNewFile(String title, String type) {
+    	if(! checkUnsavedChanges() ) {
+    		return;
+    	}
 
-	    	editorTab.reset( "Untitled" );
+    	
+    	String template = ( "XML".equals(type) )
+    			? "templates/icu-xml-template.xml"
+    			: "templates/icu-text-template.txt" 
+    	;
+    	try {
+    		editorTab.getEditor().loadResourceFile( template );
+
+    		editorTab.reset( "Untitled" );
     	}
     	catch(Exception ex) {
         	errorAlert(ex, "Error opening: " + template );

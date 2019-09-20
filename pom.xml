@@ -53,6 +53,11 @@
     		<artifactId>jaxb-runtime</artifactId>
     		<version>2.3.1</version>
 		</dependency>
+		<dependency>
+			<groupId>de.endrullis.draggabletabs</groupId>
+			<artifactId>draggabletabs</artifactId>
+			<version>1.0.3</version>
+		</dependency>
 	</dependencies>
 
 	<build>
