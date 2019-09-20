@@ -61,11 +61,13 @@ public abstract class XliteratorTab extends Tab {
 			component.setStyle( "-fx-font-family: '" + component.getProperties().get("font-family") + "'; -fx-font-size: " + fontSize + ";" ); 
 		// }
     		component.getProperties().put( "font-size", fontSize );
+    		this.fontSize = fontSize;
     }
     
-    protected void setFontFamily( StyleClassedTextArea component, String font ) {
-    		component.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + component.getProperties().get("font-size") + ";" ); 
-    		component.getProperties().put( "font-family", font );
+    protected void setFontFamily( StyleClassedTextArea component, String fontFamily ) {
+    		component.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + component.getProperties().get("font-size") + ";" ); 
+    		component.getProperties().put( "font-family", fontFamily );
+    		this.fontFamily = fontFamily;
     }
     
     

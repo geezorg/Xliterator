@@ -225,10 +225,17 @@ public class ConvertTextTab extends XliteratorTab {
     public void saveDefaultFontSelections() {
         Preferences prefs = Preferences.userNodeForPackage( ConvertTextTab.class );
         
-        prefs.put( textAreaInFontFacePref,  (String)textAreaIn.getProperties().get( "font-family" ) );
-        prefs.put( textAreaInFontSizePref,  (String)textAreaIn.getProperties().get( "font-size" ) );
-        prefs.put( textAreaOutFontFacePref, (String)textAreaOut.getProperties().get( "font-family" ) );
-        prefs.put( textAreaOutFontSizePref, (String)textAreaOut.getProperties().get( "font-size" ) );
+        String value = (String)textAreaIn.getProperties().get( "font-family" );
+        if( value != null ) {
+        	prefs.put( textAreaInFontFacePref,  value );
+        	prefs.put( textAreaInFontSizePref,  (String)textAreaIn.getProperties().get( "font-size" ) );
+        }
+        
+        value = (String)textAreaOut.getProperties().get( "font-family" );
+        if( value != null ) {
+        	prefs.put( textAreaOutFontFacePref, value );
+        	prefs.put( textAreaOutFontSizePref, (String)textAreaOut.getProperties().get( "font-size" ) );
+        }
     }
       
     private boolean checkPreferences() {
