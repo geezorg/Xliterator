@@ -31,13 +31,39 @@ public abstract class XliteratorTab extends Tab {
     }
 
     
-    private void setFontSize( StyleClassedTextArea component, String fontSize  ) {
-		if( component.getProperties().get( "font-size") == null ) {
-			component.setStyle( "-fx-font-family: '" + component.getProperties().get("font-family") + "'; -fx-font-size: " + fontSize + ";" ); 
-		}
+
+    protected void incrementFontSize(StyleClassedTextArea component) {
+    	// StyleClassedTextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
+
+    	String fontFamily = (String) component.getProperties().get("font-family");
+    	int newSize = Integer.parseInt( (String)component.getProperties().get("font-size") ) + 1;
+    	if( newSize <= 24 ) {
+    		String fontSize = String.valueOf( newSize );
+    		component.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
+    		component.getProperties().put( "font-size", fontSize );
+    	}
+    }
+
+    protected void decrementFontSize(StyleClassedTextArea component) {
+    	// StyleClassedTextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
+
+    	String fontFamily = (String) component.getProperties().get("font-family");
+    	int newSize = Integer.parseInt( (String)component.getProperties().get("font-size") ) - 1;
+    	if( newSize >= 10 ) {
+    		String fontSize = String.valueOf( newSize );
+    		component.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
+    		component.getProperties().put( "font-size", fontSize );
+    	}
     }
     
-    private void setFont( StyleClassedTextArea component, String font ) {
+    protected void setFontSize( StyleClassedTextArea component, String fontSize  ) {
+		// if( component.getProperties().get( "font-size") == null ) {
+			component.setStyle( "-fx-font-family: '" + component.getProperties().get("font-family") + "'; -fx-font-size: " + fontSize + ";" ); 
+		// }
+    		component.getProperties().put( "font-size", fontSize );
+    }
+    
+    protected void setFont( StyleClassedTextArea component, String font ) {
     		component.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + component.getProperties().get("font-size") + ";" ); 
     		component.getProperties().put( "font-family", font );
     }

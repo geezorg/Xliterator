@@ -30,31 +30,6 @@ public class ConvertTextTab extends XliteratorTab {
 	public ConvertTextTab(String title) {
 		super( title );
 	}    
-
-    private void incrementFontSize(String component) {
-    	StyleClassedTextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
-
-    	String fontFamily = (String) textArea.getProperties().get("font-family");
-    	int newSize = Integer.parseInt( (String)textArea.getProperties().get("font-size") ) + 1;
-    	if( newSize <= 24 ) {
-    		String fontSize = String.valueOf( newSize );
-    		textArea.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
-    		textArea.getProperties().put( "font-size", fontSize );
-    	}
-    }
-
-    private void decrementFontSize(String component) {
-    	StyleClassedTextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
-
-    	String fontFamily = (String) textArea.getProperties().get("font-family");
-    	int newSize = Integer.parseInt( (String)textArea.getProperties().get("font-size") ) - 1;
-    	if( newSize >= 10 ) {
-    		String fontSize = String.valueOf( newSize );
-    		textArea.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
-    		textArea.getProperties().put( "font-size", fontSize );
-    	}
-    }
-    
     
     HashMap<String,ConvertTextString> textStringConverts = new HashMap<String,ConvertTextString>();    
     private void convertTextArea(StyleClassedTextArea textAreaIn, StyleClassedTextArea textAreaOut, String direction) {
@@ -118,10 +93,10 @@ public class ConvertTextTab extends XliteratorTab {
         textAreaInMenuBox.setPadding(new Insets(2, 2, 2, 2));
         textAreaInMenuBox.setSpacing(4);
         textAreaInIncreaseFontSizeButton.setOnAction( event -> {
-        	incrementFontSize( "textAreaIn" );
+        	incrementFontSize( textAreaIn );
         });
         textAreaInDecreaseFontSizeButton.setOnAction( event -> {
-        	decrementFontSize( "textAreaIn" );
+        	decrementFontSize( textAreaIn );
         });
         // textAreaInMenuBox.setPrefHeight( 32.0 );
         
@@ -153,10 +128,10 @@ public class ConvertTextTab extends XliteratorTab {
         Button textAreaOutIncreaseFontSizeButton = new Button( "+" ); 
         Button textAreaOutDecreaseFontSizeButton = new Button( "-" );
         textAreaOutIncreaseFontSizeButton.setOnAction( event -> {
-        	incrementFontSize( "textAreaOut" );
+        	incrementFontSize( textAreaOut );
         });
         textAreaOutDecreaseFontSizeButton.setOnAction( event -> {
-        	decrementFontSize( "textAreaOut" );
+        	decrementFontSize( textAreaOut );
         });
         Region hspacer = new Region();
         hspacer.prefWidth( 200 );
