@@ -595,7 +595,7 @@ public final class XliteratorNew extends Application {
 
     private void saveDefaultMapping() {
         // Retrieve the user preference node for the package com.mycompany
-        Preferences prefs = Preferences.userNodeForPackage( org.geez.ui.xliterator.XliteratorConfig.class );
+        Preferences prefs = Preferences.userNodeForPackage( XliteratorNew.class );
 
         prefs.put( scriptInPreference, scriptIn );
         prefs.put( scriptOutPreference, scriptOut );
