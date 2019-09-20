@@ -2,13 +2,14 @@ package org.geez.ui.xliterator;
 
 import org.fxmisc.richtext.StyleClassedTextArea;
 
+import de.endrullis.draggabletabs.DraggableTab;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Menu;
 import javafx.scene.control.Tab;
 
-public abstract class XliteratorTab extends Tab {
+public abstract class XliteratorTab extends DraggableTab {
 	
 	protected boolean converted = false;
 	protected String scriptIn = null;
