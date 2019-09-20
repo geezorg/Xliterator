@@ -14,6 +14,7 @@ import org.geez.ui.xliterator.ConvertFilesTab;
 import org.geez.ui.xliterator.ConvertTextTab;
 import org.geez.ui.xliterator.EditorTab;
 import org.geez.ui.xliterator.XliteratorConfig;
+import org.geez.ui.xliterator.XliteratorTab;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -77,7 +78,7 @@ public final class XliteratorNew extends Application {
 	private String transliterationDirection = null;
     private String defaultFontFamily      = null;
     private MenuItem loadInternalMenuItem = new MenuItem( "Load Selected Transliteration" );
-    private EditorTab editTab             = new EditorTab( "Mapping Editor" );
+    private EditorTab editorTab             = new EditorTab( "Mapping Editor" );
     private ConvertTextTab textTab        = new ConvertTextTab( "Convert Text" );
     private ConvertFilesTab filesTab      = new ConvertFilesTab( "Convert Files" );
     private ProcessorManager processorManager = new ProcessorManager();
@@ -138,12 +139,29 @@ public final class XliteratorNew extends Application {
     	
     	// Menu for the first edtior tab:
     	menu.getItems().add( new SeparatorMenuItem() );
-    	RadioMenuItem editTabItem = new RadioMenuItem( "Use Editor" );
-    	editTabItem.setOnAction( evt -> setUseEditor() );
-    	menu.getItems().add( editTabItem );
+    	RadioMenuItem editorTabItem = new RadioMenuItem( "Use Editor" );
+    	editorTabItem.setOnAction( evt -> setUseEditor() );
+    	menu.getItems().add( editorTabItem );
         		
     	return menu;
     }
+    
+    private void tabToggler( MenuItem menuItem, XliteratorTab tab , TabPane tabpane, ImageView onView, ImageView offFile){
+    	boolean show = (boolean)menuItem.getProperties().get( "show" );
+    	show =! show;
+    	menuItem.getProperties().put( "show", show );
+    	
+    	if( show ) {
+    		tabpane.getTabs().add( tab );
+    		menuItem.setGraphic( onView );
+    	}
+    	else {
+    		tabpane.getTabs().remove( tab );
+    		menuItem.setGraphic( offFile );
+    	}
+    	
+    	
+    };
     
     
     private Menu createOutScriptsMenu(String outScript) {
@@ -256,12 +274,12 @@ public final class XliteratorNew extends Application {
         fileMenuItem.setDisable( true );
         
         final MenuItem saveMenuItem = new MenuItem( "_Save" );
-        saveMenuItem.setOnAction( actionEvent -> editTab.saveContent( stage, false ) );
+        saveMenuItem.setOnAction( actionEvent -> editorTab.saveContent( stage, false ) );
         saveMenuItem.setDisable(true);
         saveMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN));
         
         final MenuItem saveAsMenuItem = new MenuItem( "Save As..." );
-        saveAsMenuItem.setOnAction( actionEvent ->  editTab.saveContent( stage, true ) );
+        saveAsMenuItem.setOnAction( actionEvent ->  editorTab.saveContent( stage, true ) );
         saveAsMenuItem.setDisable(true);
         saveAsMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN) );
 
@@ -283,11 +301,11 @@ public final class XliteratorNew extends Application {
                         }
                         try {
                         	// editor.replaceText( FileUtils.readFileToString(icuFile, StandardCharsets.UTF_8) );
-                        	editTab.loadFile( externalIcuFile );
+                        	editorTab.loadFile( externalIcuFile );
                         	setUseEditor(); // TODO: set transliteration direction?
                         	textTab.enableConvertForward( true );
                         	textTab.enableConvertReverse( false );
-                        	if( editTab.getEditor().getText().contains( "↔" ) ) {
+                        	if( editorTab.getEditor().getText().contains( "↔" ) ) {
                         		transliterationDirection = "both";
                                 textTab.enableConvertBoth( true );
                         	} else {
@@ -313,8 +331,8 @@ public final class XliteratorNew extends Application {
                     		return;
                     	}
                     	try {
-                    		editTab.getEditor().loadResourceFile( selectedTransliteration );
-                        	editTab.setText( selectedTransliteration );
+                    		editorTab.getEditor().loadResourceFile( selectedTransliteration );
+                        	editorTab.setText( selectedTransliteration );
                         	saveMenuItem.setDisable(false);
                         	saveAsMenuItem.setDisable(false);
                         }
@@ -359,18 +377,18 @@ public final class XliteratorNew extends Application {
         //=========================== END FILES TAB =============================================
 
         //=========================== BEGIN EDITOR TAB ===========================================
-        editTab.setDefaultFontFamily( defaultFontFamily );
-        editTab.setClosable( false ); // future set to true when multiple editors are supported
-        editTab.setup(saveMenuItem, saveAsMenuItem);
-        editTab.setOnSelectionChanged( evt -> {
-        	if( editTab.isSelected() ) {
+        editorTab.setDefaultFontFamily( defaultFontFamily );
+        editorTab.setClosable( false ); // future set to true when multiple editors are supported
+        editorTab.setup(saveMenuItem, saveAsMenuItem);
+        editorTab.setOnSelectionChanged( evt -> {
+        	if( editorTab.isSelected() ) {
         		fileMenuItem.setDisable( true );
         		openMenuItem.setDisable( false );
         		if ( variantOut == null )
         			loadInternalMenuItem.setDisable( true );
         		else
         			loadInternalMenuItem.setDisable( false );
-        		if(! "".equals( editTab.getEditor().getText() ) ) {
+        		if(! "".equals( editorTab.getEditor().getText() ) ) {
         			saveMenuItem.setDisable( false );
         			saveAsMenuItem.setDisable( false );
         		}
@@ -379,7 +397,7 @@ public final class XliteratorNew extends Application {
         //=========================== END EDITOR TAB ==============================================
         
         //=========================== BEGIN TEXT TAB ============================================
-        textTab.setup( editTab.getEditor() );
+        textTab.setup( editorTab.getEditor() );
         textTab.setDefaultFontFamily( defaultFontFamily );
         textTab.setClosable( false );
         textTab.setOnSelectionChanged( evt -> {
@@ -395,7 +413,7 @@ public final class XliteratorNew extends Application {
         
         // Setup the tabs:
         TabPane tabpane = new TabPane();
-        tabpane.getTabs().addAll( editTab, textTab, filesTab );
+        tabpane.getTabs().addAll( textTab );
         //
         //  End of Tab & TabPane setup
         //
@@ -494,38 +512,36 @@ public final class XliteratorNew extends Application {
         MenuItem editorTabMenuItem = new MenuItem( "Editor" );
         MenuItem fileConverterTabMenuItem = new MenuItem( "File Converter" );
         MenuItem textConverterTabMenuItem = new MenuItem( "Text Converter" );
-        
-        Image visibleIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
-        ImageView fileConverterOnView = new ImageView( visibleIcon );
-        ImageView textConverterOnView = new ImageView( visibleIcon );
-        ImageView editorOnView = new ImageView( visibleIcon );
-        
-        editorTabMenuItem.setGraphic( editorOnView );
-        textConverterTabMenuItem.setGraphic( textConverterOnView );
 
-
-        
         tabsMenu.getItems().addAll( editorTabMenuItem, fileConverterTabMenuItem, textConverterTabMenuItem );
         
         ColorAdjust monochrome = new ColorAdjust();
         monochrome.setSaturation(-1);
         
-        ImageView fileConverterOffView = new ImageView( visibleIcon );
-        fileConverterOffView.setEffect(monochrome);
-        ImageView textConverterOffView = new ImageView( visibleIcon );
-        textConverterOffView.setEffect(monochrome);
-        ImageView editorOffView = new ImageView( visibleIcon );
-        editorOffView.setEffect(monochrome);
         
+        Image visibleIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
+
+        ImageView fileConverterOnView = new ImageView( visibleIcon );
+        ImageView fileConverterOffView = new ImageView( visibleIcon );
+        fileConverterOffView.setEffect( monochrome );
         fileConverterTabMenuItem.setGraphic( fileConverterOffView );
-    	fileConverterTabMenuItem.getProperties().put( "show", false );
-    	
-        fileConverterTabMenuItem.setOnAction( evt -> {
-        	boolean show = (boolean)fileConverterTabMenuItem.getProperties().get( "show" );
-        	show =! show;
-        	fileConverterTabMenuItem.getProperties().put( "show", show );
-        	fileConverterTabMenuItem.setGraphic( (show) ? fileConverterOnView : fileConverterOffView );
-        });
+    	fileConverterTabMenuItem.getProperties().put( "show", false );	
+        fileConverterTabMenuItem.setOnAction( evt -> tabToggler(fileConverterTabMenuItem, filesTab, tabpane,  fileConverterOnView, fileConverterOffView) );
+   
+        ImageView textConverterOnView = new ImageView( visibleIcon );
+        ImageView textConverterOffView = new ImageView( visibleIcon );
+        textConverterOffView.setEffect( monochrome );
+        textConverterTabMenuItem.setGraphic( textConverterOnView );
+        textConverterTabMenuItem.getProperties().put( "show", true );	
+        textConverterTabMenuItem.setOnAction( evt -> tabToggler(textConverterTabMenuItem, textTab, tabpane,  textConverterOnView, textConverterOffView) );
+
+        ImageView editorOnView = new ImageView( visibleIcon );
+        ImageView editorOffView = new ImageView( visibleIcon );
+        editorOffView.setEffect( monochrome );
+        editorTabMenuItem.setGraphic( editorOffView );
+        editorTabMenuItem.getProperties().put( "show", false );	
+        editorTabMenuItem.setOnAction( evt -> tabToggler(editorTabMenuItem, editorTab, tabpane,  editorOnView, editorOffView) );
+
         
         //
         //=========================== END TABS MENU =============================================
@@ -560,8 +576,8 @@ public final class XliteratorNew extends Application {
         ClassLoader classLoader = this.getClass().getClassLoader();
         scene.getStylesheets().add( classLoader.getResource("styles/xliterator.css").toExternalForm() );
         stage.setScene( scene ); 
-        editTab.getEditor().setStyle( scene );
-        editTab.getEditor().prefHeightProperty().bind( stage.heightProperty().multiply(0.8) );
+        editorTab.getEditor().setStyle( scene );
+        editorTab.getEditor().prefHeightProperty().bind( stage.heightProperty().multiply(0.8) );
 
         scene.getWindow().addEventFilter( WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent );
         
@@ -572,7 +588,7 @@ public final class XliteratorNew extends Application {
     }
     
     private void closeWindowEvent(WindowEvent event) {
-    	if( editTab.hasUnsavedChanges() ) {
+    	if( editorTab.hasUnsavedChanges() ) {
     		Alert alert = saveAndExitAlert( "Confirm Exit", "Exit without saving?", "Unsaved changes will be lost." );
             alert.initOwner( primaryStage.getOwner() );
             Optional<ButtonType> response = alert.showAndWait();
@@ -583,7 +599,7 @@ public final class XliteratorNew extends Application {
                     event.consume();
                 }
                 else if( type.getButtonData() == ButtonData.YES ) {
-                	editTab.saveContent( primaryStage, false );
+                	editorTab.saveContent( primaryStage, false );
                 }
             }
     	}
@@ -622,7 +638,7 @@ public final class XliteratorNew extends Application {
 
     
     private boolean checkUnsavedChanges() {
-    	if( editTab.hasUnsavedChanges() ) {
+    	if( editorTab.hasUnsavedChanges() ) {
     		Alert alert = saveOrContinue( "Confirm Replace", "Save changes before loading?", "Unsaved changes will be lost." );
             alert.initOwner( primaryStage.getOwner() );
             Optional<ButtonType> response = alert.showAndWait();
@@ -633,7 +649,7 @@ public final class XliteratorNew extends Application {
                 	return false;
                 }
                 if( type.getButtonData() == ButtonData.YES ) {
-                	editTab.saveContent( primaryStage, false );
+                	editorTab.saveContent( primaryStage, false );
                 }
             } 
     	}
@@ -814,7 +830,7 @@ public final class XliteratorNew extends Application {
     private void saveDefaultFontSelections() {
     	filesTab.saveDefaultFontSelections();
     	textTab.saveDefaultFontSelections();
-    	editTab.saveDefaultFontSelections();
+    	editorTab.saveDefaultFontSelections();
     }
     
     
@@ -829,9 +845,9 @@ public final class XliteratorNew extends Application {
     			: "templates/icu-text-template.txt" 
     	;
     	try {
-	    	editTab.getEditor().loadResourceFile( template );
+	    	editorTab.getEditor().loadResourceFile( template );
 
-	    	editTab.reset( "Untitled" );
+	    	editorTab.reset( "Untitled" );
     	}
     	catch(Exception ex) {
         	errorAlert(ex, "Error opening: " + template );
@@ -861,8 +877,8 @@ public final class XliteratorNew extends Application {
     	}
     	
     	try {
-    		editTab.getEditor().loadResourceFile( selectedTransliteration );
-        	editTab.setText( selectedTransliteration );
+    		editorTab.getEditor().loadResourceFile( selectedTransliteration );
+        	editorTab.setText( selectedTransliteration );
 
         	setUseEditor();
         }
