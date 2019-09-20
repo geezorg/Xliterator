@@ -1,9 +1,11 @@
-package org.geez.ui;
+package org.geez.ui.xliterator;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.prefs.Preferences;
 
 import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.geez.ui.XliteratorNew;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -17,10 +19,14 @@ public class EditorTab extends XliteratorTab {
     private ICUEditor editor = new ICUEditor();
 	private File externalIcuFile = null;
 	private boolean unsavedChanges = false;
+        
+    private final String editorFontFamilyPref = "org.geez.ui.xliterator.editor.font.family";
+    private final String editorFontSizePref = "org.geez.ui.xliterator.editor.font.size";
     
 
 	public EditorTab( String title ) {
 		super(title);
+		checkPreferences();
 	}
 	
 	public void reset( String title ) {
@@ -38,10 +44,12 @@ public class EditorTab extends XliteratorTab {
     
     
 	public void setup( MenuItem saveMenuItem, MenuItem saveAsMenuItem ) {
-        Menu editorFontMenu = createFontMenu( editor );
+        Menu editorFontMenu     = createFontMenu( editor );
         Menu editorFontSizeMenu = createFontSizeMenu( editor );
-        MenuBar editorMenutBar = new MenuBar();
+        
+        MenuBar editorMenutBar  = new MenuBar();
         editorMenutBar.getMenus().addAll( editorFontMenu, editorFontSizeMenu );
+        
         VBox editorVBox = new VBox( editorMenutBar, new StackPane( new VirtualizedScrollPane<>( editor ) ) );
         this.setContent( editorVBox );
         
@@ -65,22 +73,6 @@ public class EditorTab extends XliteratorTab {
 			saveAsMenuItem.setDisable( false );
         });
 	}
-    
-    
-	/*
-    private void setFontSize( String fontSize ) {
-		String fontFamily = (String) editor.getProperties().get("font-family");
-		editor.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" );
-		editor.getProperties().put( "font-size", fontSize );
-    }
-
-    
-    private void setFont( String font, String component ) {
-    		// the editor is a single component, so we can drop this.
-    		String fontSize = (String) editor.getProperties().get("font-size");
-    		editor.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + fontSize + ";" );
-    }
-    */
     
     
     public void saveContent( Stage stage, boolean saveToNewFile ) {
@@ -131,4 +123,32 @@ public class EditorTab extends XliteratorTab {
 		// we need to make sure this is set right when a file is loaded.
 		return unsavedChanges;
 	}
+	
+
+    public void saveDefaultFontSelections() {
+        Preferences prefs = Preferences.userNodeForPackage( EditorTab.class );
+
+        prefs.put( editorFontFamilyPref, fontFamily );
+        prefs.put( editorFontSizePref, fontSize );
+    }
+    
+    
+  private boolean checkPreferences() {
+      Preferences prefs = Preferences.userNodeForPackage( EditorTab.class );
+      
+      fontFamily = prefs.get( editorFontFamilyPref, null );
+      
+      if( fontFamily == null ) {
+    	  return false;
+      }
+      
+      fontSize = prefs.get( editorFontSizePref, null );
+      
+      editor.getProperties().put( "font-family", fontFamily );
+      editor.getProperties().put( "font-size", fontSize );
+      setFontSize( editor, fontSize );
+      
+      return true;
+  }
+      
 }

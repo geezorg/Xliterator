@@ -1,4 +1,4 @@
-package org.geez.ui;
+package org.geez.ui.xliterator;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;

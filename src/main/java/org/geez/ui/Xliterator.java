@@ -26,7 +26,8 @@ import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
 import org.geez.convert.fontsystem.ConvertFontSystem;
 import org.geez.convert.text.ConvertTextString;
 import org.geez.convert.text.TextFileProcessor;
-import org.geez.transliterate.XliteratorConfig;
+import org.geez.ui.xliterator.ICUEditor;
+import org.geez.ui.xliterator.XliteratorConfig;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;

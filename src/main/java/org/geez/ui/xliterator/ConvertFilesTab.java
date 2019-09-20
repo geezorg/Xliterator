@@ -1,4 +1,4 @@
-package org.geez.ui;
+package org.geez.ui.xliterator;
 
 import java.awt.Desktop;
 import java.io.File;
@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
 
 import org.apache.commons.io.FilenameUtils;
 import org.controlsfx.control.CheckComboBox;
@@ -14,11 +15,14 @@ import org.controlsfx.control.StatusBar;
 import org.docx4j.openpackaging.exceptions.Docx4JException;
 import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
 import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
+import org.fxmisc.richtext.StyleClassedTextArea;
 import org.geez.convert.DocumentProcessor;
 import org.geez.convert.ProcessorManager;
 import org.geez.convert.docx.DocxProcessor;
 import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
 import org.geez.convert.fontsystem.ConvertFontSystem;
+import org.geez.ui.Xliterator;
+import org.geez.ui.XliteratorNew;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -56,13 +60,17 @@ public class ConvertFilesTab extends XliteratorTab {
     private Desktop desktop = Desktop.getDesktop();
 	private StatusBar statusBar = null;
 	
-
+    private final String fileOutFontPref = "org.geez.ui.xliterator.convertFilesTab.fontOut";
+    
 
 	public ConvertFilesTab(String title) {
 		super( title );
+		this.defaultFont = "Arial";
+		checkPreferences();
 	}
     
 	
+	/*
     // this is identical to the method in XliteratorTab, with the only difference being the
 	// commented out .setOnAction line, see if this can be revised.
     protected ChoiceBox<String> createFontChoiceBox(String component, String defaultSelection) {  
@@ -74,6 +82,11 @@ public class ConvertFilesTab extends XliteratorTab {
         // choiceBox.setOnAction( evt -> setFont( choiceBox.getSelectionModel().getSelectedItem(), component ) );
         
         return choiceBox;    
+    }
+    */
+    
+    public void setFontFamily(StyleClassedTextArea component, String fontFamily) {
+    	this.fontFamily = fontFamily;
     }
     
     
@@ -212,7 +225,7 @@ public class ConvertFilesTab extends XliteratorTab {
         VBox listVBox = new VBox( listView );
         listView.autosize();
         
-        ChoiceBox<String> outputFontMenu = createFontChoiceBox( "fileConverter", "Arial" );
+        ChoiceBox<String> outputFontMenu = createFontChoiceBox( null, (fontFamily==null)? defaultFont : fontFamily );
         HBox filesTabMenuBox = new HBox( new Text( "Output Font:" ), outputFontMenu, new Text( "Document Fonts:" ), documentFontsMenu );
         filesTabMenuBox.setPadding(new Insets(2, 2, 2, 2));
         filesTabMenuBox.setSpacing(4);
@@ -337,5 +350,21 @@ public class ConvertFilesTab extends XliteratorTab {
     	if( inputFileList != null ) {
     		convertButton.setDisable( false );
     	}
+    }
+        
+
+    public void saveDefaultFontSelections() {
+        Preferences prefs = Preferences.userNodeForPackage( ConvertFilesTab.class );
+
+        prefs.put( fileOutFontPref, fontFamily );
+    }
+    
+    
+    private boolean checkPreferences() {
+        Preferences prefs = Preferences.userNodeForPackage( ConvertFilesTab.class );
+
+        this.fontFamily = prefs.get( fileOutFontPref, null );
+        
+        return ( this.fontFamily == null );
     }
 }
