@@ -356,7 +356,9 @@ public class ConvertFilesTab extends XliteratorTab {
     public void saveDefaultFontSelections() {
         Preferences prefs = Preferences.userNodeForPackage( ConvertFilesTab.class );
 
-        prefs.put( fileOutFontPref, fontFamily );
+        if( fontFamily != null ) {
+        	prefs.put( fileOutFontPref, fontFamily );
+        }
     }
     
     

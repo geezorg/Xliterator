@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.prefs.Preferences;
 
 import org.fxmisc.flowless.VirtualizedScrollPane;
-import org.geez.ui.XliteratorNew;
 
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
@@ -128,8 +127,12 @@ public class EditorTab extends XliteratorTab {
     public void saveDefaultFontSelections() {
         Preferences prefs = Preferences.userNodeForPackage( EditorTab.class );
 
-        prefs.put( editorFontFamilyPref, fontFamily );
-        prefs.put( editorFontSizePref, fontSize );
+        if( fontFamily != null ) {
+        	prefs.put( editorFontFamilyPref, fontFamily );
+        }
+        if( fontSize != null ) {
+        	prefs.put( editorFontSizePref, fontSize );
+        }
     }
     
     
