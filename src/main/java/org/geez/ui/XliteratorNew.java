@@ -10,7 +10,10 @@ import java.util.prefs.Preferences;
 
 import org.controlsfx.control.StatusBar;
 import org.geez.convert.ProcessorManager;
-import org.geez.transliterate.XliteratorConfig;
+import org.geez.ui.xliterator.ConvertFilesTab;
+import org.geez.ui.xliterator.ConvertTextTab;
+import org.geez.ui.xliterator.EditorTab;
+import org.geez.ui.xliterator.XliteratorConfig;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -71,28 +74,20 @@ public final class XliteratorNew extends Application {
 	private String selectedTransliteration  = null;
 	private String transliterationDirection = null;
     private String defaultFont    = null;
-    MenuItem loadInternalMenuItem = new MenuItem( "Load Selected Transliteration" );
+    private MenuItem loadInternalMenuItem = new MenuItem( "Load Selected Transliteration" );
     private EditorTab editTab     = new EditorTab( "Mapping Editor" );
-	ConvertTextTab textTab        = new ConvertTextTab( "Convert Text" );
-	ConvertFilesTab filesTab      = new ConvertFilesTab( "Convert Files" );
-	ProcessorManager processorManager = new ProcessorManager();
+    private ConvertTextTab textTab        = new ConvertTextTab( "Convert Text" );
+    private ConvertFilesTab filesTab      = new ConvertFilesTab( "Convert Files" );
+    private ProcessorManager processorManager = new ProcessorManager();
     
     private final int APP_WIDTH  = 800;
     private final int APP_HEIGHT = 800;
     
-    private final String scriptInPreference   = "org.geez.preferences.scriptIn";
-    private final String scriptOutPreference  = "org.geez.preferences.scriptOut";
-    private final String variantOutPreference = "org.geez.preferences.variantOut";
-    private final String transliterationIdPreference        = "org.geez.preferences.transliterationId";
-    private final String transliterationDirectionPreference = "org.geez.preferences.transliterationDirection";
-    
-    private final String editorFontFace = "org.geez.preferences.editor.font.face";
-    private final String editorFontSize = "org.geez.preferences.editor.font.size";
-    private final String textAreaInFontFace = "org.geez.preferences.textAreaIn.font.face";
-    private final String textAreaInFontSize = "org.geez.preferences.textAreaIn.font.size";
-    private final String textAreaOutFontFace = "org.geez.preferences.textAreaOut.font.face";
-    private final String textAreaOutFontSize = "org.geez.preferences.textAreaOut.font.size";
-    private final String fileOutFont = "org.geez.preferences.fileOut.font";
+    private final String scriptInPreference   = "org.geez.ui.xliterator.scriptIn";
+    private final String scriptOutPreference  = "org.geez.ui.xliterator.scriptOut";
+    private final String variantOutPreference = "org.geez.ui.xliterator.variantOut";
+    private final String transliterationIdPreference        = "org.geez.ui.xliterator.transliterationId";
+    private final String transliterationDirectionPreference = "org.geez.ui.xliterator.transliterationDirection";
     
 	private XliteratorConfig config = null;
 
@@ -348,7 +343,7 @@ public final class XliteratorNew extends Application {
         //
         //=========================== BEGIN FILES TAB ===========================================
         filesTab.setClosable( false );
-        filesTab.setProcessor(processorManager);
+        filesTab.setProcessor( processorManager );
         filesTab.setComponents(fileMenuItem, statusBar, stage);
         filesTab.setOnSelectionChanged( evt -> {
         	if( filesTab.isSelected() ) {
@@ -407,7 +402,7 @@ public final class XliteratorNew extends Application {
         //
         //=========================== BEGIN SCRIPT MENUS =============================================
         // 
-        inScriptMenu =  createInScriptsMenu( stage );
+        inScriptMenu   = createInScriptsMenu( stage );
         outScriptMenu  = new Menu( "Script _Out" );
         outVariantMenu = new Menu( "_Variant" );
         //
@@ -600,7 +595,7 @@ public final class XliteratorNew extends Application {
 
     private void saveDefaultMapping() {
         // Retrieve the user preference node for the package com.mycompany
-        Preferences prefs = Preferences.userNodeForPackage( org.geez.transliterate.XliteratorConfig.class );
+        Preferences prefs = Preferences.userNodeForPackage( org.geez.ui.xliterator.XliteratorConfig.class );
 
         prefs.put( scriptInPreference, scriptIn );
         prefs.put( scriptOutPreference, scriptOut );
@@ -608,24 +603,10 @@ public final class XliteratorNew extends Application {
         prefs.put( transliterationIdPreference, selectedTransliteration );
         prefs.put( transliterationDirectionPreference, transliterationDirection );
     }
-    
 
-    private void saveDefaultFontSelections() {
-        // Retrieve the user preference node for the package com.mycompany
-        Preferences prefs = Preferences.userNodeForPackage( org.geez.transliterate.XliteratorConfig.class );
-
-        prefs.put( editorFontFace, scriptIn );
-        prefs.put( editorFontSize, scriptIn );
-        prefs.put( textAreaInFontFace, scriptOut );
-        prefs.put( textAreaInFontSize, scriptOut );
-        prefs.put( textAreaOutFontFace, variantOut );
-        prefs.put( textAreaOutFontSize, variantOut );
-        prefs.put( fileOutFont, selectedTransliteration );
-    }
     
     private void checkPreferences() {
-        // Retrieve the user preference node for the package com.mycompany
-        Preferences prefs = Preferences.userNodeForPackage( org.geez.transliterate.XliteratorConfig.class );
+        Preferences prefs = Preferences.userNodeForPackage( XliteratorNew.class );
 
         scriptIn   = prefs.get( scriptInPreference, null );
         if( scriptIn != null) {
@@ -645,7 +626,6 @@ public final class XliteratorNew extends Application {
         if( variantOut != null) {
         	setVariantOut( variantOut );
         }
-
 
     }
     
@@ -775,6 +755,13 @@ public final class XliteratorNew extends Application {
 	    		}
     		}
     	}
+    }
+    
+    
+    private void saveDefaultFontSelections() {
+    	filesTab.saveDefaultFontSelections();
+    	textTab.saveDefaultFontSelections();
+    	editTab.saveDefaultFontSelections();
     }
     
     

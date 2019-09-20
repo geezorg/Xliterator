@@ -1,4 +1,4 @@
-package org.geez.ui;
+package org.geez.ui.xliterator;
 
 import org.fxmisc.richtext.StyleClassedTextArea;
 
@@ -18,8 +18,8 @@ public abstract class XliteratorTab extends Tab {
 	protected String transliterationDirection = null;
 	protected String caseOption = null;
 	protected String defaultFont = null;
-	private String fontFamily = null;
-	private String fontSize = null;
+	protected String fontFamily = null;
+	protected String fontSize = null;
 	
     
 	public XliteratorTab( String title ) {
@@ -63,7 +63,7 @@ public abstract class XliteratorTab extends Tab {
     		component.getProperties().put( "font-size", fontSize );
     }
     
-    protected void setFont( StyleClassedTextArea component, String font ) {
+    protected void setFontFamily( StyleClassedTextArea component, String font ) {
     		component.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + component.getProperties().get("font-size") + ";" ); 
     		component.getProperties().put( "font-family", font );
     }
@@ -81,7 +81,7 @@ public abstract class XliteratorTab extends Tab {
     	Menu menu = new Menu();
     	menu.setId( "transparent" );
     	ChoiceBox<String> choiceBox = new ChoiceBox<>();
-    	for(int i=10 ; i < 24; i++ ) {
+    	for(int i=10 ; i <= 24; i++ ) {
     		String size = String.valueOf(i);
     		choiceBox.getItems().add( size );
     	}
@@ -99,7 +99,7 @@ public abstract class XliteratorTab extends Tab {
     		choiceBox.getItems().add( font );
     	}
     	choiceBox.getSelectionModel().select( defaultSelection );
-        choiceBox.setOnAction( evt -> setFont( component, choiceBox.getSelectionModel().getSelectedItem() ) );
+        choiceBox.setOnAction( evt -> setFontFamily( component, choiceBox.getSelectionModel().getSelectedItem() ) );
         
         return choiceBox;    
     }

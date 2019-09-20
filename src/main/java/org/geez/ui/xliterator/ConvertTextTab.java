@@ -1,6 +1,7 @@
-package org.geez.ui;
+package org.geez.ui.xliterator;
 
 import java.util.HashMap;
+import java.util.prefs.Preferences;
 
 import org.fxmisc.richtext.StyleClassedTextArea;
 import org.geez.convert.text.ConvertTextString;
@@ -19,11 +20,16 @@ import javafx.scene.layout.VBox;
 
 public class ConvertTextTab extends XliteratorTab {
 	
-    private final StyleClassedTextArea textAreaIn = new StyleClassedTextArea();
+    private final StyleClassedTextArea textAreaIn  = new StyleClassedTextArea();
     private final StyleClassedTextArea textAreaOut = new StyleClassedTextArea();
+    
 	private final Button convertButtonDown = new Button(); // ( "⬇" );
-    private final Button convertButtonUp = new Button(); // ( "⬆" );
-
+    private final Button convertButtonUp   = new Button(); // ( "⬆" );
+    
+    private final String textAreaInFontFacePref  = "org.geez.ui.xliterator.convertTextTab.textAreaIn.font.face";
+    private final String textAreaInFontSizePref  = "org.geez.ui.xliterator.convertTextTab.textAreaIn.font.size";
+    private final String textAreaOutFontFacePref = "org.geez.ui.xliterator.convertTextTab.textAreaOut.font.face";
+    private final String textAreaOutFontSizePref = "org.geez.ui.xliterator.convertTextTab.textAreaOut.font.size";
 
 	private ICUEditor editor = null; // used to get a handle on rules text
 	
@@ -34,8 +40,9 @@ public class ConvertTextTab extends XliteratorTab {
     HashMap<String,ConvertTextString> textStringConverts = new HashMap<String,ConvertTextString>();    
     private void convertTextArea(StyleClassedTextArea textAreaIn, StyleClassedTextArea textAreaOut, String direction) {
     	String textIn = textAreaIn.getText();
-    	if( textIn == null )
+    	if( textIn == null ) {
     		return;
+    	}
     	
     	try {
 	    	ConvertTextString stringConverter = null;
@@ -77,12 +84,14 @@ public class ConvertTextTab extends XliteratorTab {
         textAreaIn.setPrefHeight(313);
         textAreaOut.setPrefHeight(313);
         // textAreaIn.setFont( Font.font( defaultFont, FontWeight.NORMAL, 12) );
-        textAreaIn.setStyle("-fx-font-family: '" + defaultFont + "'; -fx-font-size: 12;"  );
-        textAreaIn.getProperties().put( "font-family", defaultFont );
-        textAreaIn.getProperties().put( "font-size", "12" );
-        textAreaOut.setStyle("-fx-font-family: '" + defaultFont + "'; -fx-font-size: 12;"  );
-        textAreaOut.getProperties().put( "font-family", defaultFont );
-        textAreaOut.getProperties().put( "font-size", "12" );
+		if(! checkPreferences() ) {
+	        textAreaIn.setStyle("-fx-font-family: '" + defaultFont + "'; -fx-font-size: 12;"  );
+	        textAreaIn.getProperties().put( "font-family", defaultFont );
+	        textAreaIn.getProperties().put( "font-size", "12" );
+	        textAreaOut.setStyle("-fx-font-family: '" + defaultFont + "'; -fx-font-size: 12;"  );
+	        textAreaOut.getProperties().put( "font-family", defaultFont );
+	        textAreaOut.getProperties().put( "font-size", "12" );
+		}
         
        //  Menu textAreaInFontMenu = createFontMenu( "textAreaIn" );
         
@@ -213,4 +222,32 @@ public class ConvertTextTab extends XliteratorTab {
     	convertButtonUp.setDisable( !enable );
     }
 
+    public void saveDefaultFontSelections() {
+        Preferences prefs = Preferences.userNodeForPackage( ConvertTextTab.class );
+        
+        prefs.put( textAreaInFontFacePref,  (String)textAreaIn.getProperties().get( "font-family" ) );
+        prefs.put( textAreaInFontSizePref,  (String)textAreaIn.getProperties().get( "font-size" ) );
+        prefs.put( textAreaOutFontFacePref, (String)textAreaOut.getProperties().get( "font-family" ) );
+        prefs.put( textAreaOutFontSizePref, (String)textAreaOut.getProperties().get( "font-size" ) );
+    }
+      
+    private boolean checkPreferences() {
+        Preferences prefs = Preferences.userNodeForPackage( ConvertTextTab.class );
+        
+        String value = prefs.get( textAreaInFontFacePref, null );
+        if( value == null ) {
+        	return false;
+        }
+        
+        textAreaIn.getProperties().put( "font-family", value );
+        value = prefs.get( textAreaInFontSizePref, null );
+        textAreaIn.getProperties().put( "font-size", value );
+        setFontSize( textAreaIn, value );
+    	value = prefs.get( textAreaOutFontFacePref, null );
+        textAreaOut.getProperties().put( "font-family", value );
+        value = prefs.get( textAreaOutFontSizePref, null );
+        textAreaOut.getProperties().put( "font-size", value );
+        setFontSize( textAreaOut, value );
+        return true;
+    }
 }
