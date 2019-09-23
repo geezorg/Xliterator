@@ -9,7 +9,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.regex.Matcher;
@@ -35,7 +34,6 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.DialogEvent;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
@@ -171,7 +169,6 @@ public class ICUEditor extends CodeArea {
                 )
         );
         
-        currentDialogs = new ArrayList<>();
         replaceDialog = new Dialog<>();
         findDialog = new Dialog<>();
         
