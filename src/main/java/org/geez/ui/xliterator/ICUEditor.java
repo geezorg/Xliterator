@@ -482,157 +482,136 @@ public class ICUEditor extends CodeArea {
     
 
     int pos;
-    ArrayList<Dialog> currentDialogs;
     Dialog<Pair<String, String>> replaceDialog;
     Dialog<String> findDialog;
     
     public void findWord(Stage stage) {
-        if (!currentDialogs.contains(findDialog)) {
-            currentDialogs.add(findDialog);
+        if (findDialog.getDialogPane().getButtonTypes().isEmpty()) {
             findDialog.initOwner(stage);
+            findDialog.setTitle("Find");
+            findDialog.setHeaderText(null);
 
-            if (findDialog.getDialogPane().getButtonTypes().isEmpty()) {
-                findDialog.setTitle("Find");
-                findDialog.setHeaderText(null);
+            ButtonType findNext = new ButtonType("Find Next", ButtonBar.ButtonData.OK_DONE);
+            findDialog.getDialogPane().getButtonTypes().addAll(findNext, ButtonType.CANCEL);
 
-                ButtonType findNext = new ButtonType("Find Next", ButtonBar.ButtonData.OK_DONE);
-                findDialog.getDialogPane().getButtonTypes().addAll(findNext, ButtonType.CANCEL);
+            GridPane grid = new GridPane();
 
-                GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 10, 10, 10));
 
-                grid.setHgap(10);
-                grid.setVgap(10);
-                grid.setPadding(new Insets(20, 10, 10, 10));
+            TextField word = new TextField();
+            word.setStyle("-fx-pref-width: 250");
+            word.setPromptText("Find a word");
+            word.requestFocus();
+            word.setFocusTraversable(true);
 
-                TextField word = new TextField();
-                word.setStyle("-fx-pref-width: 250");
-                word.setPromptText("Find a word");
-                word.requestFocus();
-                word.setFocusTraversable(true);
+            grid.add(word, 0, 0);
 
-                grid.add(word, 0, 0);
+            Button findNextBTN = (Button) findDialog.getDialogPane().lookupButton(findNext);
+            findNextBTN.setDisable(true);
 
-                Button findNextBTN = (Button) findDialog.getDialogPane().lookupButton(findNext);
-                findNextBTN.setDisable(true);
+            word.textProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    findNextBTN.setDisable(newValue.trim().isEmpty());
+                }
+            });
 
-                word.textProperty().addListener(new ChangeListener<String>() {
-                    @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                        findNextBTN.setDisable(newValue.trim().isEmpty());
+            findDialog.getDialogPane().setContent(grid);
+
+            findDialog.initModality(Modality.WINDOW_MODAL);
+
+            findNextBTN.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    while ((pos = getText().toUpperCase().indexOf(word.getText().toUpperCase(), pos)) >= 0) {
+                        selectRange(pos, (pos + word.getText().length()));
+                        pos += word.getText().length();
+                        break;
                     }
-                });
+                    event.consume();
+                }
+            });
 
-                findDialog.getDialogPane().setContent(grid);
-
-                findDialog.initModality(Modality.WINDOW_MODAL);
-
-                findNextBTN.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        while ((pos = getText().toUpperCase().indexOf(word.getText().toUpperCase(), pos)) >= 0) {
-                            selectRange(pos, (pos + word.getText().length()));
-                            pos += word.getText().length();
-                            break;
-                        }
-                        event.consume();
-                    }
-                });
-
-                findDialog.setOnCloseRequest(new EventHandler<DialogEvent>() {
-                    @Override
-                    public void handle(DialogEvent event) {
-                        currentDialogs.remove(findDialog);
-                    }
-                });
-            }
-            findDialog.showAndWait();
         }
+        findDialog.showAndWait();
     }
 
+
     public void replace(Stage stage) {
-        if (!currentDialogs.contains(replaceDialog)) {
-            currentDialogs.add(replaceDialog);
+        if (replaceDialog.getDialogPane().getButtonTypes().isEmpty()) {
             replaceDialog.initOwner(stage);
+            replaceDialog.setTitle("Replace");
+            replaceDialog.setHeaderText(null);
 
-            if (replaceDialog.getDialogPane().getButtonTypes().isEmpty()) {
-                replaceDialog.setTitle("Replace");
-                replaceDialog.setHeaderText(null);
+            ButtonType replaceNext = new ButtonType("Replace Next", ButtonBar.ButtonData.OK_DONE);
+            ButtonType replaceAll = new ButtonType("Replace All", ButtonBar.ButtonData.OK_DONE);
+            replaceDialog.getDialogPane().getButtonTypes().addAll(replaceNext, replaceAll, ButtonType.CANCEL);
 
-                ButtonType replaceNext = new ButtonType("Replace Next", ButtonBar.ButtonData.OK_DONE);
-                ButtonType replaceAll = new ButtonType("Replace All", ButtonBar.ButtonData.OK_DONE);
-                replaceDialog.getDialogPane().getButtonTypes().addAll(replaceNext, replaceAll, ButtonType.CANCEL);
+            GridPane grid = new GridPane();
 
-                GridPane grid = new GridPane();
+            grid.setHgap(10);
+            grid.setVgap(10);
+            grid.setPadding(new Insets(20, 10, 10, 10));
 
-                grid.setHgap(10);
-                grid.setVgap(10);
-                grid.setPadding(new Insets(20, 10, 10, 10));
+            TextField word = new TextField();
+            word.setStyle("-fx-pref-width: 250");
+            word.setPromptText("Enter a word");
+            word.requestFocus();
 
-                TextField word = new TextField();
-                word.setStyle("-fx-pref-width: 250");
-                word.setPromptText("Enter a word");
-                word.requestFocus();
+            TextField replaceWord = new TextField();
+            replaceWord.setStyle("-fx-pref-width: 250");
+            replaceWord.setPromptText("Enter a replacement");
 
-                TextField replaceWord = new TextField();
-                replaceWord.setStyle("-fx-pref-width: 250");
-                replaceWord.setPromptText("Enter a replacement");
-
-                grid.add(word, 0, 0);
-                grid.add(replaceWord, 0, 1);
+            grid.add(word, 0, 0);
+            grid.add(replaceWord, 0, 1);
 
 
-                Button replaceAllBTN = (Button) replaceDialog.getDialogPane().lookupButton(replaceAll);
-                replaceAllBTN.setDisable(true);
+            Button replaceAllBTN = (Button) replaceDialog.getDialogPane().lookupButton(replaceAll);
+            replaceAllBTN.setDisable(true);
 
-                Button replaceNextBTN = (Button) replaceDialog.getDialogPane().lookupButton(replaceNext);
-                replaceNextBTN.setDisable(true);
+            Button replaceNextBTN = (Button) replaceDialog.getDialogPane().lookupButton(replaceNext);
+            replaceNextBTN.setDisable(true);
 
-                word.textProperty().addListener(new ChangeListener<String>() {
-                    @Override
-                    public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                        replaceNextBTN.setDisable(newValue.trim().isEmpty());
-                        replaceAllBTN.setDisable(newValue.trim().isEmpty());
+            word.textProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    replaceNextBTN.setDisable(newValue.trim().isEmpty());
+                    replaceAllBTN.setDisable(newValue.trim().isEmpty());
+                }
+            });
+
+            replaceDialog.getDialogPane().setContent(grid);
+
+            replaceDialog.initModality(Modality.WINDOW_MODAL);
+
+            replaceNextBTN.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    while ((pos = getText().toUpperCase().indexOf(word.getText().toUpperCase(), pos)) >= 0) {
+                        selectRange(pos, (pos + word.getText().length()));
+                        replaceSelection(replaceWord.getText());
+                        pos += word.getText().length();
+                        break;
                     }
-                });
+                    event.consume();
+                }
+            });
 
-                replaceDialog.getDialogPane().setContent(grid);
-
-                replaceDialog.initModality(Modality.WINDOW_MODAL);
-
-                replaceNextBTN.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        while ((pos = getText().toUpperCase().indexOf(word.getText().toUpperCase(), pos)) >= 0) {
-                            selectRange(pos, (pos + word.getText().length()));
-                            replaceSelection(replaceWord.getText());
-                            pos += word.getText().length();
-                            break;
-                        }
-                        event.consume();
+            replaceAllBTN.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    while ((pos = getText().toUpperCase().indexOf(word.getText().toUpperCase(), pos)) >= 0) {
+                        selectRange(pos, (pos + word.getText().length()));
+                        replaceSelection(replaceWord.getText());
+                        pos += word.getText().length();
                     }
-                });
+                    event.consume();
+                }
+            });
 
-                replaceAllBTN.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        while ((pos = getText().toUpperCase().indexOf(word.getText().toUpperCase(), pos)) >= 0) {
-                            selectRange(pos, (pos + word.getText().length()));
-                            replaceSelection(replaceWord.getText());
-                            pos += word.getText().length();
-                        }
-                        event.consume();
-                    }
-                });
-
-                replaceDialog.setOnCloseRequest(new EventHandler<DialogEvent>() {
-                    @Override
-                    public void handle(DialogEvent event) {
-                        currentDialogs.remove(replaceDialog);
-                    }
-                });
-            }
-            replaceDialog.showAndWait();
         }
-
+        replaceDialog.showAndWait();
     }
 }
