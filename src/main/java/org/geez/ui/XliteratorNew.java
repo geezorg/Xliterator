@@ -4,7 +4,9 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
@@ -13,6 +15,7 @@ import org.geez.convert.ProcessorManager;
 import org.geez.ui.xliterator.ConvertFilesTab;
 import org.geez.ui.xliterator.ConvertTextTab;
 import org.geez.ui.xliterator.EditorTab;
+import org.geez.ui.xliterator.ICUEditor;
 import org.geez.ui.xliterator.SyntaxHighlighterTab;
 import org.geez.ui.xliterator.XliteratorConfig;
 import org.geez.ui.xliterator.XliteratorTab;
@@ -22,17 +25,20 @@ import com.google.gson.JsonObject;
 
 import de.endrullis.draggabletabs.DraggableTabPane;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -41,6 +47,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -50,6 +58,7 @@ import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -58,6 +67,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
@@ -97,6 +107,7 @@ public final class XliteratorNew extends Application {
     
 	private XliteratorConfig config = null;
 
+	private String searchText = null, replaceText = null;
 	
 	private void errorAlert( Exception ex, String header ) {
         Alert alert = new Alert(AlertType.ERROR);
@@ -618,7 +629,18 @@ public final class XliteratorNew extends Application {
         
         // Check for a saved user menu preference:
         checkPreferences();
-        	
+        
+        MenuItem findItem = new MenuItem("Find..");
+        fileMenu.getItems().add( findItem ); findItem.setVisible( false );
+		findItem.setAccelerator( new KeyCodeCombination(KeyCode.F, KeyCombination.SHORTCUT_DOWN) );
+		findItem.setOnAction( evt -> editorTab.getEditor().findWord(stage) );
+        
+        MenuItem replaceItem = new MenuItem("Replace..");
+        fileMenu.getItems().add( replaceItem ); replaceItem.setVisible( false );
+        replaceItem.setAccelerator( new KeyCodeCombination(KeyCode.R, KeyCombination.SHORTCUT_DOWN) );
+        replaceItem.setOnAction( evt -> editorTab.getEditor().replace(stage) );
+        
+        stage.setAlwaysOnTop(false);
         stage.show();
     }
     
@@ -897,6 +919,7 @@ public final class XliteratorNew extends Application {
     }
     
     
+    /*
     private void loadNewFile(String title, String type) {
     	if(! checkUnsavedChanges() ) {
     		return;
@@ -917,6 +940,7 @@ public final class XliteratorNew extends Application {
     	}
     	
     }
+    */
     
     private void launchSyntaxHightlightEditor( Stage stage ) {
     	if( syntaxHighlighterTab == null) {
