@@ -325,7 +325,7 @@ public final class XliteratorNew extends Application {
         		saveMenuItem.setDisable( true );
         		saveAsMenuItem.setDisable( true );
         	}
-        } );
+        });
         //=========================== END FILES TAB =============================================
 
         //=========================== BEGIN EDITOR TAB ===========================================
@@ -346,7 +346,7 @@ public final class XliteratorNew extends Application {
         		}
         	}
     		System.out.println( "Selected: " + editorTab.getTitle() + " isSelected: " + editorTab.isSelected() );
-        } );
+        });
 
 
         //=========================== END EDITOR TAB ==============================================
@@ -363,7 +363,7 @@ public final class XliteratorNew extends Application {
         		saveMenuItem.setDisable( true );
         		saveAsMenuItem.setDisable( true );
         	}
-        } );
+        });
         //=========================== END TEXT TAB =============================================
         
         // Setup the tabs:
@@ -392,35 +392,30 @@ public final class XliteratorNew extends Application {
         helpMenu.getItems().add( aboutMenuItem );
 
         
-        aboutMenuItem.setOnAction(
-            new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(final ActionEvent e) {
-			        Alert alert = new Alert(AlertType.INFORMATION);
-			        alert.setTitle( "About The Xliterator" );
-			        alert.setHeaderText( "An ICU based transliteration utility " + VERSION );
-			        
-			        FlowPane fp = new FlowPane();
-			        Label label = new Label( "Visit the project homepage on" );
-			        Hyperlink link = new Hyperlink("GitHub");
-			        fp.getChildren().addAll( label, link);
-
-			        link.setOnAction( (event) -> {
-	                    alert.close();
-	                    try {
-		                    URI uri = new URI( "https://github.com/geezorg/Xliterator/" );
-		                    desktop.browse( uri );
-	                    }
-	                    catch(Exception ex) {
-	                    	
-	                    }
-			        });
-
-			        alert.getDialogPane().contentProperty().set( fp );
-			        alert.showAndWait();
-                }
-            }
-        );
+        aboutMenuItem.setOnAction( evt -> {
+		        Alert alert = new Alert(AlertType.INFORMATION);
+		        alert.setTitle( "About The Xliterator" );
+		        alert.setHeaderText( "An ICU based transliteration utility " + VERSION );
+		        
+		        FlowPane fp = new FlowPane();
+		        Label label = new Label( "Visit the project homepage on" );
+		        Hyperlink link = new Hyperlink( "GitHub" );
+		        fp.getChildren().addAll( label, link );
+		
+		        link.setOnAction( (event) -> {
+		            alert.close();
+		            try {
+		                URI uri = new URI( "https://github.com/geezorg/Xliterator/" );
+		                desktop.browse( uri );
+		            }
+		            catch(Exception ex) {
+		            	
+		            }
+		        });
+		
+		        alert.getDialogPane().contentProperty().set( fp );
+		        alert.showAndWait();
+        });
         
         final MenuItem demoMenuItem = new MenuItem( "Load Demo" );
         helpMenu.getItems().add( demoMenuItem );
@@ -477,68 +472,58 @@ public final class XliteratorNew extends Application {
         //=========================== END TABS MENU =============================================
         //
         
-        loadInternalMenuItem.setOnAction(
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(final ActionEvent e) {
-                    	if(! checkUnsavedChanges() ) {
-                    		return;
-                    	}
-                    	try {
-                    		editorTab.getEditor().loadResourceFile( selectedTransliteration );
-                        	editorTab.setTitle( selectedTransliteration );
-                        	saveMenuItem.setDisable(false);
-                        	saveAsMenuItem.setDisable(false);
-                        	boolean isEditorTabVisble = (boolean)editorTabViewMenuItem.getProperties().get( "show" );
-                        	if( isEditorTabVisble == true ) {
-                            	tabpane.getSelectionModel().select( editorTab );
-                        	}
-                        	else {
-                        		tabToggler(editorTabViewMenuItem, editorTab, editorOnView, editorOffView);
-                        	}
-                        }
-                        catch(IOException ex) {
-                        	errorAlert(ex, "Error opening: " + selectedTransliteration );
-                        }
-                    }
+        loadInternalMenuItem.setOnAction( evt -> {
+            	if(! checkUnsavedChanges() ) {
+            		return;
+            	}
+            	try {
+            		editorTab.getEditor().loadResourceFile( selectedTransliteration );
+                	editorTab.setTitle( selectedTransliteration );
+                	saveMenuItem.setDisable(false);
+                	saveAsMenuItem.setDisable(false);
+                	boolean isEditorTabVisble = (boolean)editorTabViewMenuItem.getProperties().get( "show" );
+                	if( isEditorTabVisble == true ) {
+                    	tabpane.getSelectionModel().select( editorTab );
+                	}
+                	else {
+                		tabToggler(editorTabViewMenuItem, editorTab, editorOnView, editorOffView);
+                	}
                 }
-        );
-        openMenuItem.setOnAction(
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(final ActionEvent e) {
-                    	if(! checkUnsavedChanges() ) {
-                    		return;
-                    	}
-                        final FileChooser fileChooser = new FileChooser();
-                    	configureFileChooserICU(fileChooser);    
-                    	File externalIcuFile = fileChooser.showOpenDialog( stage );
-                        if( externalIcuFile == null ) {
-                        	return;
-                        }
-                        try {
-                        	// editor.replaceText( FileUtils.readFileToString(icuFile, StandardCharsets.UTF_8) );
-                        	editorTab.loadFile( externalIcuFile );
-                        	setUseEditor(); // TODO: set transliteration direction?
-                        	textTab.enableConvertForward( true );
-                        	textTab.enableConvertReverse( false );
-                        	// TODO: if an XML file, scan for ="both"
-                        	if( editorTab.getEditor().getText().contains( "↔" ) ) {
-                        		transliterationDirection = "both";
-                                textTab.enableConvertBoth( true );
-                        	} else {
-                        		transliterationDirection = "forward"; // TODO: confirm this, it might be reverse only
-                        	}
-                        	saveMenuItem.setDisable(false);
-                        	saveAsMenuItem.setDisable(false);
-                        	tabToggler(editorTabViewMenuItem, editorTab, editorOnView, editorOffView);
-                        }
-                        catch(IOException ex) {
-                        	errorAlert(ex, "Error opening: " + externalIcuFile.getName() );
-                        }
-                    }
+                catch(IOException ex) {
+                	errorAlert(ex, "Error opening: " + selectedTransliteration );
                 }
-        );
+        });
+        openMenuItem.setOnAction( evt -> {
+		    	if(! checkUnsavedChanges() ) {
+		    		return;
+		    	}
+		        final FileChooser fileChooser = new FileChooser();
+		    	configureFileChooserICU(fileChooser);    
+		    	File externalIcuFile = fileChooser.showOpenDialog( stage );
+		        if( externalIcuFile == null ) {
+		        	return;
+		        }
+		        try {
+		        	// editor.replaceText( FileUtils.readFileToString(icuFile, StandardCharsets.UTF_8) );
+		        	editorTab.loadFile( externalIcuFile );
+		        	setUseEditor(); // TODO: set transliteration direction?
+		        	textTab.enableConvertForward( true );
+		        	textTab.enableConvertReverse( false );
+		        	// TODO: if an XML file, scan for ="both"
+		        	if( editorTab.getEditor().getText().contains( "↔" ) ) {
+		        		transliterationDirection = "both";
+		                textTab.enableConvertBoth( true );
+		        	} else {
+		        		transliterationDirection = "forward"; // TODO: confirm this, it might be reverse only
+		        	}
+		        	saveMenuItem.setDisable(false);
+		        	saveAsMenuItem.setDisable(false);
+		        	tabToggler(editorTabViewMenuItem, editorTab, editorOnView, editorOffView);
+		        }
+		        catch(IOException ex) {
+		        	errorAlert(ex, "Error opening: " + externalIcuFile.getName() );
+		        }
+        });
         
         //
         //=========================== BEGIN PREFERENCES MENU ====================================
