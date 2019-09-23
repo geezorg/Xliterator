@@ -89,6 +89,8 @@ public final class XliteratorNew extends Application {
     private final int APP_WIDTH  = 800;
     private final int APP_HEIGHT = 800;
     
+	private String xlitStylesheet =  "styles/xliterator.css";
+	
     private final String scriptInPreference   = "org.geez.ui.xliterator.scriptIn";
     private final String scriptOutPreference  = "org.geez.ui.xliterator.scriptOut";
     private final String variantOutPreference = "org.geez.ui.xliterator.variantOut";
@@ -584,6 +586,8 @@ public final class XliteratorNew extends Application {
         //
         //=========================== BEGIN EDIT MENU ===========================================
         //
+        
+        // TODO:  This menu needs to work with which ever text area is in focus
         final Menu editMenu = new Menu( "Edit" );
         
         MenuItem findMenuItem = new MenuItem("Find…");
@@ -656,7 +660,7 @@ public final class XliteratorNew extends Application {
  
         Scene scene = new Scene(rootGroup, APP_WIDTH, APP_HEIGHT);
         ClassLoader classLoader = this.getClass().getClassLoader();
-        scene.getStylesheets().add( classLoader.getResource( "styles/xliterator.css" ).toExternalForm() );
+        scene.getStylesheets().add( classLoader.getResource( xlitStylesheet ).toExternalForm() );
         stage.setScene( scene ); 
         
         editorTab.getEditor().setStyle( scene );
