@@ -1,14 +1,50 @@
 // Review https://www.sublimetext.com/docs/3/color_schemes.html#colors
 
+
+// ICU Syntax Highlighting
+.forwardArrow {
+	-fx-fill: #008e00;
+	-fx-font-weight: bold;
+}
+
+.reverseArrow {
+	-fx-fill: orangered;
+	-fx-font-weight: bold;
+}
+
+.bothArrow {
+	-fx-fill: mediumvioletred;
+	-fx-font-weight: bold;
+}
+
+.variable {
+	-fx-fill: cyan;
+}
+
+.comment {
+	-fx-fill: teal;
+}
+
+.directive {
+	-fx-fill: black;
+}
+
+.identifier {
+	-fx-fill: orange;
+}
+
+.paren {
+    -fx-fill: firebrick;
+    -fx-font-weight: bold;
+}
+
+
+// XML Syntax Highlighting
 .tagmark {
     -fx-fill: gray;
 }
 .anytag {
     -fx-fill: crimson;
-}
-.paren {
-    -fx-fill: firebrick;
-    -fx-font-weight: bold;
 }
 .attribute {
     -fx-fill: darkviolet;
@@ -16,32 +52,7 @@
 .avalue {
     -fx-fill: black;
 }
-
-.comment {
-	-fx-fill: teal;
-}
 .cdata {
-    -fx-font-weight: bold;
 	-fx-fill: blue;
-}
-.variable {
-	-fx-fill: cyan;
-}
-.directive {
-	-fx-fill: black;
-}
-.identifier {
-	-fx-fill: orange;
-}
-.forwardArrow {
 	-fx-font-weight: bold;
-	-fx-fill: #008e00;
-}
-.reverseArrow {
-	-fx-font-weight: bold;
-	-fx-fill: orangered;
-}
-.bothArrow {
-	-fx-font-weight: bold;
-	-fx-fill: mediumvioletred;
 }

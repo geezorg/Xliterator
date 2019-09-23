@@ -7,7 +7,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Menu;
-import javafx.scene.control.Tab;
 
 public abstract class XliteratorTab extends DraggableTab {
 	
@@ -32,17 +31,13 @@ public abstract class XliteratorTab extends DraggableTab {
     	this.defaultFontFamily = defaultFontFamily;
     }
     
-
     public void setDefaultFontFamily(String defaultFontFamily, String defaultFontSize) {
     	this.defaultFontFamily = defaultFontFamily;
     	this.defaultFontSize = defaultFontSize;
     }
 
     
-
     protected void incrementFontSize(StyleClassedTextArea component) {
-    	// StyleClassedTextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
-
     	String fontFamily = (String) component.getProperties().get("font-family");
     	int newSize = Integer.parseInt( (String)component.getProperties().get("font-size") ) + 1;
     	if( newSize <= 24 ) {
@@ -53,8 +48,6 @@ public abstract class XliteratorTab extends DraggableTab {
     }
 
     protected void decrementFontSize(StyleClassedTextArea component) {
-    	// StyleClassedTextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
-
     	String fontFamily = (String) component.getProperties().get("font-family");
     	int newSize = Integer.parseInt( (String)component.getProperties().get("font-size") ) - 1;
     	if( newSize >= 10 ) {
@@ -65,9 +58,7 @@ public abstract class XliteratorTab extends DraggableTab {
     }
     
     protected void setFontSize( StyleClassedTextArea component, String fontSize  ) {
-		// if( component.getProperties().get( "font-size") == null ) {
 			component.setStyle( "-fx-font-family: '" + component.getProperties().get("font-family") + "'; -fx-font-size: " + fontSize + ";" ); 
-		// }
     		component.getProperties().put( "font-size", fontSize );
     		this.fontSize = fontSize;
     }

@@ -54,17 +54,19 @@ public class EditorTab extends XliteratorTab {
         
         
         editor.textProperty().addListener( (obs, oldText, newText) -> {
-    		String label = this.getText();
+    		String label = this.getTitle();
         	if( editor.hasContentChanged(newText) ) {
         		if( label.charAt(0) != '*' ) {
-        			this.setText( "*" + this.getText() );
+        			// this.setText( "*" + this.getText() );
+        			this.setTitle( "*" + this.getTitle() );
         			saveMenuItem.setDisable( false );
         			unsavedChanges = true;
         		}
         	}
         	else {
         		if( label.charAt(0) == '*' ) {
-        			this.setText( this.getText().substring(1) );
+        			// this.setText( this.getText().substring(1) );
+        			this.setTitle( this.getTitle().substring(1) );
         			saveMenuItem.setDisable( true );
         			unsavedChanges = false;
         		}
@@ -114,7 +116,8 @@ public class EditorTab extends XliteratorTab {
     
     public void loadFile( File editorFile ) throws IOException {
     	editor.loadFile( editorFile );
-    	setText( editorFile.getName() );
+    	// setText( editorFile.getName() );
+    	setTitle( editorFile.getName() );
     }
 	
 	

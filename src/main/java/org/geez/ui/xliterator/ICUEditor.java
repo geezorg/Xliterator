@@ -94,6 +94,9 @@ public class ICUEditor extends CodeArea {
     private static final int GROUP_TRULE_CLOSE    = 4;
 
     private String originalText = "";
+    
+	private String defaultStylesheet = "styles/icu-highlighting.css";
+	private String userStylesheet    = "styles/user-highlighting.css";
 
     public ICUEditor() {
     	String osName = System.getProperty("os.name");
@@ -164,8 +167,16 @@ public class ICUEditor extends CodeArea {
     	//
 		// Scene scenex = new Scene(new StackPane( new VirtualizedScrollPane<>(this) ), 600, 400);
     	
+    	// this.setBackground( new Background( new BackgroundFill(Color.rgb(0, 4, 0), CornerRadii.EMPTY, Insets.EMPTY)) ); ;
 		ClassLoader classLoader = this.getClass().getClassLoader();
-        scene.getStylesheets().add( classLoader.getResource("styles/icu-highlighting.css").toExternalForm()  );
+		InputStream inputStream = classLoader.getResourceAsStream( userStylesheet );
+		if( inputStream == null ) {
+			scene.getStylesheets().add( classLoader.getResource( defaultStylesheet ).toExternalForm() );
+		}
+		else {
+			scene.getStylesheets().add( classLoader.getResource( userStylesheet ).toExternalForm() );
+		}
+		
     }
 
     private static StyleSpans<Collection<String>> computeHighlighting(String text) {
@@ -427,7 +438,7 @@ public class ICUEditor extends CodeArea {
 		}
 		// Create file 
 		FileWriter fstream = new FileWriter( file );
-		BufferedWriter out = new BufferedWriter (fstream );
+		BufferedWriter out = new BufferedWriter ( fstream );
 		
 		String content = getText(); // a check for null content was made by the EditorTab
 		out.write( content );
