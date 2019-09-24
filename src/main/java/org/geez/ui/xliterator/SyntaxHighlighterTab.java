@@ -83,19 +83,18 @@ public class SyntaxHighlighterTab extends XliteratorTab {
     
 
     
-    private Dialog<Color> createColorPickerDialog(String action, String question, Color _default) {
-        Dialog<Color> dialog = new Dialog<>();
+    private Dialog<Color> createColorPickerDialog( String action, String question, Color _default ) {
+        Dialog<Color> dialog = new Dialog<Color>();
         dialog.setTitle(action);
         dialog.setHeaderText(question);
-        ColorPicker picker = new ColorPicker(_default);
+        ColorPicker picker = new ColorPicker( _default );
 
-        dialog.getDialogPane().setContent(picker);
+        dialog.getDialogPane().setContent( picker );
 
-        dialog.getDialogPane().getButtonTypes().addAll(
-                ButtonType.OK, ButtonType.CANCEL);
+        dialog.getDialogPane().getButtonTypes().addAll( ButtonType.OK, ButtonType.CANCEL );
 
         dialog.setResultConverter(buttonType -> {
-            if (buttonType.equals(ButtonType.OK)) {
+            if (buttonType.equals( ButtonType.OK ) ) {
             	// setRubricationColor( silt, picker.getValue() );
                 return picker.getValue();
             } else {
@@ -315,21 +314,22 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 			if( (boolean)list.get(3) ) {
 				underline.setSelected( true );
 			}
-			String color = (String)list.get(0);
-			Button colorButton = new Button ( color );
-			colorButton.setStyle( "-fx-text-fill: " + color + ";" );
+			String colorValue = (String)list.get(0);
+			Button colorButton = new Button ( colorValue );
+			colorButton.getProperties().put( "color" , Color.valueOf(colorValue ) );
+			colorButton.setStyle( "-fx-text-fill: " + colorValue + ";" );
 			colorButton.setOnAction( evt -> {
-				
-	        	Dialog<Color> d = createColorPickerDialog( "Text Color", "Text Color", Color.valueOf( color ) );
+				Color color = (Color)colorButton.getProperties().get( "color" );
+	        	Dialog<Color> d = createColorPickerDialog( "Text Color", "Text Color", color );
 	        	Optional<Color> result = d.showAndWait();
 	        	if ( result.isPresent() ) {
-	        		String newColor = getRGBString( d.getResult() );
+	        		String newColor = getRGBString( result.get() );
 					ArrayList<Object> ulist = updatedStyles.get( style );
 					ulist.set( 0, newColor );
 					setStyle( label,  ulist );
 					colorButton.setText( newColor );
 					colorButton.setStyle( "-fx-text-fill: " + newColor + ";" );
-	        	
+					colorButton.getProperties().put( "color" ,result.get() );
 	        	}
 			});
 			
