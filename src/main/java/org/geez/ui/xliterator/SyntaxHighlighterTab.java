@@ -331,7 +331,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 					colorButton.setStyle( "-fx-text-fill: " + newColor + ";" );
 					colorButton.getProperties().put( "color" ,result.get() );
 	        	}
-			});
+			}); 
 			
 			
 			HBox lbox = new HBox( label );
