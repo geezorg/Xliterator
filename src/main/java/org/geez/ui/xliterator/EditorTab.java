@@ -6,11 +6,16 @@ import java.util.prefs.Preferences;
 
 import org.fxmisc.flowless.VirtualizedScrollPane;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class EditorTab extends XliteratorTab {
@@ -21,6 +26,7 @@ public class EditorTab extends XliteratorTab {
         
     private final String editorFontFamilyPref = "org.geez.ui.xliterator.editor.font.family";
     private final String editorFontSizePref   = "org.geez.ui.xliterator.editor.font.size";
+    private final String editorBackgroundColor = "org.geez.ui.xliterator.editor.background.color";
     
 
 	public EditorTab( String title ) {
@@ -154,7 +160,25 @@ public class EditorTab extends XliteratorTab {
       editor.getProperties().put( "font-size", fontSize );
       setFontSize( editor, fontSize );
       
+      
+      String bgcolor = prefs.get( editorBackgroundColor, "white" );
+	  //editor.setStyle( "-fx-background-color: " + bgcolor + ";" );
+	  setBackgroundColor( bgcolor );
+
+
+      
       return true;
+  }
+  
+  public void setBackgroundColor(String color ) {
+      // create a background fill 
+      BackgroundFill background_fill = new BackgroundFill( Color.valueOf( color ),  CornerRadii.EMPTY, Insets.EMPTY); 
+
+      // create Background 
+      Background background = new Background(background_fill); 
+
+      // set background 
+      editor.setBackground(background); 
   }
       
 }

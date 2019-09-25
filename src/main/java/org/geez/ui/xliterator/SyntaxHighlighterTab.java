@@ -20,6 +20,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
+import org.geez.ui.xliterator.ICUEditor;
+import org.geez.ui.Xliterator;
+import org.geez.ui.XliteratorNew;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -71,6 +74,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 	private HashMap<String,ArrayList<Object>> styles = new HashMap<String,ArrayList<Object>>();
 	private HashMap<String,ArrayList<Object>> updatedStyles = new HashMap<String,ArrayList<Object>>();
     
+	private XliteratorNew xlit = null;
 
 	public SyntaxHighlighterTab( String title ) {
 		super(title);
@@ -177,7 +181,8 @@ public class SyntaxHighlighterTab extends XliteratorTab {
     	label.setStyle( style );
     }
     
-    public void load( final Stage stage ) {
+    public void load( final Stage stage, final XliteratorNew xlit ) {
+    	this.xlit = xlit;
 		if( styles.isEmpty() ) {
 			ClassLoader classLoader = this.getClass().getClassLoader();
 			InputStream inputStream = classLoader.getResourceAsStream( userStylesheet );
@@ -229,16 +234,15 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 		});
 		
 		
-		applyButton.setOnAction(
-				// TBD: We need an editor handle to apply the bgcolor to
-				evt -> applyStylesheet( stage.getScene(), tempStylesheet, true )
-		);
+		applyButton.setOnAction( evt -> {
+				EditorTab editorTab = xlit.getActiveEditorTab(); //TBD will need to get a list of editors
+				editorTab.setBackgroundColor( bgcolor );
+				applyStylesheet( stage.getScene(), tempStylesheet, true );
+		});
 		
 		saveButton.setOnAction( evt -> {
 				saveStylesheet( stage.getScene(), userStylesheet, true );
-				
-		        Preferences prefs = Preferences.userNodeForPackage( SyntaxHighlighterTab.class );
-
+		        Preferences prefs = Preferences.userNodeForPackage( EditorTab.class );
 		        prefs.put( editorBackgroundColor, bgcolor );
 		});
 		
@@ -361,7 +365,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 			}
 		}
 		
-	    Preferences prefs = Preferences.userNodeForPackage( SyntaxHighlighterTab.class );
+	    Preferences prefs = Preferences.userNodeForPackage( EditorTab.class );
 	      
 		String colorValue = bgcolor = prefs.get( editorBackgroundColor, "white" );
 		Button colorButton = new Button ( colorValue );
@@ -447,7 +451,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
     }
     
     
-    private void applyStylesheet(Scene scene, String stylesheet, boolean save ) {
+    private void applyStylesheet( Scene scene, String stylesheet, boolean save ) {
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		scene.getStylesheets().clear();
         scene.setUserAgentStylesheet( null );
@@ -460,7 +464,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 		scene.getStylesheets().add( classLoader.getResource( xlitStylesheet ).toExternalForm() );
     }
     
-    private void reloadDefault(Scene scene) {
+    private void reloadDefault( Scene scene ) {
     	applyStylesheet( scene, defaultStylesheet, false );
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		InputStream inputStream = classLoader.getResourceAsStream( defaultStylesheet );			
