@@ -551,8 +551,8 @@ public final class XliteratorNew extends Application {
         
         final MenuItem syntaxHighlightEditorMenuItem   = new MenuItem( "Edit Syntax Highlighting" );
         syntaxHighlightEditorMenuItem.setOnAction( evt -> {
-        	syntaxHighlightEditorMenuItem.setDisable(true);
-        	tabsMenu.getItems().add(syntaxHighlighterTabViewMenuItem);
+        	syntaxHighlightEditorMenuItem.setDisable( true );
+        	tabsMenu.getItems().add( syntaxHighlighterTabViewMenuItem );
         	tabToggler( syntaxHighlighterTabViewMenuItem, syntaxHighlighterTab, syntaxHighlighterOnView, syntaxHighlighterOffView );
         	launchSyntaxHightlightEditor( stage ); 
         });
@@ -968,10 +968,14 @@ public final class XliteratorNew extends Application {
     		// the syntax highlight editor is already loaded
     		return;
     	}
-    	syntaxHighlighterTab.load( stage );
+    	syntaxHighlighterTab.load( stage, this );
     	tabpane.getSelectionModel().select(syntaxHighlighterTab);
     }
     
+    public EditorTab getActiveEditorTab() {
+    	// TBD: this will have to change to the active editor
+    	return editorTab;
+    }
     
     private void loadDemo() {
     	if(! checkUnsavedChanges() ) {
