@@ -246,9 +246,6 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 		
 		defaultButton.setOnAction( evt -> {
 				reloadDefault( stage.getScene() );
-				ClassLoader classLoader = this.getClass().getClassLoader();
-				InputStream inputStream = classLoader.getResourceAsStream( defaultStylesheet );			
-				readStyleSheet(inputStream);
 				VBox vvbox = (VBox)this.getContent();
 				vvbox.getChildren().set( 0, createGridPane() );
 		});
@@ -424,14 +421,9 @@ public class SyntaxHighlighterTab extends XliteratorTab {
     
     private void reloadDefault(Scene scene) {
     	applyStylesheet( scene, defaultStylesheet, false );
-    	/*
 		ClassLoader classLoader = this.getClass().getClassLoader();
-		scene.getStylesheets().clear();
-        scene.setUserAgentStylesheet( null );
-		scene.getStylesheets().add( classLoader.getResource( defaultStylesheet ).toExternalForm() );
-		scene.getStylesheets().add( classLoader.getResource( xlitStylesheet ).toExternalForm() );
-		*/
-    	
+		InputStream inputStream = classLoader.getResourceAsStream( defaultStylesheet );			
+		readStyleSheet(inputStream);    	
     }
     
     private void exportStylesheet( Stage stage ) {
