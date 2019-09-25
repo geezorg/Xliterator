@@ -13,6 +13,7 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -47,8 +48,8 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 	private String defaultStylesheet = "styles/icu-highlighting.css";
 	private String userStylesheet    = "styles/user-highlighting.css";
 	private String tempStylesheet    = "styles/temp-highlighting.css";
-	private String xlitStylesheet    =  "styles/xliterator.css";
-	private String exportStylesheet  =  "xliterator-highlighting.css";
+	private String xlitStylesheet    = "styles/xliterator.css";
+	private String exportStylesheet  = "xliterator-highlighting.css";
 	
 	private static final Pattern classPattern = Pattern.compile( "\\.(\\w+) \\{" );
 	private static final Pattern colorPattern = Pattern.compile( "-fx-fill: (#?\\w+);" );
@@ -107,8 +108,8 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 	public void readStyleSheet(InputStream inputStream) {
 
 		try {
+			styles.clear();
 			BufferedReader br = new BufferedReader( new InputStreamReader(inputStream, "UTF-8") );
-			// StringBuffer sb = new StringBuffer();
 			String line = null, cssClass = null, data = null;
 			
 			while ( (line = br.readLine()) != null ) {
@@ -122,22 +123,15 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 							if( styleMatcher.group("COLOR") != null) {
 								data = styleMatcher.group(2);
 								styles.put( cssClass, new ArrayList<Object>( Arrays.asList( data, false, false, false) ) );
-								// updatedStyles.put(  cssClass, new ArrayList<Object>( Arrays.asList( data, false, false, false) ) );
 							}
 							else if( styleMatcher.group("BOLD") != null) {
-								// data  = styleMatcher.group();
 								styles.get( cssClass ).set( 1, true );
-								// updatedStyles.get( cssClass ).add( 1, true );
 							}
 							else if( styleMatcher.group("ITALIC") != null) {
-								// data = styleMatcher.group();
 								styles.get( cssClass ).set( 2, true );
-								// updatedStyles.get( cssClass ).add( 2, true );
 							}
 							else if( styleMatcher.group("UNDERLINE") != null) {
-								// data = styleMatcher.group();
 								styles.get( cssClass ).set( 3, true );
-								// updatedStyles.get( cssClass ).add( 3, true );
 							}
 						}
 					}
@@ -226,18 +220,13 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 
 
 		resetButton.setOnAction( evt -> {
-			VBox vvbox = (VBox)this.getContent();
-			vvbox.getChildren().remove(0);
-			vvbox.getChildren().remove(0);
-			// vvbox = null;
-			// vvbox = new VBox();
-			vvbox.getChildren().addAll( createGridPane(), controlBox );
-			// this.setContent( vvbox );
+				VBox vvbox = (VBox)this.getContent();
+				vvbox.getChildren().set( 0, createGridPane() );
 		});
 		
 		
 		applyButton.setOnAction(
-				evt -> applyStylesheet( stage.getScene(), tempStylesheet )
+				evt -> applyStylesheet( stage.getScene(), tempStylesheet, true )
 		);
 		
 		saveButton.setOnAction(
@@ -248,24 +237,40 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 				evt -> exportStylesheet( stage )
 		);
 		
-		importButton.setOnAction(
-				evt -> importStylesheet( stage )
-		);
+		importButton.setOnAction( evt -> {
+				importStylesheet( stage );
+				VBox vvbox = (VBox)this.getContent();
+				vvbox.getChildren().set( 0, createGridPane() );
+		});
 		
 		
-		defaultButton.setOnAction(
-				evt -> importStylesheet( stage )
-		);
+		defaultButton.setOnAction( evt -> {
+				reloadDefault( stage.getScene() );
+				ClassLoader classLoader = this.getClass().getClassLoader();
+				InputStream inputStream = classLoader.getResourceAsStream( defaultStylesheet );			
+				readStyleSheet(inputStream);
+				VBox vvbox = (VBox)this.getContent();
+				vvbox.getChildren().set( 0, createGridPane() );
+		});
 		
 
 		this.setContent( vbox );
     }
 	
+    private void copyStyles() {
+    	
+    	updatedStyles.clear();
+    	
+		for(String style: styles.keySet()) {
+			ArrayList<Object> newList = new ArrayList<Object>( styles.get( style ) );
+			updatedStyles.put( style, newList );
+			
+		}
+    	
+    }
 	private GridPane createGridPane() {
 
-		
-		updatedStyles = (HashMap<String, ArrayList<Object>>) styles.clone();
-
+		copyStyles();
 		
 		GridPane gridPane = new GridPane();
 
@@ -331,7 +336,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 					colorButton.setStyle( "-fx-text-fill: " + newColor + ";" );
 					colorButton.getProperties().put( "color" ,result.get() );
 	        	}
-			}); 
+			});
 			
 			
 			HBox lbox = new HBox( label );
@@ -371,7 +376,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 			for(String style : updatedStyles.keySet()) {
 				StringBuffer sb = new StringBuffer( "." + style + " {\n" );
 				
-				ArrayList<Object> list = styles.get( style );
+				ArrayList<Object> list = updatedStyles.get( style );
 
 				sb.append( "\t-fx-fill: " + (String)list.get(0) + ";\n" );
 		    	if( (boolean)list.get(1) ) {
@@ -393,7 +398,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 			printStream.close();
 			
 			if( apply ) {
-				applyStylesheet( scene, stylesheet );
+				applyStylesheet( scene, stylesheet, false );
 				okAlert( "Updates Successfully Saved", "Updates Successfully Saved", "Syntax highlighting updates saved successfully." );
 			}
     	}
@@ -404,15 +409,29 @@ public class SyntaxHighlighterTab extends XliteratorTab {
     }
     
     
-    private void applyStylesheet(Scene scene, String stylesheet ) {
+    private void applyStylesheet(Scene scene, String stylesheet, boolean save ) {
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		scene.getStylesheets().clear();
         scene.setUserAgentStylesheet( null );
-        saveStylesheet( scene, stylesheet, false );
-		// scene.getStylesheets().remove( classLoader.getResource( userStylesheet ).toExternalForm() );
-		// scene.getStylesheets().remove( classLoader.getResource( defaultStylesheet ).toExternalForm() );
-		scene.getStylesheets().add( classLoader.getResource( stylesheet ).toExternalForm()  );
-		scene.getStylesheets().add( classLoader.getResource( xlitStylesheet ).toExternalForm()  );
+        
+        if( save ) {
+        	saveStylesheet( scene, stylesheet, false );
+        }
+
+		scene.getStylesheets().add( classLoader.getResource( stylesheet ).toExternalForm() );
+		scene.getStylesheets().add( classLoader.getResource( xlitStylesheet ).toExternalForm() );
+    }
+    
+    private void reloadDefault(Scene scene) {
+    	applyStylesheet( scene, defaultStylesheet, false );
+    	/*
+		ClassLoader classLoader = this.getClass().getClassLoader();
+		scene.getStylesheets().clear();
+        scene.setUserAgentStylesheet( null );
+		scene.getStylesheets().add( classLoader.getResource( defaultStylesheet ).toExternalForm() );
+		scene.getStylesheets().add( classLoader.getResource( xlitStylesheet ).toExternalForm() );
+		*/
+    	
     }
     
     private void exportStylesheet( Stage stage ) {
@@ -474,7 +493,11 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 	        printStream.print(styleSheetString );
 	        printStream.close();
 	        
-	        applyStylesheet( stage.getScene(), userStylesheet );
+			ClassLoader classLoader = this.getClass().getClassLoader();
+			InputStream inputStream = classLoader.getResourceAsStream( userStylesheet );			
+			readStyleSheet(inputStream);
+			
+	        applyStylesheet( stage.getScene(), userStylesheet, false );
 			okAlert( "Import Successfully Saved", "Import Successfully Saved", "Syntax highlighting import saved successfully." );
 
 		}
