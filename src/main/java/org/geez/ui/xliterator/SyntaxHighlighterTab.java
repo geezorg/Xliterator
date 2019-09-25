@@ -13,9 +13,9 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Optional;
+import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,17 +52,21 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 	private String exportStylesheet  = "xliterator-highlighting.css";
 	
 	private static final Pattern classPattern = Pattern.compile( "\\.(\\w+) \\{" );
+	/*
 	private static final Pattern colorPattern = Pattern.compile( "-fx-fill: (#?\\w+);" );
 	private static final Pattern boldPattern = Pattern.compile( "-fx-font-weight: bold;" );
 	private static final Pattern italicattern = Pattern.compile( "-fx-font-style: italic;" );
 	private static final Pattern underlinePattern = Pattern.compile( "-fx-underline: true;" );
+	*/
 	private static final Pattern stylePattern = Pattern.compile(
 			"(?<COLOR>-fx-fill: ([#\\w]+);)"
 			+ "|(?<BOLD>-fx-font-weight: bold;)"
 			+ "|(?<ITALIC>-fx-font-style: italic;)"
 			+ "|(?<UNDERLINE>-fx-underline: true;)"
 	);
-			   
+	
+    private final String editorBackgroundColor = "org.geez.ui.xliterator.editor.background.color";
+    private String bgcolor = null;
 	
 	private HashMap<String,ArrayList<Object>> styles = new HashMap<String,ArrayList<Object>>();
 	private HashMap<String,ArrayList<Object>> updatedStyles = new HashMap<String,ArrayList<Object>>();
@@ -226,12 +230,17 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 		
 		
 		applyButton.setOnAction(
+				// TBD: We need an editor handle to apply the bgcolor to
 				evt -> applyStylesheet( stage.getScene(), tempStylesheet, true )
 		);
 		
-		saveButton.setOnAction(
-				evt -> saveStylesheet( stage.getScene(), userStylesheet, true )
-		);
+		saveButton.setOnAction( evt -> {
+				saveStylesheet( stage.getScene(), userStylesheet, true );
+				
+		        Preferences prefs = Preferences.userNodeForPackage( SyntaxHighlighterTab.class );
+
+		        prefs.put( editorBackgroundColor, bgcolor );
+		});
 		
 		exportButton.setOnAction(
 				evt -> exportStylesheet( stage )
@@ -351,6 +360,38 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 				row++;
 			}
 		}
+		
+	    Preferences prefs = Preferences.userNodeForPackage( SyntaxHighlighterTab.class );
+	      
+		String colorValue = bgcolor = prefs.get( editorBackgroundColor, "white" );
+		Button colorButton = new Button ( colorValue );
+		colorButton.getProperties().put( "color" , Color.valueOf(colorValue ) );
+		colorButton.setStyle( "-fx-text-fill: " + colorValue + ";" );
+		colorButton.setOnAction( evt -> {
+			Color color = (Color)colorButton.getProperties().get( "color" );
+        	Dialog<Color> d = createColorPickerDialog( "Text Color", "Text Color", color );
+        	Optional<Color> result = d.showAndWait();
+        	if ( result.isPresent() ) {
+        		String newColor = getRGBString( result.get() );
+        		bgcolor = newColor;
+				// label.setStyle( "-fx-text-fill: " + newColor + "; " );
+				colorButton.setText( newColor );
+				colorButton.setStyle( "-fx-text-fill: " + newColor + ";" );
+				colorButton.getProperties().put( "color" ,result.get() );
+        	}
+		});
+		
+		// Label label = new Label( "background: " );
+		// label.setStyle( "-fx-text-fill: " + colorValue + "; " );
+		HBox lbox = new HBox( new Label( "background: " ) );
+		lbox.setAlignment( Pos.CENTER_RIGHT );
+		
+		HBox sbox = new HBox();
+		sbox.getChildren().addAll( colorButton );
+		sbox.setAlignment( Pos.CENTER_LEFT);
+		
+		gridPane.add( lbox, column,     row, 1, 1 );
+		gridPane.add( sbox, (column+1), row, 1, 1 );
 		
 		return gridPane;
 	}
@@ -510,26 +551,6 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 		}
         return sb.toString();
     }
-    
-    /*
-  private boolean loadStylesheet() {
-      Preferences prefs = Preferences.userNodeForPackage( SyntaxHighlighterTab.class );
-      
-      fontFamily = prefs.get( editorFontFamilyPref, null );
-      
-      if( fontFamily == null ) {
-    	  return false;
-      }
-      
-      fontSize = prefs.get( editorFontSizePref, null );
-      
-      editor.getProperties().put( "font-family", fontFamily );
-      editor.getProperties().put( "font-size", fontSize );
-      setFontSize( editor, fontSize );
-      
-      return true;
-  }
-	*/
     
 	
 	protected void okAlert( String title, String header, String message ) {

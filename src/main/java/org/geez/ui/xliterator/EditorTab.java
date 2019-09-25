@@ -24,7 +24,7 @@ public class EditorTab extends XliteratorTab {
     
 
 	public EditorTab( String title ) {
-		super(title);
+		super( title );
 		checkPreferences();
 	}
 	
