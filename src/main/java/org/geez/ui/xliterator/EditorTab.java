@@ -33,7 +33,8 @@ public class EditorTab extends XliteratorTab {
 		super( title );
 		checkPreferences();
 	}
-	
+
+
 	public void reset( String title ) {
 		setText( title );
 		externalIcuFile = null;
@@ -145,40 +146,39 @@ public class EditorTab extends XliteratorTab {
     }
     
     
-  private boolean checkPreferences() {
-      Preferences prefs = Preferences.userNodeForPackage( EditorTab.class );
-      
-      fontFamily = prefs.get( editorFontFamilyPref, null );
-      
-      if( fontFamily == null ) {
-    	  return false;
-      }
-      
-      fontSize = prefs.get( editorFontSizePref, null );
-      
-      editor.getProperties().put( "font-family", fontFamily );
-      editor.getProperties().put( "font-size", fontSize );
-      setFontSize( editor, fontSize );
-      
-      
-      String bgcolor = prefs.get( editorBackgroundColor, "white" );
-	  //editor.setStyle( "-fx-background-color: " + bgcolor + ";" );
-	  setBackgroundColor( bgcolor );
-
-
-      
-      return true;
-  }
+    private boolean checkPreferences() {
+		Preferences prefs = Preferences.userNodeForPackage( EditorTab.class );
+		  
+		fontFamily = prefs.get( editorFontFamilyPref, null );
+		  
+		if( fontFamily == null ) {
+			return false;
+		}
+		  
+		fontSize = prefs.get( editorFontSizePref, null );
+		  
+		editor.getProperties().put( "font-family", fontFamily );
+		editor.getProperties().put( "font-size", fontSize );
+		setFontSize( editor, fontSize );
+		  
+		  
+		String bgcolor = prefs.get( editorBackgroundColor, "white" );
+		//editor.setStyle( "-fx-background-color: " + bgcolor + ";" );
+		setBackgroundColor( bgcolor );
+		  
+		return true;
+    }
   
-  public void setBackgroundColor(String color ) {
-      // create a background fill 
-      BackgroundFill background_fill = new BackgroundFill( Color.valueOf( color ),  CornerRadii.EMPTY, Insets.EMPTY); 
+  
+    public void setBackgroundColor(String color ) {
+    	// create a background fill 
+    	BackgroundFill background_fill = new BackgroundFill( Color.valueOf( color ),  CornerRadii.EMPTY, Insets.EMPTY); 
 
-      // create Background 
-      Background background = new Background(background_fill); 
+    	// create Background 
+    	Background background = new Background(background_fill); 
 
-      // set background 
-      editor.setBackground(background); 
-  }
+    	// set background 
+    	editor.setBackground(background); 
+    }
       
 }

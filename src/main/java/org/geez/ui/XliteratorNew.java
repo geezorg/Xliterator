@@ -4,6 +4,8 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.prefs.Preferences;
@@ -78,7 +80,7 @@ public final class XliteratorNew extends Application {
 	private String selectedTransliteration  = null;
 	private String transliterationDirection = null;
     private String defaultFontFamily      = null;
-    DraggableTabPane tabpane = new DraggableTabPane();
+    private DraggableTabPane tabpane = new DraggableTabPane();
     private MenuItem loadInternalMenuItem = new MenuItem( "Load Selected Transliteration" );
     private EditorTab editorTab           = new EditorTab( "Mapping Editor" );
     private SyntaxHighlighterTab syntaxHighlighterTab = new SyntaxHighlighterTab( "Syntax Highlighter" );
@@ -86,10 +88,14 @@ public final class XliteratorNew extends Application {
     private ConvertFilesTab filesTab      = new ConvertFilesTab( "Convert Files" );
     private ProcessorManager processorManager = new ProcessorManager();
     
+    private ArrayList<XliteratorTab> editors = new ArrayList<XliteratorTab>( Arrays.asList( editorTab, textTab) ); 
+    private int currentEditorIndex = 0;
+    private EditorTab currentEditor = null;
+    
     private final int APP_WIDTH  = 800;
     private final int APP_HEIGHT = 800;
     
-	private String xlitStylesheet =  "styles/xliterator.css";
+	private String xlitStylesheet = "styles/xliterator.css";
 	
     private final String scriptInPreference   = "org.geez.ui.xliterator.scriptIn";
     private final String scriptOutPreference  = "org.geez.ui.xliterator.scriptOut";
@@ -97,6 +103,7 @@ public final class XliteratorNew extends Application {
     private final String transliterationIdPreference        = "org.geez.ui.xliterator.transliterationId";
     private final String transliterationDirectionPreference = "org.geez.ui.xliterator.transliterationDirection";
     
+    private Stage primaryStage = null;
 	private XliteratorConfig config = null;
 	
 	private void errorAlert( Exception ex, String header ) {
@@ -233,8 +240,15 @@ public final class XliteratorNew extends Application {
     	return outVariantMenu;
     }
     
-    Stage primaryStage = null;
+    final Menu editMenu = new Menu( "Edit" );
+    private void toggleEditMenu(boolean disable) {
+    	for (MenuItem item: editMenu.getItems() ) {
+    		item.setDisable( disable );
+    	}
+    }
     
+    final MenuItem saveMenuItem = new MenuItem( "_Save" );
+    final MenuItem saveAsMenuItem = new MenuItem( "Save As..." );
     @Override
     public void start(final Stage stage) {
     	try {
@@ -278,12 +292,10 @@ public final class XliteratorNew extends Application {
         final MenuItem fileMenuItem = new MenuItem( "Select Files..." ); 
         fileMenuItem.setDisable( true );
         
-        final MenuItem saveMenuItem = new MenuItem( "_Save" );
         saveMenuItem.setOnAction( actionEvent -> editorTab.saveContent( stage, false ) );
         saveMenuItem.setDisable(true);
         saveMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN));
         
-        final MenuItem saveAsMenuItem = new MenuItem( "Save As..." );
         saveAsMenuItem.setOnAction( actionEvent ->  editorTab.saveContent( stage, true ) );
         saveAsMenuItem.setDisable(true);
         saveAsMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN) );
@@ -324,6 +336,7 @@ public final class XliteratorNew extends Application {
         		loadInternalMenuItem.setDisable( true );
         		saveMenuItem.setDisable( true );
         		saveAsMenuItem.setDisable( true );
+        		toggleEditMenu( true );
         	}
         });
         //=========================== END FILES TAB =============================================
@@ -344,6 +357,8 @@ public final class XliteratorNew extends Application {
         			saveMenuItem.setDisable( false );
         			saveAsMenuItem.setDisable( false );
         		}
+        		currentEditor = editorTab;
+        		toggleEditMenu( false );
         	}
     		System.out.println( "Selected: " + editorTab.getTitle() + " isSelected: " + editorTab.isSelected() );
         });
@@ -362,6 +377,8 @@ public final class XliteratorNew extends Application {
         		loadInternalMenuItem.setDisable( true );
         		saveMenuItem.setDisable( true );
         		saveAsMenuItem.setDisable( true );
+        		currentEditor = null;
+        		toggleEditMenu( true );
         	}
         });
         //=========================== END TEXT TAB =============================================
@@ -549,7 +566,7 @@ public final class XliteratorNew extends Application {
         titlecaseMenuItem.setOnAction( evt -> setCaseOption( titlecaseMenuItem ) );
         caseConversionMenu.getItems().addAll( lowercaseMenuItem, uppercaseMenuItem, titlecaseMenuItem );
         
-        final MenuItem syntaxHighlightEditorMenuItem   = new MenuItem( "Edit Syntax Highlighting" );
+        final MenuItem syntaxHighlightEditorMenuItem = new MenuItem( "Edit Syntax Highlighting" );
         syntaxHighlightEditorMenuItem.setOnAction( evt -> {
         	syntaxHighlightEditorMenuItem.setDisable( true );
         	tabsMenu.getItems().add( syntaxHighlighterTabViewMenuItem );
@@ -560,6 +577,12 @@ public final class XliteratorNew extends Application {
         syntaxHighlighterTab.setOnCloseRequest( evt -> {
         	syntaxHighlightEditorMenuItem.setDisable( false );
         	tabsMenu.getItems().remove(syntaxHighlighterTabViewMenuItem);
+        });
+        
+        syntaxHighlighterTab.setOnSelectionChanged( evt -> {
+        	if( syntaxHighlighterTab.isSelected() ) {
+        		toggleEditMenu( true );
+        	}
         });
       
 
@@ -573,46 +596,45 @@ public final class XliteratorNew extends Application {
         //
         
         // TODO:  This menu needs to work with which ever text area is in focus
-        final Menu editMenu = new Menu( "Edit" );
         
         MenuItem findMenuItem = new MenuItem("Find…");
         findMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.F, KeyCombination.SHORTCUT_DOWN) );
-        findMenuItem.setOnAction( evt -> editorTab.getEditor().findWord(stage) );
+        findMenuItem.setOnAction( evt -> currentEditor.getEditor().findWord(stage) );
         
         MenuItem replaceMenuItem = new MenuItem("Replace…");
         replaceMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.R, KeyCombination.SHORTCUT_DOWN) );
-        replaceMenuItem.setOnAction( evt -> editorTab.getEditor().replace(stage) );
+        replaceMenuItem.setOnAction( evt -> currentEditor.getEditor().replace(stage) );
         
         MenuItem undoMenuItem = new MenuItem( "Undo" );
         undoMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.U, KeyCombination.SHORTCUT_DOWN) );
-        undoMenuItem.setOnAction( evt -> editorTab.getEditor().undo() );
+        undoMenuItem.setOnAction( evt -> currentEditor.getEditor().undo() );
 
         MenuItem redoMenuItem = new MenuItem( "Redo" );
         redoMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.Y, KeyCombination.SHORTCUT_DOWN) );
-        redoMenuItem.setOnAction( evt -> editorTab.getEditor().redo() );
+        redoMenuItem.setOnAction( evt -> currentEditor.getEditor().redo() );
 
         MenuItem cutMenuItem = new MenuItem( "Cut" );
         cutMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.X, KeyCombination.SHORTCUT_DOWN) );
-        cutMenuItem.setOnAction( evt -> editorTab.getEditor().cut() );
+        cutMenuItem.setOnAction( evt -> currentEditor.getEditor().cut() );
 
         MenuItem copyMenuItem = new MenuItem( "Copy" );
         copyMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.C, KeyCombination.SHORTCUT_DOWN) );
-        copyMenuItem.setOnAction( evt -> editorTab.getEditor().copy() );
+        copyMenuItem.setOnAction( evt -> currentEditor.getEditor().copy() );
 
-        MenuItem pasteMenuItem = new MenuItem( "Copy" );
+        MenuItem pasteMenuItem = new MenuItem( "Paste" );
         pasteMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.V, KeyCombination.SHORTCUT_DOWN) );
-        pasteMenuItem.setOnAction( evt -> editorTab.getEditor().paste() );
+        pasteMenuItem.setOnAction( evt -> currentEditor.getEditor().paste() );
 
         // MenuItem deleteMenuItem = new MenuItem( "Delete" );
         // deleteMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.V, KeyCombination.SHORTCUT_DOWN) );
         // deleteMenuItem.setOnAction( evt -> editorTab.getEditor().replaceSelection() );
 
-        
         MenuItem selectAllMenuItem = new MenuItem( "Select All" );
         selectAllMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN) );
-        selectAllMenuItem.setOnAction( evt -> editorTab.getEditor().selectAll() );
+        selectAllMenuItem.setOnAction( evt -> currentEditor.getEditor().selectAll() );
         
         editMenu.getItems().addAll( undoMenuItem, redoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, /* deleteMenuItem, */ new SeparatorMenuItem(), findMenuItem, replaceMenuItem, new SeparatorMenuItem(), selectAllMenuItem);
+		toggleEditMenu( true );
         //
         //=========================== END EDIT MENU ==============================================
         //
@@ -869,6 +891,7 @@ public final class XliteratorNew extends Application {
     	filesTab.setCaseOption( caseOption );
     }
     
+    
     private void setUseEditor() {    	
     	for(MenuItem item: inScriptMenu.getItems() ) {
     		if( item.getClass() == RadioMenuItem.class ) {
@@ -907,7 +930,7 @@ public final class XliteratorNew extends Application {
     }
     
     
-    private void createNewFile(String title, String type) {
+    private void createNewFile(String title, String type ) {
     	if(! checkUnsavedChanges() ) {
     		return;
     	}
@@ -919,14 +942,26 @@ public final class XliteratorNew extends Application {
     	;
     	try {
     		EditorTab newTab = new EditorTab( "Untitled" );
-            // editorTab.setup(saveMenuItem, saveAsMenuItem);
+    		newTab.setDefaultFontFamily( defaultFontFamily );
+    		newTab.setup(saveMenuItem, saveAsMenuItem);
     		newTab.getEditor().loadResourceFile( template );
     		tabpane.getTabs().add( newTab );
     		
-    		newTab.setOnSelectionChanged( evt ->
-    			System.out.println( "Selected: " + newTab.getTitle() + " isSelected: " + newTab.isSelected() )
-    		);
-    		editorTab = newTab;
+    		newTab.setOnSelectionChanged( evt -> {
+    			System.out.println( "Selected: " + newTab.getTitle() + " isSelected: " + newTab.isSelected() );
+            	if( newTab.isSelected() ) {
+            		toggleEditMenu( false );
+            		currentEditor = newTab;
+            	}
+    		});
+    		
+            
+    		newTab.getEditor().setStyle( primaryStage.getScene() );
+    		newTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().multiply(0.8) );
+
+    		tabpane.getSelectionModel().select( newTab );
+    		toggleEditMenu( false );
+    		currentEditor = newTab;
     	}
     	catch(Exception ex) {
         	errorAlert(ex, "Error opening: " + template );
@@ -972,10 +1007,13 @@ public final class XliteratorNew extends Application {
     	tabpane.getSelectionModel().select(syntaxHighlighterTab);
     }
     
+    
+    
     public EditorTab getActiveEditorTab() {
     	// TBD: this will have to change to the active editor
-    	return editorTab;
+    	return currentEditor;
     }
+    
     
     private void loadDemo() {
     	if(! checkUnsavedChanges() ) {
