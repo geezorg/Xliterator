@@ -85,6 +85,13 @@ public class ConvertTextTab extends XliteratorTab {
     	this.editor = editor; 
     }
     
+    public void checkRemoveEditor(ICUEditor editor) {
+    	// need this when the current editor window closes
+    	if( editor == this.editor ) {
+    		this.editor = null;
+    	}
+    }
+    
     
     public void setup() {
         textAreaIn.setPrefHeight(313);

@@ -261,7 +261,6 @@ public final class XliteratorNew extends Application {
         			saveAsMenuItem.setDisable( false );
         		}
         		currentEditorTab = editorTab;
-        		textTab.setEditor( currentEditorTab.getEditor() );
         		toggleEditMenu( false );
         	}
     		System.out.println( "Selected: " + editorTab.getTitle() + " isSelected: " + editorTab.isSelected() );
@@ -280,8 +279,7 @@ public final class XliteratorNew extends Application {
         editorTab.getProperties().put( "editorOnView", editorOnView );
         editorTab.getProperties().put( "editorOffView", editorOffView );
 
-        
-        
+          
         if( editorTabs.size() == 0 ) {
         	inScriptMenu.getItems().add( new SeparatorMenuItem() );
         }
@@ -300,11 +298,22 @@ public final class XliteratorNew extends Application {
             	int lastIndex = inScriptMenu.getItems().size() - 1;  // this should be the separator index
             	inScriptMenu.getItems().remove( lastIndex );
             }
+        	textTab.checkRemoveEditor( editorTab.getEditor() ); // the textTab must remove the editor if it is the one set
         });
         
+        saveMenuItem.setDisable(false); // because the new editor will appear in the foreground
+        saveAsMenuItem.setDisable(false); 
+    	
+		tabToggler( 
+				editorTabViewMenuItem,
+				editorTab, 
+				(ImageView)editorTab.getProperties().get( "editorOnView" ), 
+				(ImageView)editorTab.getProperties().get( "editorOffView" )
+		);
+		
         return editorTab;
-
     }
+    
     
     final Menu editMenu = new Menu( "Edit" );
     private void toggleEditMenu(boolean disable) {
@@ -475,7 +484,6 @@ public final class XliteratorNew extends Application {
         
         final MenuItem demoMenuItem = new MenuItem( "Load Demo" );
         helpMenu.getItems().add( demoMenuItem );
-        demoMenuItem.setOnAction( evt -> { loadDemo(); saveMenuItem.setDisable(false); saveAsMenuItem.setDisable(false); } );
         //
         //=========================== END HELP MENU =============================================
         //
@@ -529,27 +537,14 @@ public final class XliteratorNew extends Application {
         //=========================== END TABS MENU =============================================
         //
         
+        //
+        //=========================== BEGIN UPDATE FILE MENU ENTRIES ============================
+        //
         loadInternalMenuItem.setOnAction( evt -> {
         		// load into a new editor tab
             	try {
             		currentEditorTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
             		currentEditorTab.getEditor().loadResourceFile( selectedTransliteration );
-            		currentEditorTab.setTitle( selectedTransliteration );
-                	saveMenuItem.setDisable(false);
-                	saveAsMenuItem.setDisable(false);
-                	MenuItem editorTabViewMenuItem = (MenuItem)currentEditorTab.getProperties().get( "editorTabViewMenuItem" );
-                	boolean isEditorTabVisble = (boolean)editorTabViewMenuItem.getProperties().get( "show" );
-                	if( isEditorTabVisble == true ) {
-                    	tabpane.getSelectionModel().select( currentEditorTab );
-                	}
-                	else {
-                		tabToggler( 
-                				editorTabViewMenuItem,
-                				currentEditorTab, 
-                				(ImageView)currentEditorTab.getProperties().get( "editorOnView" ), 
-                				(ImageView)currentEditorTab.getProperties().get( "editorOffView" )
-                		);
-                	}
                 }
                 catch(IOException ex) {
                 	errorAlert(ex, "Error opening: " + selectedTransliteration );
@@ -574,19 +569,16 @@ public final class XliteratorNew extends Application {
 		        	} else {
 		        		transliterationDirection = "forward"; // TODO: confirm this, it might be reverse only
 		        	}
-		        	saveMenuItem.setDisable(false);
-		        	saveAsMenuItem.setDisable(false);
-            		tabToggler( 
-            				(MenuItem)currentEditorTab.getProperties().get( "editorTabViewMenuItem" ),
-            				currentEditorTab, 
-            				(ImageView)currentEditorTab.getProperties().get( "editorOnView" ), 
-            				(ImageView)currentEditorTab.getProperties().get( "editorOffView" )
-            		);
 		        }
 		        catch(IOException ex) {
 		        	errorAlert(ex, "Error opening: " + externalIcuFile.getName() );
 		        }
         });
+        
+        demoMenuItem.setOnAction( evt -> loadDemo(tabsMenu, visibleIcon, monochrome) );
+        //
+        //=========================== END UPDATE FILE MENU ENTRIES ============================
+        //
         
         //
         //=========================== BEGIN PREFERENCES MENU ====================================
@@ -1056,7 +1048,7 @@ public final class XliteratorNew extends Application {
     }
     
     
-    private void loadDemo() {
+    private void loadDemo(Menu tabsMenu, Image visibleIcon, ColorAdjust monochrome) {
     	textTab.clearAll();
     	textTab.setTextIn( "ሰላም ዓለም" );
     	
@@ -1074,9 +1066,10 @@ public final class XliteratorNew extends Application {
     	}
     	
     	try {
-    		currentEditorTab = new EditorTab( selectedTransliteration );
+    		currentEditorTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
     		currentEditorTab.getEditor().loadResourceFile( selectedTransliteration );
-    		currentEditorTab.setText( selectedTransliteration );
+    		// currentEditorTab.setText( selectedTransliteration );
+    		setUseEditor( selectedTransliteration );
         }
         catch(IOException ex) {
         	errorAlert(ex, "Error opening: " + selectedTransliteration );
