@@ -35,6 +35,7 @@ public class ConvertTextTab extends XliteratorTab {
 	
 	public ConvertTextTab(String title) {
 		super( title );
+		setup();
 	}    
     
     HashMap<String,ConvertTextString> textStringConverts = new HashMap<String,ConvertTextString>();    
@@ -79,8 +80,13 @@ public class ConvertTextTab extends XliteratorTab {
 		}
     }
     
-    public void setup(ICUEditor editor) {
-        this.editor = editor;
+    public void setEditor(ICUEditor editor) {
+    	// need this when the current editor changes
+    	this.editor = editor; 
+    }
+    
+    
+    public void setup() {
         textAreaIn.setPrefHeight(313);
         textAreaOut.setPrefHeight(313);
         // textAreaIn.setFont( Font.font( defaultFont, FontWeight.NORMAL, 12) );
