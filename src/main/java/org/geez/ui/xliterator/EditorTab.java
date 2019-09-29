@@ -163,7 +163,6 @@ public class EditorTab extends XliteratorTab {
 		  
 		  
 		String bgcolor = prefs.get( editorBackgroundColor, "white" );
-		//editor.setStyle( "-fx-background-color: " + bgcolor + ";" );
 		setBackgroundColor( bgcolor );
 		  
 		return true;

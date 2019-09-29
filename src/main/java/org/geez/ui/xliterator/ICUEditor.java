@@ -118,6 +118,8 @@ public class ICUEditor extends CodeArea {
             this.getProperties().put("font-family", "Kefa");
         }
         this.getProperties().put("font-size", "12");
+        this.setId( "icuEditor" );
+        // this.setStyle( "-fx-text-fill: white;" );
     
         setParagraphGraphicFactory( LineNumberFactory.get( this ) );
 

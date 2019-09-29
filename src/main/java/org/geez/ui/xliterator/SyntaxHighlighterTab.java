@@ -20,8 +20,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
-import org.geez.ui.xliterator.ICUEditor;
-import org.geez.ui.Xliterator;
 import org.geez.ui.XliteratorNew;
 
 import javafx.geometry.Insets;
@@ -54,7 +52,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 	private String xlitStylesheet    = "styles/xliterator.css";
 	private String exportStylesheet  = "xliterator-highlighting.css";
 	
-	private static final Pattern classPattern = Pattern.compile( "\\.(\\w+) \\{" );
+	private static final Pattern classPattern = Pattern.compile( "(#icuEditor|\\.paragraph-text) \\.(\\w+)(\\s+)?\\{" );
 	/*
 	private static final Pattern colorPattern = Pattern.compile( "-fx-fill: (#?\\w+);" );
 	private static final Pattern boldPattern = Pattern.compile( "-fx-font-weight: bold;" );
@@ -90,8 +88,6 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 		return loaded;
 	}
     
-
-    
     private Dialog<Color> createColorPickerDialog( String action, String question, Color _default ) {
         Dialog<Color> dialog = new Dialog<Color>();
         dialog.setTitle(action);
@@ -114,7 +110,6 @@ public class SyntaxHighlighterTab extends XliteratorTab {
     }
 
 	public void readStyleSheet(InputStream inputStream) {
-
 		try {
 			styles.clear();
 			BufferedReader br = new BufferedReader( new InputStreamReader(inputStream, "UTF-8") );
@@ -123,7 +118,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 			while ( (line = br.readLine()) != null ) {
 				Matcher classMatcher = classPattern.matcher( line );
 				if( classMatcher.matches() ) {
-					cssClass = classMatcher.group(1);
+					cssClass = classMatcher.group(2);
 
 					while (! "}".equals( (line = br.readLine()) ) ) {
 						Matcher styleMatcher = stylePattern.matcher( line );
@@ -235,9 +230,12 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 		
 		
 		applyButton.setOnAction( evt -> {
-				EditorTab editorTab = xlit.getActiveEditorTab(); //TBD will need to get a list of editors
-				editorTab.setBackgroundColor( bgcolor );
-				applyStylesheet( stage.getScene(), tempStylesheet, true );
+				ArrayList<EditorTab> editorTabs = xlit.getEditorTabs();
+				for( EditorTab editorTab: editorTabs ) {
+					editorTab.setBackgroundColor( bgcolor );
+					editorTab.setStyle( "" );
+					applyStylesheet( stage.getScene(), tempStylesheet, true );
+				}
 		});
 		
 		saveButton.setOnAction( evt -> {
@@ -293,8 +291,89 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 	    
 		
 		int column = 0, row = 0;
+		
+		//=====================BACKGROUND COLOR========================================
+		
+	    Preferences prefs = Preferences.userNodeForPackage( EditorTab.class );
+	    
+	    String buttonStyleBase = "-fx-border-color: gray; -fx-padding: 10 20 10 20; -fx-background-radius: 5,4,3,5; -fx-background-insets: 0,1,2,0; -fx-text-fill: black; -fx-font-weight: bold; -fx-background-color: " ;
+		String colorValue = bgcolor = prefs.get( editorBackgroundColor, "white" );
+		final Button colorButton1 = new Button( );
+		colorButton1.getProperties().put( "color" , Color.valueOf( colorValue ) );
+		colorButton1.setStyle( buttonStyleBase + colorValue + ";" );
+		colorButton1.setOnAction( evt -> {
+			Color color = (Color)colorButton1.getProperties().get( "color" );
+        	Dialog<Color> d = createColorPickerDialog( "Background Color", "Background Color", color );
+        	Optional<Color> result = d.showAndWait();
+        	if ( result.isPresent() ) {
+         		String newColor = getRGBString( result.get() );
+        		bgcolor = newColor;
+				// colorButton1.setText( newColor );
+				colorButton1.setStyle( buttonStyleBase + newColor + ";" );
+				colorButton1.getProperties().put( "color" ,result.get() );
+        	}
+		});
+	    
+		Label hlabel = new Label( "Background: " );
+		hlabel.setStyle( "-fx-font-weight: bold;" );
+		HBox lbox = new HBox( hlabel );
+		lbox.setAlignment( Pos.CENTER_RIGHT );
+		
+		HBox sbox = new HBox();
+		sbox.getChildren().addAll( colorButton1 );
+		sbox.setAlignment( Pos.CENTER_LEFT);
+		
+		gridPane.add( lbox, column,     row, 1, 1 );
+		gridPane.add( sbox, (column+1), row, 1, 1 );
+		column += 2;
+		
+		
+		//=====================FOREGROUND COLOR========================================
+		ArrayList<Object> list = styles.get( "text" );
+		colorValue = (String)list.get(0);
+		final Button colorButton2 = new Button(  );
+		colorButton2.getProperties().put( "color" , Color.valueOf( colorValue ) );
+		colorButton2.setStyle( buttonStyleBase + colorValue + ";" );
+		colorButton2.setOnAction( evt -> {
+			Color color = (Color)colorButton2.getProperties().get( "color" );
+        	Dialog<Color> d = createColorPickerDialog( "Foreground Color", "Foreground Color", color );
+        	Optional<Color> result = d.showAndWait();
+        	if ( result.isPresent() ) {
+        		String newColor = getRGBString( result.get() );
+				ArrayList<Object> ulist = updatedStyles.get( "text" );
+				ulist.set( 0, newColor );
+				// colorButton2.setText( newColor );
+				colorButton2.setStyle( buttonStyleBase + newColor + ";" );
+				colorButton2.getProperties().put( "color" ,result.get() );
+        	}
+		});
+		
+		// Label label = new Label( "background: " );
+		// label.setStyle( "-fx-text-fill: " + colorValue + "; " );
+		hlabel = new Label( "Foreground: " );
+		hlabel.setStyle( "-fx-font-weight: bold;" );
+		lbox = new HBox( hlabel );
+		lbox.setAlignment( Pos.CENTER_RIGHT );
+		
+		sbox = new HBox();
+		sbox.getChildren().addAll( colorButton2 );
+		sbox.setAlignment( Pos.CENTER_LEFT);
+		
+		gridPane.add( lbox, column,     row, 1, 1 );
+		gridPane.add( sbox, (column+1), row, 1, 1 );
+		column++;
+		
+		
+		//=====================SYNTAX HIGHLIGHT COLORS=================================
+		
+		column = 0;
+		row = 1;
+		
 		for(String style : styles.keySet()) {
-			ArrayList<Object> list = styles.get( style );
+			if( "text".equals( style) ) {
+				continue;
+			}
+			list = styles.get( style );
 			Label label = new Label( style + ":  ");
 			// label.setStyle( "-fx-font-weight: bold;" );
 			setStyle( label, list );
@@ -329,13 +408,13 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 			if( (boolean)list.get(3) ) {
 				underline.setSelected( true );
 			}
-			String colorValue = (String)list.get(0);
+			colorValue = (String)list.get(0);
 			Button colorButton = new Button ( colorValue );
-			colorButton.getProperties().put( "color" , Color.valueOf(colorValue ) );
+			colorButton.getProperties().put( "color" , Color.valueOf( colorValue ) );
 			colorButton.setStyle( "-fx-text-fill: " + colorValue + ";" );
 			colorButton.setOnAction( evt -> {
 				Color color = (Color)colorButton.getProperties().get( "color" );
-	        	Dialog<Color> d = createColorPickerDialog( "Text Color", "Text Color", color );
+	        	Dialog<Color> d = createColorPickerDialog( style + " Color", style + " Color", color );
 	        	Optional<Color> result = d.showAndWait();
 	        	if ( result.isPresent() ) {
 	        		String newColor = getRGBString( result.get() );
@@ -344,15 +423,15 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 					setStyle( label,  ulist );
 					colorButton.setText( newColor );
 					colorButton.setStyle( "-fx-text-fill: " + newColor + ";" );
-					colorButton.getProperties().put( "color" ,result.get() );
+					colorButton.getProperties().put( "color", result.get() );
 	        	}
 			});
 			
 			
-			HBox lbox = new HBox( label );
+			lbox = new HBox( label );
 			lbox.setAlignment( Pos.CENTER_RIGHT );
 			
-			HBox sbox = new HBox();
+			sbox = new HBox();
 			sbox.getChildren().addAll( colorButton, bold, italic, underline );
 			sbox.setAlignment( Pos.CENTER_LEFT);
 			
@@ -364,38 +443,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 				row++;
 			}
 		}
-		
-	    Preferences prefs = Preferences.userNodeForPackage( EditorTab.class );
-	      
-		String colorValue = bgcolor = prefs.get( editorBackgroundColor, "white" );
-		Button colorButton = new Button ( colorValue );
-		colorButton.getProperties().put( "color" , Color.valueOf(colorValue ) );
-		colorButton.setStyle( "-fx-text-fill: " + colorValue + ";" );
-		colorButton.setOnAction( evt -> {
-			Color color = (Color)colorButton.getProperties().get( "color" );
-        	Dialog<Color> d = createColorPickerDialog( "Text Color", "Text Color", color );
-        	Optional<Color> result = d.showAndWait();
-        	if ( result.isPresent() ) {
-        		String newColor = getRGBString( result.get() );
-        		bgcolor = newColor;
-				// label.setStyle( "-fx-text-fill: " + newColor + "; " );
-				colorButton.setText( newColor );
-				colorButton.setStyle( "-fx-text-fill: " + newColor + ";" );
-				colorButton.getProperties().put( "color" ,result.get() );
-        	}
-		});
-		
-		// Label label = new Label( "background: " );
-		// label.setStyle( "-fx-text-fill: " + colorValue + "; " );
-		HBox lbox = new HBox( new Label( "background: " ) );
-		lbox.setAlignment( Pos.CENTER_RIGHT );
-		
-		HBox sbox = new HBox();
-		sbox.getChildren().addAll( colorButton );
-		sbox.setAlignment( Pos.CENTER_LEFT);
-		
-		gridPane.add( lbox, column,     row, 1, 1 );
-		gridPane.add( sbox, (column+1), row, 1, 1 );
+
 		
 		return gridPane;
 	}
@@ -407,18 +455,26 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 	}
 	
 
-	
     public void saveStylesheet( Scene scene, String stylesheet, boolean apply ) {
     	try {
 	    	String dir = this.getClass().getResource("/").getFile();
 	        OutputStream os = new FileOutputStream( dir + stylesheet );
 	        final PrintStream printStream = new PrintStream(os);
 	    	
+
+	        StringBuffer sb = new StringBuffer( ".paragraph-text .text {\n" );
+			ArrayList<Object> list = updatedStyles.get( "text" );
+			sb.append( "\t-fx-fill: " + (String)list.get(0) + ";\n" );
+	        sb.append(  "}\n" );
+	        printStream.println( sb );
 	        
 			for(String style : updatedStyles.keySet()) {
-				StringBuffer sb = new StringBuffer( "." + style + " {\n" );
+				if( "text".equals( style) ) {
+					continue;
+				}
+				sb = new StringBuffer( "#icuEditor ." + style + " {\n" );
 				
-				ArrayList<Object> list = updatedStyles.get( style );
+				list = updatedStyles.get( style );
 
 				sb.append( "\t-fx-fill: " + (String)list.get(0) + ";\n" );
 		    	if( (boolean)list.get(1) ) {
@@ -464,12 +520,14 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 		scene.getStylesheets().add( classLoader.getResource( xlitStylesheet ).toExternalForm() );
     }
     
+    
     private void reloadDefault( Scene scene ) {
     	applyStylesheet( scene, defaultStylesheet, false );
 		ClassLoader classLoader = this.getClass().getClassLoader();
 		InputStream inputStream = classLoader.getResourceAsStream( defaultStylesheet );			
 		readStyleSheet(inputStream);    	
     }
+    
     
     private void exportStylesheet( Stage stage ) {
 		ClassLoader classLoader = this.getClass().getClassLoader();
