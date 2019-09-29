@@ -282,7 +282,6 @@ public final class XliteratorNew extends Application {
         editorTab.getProperties().put( "editorOnView", editorOnView );
         editorTab.getProperties().put( "editorOffView", editorOffView );
 
-          
         if( editorTabs.size() == 0 ) {
         	inScriptMenu.getItems().add( new SeparatorMenuItem() );
         }
