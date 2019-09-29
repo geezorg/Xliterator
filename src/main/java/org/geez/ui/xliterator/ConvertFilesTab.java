@@ -38,7 +38,11 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -52,7 +56,7 @@ public class ConvertFilesTab extends XliteratorTab {
 	
 	private final Button convertButton = new Button("Convert");
 	private boolean openOutput = true;
-	private boolean appendOutput = true;
+	private String appendStyle = "Off";
     private CheckComboBox<String> documentFontsMenu = new CheckComboBox<String>();
 	// private DocumentProcessor processor = null;
 	private List<File> inputFileList = null;
@@ -119,6 +123,7 @@ public class ConvertFilesTab extends XliteratorTab {
     			ConvertDocxGenericUnicodeFont converter = (ConvertDocxGenericUnicodeFont)docxProcessor.getStashedConverter();
     			converter.setTargetTypefaces( targetTypefaces );
     			converter.setCaseOption( caseOption );
+    			docxProcessor.setAppendOutput( appendStyle );
     			docxProcessor.setFontOut( (String)convertButton.getProperties().get("fontOut") );
     			docxProcessor.addConverter( (ConvertFontSystem)converter );
     		}
@@ -248,6 +253,16 @@ public class ConvertFilesTab extends XliteratorTab {
         openFilesCheckbox.setSelected(true);
         
         
+        ChoiceBox<String> appendMenu = new ChoiceBox<String>();
+        appendMenu.getItems().add( "Off" );
+        appendMenu.getSelectionModel().select( "Off" );
+        appendMenu.getItems().add( "On a New Line" );
+        appendMenu.getItems().add( "  • On a New Line and with ()" );
+        appendMenu.getItems().add( "With a space" );
+        appendMenu.getItems().add( "  • With a space and with ()" );
+        appendMenu.setOnAction( evt -> { appendStyle = appendMenu.getSelectionModel().getSelectedItem(); } );
+
+        /*
         CheckBox appendOutputCheckbox = new CheckBox( "Append transliterated output?" );
         openFilesCheckbox.selectedProperty().addListener(new ChangeListener<Boolean>() {
             public void changed(ObservableValue<? extends Boolean> ov,
@@ -255,6 +270,7 @@ public class ConvertFilesTab extends XliteratorTab {
                     appendOutput = new_val.booleanValue();
             }
         });
+        */
         
         
         Region bottomSpacer = new Region();
@@ -262,7 +278,7 @@ public class ConvertFilesTab extends XliteratorTab {
         Region optionSpacer = new Region();
         optionSpacer.setMinWidth( 10 );
         optionSpacer.setMaxWidth( 10 );
-        HBox hbottomBox = new HBox( openFilesCheckbox, optionSpacer, appendOutputCheckbox, bottomSpacer, convertButton );
+        HBox hbottomBox = new HBox( openFilesCheckbox, optionSpacer, new Label( "Append Output? "), appendMenu, bottomSpacer, convertButton );
         hbottomBox.setPadding(new Insets(4, 0, 4, 0));
         hbottomBox.setAlignment( Pos.CENTER_LEFT );
 
@@ -339,10 +355,12 @@ public class ConvertFilesTab extends XliteratorTab {
 		convertButton.setDisable( true );
     }
     
+    
     public void setScriptOut(String scriptOut ) {
     	super.setScriptOut(scriptOut);
 		convertButton.setDisable( true );
     }
+    
       
     public void setVariantOut(String variantOut, String selectedTransliteration, String transliterationDirection ) {
     	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection);
