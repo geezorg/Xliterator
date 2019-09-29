@@ -90,6 +90,8 @@ public class ConvertTextTab extends XliteratorTab {
     	this.xlit = xlit;
         textAreaIn.setPrefHeight(313);
         textAreaOut.setPrefHeight(313);
+    	textAreaIn.setStyle( "-fx-fill: white;" );
+    	textAreaOut.setStyle( "-fx-fill: white;" );
         // textAreaIn.setFont( Font.font( defaultFont, FontWeight.NORMAL, 12) );
 		if(! checkPreferences() ) {
 	        textAreaIn.setStyle("-fx-font-family: '" + defaultFontFamily + "'; -fx-font-size: " + defaultFontSize + ";"  );

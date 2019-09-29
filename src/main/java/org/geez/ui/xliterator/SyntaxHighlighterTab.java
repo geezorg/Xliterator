@@ -71,6 +71,15 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 	
 	private HashMap<String,ArrayList<Object>> styles = new HashMap<String,ArrayList<Object>>();
 	private HashMap<String,ArrayList<Object>> updatedStyles = new HashMap<String,ArrayList<Object>>();
+	
+	private ArrayList<String> cssOrder = new ArrayList<String>(
+			Arrays.asList(
+				"forwardArrow", "reverseArrow", "bothArrow",
+				"variable", "comment", "directive", "identifier",
+				"paren", "tagmark", "anytag", "attribute",
+				"avalue", "cdata"
+			)
+	);
     
 	private XliteratorNew xlit = null;
 
@@ -327,8 +336,8 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 		gridPane.add( sbox, (column+1), row, 1, 1 );
 		column += 2;
 		
-		
 		//=====================FOREGROUND COLOR========================================
+
 		ArrayList<Object> list = styles.get( "text" );
 		colorValue = (String)list.get(0);
 		final Button colorButton2 = new Button(  );
@@ -348,8 +357,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
         	}
 		});
 		
-		// Label label = new Label( "background: " );
-		// label.setStyle( "-fx-text-fill: " + colorValue + "; " );
+
 		hlabel = new Label( "Foreground: " );
 		hlabel.setStyle( "-fx-font-weight: bold;" );
 		lbox = new HBox( hlabel );
@@ -363,19 +371,17 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 		gridPane.add( sbox, (column+1), row, 1, 1 );
 		column++;
 		
-		
 		//=====================SYNTAX HIGHLIGHT COLORS=================================
 		
 		column = 0;
 		row = 1;
 		
-		for(String style : styles.keySet()) {
+		for(String style : cssOrder) {
 			if( "text".equals( style) ) {
 				continue;
 			}
 			list = styles.get( style );
 			Label label = new Label( style + ":  ");
-			// label.setStyle( "-fx-font-weight: bold;" );
 			setStyle( label, list );
 
 			ToggleButton bold = new ToggleButton( "B" );
@@ -468,7 +474,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 	        sb.append(  "}\n" );
 	        printStream.println( sb );
 	        
-			for(String style : updatedStyles.keySet()) {
+			for(String style : cssOrder) {
 				if( "text".equals( style) ) {
 					continue;
 				}
