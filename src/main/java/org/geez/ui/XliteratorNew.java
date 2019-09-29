@@ -84,24 +84,26 @@ public final class XliteratorNew extends Application {
     private MenuItem loadInternalMenuItem = new MenuItem( "Load Selected Transliteration" );
     //private EditorTab editorTab           = new EditorTab( "Mapping Editor" );
     private SyntaxHighlighterTab syntaxHighlighterTab = new SyntaxHighlighterTab( "Syntax Highlighter" );
-    private ConvertTextTab textTab        = new ConvertTextTab( "Convert Text" );
-    private ConvertFilesTab filesTab      = new ConvertFilesTab( "Convert Files" );
+    private ConvertTextTab textTab            = new ConvertTextTab( "Convert Text", this );
+    private ConvertFilesTab filesTab          = new ConvertFilesTab( "Convert Files", this );
     private ProcessorManager processorManager = new ProcessorManager();
     
     private ArrayList<EditorTab> editorTabs = new ArrayList<EditorTab>(); 
     // private int currentEditorIndex = 0;
     private EditorTab currentEditorTab = null;
+    private EditorTab selectedEditorTab   = null;
     
     private final int APP_WIDTH  = 800;
     private final int APP_HEIGHT = 800;
     
 	private String xlitStylesheet = "styles/xliterator.css";
 	
-    private final String scriptInPreference   = "org.geez.ui.xliterator.scriptIn";
-    private final String scriptOutPreference  = "org.geez.ui.xliterator.scriptOut";
-    private final String variantOutPreference = "org.geez.ui.xliterator.variantOut";
-    private final String transliterationIdPreference        = "org.geez.ui.xliterator.transliterationId";
-    private final String transliterationDirectionPreference = "org.geez.ui.xliterator.transliterationDirection";
+    public static final String scriptInPreference   = "org.geez.ui.xliterator.scriptIn";
+    public static final String scriptOutPreference  = "org.geez.ui.xliterator.scriptOut";
+    public static final String variantOutPreference = "org.geez.ui.xliterator.variantOut";
+    public static final String useSelectedEdtior    = "org.geez.ui.xliterator.editor.selected";
+    public static final String transliterationIdPreference        = "org.geez.ui.xliterator.transliterationId";
+    public static final String transliterationDirectionPreference = "org.geez.ui.xliterator.transliterationDirection";
     
     private Stage primaryStage = null;
 	private XliteratorConfig config = null;
@@ -271,7 +273,8 @@ public final class XliteratorNew extends Application {
         ImageView editorOffView = new ImageView( visibleIcon );
         editorOffView.setEffect( monochrome );
         editorTabViewMenuItem.setGraphic( editorOffView );
-        editorTabViewMenuItem.getProperties().put( "show", false );	
+        editorTabViewMenuItem.getProperties().put( "show", false );
+        editorTabViewMenuItem.setMnemonicParsing( false );
         editorTabViewMenuItem.setOnAction( evt -> tabToggler(editorTabViewMenuItem, editorTab, editorOnView, editorOffView) );
         tabsMenu.getItems().add( editorTabViewMenuItem );
         
@@ -287,6 +290,7 @@ public final class XliteratorNew extends Application {
         
     	RadioMenuItem editorTabItem = new RadioMenuItem( title );
     	editorTabItem.setOnAction( evt -> setUseEditor( title ) );
+    	editorTabItem.setMnemonicParsing( false );
     	inScriptMenu.getItems().add( editorTabItem );
 
         
@@ -298,7 +302,6 @@ public final class XliteratorNew extends Application {
             	int lastIndex = inScriptMenu.getItems().size() - 1;  // this should be the separator index
             	inScriptMenu.getItems().remove( lastIndex );
             }
-        	textTab.checkRemoveEditor( editorTab.getEditor() ); // the textTab must remove the editor if it is the one set
         });
         
         saveMenuItem.setDisable(false); // because the new editor will appear in the foreground
@@ -935,7 +938,7 @@ public final class XliteratorNew extends Application {
 	    		RadioMenuItem rItem = (RadioMenuItem)item;
 	    		if ( title.equals( rItem.getText() ) ) {
 	    			rItem.setSelected( true );
-	    	    	selectedTransliteration = title; // TODO: before convertering, check if the title matches an editor tab
+	    	    	selectedTransliteration = useSelectedEdtior; // TODO: before convertering, check if the title matches an editor tab
 	    		}
 	    		else {
 	    			rItem.setSelected( false );
@@ -1041,11 +1044,22 @@ public final class XliteratorNew extends Application {
     }
     
     
+    public ArrayList<EditorTab> getEditorTabs() {
+    	return editorTabs;
+    }
+    
     
     public EditorTab getActiveEditorTab() {
     	// TBD: this will have to change to the active editor
     	return currentEditorTab;
     }
+    
+    
+    public EditorTab getSelectedEditorTab() {
+    	// TBD: this will have to change to the active editor
+    	return selectedEditorTab;
+    }
+    
     
     
     private void loadDemo(Menu tabsMenu, Image visibleIcon, ColorAdjust monochrome) {

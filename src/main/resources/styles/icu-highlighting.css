@@ -2,57 +2,62 @@
 
 
 // ICU Syntax Highlighting
-.forwardArrow {
+.paragraph-text .text {
+	-fx-fill: black;
+}
+
+
+#icuEditor .forwardArrow {
 	-fx-fill: #008e00;
 	-fx-font-weight: bold;
 }
 
-.reverseArrow {
+#icuEditor .reverseArrow {
 	-fx-fill: orangered;
 	-fx-font-weight: bold;
 }
 
-.bothArrow {
+#icuEditor .bothArrow {
 	-fx-fill: mediumvioletred;
 	-fx-font-weight: bold;
 }
 
-.variable {
+#icuEditor .variable {
 	-fx-fill: cyan;
 }
 
-.comment {
+#icuEditor .comment {
 	-fx-fill: teal;
 }
 
-.directive {
+#icuEditor .directive {
 	-fx-fill: black;
 }
 
-.identifier {
+#icuEditor .identifier {
 	-fx-fill: orange;
 }
 
-.paren {
+#icuEditor .paren {
     -fx-fill: firebrick;
     -fx-font-weight: bold;
 }
 
 
 // XML Syntax Highlighting
-.tagmark {
+#icuEditor .tagmark {
     -fx-fill: gray;
 }
-.anytag {
+#icuEditor .anytag {
     -fx-fill: crimson;
 }
-.attribute {
+#icuEditor .attribute {
     -fx-fill: darkviolet;
 }
-.avalue {
+#icuEditor .avalue {
     -fx-fill: black;
 }
-.cdata {
+#icuEditor .cdata {
 	-fx-fill: blue;
 	-fx-font-weight: bold;
 }

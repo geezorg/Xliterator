@@ -22,6 +22,7 @@ import org.geez.convert.docx.DocxProcessor;
 import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
 import org.geez.convert.fontsystem.ConvertFontSystem;
 import org.geez.ui.Xliterator;
+import org.geez.ui.XliteratorNew;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -60,10 +61,11 @@ public class ConvertFilesTab extends XliteratorTab {
 	private StatusBar statusBar = null;
 	
     private final String fileOutFontPref = "org.geez.ui.xliterator.convertFilesTab.fontOut";
-    
+	private XliteratorNew xlit = null; // used to get a handle on rules text
 
-	public ConvertFilesTab(String title) {
+	public ConvertFilesTab(String title, XliteratorNew xlit) {
 		super( title );
+		this.xlit = xlit;
 		this.defaultFontFamily = "Arial";
 		checkPreferences();
 	}
@@ -246,7 +248,7 @@ public class ConvertFilesTab extends XliteratorTab {
         openFilesCheckbox.setSelected(true);
         
         
-        CheckBox appendOutputCheckbox = new CheckBox( "Append transliterated output?");
+        CheckBox appendOutputCheckbox = new CheckBox( "Append transliterated output?" );
         openFilesCheckbox.selectedProperty().addListener(new ChangeListener<Boolean>() {
             public void changed(ObservableValue<? extends Boolean> ov,
                 Boolean old_val, Boolean new_val) {
@@ -308,7 +310,6 @@ public class ConvertFilesTab extends XliteratorTab {
     }
     
     
-
     private void populateDocumentFontsMenu() {
     	ObservableList<String> fonts = FXCollections.observableArrayList();  	
     	try {

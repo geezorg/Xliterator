@@ -5,6 +5,7 @@ import java.util.prefs.Preferences;
 
 import org.fxmisc.richtext.StyleClassedTextArea;
 import org.geez.convert.text.ConvertTextString;
+import org.geez.ui.XliteratorNew;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -31,11 +32,11 @@ public class ConvertTextTab extends XliteratorTab {
     private final String textAreaOutFontFacePref = "org.geez.ui.xliterator.convertTextTab.textAreaOut.font.face";
     private final String textAreaOutFontSizePref = "org.geez.ui.xliterator.convertTextTab.textAreaOut.font.size";
 
-	private ICUEditor editor = null; // used to get a handle on rules text
+	private XliteratorNew xlit = null; // used to get a handle on rules text
 	
-	public ConvertTextTab(String title) {
+	public ConvertTextTab(String title, XliteratorNew xlit) {
 		super( title );
-		setup();
+		setup( xlit );
 	}    
     
     HashMap<String,ConvertTextString> textStringConverts = new HashMap<String,ConvertTextString>();    
@@ -47,13 +48,18 @@ public class ConvertTextTab extends XliteratorTab {
     	
     	try {
 	    	ConvertTextString stringConverter = null;
-	    	if( "Use Editor".equals( selectedTransliteration ) ) {
+	    	if( selectedTransliteration.equals( XliteratorNew.useSelectedEdtior ) ) {
 	    		// do not save the converter because the text may change:
 	    		// The ConvertTextString constructor needs to be reworked here, see notes within its source file:
 	    		// stringConverter = new ConvertTextString( editor.getText(), direction, true );
 	    		
+	    		EditorTab editorTab = xlit.getSelectedEditorTab();
+	    		if( editorTab == null ) {
+	    			// error alert
+	    			return;
+	    		}
 	    		stringConverter = new ConvertTextString();
-	    		stringConverter.setRules( editor.getText(), direction );
+	    		stringConverter.setRules( editorTab.getEditor().getText(), direction );
 	    	}
 	    	else {
 		    	String transliterationKey = selectedTransliteration + "-" + direction ;
@@ -80,20 +86,8 @@ public class ConvertTextTab extends XliteratorTab {
 		}
     }
     
-    public void setEditor(ICUEditor editor) {
-    	// need this when the current editor changes
-    	this.editor = editor; 
-    }
-    
-    public void checkRemoveEditor(ICUEditor editor) {
-    	// need this when the current editor window closes
-    	if( editor == this.editor ) {
-    		this.editor = null;
-    	}
-    }
-    
-    
-    public void setup() {
+    public void setup(XliteratorNew xlit) {
+    	this.xlit = xlit;
         textAreaIn.setPrefHeight(313);
         textAreaOut.setPrefHeight(313);
         // textAreaIn.setFont( Font.font( defaultFont, FontWeight.NORMAL, 12) );
