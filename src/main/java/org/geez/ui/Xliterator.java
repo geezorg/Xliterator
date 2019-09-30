@@ -1010,68 +1010,8 @@ public final class Xliterator extends Application {
         	errorAlert(ex, "Error opening: " + template );
     	}
     	
-    } 
-    
-    private void createNewFileOld(String title, String type ) {
-    	
-    	String template = ( "XML".equals(type) )
-    			? "templates/icu-xml-template.xml"
-    			: "templates/icu-text-template.txt" 
-    	;
-    	try {
-    		// this should probably be changed to use createNewEditor 
-    		
-    		EditorTab newTab = new EditorTab( "Untitled" );
-    		newTab.setDefaultFontFamily( defaultFontFamily );
-    		newTab.setup(saveMenuItem, saveAsMenuItem);
-    		newTab.getEditor().loadResourceFile( template );
-    		tabpane.getTabs().add( newTab );
-    		
-    		newTab.setOnSelectionChanged( evt -> {
-    			System.out.println( "Selected: " + newTab.getTitle() + " isSelected: " + newTab.isSelected() );
-            	if( newTab.isSelected() ) {
-            		toggleEditMenu( false );
-            		currentEditorTab = newTab;
-            	}
-    		});
-    		
-            
-    		// newTab.getEditor().setStyle( primaryStage.getScene() );
-    		newTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().multiply(0.8) );
-
-    		tabpane.getSelectionModel().select( newTab );
-    		toggleEditMenu( false );
-    		currentEditorTab = newTab;
-    	}
-    	catch(Exception ex) {
-        	errorAlert(ex, "Error opening: " + template );
-    	}
-    	
     }
     
-    
-    /*
-    private void loadNewFile(String title, String type) {
-    	if(! checkUnsavedChanges() ) {
-    		return;
-    	}
-
-    	
-    	String template = ( "XML".equals(type) )
-    			? "templates/icu-xml-template.xml"
-    			: "templates/icu-text-template.txt" 
-    	;
-    	try {
-    		editorTab.getEditor().loadResourceFile( template );
-
-    		editorTab.reset( "Untitled" );
-    	}
-    	catch(Exception ex) {
-        	errorAlert(ex, "Error opening: " + template );
-    	}
-    	
-    }
-    */
     
     private void launchSyntaxHightlightEditor( Stage stage ) {
     	if( syntaxHighlighterTab == null) {
