@@ -77,11 +77,14 @@ public final class XliteratorNew extends Application {
 	private Menu inScriptMenu   = null;
 	private Menu outVariantMenu = null;
 	private Menu outScriptMenu  = null;
+	// an object could be introduced to hold the various transliteration attributes:
 	private String selectedTransliteration  = null;
 	private String transliterationDirection = null;
-    private String defaultFontFamily      = null;
-    private DraggableTabPane tabpane = new DraggableTabPane();
-    private MenuItem loadInternalMenuItem = new MenuItem( "Load Selected Transliteration" );
+	private ArrayList<String> transliterationDependencies = null;
+	
+    private String defaultFontFamily        = null;
+    private DraggableTabPane tabpane        = new DraggableTabPane();
+    private MenuItem loadInternalMenuItem   = new MenuItem( "Load Selected Transliteration" );
     //private EditorTab editorTab           = new EditorTab( "Mapping Editor" );
     private SyntaxHighlighterTab syntaxHighlighterTab = new SyntaxHighlighterTab( "Syntax Highlighter" );
     private ConvertTextTab textTab            = new ConvertTextTab( "Convert Text", this );
@@ -107,6 +110,12 @@ public final class XliteratorNew extends Application {
     
     private Stage primaryStage = null;
 	private XliteratorConfig config = null;
+	
+	
+	public XliteratorConfig getConfig() {
+		return config;
+	}
+	
 	
 	private void errorAlert( Exception ex, String header ) {
         Alert alert = new Alert(AlertType.ERROR);
@@ -137,12 +146,12 @@ public final class XliteratorNew extends Application {
     }
     
     
-    private Menu createInScriptsMenu(final Stage stage) {
+    private Menu createInScriptsMenu( final Stage stage ) {
     	Menu menu = new Menu( "Script _In" );
         ToggleGroup groupInMenu = new ToggleGroup();
         
         // Create menu from the scripts in the configuration file:
-    	List<String> scripts = config.getInScripts();
+    	List<String> scripts = config.getInScripts( true );
     	for(String script: scripts) {
     		RadioMenuItem menuItem = new RadioMenuItem( script );
     		menuItem.setToggleGroup( groupInMenu );
@@ -189,7 +198,7 @@ public final class XliteratorNew extends Application {
     	
         ToggleGroup groupOutMenu = new ToggleGroup();
         
-    	List<String> scripts = config.getOutScripts(outScript);
+    	List<String> scripts = config.getOutScripts(outScript, true);
     	for(String script: scripts) {
     		RadioMenuItem menuItem = new RadioMenuItem( script );
     		menuItem.setToggleGroup( groupOutMenu );
@@ -207,18 +216,36 @@ public final class XliteratorNew extends Application {
     	JsonArray variants = config.getVariants(scriptIn, scriptOut);
     	for (int i = 0; i < variants.size(); i++) {
     		JsonObject variant = variants.get(i).getAsJsonObject();
+    		if( variant.has( "visibility" ) && ("internal".equals( variant.get("vsibility").getAsString() ) ) ) {
+    			continue;
+    		}
     		if( variant.get("name") == null ) {
     			for(String subVariantKey: variant.keySet() ) {
     				Menu variantSubMenu = new Menu( subVariantKey );
     				JsonArray subvariants = variant.getAsJsonArray( subVariantKey );
     		    	for (int j = 0; j < subvariants.size(); j++) {
     		    		JsonObject subvariant = subvariants.get(j).getAsJsonObject();
+        	    		if( subvariant.has( "visibility" ) && ("internal".equals( subvariant.get("vsibility").getAsString() ) ) ) {
+        	    			continue;
+        	    		}
     	    			String name = subvariant.get("name").getAsString();
     	        		RadioMenuItem menuItem = new RadioMenuItem( name );
     	        		menuItem.setToggleGroup( groupVariantOutMenu );
     	        		String transliterationID = subvariant.get( "path" ).getAsString();
     	        		String direction = subvariant.get( "direction" ).getAsString();
-    	        		menuItem.setOnAction( evt -> { this.selectedTransliteration = transliterationID; this.transliterationDirection = direction; setVariantOut( subVariantKey + " - " + name ); });
+    	        		ArrayList<String> dependencies = new ArrayList<String>();
+    	        		if( subvariant.has( "dependencies" ) ) {
+    	        			JsonArray dependenciesJSON = subvariant.getAsJsonArray( "dependencies" );
+    	        			for (int k = 0; k < dependenciesJSON.size(); k++) {
+    	        				dependencies.add( dependenciesJSON.get(k).getAsString() );
+    	        			}
+    	        		}
+    	        		menuItem.setOnAction( evt -> { 
+    	        			this.selectedTransliteration  = transliterationID; 
+    	        			this.transliterationDirection = direction; 
+    	        			this.transliterationDependencies = (dependencies.isEmpty()) ? null: dependencies;
+    	        			setVariantOut( subVariantKey + " - " + name ); 
+    	        		});
     	        		menuItem.setId( transliterationID );
     	        		variantSubMenu.getItems().add( menuItem );
     		    	}
@@ -231,7 +258,19 @@ public final class XliteratorNew extends Application {
         		menuItem.setToggleGroup( groupVariantOutMenu );
         		String transliterationID = variant.get( "path" ).getAsString();
         		String direction = variant.get( "direction" ).getAsString();
-        		menuItem.setOnAction( evt -> { this.selectedTransliteration = transliterationID; this.transliterationDirection = direction; setVariantOut( name ); } );
+        		ArrayList<String> dependencies = new ArrayList<String>();
+        		if( variant.has( "dependencies" ) ) {
+        			JsonArray dependenciesJSON = variant.getAsJsonArray( "dependencies" );
+        			for (int j = 0; j < dependenciesJSON.size(); j++) {
+        				dependencies.add( dependenciesJSON.get(j).getAsString() );
+        			}
+        		}
+        		menuItem.setOnAction( evt -> {
+        			this.selectedTransliteration = transliterationID;
+        			this.transliterationDirection = direction;
+        			this.transliterationDependencies = (dependencies.isEmpty()) ? null: dependencies;
+        			setVariantOut( name ); 
+        		});
         		menuItem.setId( transliterationID );
         		outVariantMenu.getItems().add( menuItem );
     		}
@@ -265,7 +304,7 @@ public final class XliteratorNew extends Application {
         		currentEditorTab = editorTab;
         		toggleEditMenu( false );
         	}
-    		System.out.println( "Selected: " + editorTab.getTitle() + " isSelected: " + editorTab.isSelected() );
+    		// System.out.println( "Selected: " + editorTab.getTitle() + " isSelected: " + editorTab.isSelected() );
         });
         
         MenuItem editorTabViewMenuItem = new MenuItem( title );
@@ -911,8 +950,8 @@ public final class XliteratorNew extends Application {
     	this.variantOut = variantOut;
     	variantOutText.setText( variantOut );
         loadInternalMenuItem.setDisable( false );
-    	filesTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection );
-    	textTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection );
+    	filesTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection, transliterationDependencies );
+    	textTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection, transliterationDependencies );
     	setMenuItemSelection( outVariantMenu, variantOut );
     }
     private String caseOption = null;

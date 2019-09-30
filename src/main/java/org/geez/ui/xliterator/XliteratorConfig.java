@@ -8,21 +8,24 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
+import org.xml.sax.SAXException;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.ibm.icu.text.Transliterator;
 
 
 public class XliteratorConfig {
 	
 	private String userConfigFilePath = "transliterations.json";
-	private String transformsIndex = "common/transforms/index.json";
+	private String transformsIndex    = "common/transforms/index.json";
 	
 	private JsonObject config;
     
@@ -49,12 +52,67 @@ public class XliteratorConfig {
         return contentBuilder.toString();
     }
     
-    public List<String> getInScripts() {    
+    
+    public List<String> getInScripts( boolean skipInternal ) {
+    	
+    	if( skipInternal ) {
+    		ArrayList<String> scriptList = new ArrayList<String>();
+            JsonObject scripts = config.getAsJsonObject("Scripts");
+    		
+            for(String inScriptKey: scripts.keySet() ) {
+            	JsonObject inScript = scripts.getAsJsonObject( inScriptKey );
+            	int outScriptSize = inScript.keySet().size();
+            	int outScriptSkipCount = 0;
+            	for(String outScript: inScript.keySet()) {
+            		int variantSkipCount = 0;
+                    JsonArray variants = inScript.getAsJsonArray( outScript );
+                    for (int i = 0; i < variants.size(); i++) {
+                        JsonObject variant = variants.get(i).getAsJsonObject();
+                        if( variant.has( "visibility" ) && "internal".equals( variant.get( "visibility" ).getAsString() ) ) {
+                        	variantSkipCount++;
+                        }
+    				}
+                    if( variantSkipCount == variants.size() ) {
+                    	// all children are internal, so we hid the script in
+                    	outScriptSkipCount++;
+                    }
+    			}
+            	
+            	if(outScriptSkipCount <  outScriptSize) {
+            		scriptList.add( inScriptKey );
+            	}
+    		}
+    		return scriptList;
+    	}
+    	
         return new ArrayList<String>( config.getAsJsonObject("Scripts").keySet() );
     }
     
     
-    public List<String> getOutScripts(String inScript ) {
+    public List<String> getOutScripts( String inScript, boolean skipInternal ) {
+    	
+    	if( skipInternal ) {
+    		ArrayList<String> scriptList = new ArrayList<String>();
+
+        	JsonObject inScriptObj = config.getAsJsonObject("Scripts").getAsJsonObject( inScript );
+        	for(String outScript: inScriptObj.keySet()) {
+        		int variantSkipCount = 0;
+                JsonArray variants = inScriptObj.getAsJsonArray( outScript );
+                for (int i = 0; i < variants.size(); i++) {
+                    JsonObject variant = variants.get(i).getAsJsonObject();
+                    if( variant.has( "visibility" ) && "internal".equals( variant.get( "visibility" ).getAsString() ) ) {
+                    	variantSkipCount++;
+                    }
+				}
+                if( variantSkipCount < variants.size() ) {
+                	// all children are internal, so we hid the script in
+                	scriptList.add( outScript );
+                }
+			}
+    		
+    		return scriptList;
+    	}
+    	
         return new ArrayList<String>( config.getAsJsonObject("Scripts").getAsJsonObject( inScript ).keySet() );
     }
     
@@ -62,7 +120,6 @@ public class XliteratorConfig {
     public JsonArray getVariants(String inScript, String outScript) {
     	return config.getAsJsonObject("Scripts").getAsJsonObject( inScript ).getAsJsonArray( outScript );
     }
-    
     
     
     private void addVariantReverseEntry( JsonObject object, String from, String to, JsonObject variant ) {
@@ -130,26 +187,104 @@ public class XliteratorConfig {
     }
     
     
-    public void load ( String configFilePath ) throws URISyntaxException, IOException {
+    public JsonObject getTransliterationByAlias( String alias ) {
+    	List<String> inScripts = getInScripts( false );
+    	for(String inScript: inScripts) {
+    		List<String> outScripts = getOutScripts( inScript, false );
+    		for(String outScript: outScripts) {
+    			JsonArray variants = getVariants(inScript, outScript);
+    	    	for (int i = 0; i < variants.size(); i++) {
+    	    		JsonObject variant = variants.get(i).getAsJsonObject();
+    	    		if( variant.has( "name" ) ) {
+    	    			if( variant.has( "alias" ) && ( alias.equals( variant.get("alias").getAsString() ) ) ) {
+    	    				return variant;
+    	    			}
+    	    		}
+    	    		else {
+    	    			for(String subVariantKey: variant.keySet() ) {
+    	    				JsonArray subvariants = variant.getAsJsonArray( subVariantKey );
+    	    		    	for (int j = 0; j < subvariants.size(); j++) {
+    	    		    		JsonObject subvariant = subvariants.get(j).getAsJsonObject();
+    	    	    			if( subvariant.has( "alias" ) && ( alias.equals( subvariant.get("alias").getAsString() ) ) ) {
+    	    	    				return subvariant;
+    	    	    			}
+    	    		    	}
+    	    			} 
+
+    	    		}
+    	    	}
+    		}
+    	}
+    	
+    	return null;
+    }
+    
+    
+	protected ArrayList<String> registered = new ArrayList<String>();
+	
+	private String readResourceFile( String filePath ) throws IOException {
+		ClassLoader classLoader = this.getClass().getClassLoader();
+    	
+		InputStream inputStream = classLoader.getResourceAsStream( filePath ); 
+		BufferedReader br = new BufferedReader( new InputStreamReader(inputStream, "UTF-8") );
+		StringBuffer sb = new StringBuffer();
+		String line = null;
+		while ( (line = br.readLine()) != null) {
+			sb.append( line + "\n" );
+		}
+		br.close();
+		
+		return sb.toString();
+	}
+	
+	// Registering a transliteration instance in the XliteratorConfig seems to be going
+	// beyond its primary purpose (an interface to the index.json file , but not presently
+	// clear where to place it
+	protected void registerDependencies(ArrayList<String> dependencies) throws IOException, SAXException  {
+    	ConvertDocxGenericUnicodeFont converter = new ConvertDocxGenericUnicodeFont();
+		for( String alias: dependencies ) {
+	  		if( registered.contains( alias ) ) {
+	  			continue;
+	  		}
+	  		// get source file and direction from alias
+	  		JsonObject object = getTransliterationByAlias( alias );
+	  		
+	  		String path = object.get( "path" ).getAsString();
+	  		String rulesFilePath = (path.contains( "/" ) ) ? path : "common/transforms/" + path ; 
+	  		String direction = object.get( "direction" ).getAsString();
+	  		
+	  		int icuDirection = (direction.equals("both") || direction.equals("forward"))
+	 				 ? Transliterator.FORWARD 
+	 				 : Transliterator.REVERSE // || direction.equals("reverse") 
+	 				 ;
+	  		
+	  		String rulesText = null;
+	    	File rulesFile = new File( rulesFilePath );
+
+	    	if( rulesFile.exists() ) {
+	    		rulesText = converter.readRulesResourceFile(  rulesFilePath );
+	    	}
+	    	else {
+	    		rulesText = converter.readRulesResourceFile(  rulesFilePath );
+	    	}
+	    	
+	    	
+	  		Transliterator dependency = Transliterator.createFromRules( alias, rulesText, icuDirection );
+	  		Transliterator.registerInstance( dependency );
+	  		registered.add( alias );
+		}
+	}
+    
+    
+    public void load ( String configFilePath ) throws IOException {
     	String json = null;
     	File configFile = new File( configFilePath );
-    	Path configPath = null;
+
     	if( configFile.exists() ) {
-    		//configPath = Paths.get( configFilePath );
     		json = readLineByLineJava8( configFilePath );
-    	} else {
-    		ClassLoader classLoader = this.getClass().getClassLoader();
-    	
-    		InputStream inputStream = classLoader.getResourceAsStream( transformsIndex ); 
-    		BufferedReader br = new BufferedReader( new InputStreamReader(inputStream, "UTF-8") );
-    		StringBuffer sb = new StringBuffer();
-    		String line = null;
-    		while ( (line = br.readLine()) != null) {
-    			sb.append( line + "\n" );
-    		}
-    		br.close();
-    		json = sb.toString();
-    		// configPath = Paths.get( classLoader.getResource( transformsIndex ).toURI() );
+    	}
+    	else {
+    		json = readResourceFile( transformsIndex );
     	}
 		
         config = new JsonParser().parse(json).getAsJsonObject();

@@ -1,5 +1,6 @@
 package org.geez.ui.xliterator;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.prefs.Preferences;
 
@@ -39,6 +40,8 @@ public class ConvertTextTab extends XliteratorTab {
 		setup( xlit );
 	}    
     
+	private HashMap<String,String> registeredDependencies = new HashMap<String,String>();
+	private String selectedTransliteration = null;
     HashMap<String,ConvertTextString> textStringConverts = new HashMap<String,ConvertTextString>();    
     private void convertTextArea(StyleClassedTextArea textAreaIn, StyleClassedTextArea textAreaOut, String direction) {
     	String textIn = textAreaIn.getText();
@@ -47,6 +50,10 @@ public class ConvertTextTab extends XliteratorTab {
     	}
     	
     	try {
+    		if( (dependencies != null) && ( "false".equals( registeredDependencies.get( selectedTransliteration) ) ) ) {
+    			xlit.getConfig().registerDependencies( dependencies );
+    			registeredDependencies.put( selectedTransliteration , "true" );
+    		}
 	    	ConvertTextString stringConverter = null;
 	    	if( selectedTransliteration.equals( XliteratorNew.useSelectedEdtior ) ) {
 	    		// do not save the converter because the text may change:
@@ -110,10 +117,10 @@ public class ConvertTextTab extends XliteratorTab {
         HBox textAreaInMenuBox = new HBox( createFontChoiceBox( textAreaIn ), textAreaInIncreaseFontSizeButton, textAreaInDecreaseFontSizeButton );
         textAreaInMenuBox.setPadding(new Insets(2, 2, 2, 2));
         textAreaInMenuBox.setSpacing(4);
-        textAreaInIncreaseFontSizeButton.setOnAction( event -> {
+        textAreaInIncreaseFontSizeButton.setOnAction( evt -> {
         	incrementFontSize( textAreaIn );
         });
-        textAreaInDecreaseFontSizeButton.setOnAction( event -> {
+        textAreaInDecreaseFontSizeButton.setOnAction( evt -> {
         	decrementFontSize( textAreaIn );
         });
         // textAreaInMenuBox.setPrefHeight( 32.0 );
@@ -193,8 +200,10 @@ public class ConvertTextTab extends XliteratorTab {
 		convertButtonDown.setDisable( true );
     }
       
-    public void setVariantOut(String variantOut, String selectedTransliteration, String transliterationDirection ) {
-    	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection);
+    public void setVariantOut( String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies ) {
+    	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection, dependencies);
+    	this.selectedTransliteration = selectedTransliteration;
+		registeredDependencies.put( selectedTransliteration , "false" );
 		convertButtonUp.setDisable( false );
 		convertButtonDown.setDisable( false );
         if( "both".equals( transliterationDirection ) ) {
