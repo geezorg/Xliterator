@@ -10,6 +10,10 @@
 	-fx-stroke:  black;
 }
 
+#convertText .caret {
+	-fx-stroke:  black;
+}
+
 #icuEditor .forwardArrow {
 	-fx-fill: #008e00;
 	-fx-font-weight: bold;
