@@ -6,6 +6,9 @@
 	-fx-fill: black;
 }
 
+#icuEditor .caret {
+	-fx-stroke:  black;
+}
 
 #icuEditor .forwardArrow {
 	-fx-fill: #008e00;
