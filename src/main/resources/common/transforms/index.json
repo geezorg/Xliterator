@@ -70,13 +70,75 @@
 		},
 		"InterIndic" : {
 			"Arabic" : [
-				{ "name": "Arabic", "direction": "forward", "path": "InterIndic-Arabic.xml",
+				{
+				  "name": "Arabic", "direction": "forward", "path": "InterIndic-Arabic.xml",
                                   "alias": "InterIndic-Arabic", "visibility": "internal"
 				}
 			],
 			"Bengali" : [
-				{ "name": "Bengali", "direction": "forward", "path": "InterIndic-Bengali.xml",
+				{
+				  "name": "Bengali", "direction": "forward", "path": "InterIndic-Bengali.xml",
                                   "alias": "InterIndic-Bengali", "visibility": "internal"
+				}
+			],
+			"Devanagari" : [
+				{
+				  "name": "Devanagari", "direction": "forward", "path": "InterIndic-Devanagari.xml",
+				  "alias": "InterIndic-Devanagaril", "visibility": "internal"
+				}
+			],
+			"Gujarati" : [
+				{
+				  "name": "Gujarati", "direction": "forward", "path": "InterIndic-Gujarati.xml",
+				  "alias": "InterIndic-Gujarati", "visibility": "internal"
+				}
+			],
+			"Gurmukhi" : [
+				{
+				  "name": "Gurmukhi", "direction": "forward", "path": "InterIndic-Gurmukhi.xml",
+				  "alias": "InterIndic-Gurmukhi", "visibility": "internal"
+				}
+			],
+			"Kannada" : [
+				{
+				  "name": "Kannada", "direction": "forward", "path": "InterIndic-Kannada.xml",
+				  "alias": "InterIndic-Kannada", "visibility": "internal"
+				}
+			],
+			"Latin" : [
+				{
+				  "name": "Latin", "direction": "forward", "path": "InterIndic-Latin.xml",
+				  "alias": "InterIndic-Latin", "visibility": "internal"
+				}
+			],
+			"Malayalam" : [
+				{
+				  "name": "Malayalam", "direction": "forward", "path": "InterIndic-Malayalam.xml",
+				  "alias": "InterIndic-Malayalam", "visibility": "internal"
+				}
+			],
+			"Oriya" : [
+				{
+				  "name": "Oriya", "direction": "forward", "path": "InterIndic-Oriya.xml",
+				  "alias": "InterIndic-Oriya", "visibility": "internal"
+				}
+			],
+			"Tamil" : [
+				{
+				  "name": "Tamil", "direction": "forward", "path": "InterIndic-Tamil.xml",
+				  "alias": "InterIndic-Tamil", "visibility": "internal"
+				}
+			],
+			"Telegu" : [
+				{
+				  "name": "Telegu", "direction": "forward", "path": "InterIndic-Telugu.xml",
+				  "alias": "InterIndic-Telugu", "visibility": "internal"
+				}
+			],
+			"Urdu" : [
+				{
+				  "name": "Urdu", "direction": "forward", "path": "InterIndic-ur.xml",
+				  "alias": "InterIndic-ur", "visibility": "internal"
 				}
 			]
 		},
@@ -114,7 +176,18 @@
 		},
 		"Hani" : {
 			"Latin" : [
-				{ "name": "Latin", "direction": "forward", "path": "Han-Latin.xml" }
+				{
+			 	  "name": "Latin", "direction": "forward", "path": "Han-Latin.xml" ,
+				  "dependencies": [ "Han-Spacedhan" ]
+				},
+				{
+				  "name": "Names", "direction": "forward", "path": "Han-Latin-Names.xml" ,
+				  "dependencies": [ "Han-Spacedhan" ]
+				},
+				{
+				  "name": "Spacedhan", "direction": "both", "path": "Han-Spacedhan.xml",
+				  "alias": "Han-Spacedhan", "visibility": "internal"
+				}
 			]
 		},
 		"Hebrew" : {
