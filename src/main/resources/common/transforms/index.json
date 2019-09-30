@@ -25,25 +25,6 @@
 				{ "name": "BGN", "direction": "forward", "path": "Belarusian-Latin-BGN.xml" }
 			]
 		},
-		"Devanagari" : {
-			"Bengali" : [
-				{ "name": "Bengali", "direction": "forward", "path": "Devanagari-Bengali.xml",
-				  "dependencies": [ "Devanagari-InterIndic", "InterIndic-Bengali" ]
-				}
-			],
-			"InterIndic" : [
-				{ "name": "InterIndic", "direction": "forward", "path": "Devanagari-InterIndic.xml",
-                                  "alias": "Devanagari-InterIndic", "visibility": "internal"
-				}
-			]
-		},
-		"InterIndic" : {
-			"Bengali" : [
-				{ "name": "Bengali", "direction": "forward", "path": "InterIndic-Bengali.xml",
-                                  "alias": "InterIndic-Bengali", "visibility": "internal"
-				}
-			]
-		},
 		"Cyrillic" : {
 			"Latin" : [
 				{
@@ -67,6 +48,35 @@
 						{ "name": "BGN", "direction": "forward", "path": "Mongolian-Latin-BGN.xml" },
 						{ "name": "MNS", "direction": "forward", "path": "mn-mn_Latn-MNS.xml" }
 					]
+				}
+			]
+		},
+		"Devanagari" : {
+			"Arabic" : [
+				{ "name": "Arabic", "direction": "forward", "path": "Devanagari-Arabic.xml",
+				  "dependencies": [ "Devanagari-InterIndic", "InterIndic-Arabic" ]
+				}
+			],
+			"Bengali" : [
+				{ "name": "Bengali", "direction": "forward", "path": "Devanagari-Bengali.xml",
+				  "dependencies": [ "Devanagari-InterIndic", "InterIndic-Bengali" ]
+				}
+			],
+			"InterIndic" : [
+				{ "name": "InterIndic", "direction": "forward", "path": "Devanagari-InterIndic.xml",
+                                  "alias": "Devanagari-InterIndic", "visibility": "internal"
+				}
+			]
+		},
+		"InterIndic" : {
+			"Arabic" : [
+				{ "name": "Arabic", "direction": "forward", "path": "InterIndic-Arabic.xml",
+                                  "alias": "InterIndic-Arabic", "visibility": "internal"
+				}
+			],
+			"Bengali" : [
+				{ "name": "Bengali", "direction": "forward", "path": "InterIndic-Bengali.xml",
+                                  "alias": "InterIndic-Bengali", "visibility": "internal"
 				}
 			]
 		},
@@ -127,6 +137,9 @@
 			],
 			"Bopopmofo" : [
 				{ "name": "Bopomofo", "direction": "both", "path": "Latin-Bopomofo.xml" }
+			],
+			"Canadian Aboriginal Syllabics": [
+				{ "name": "Latin", "direction": "both", "path": "CanadianAboriginal-Latin.xml" }
 			],
 			"IPA" : [
 				{ "name": "Chamorro", "direction": "forward", "path": "chr-chr_FONIPA.xml" },
