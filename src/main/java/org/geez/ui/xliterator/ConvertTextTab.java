@@ -15,10 +15,14 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class ConvertTextTab extends XliteratorTab {
 	
@@ -273,6 +277,22 @@ public class ConvertTextTab extends XliteratorTab {
         value = prefs.get( textAreaOutFontSizePref, null );
         textAreaOut.getProperties().put( "font-size", value );
         setFontSize( textAreaOut, value );
+        
+		Preferences editorPrefs = Preferences.userNodeForPackage( EditorTab.class );
+		setBackgroundColor( editorPrefs.get( EditorTab.editorBackgroundColor, "white" ) );
+        
         return true;
+    }
+    
+    public void setBackgroundColor(String color) {
+    	// create a background fill 
+    	BackgroundFill background_fill = new BackgroundFill( Color.valueOf( color ), CornerRadii.EMPTY, Insets.EMPTY ); 
+
+    	// create Background 
+    	Background background = new Background(background_fill); 
+
+    	// set background 
+    	textAreaIn.setBackground(background); 
+    	textAreaOut.setBackground(background); 
     }
 }

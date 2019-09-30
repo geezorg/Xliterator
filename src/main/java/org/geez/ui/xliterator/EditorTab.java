@@ -24,9 +24,9 @@ public class EditorTab extends XliteratorTab {
 	private File externalIcuFile = null;
 	private boolean unsavedChanges = false;
         
-    private final String editorFontFamilyPref = "org.geez.ui.xliterator.editor.font.family";
-    private final String editorFontSizePref   = "org.geez.ui.xliterator.editor.font.size";
-    private final String editorBackgroundColor = "org.geez.ui.xliterator.editor.background.color";
+    public static final String editorFontFamilyPref  = "org.geez.ui.xliterator.editor.font.family";
+    public static final String editorFontSizePref    = "org.geez.ui.xliterator.editor.font.size";
+    public static final String editorBackgroundColor = "org.geez.ui.xliterator.editor.background.color";
     
 
 	public EditorTab( String title ) {
@@ -146,6 +146,12 @@ public class EditorTab extends XliteratorTab {
     }
     
     
+    public String getBackgroundColor( ) {
+		Preferences prefs = Preferences.userNodeForPackage( EditorTab.class );
+		return prefs.get( editorBackgroundColor, "white" );
+    }
+    
+    
     private boolean checkPreferences() {
 		Preferences prefs = Preferences.userNodeForPackage( EditorTab.class );
 		  
@@ -171,7 +177,7 @@ public class EditorTab extends XliteratorTab {
   
     public void setBackgroundColor(String color ) {
     	// create a background fill 
-    	BackgroundFill background_fill = new BackgroundFill( Color.valueOf( color ),  CornerRadii.EMPTY, Insets.EMPTY); 
+    	BackgroundFill background_fill = new BackgroundFill( Color.valueOf( color ), CornerRadii.EMPTY, Insets.EMPTY ); 
 
     	// create Background 
     	Background background = new Background(background_fill); 

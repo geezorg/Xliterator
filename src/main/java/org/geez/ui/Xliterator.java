@@ -1085,17 +1085,17 @@ public final class Xliterator extends Application {
     
     
     public EditorTab getActiveEditorTab() {
-    	// TBD: this will have to change to the active editor
     	return currentEditorTab;
     }
     
     
     public EditorTab getSelectedEditorTab() {
-    	// TBD: this will have to change to the active editor
     	return selectedEditorTab;
     }
     
-    
+    public ConvertTextTab getConvertTextTab() {
+    	return textTab;
+    }
     
     private void loadDemo(Menu tabsMenu, Image visibleIcon, ColorAdjust monochrome) {
     	textTab.clearAll();

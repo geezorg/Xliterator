@@ -245,6 +245,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 					editorTab.setStyle( "" );
 					applyStylesheet( stage.getScene(), tempStylesheet, true );
 				}
+				xlit.getConvertTextTab().setBackgroundColor( bgcolor );
 		});
 		
 		saveButton.setOnAction( evt -> {
