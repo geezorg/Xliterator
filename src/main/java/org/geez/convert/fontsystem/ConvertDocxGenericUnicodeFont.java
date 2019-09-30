@@ -8,6 +8,9 @@ import com.ibm.icu.text.Transliterator;
 
 public class ConvertDocxGenericUnicodeFont extends ConvertFontSystem {
 
+	public ConvertDocxGenericUnicodeFont() {
+		super();
+	}
 	public ConvertDocxGenericUnicodeFont( String rulesFile, String transliterationDirection ) {
 		
 		try {

@@ -362,8 +362,8 @@ public class ConvertFilesTab extends XliteratorTab {
     }
     
       
-    public void setVariantOut(String variantOut, String selectedTransliteration, String transliterationDirection ) {
-    	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection);
+    public void setVariantOut(String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies ) {
+    	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection, dependencies);
 
     	if( inputFileList != null ) {
     		convertButton.setDisable( false );

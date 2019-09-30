@@ -1,5 +1,7 @@
 package org.geez.ui.xliterator;
 
+import java.util.ArrayList;
+
 import org.fxmisc.richtext.StyleClassedTextArea;
 
 import de.endrullis.draggabletabs.DraggableTab;
@@ -21,21 +23,24 @@ public abstract class XliteratorTab extends DraggableTab {
 	protected String defaultFontSize = "12";
 	protected String fontFamily = null;
 	protected String fontSize = null;
+	protected ArrayList<String> dependencies = null;
 	
     
 	public XliteratorTab( String title ) {
 		super(title);
 	}
 
+	
     public void setDefaultFontFamily(String defaultFontFamily) {
     	this.defaultFontFamily = defaultFontFamily;
     }
+    
     
     public void setDefaultFontFamily(String defaultFontFamily, String defaultFontSize) {
     	this.defaultFontFamily = defaultFontFamily;
     	this.defaultFontSize = defaultFontSize;
     }
-
+    
     
     protected void incrementFontSize(StyleClassedTextArea component) {
     	String fontFamily = (String) component.getProperties().get("font-family");
@@ -47,6 +52,7 @@ public abstract class XliteratorTab extends DraggableTab {
     	}
     }
 
+    
     protected void decrementFontSize(StyleClassedTextArea component) {
     	String fontFamily = (String) component.getProperties().get("font-family");
     	int newSize = Integer.parseInt( (String)component.getProperties().get("font-size") ) - 1;
@@ -57,11 +63,13 @@ public abstract class XliteratorTab extends DraggableTab {
     	}
     }
     
+    
     protected void setFontSize( StyleClassedTextArea component, String fontSize  ) {
 			component.setStyle( "-fx-font-family: '" + component.getProperties().get("font-family") + "'; -fx-font-size: " + fontSize + ";" ); 
     		component.getProperties().put( "font-size", fontSize );
     		this.fontSize = fontSize;
     }
+    
     
     protected void setFontFamily( StyleClassedTextArea component, String fontFamily ) {
     		component.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + component.getProperties().get("font-size") + ";" ); 
@@ -119,20 +127,25 @@ public abstract class XliteratorTab extends DraggableTab {
     	this.scriptIn = scriptIn;
     }
     
+    
     public void setScriptOut( String scriptOut ) {
     	this.scriptOut = scriptOut;
     }
-      
-    public void setVariantOut( String variantOut, String selectedTransliteration, String transliterationDirection ) {
+    
+    
+    public void setVariantOut( String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies ) {
     	this.variantOut = variantOut;
     	this.selectedTransliteration  = selectedTransliteration;
     	this.transliterationDirection = transliterationDirection;
+    	this.dependencies = dependencies;
     }
+    
     
     public void setCaseOption( String caseOption ) {
     	this.caseOption = caseOption;
     }
 	
+    
 	protected void errorAlert( Exception ex, String header ) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle( "An Exception has occured" );

@@ -254,7 +254,7 @@ public final class Xliterator extends Application {
         ToggleGroup groupInMenu = new ToggleGroup();
         
         // Create menu from the scripts in the configuration file:
-    	List<String> scripts = config.getInScripts();
+    	List<String> scripts = config.getInScripts( true );
     	for(String script: scripts) {
     		RadioMenuItem menuItem = new RadioMenuItem( script );
     		menuItem.setToggleGroup( groupInMenu );
@@ -293,7 +293,7 @@ public final class Xliterator extends Application {
     	
         ToggleGroup groupOutMenu = new ToggleGroup();
         
-    	List<String> scripts = config.getOutScripts(outScript);
+    	List<String> scripts = config.getOutScripts(outScript, true);
     	for(String script: scripts) {
     		RadioMenuItem menuItem = new RadioMenuItem( script );
     		menuItem.setToggleGroup( groupOutMenu );
