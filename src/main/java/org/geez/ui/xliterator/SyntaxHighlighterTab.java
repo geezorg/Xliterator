@@ -471,7 +471,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 	        StringBuffer sb = new StringBuffer( ".paragraph-text .text {\n" );
 			ArrayList<Object> list = updatedStyles.get( "text" );
 			sb.append( "\t-fx-fill: " + (String)list.get(0) + ";\n" );
-	        sb.append(  "}\n" );
+	        sb.append(  "}\n#icuEditor .caret {\n\t-fx-stroke: " + (String)list.get(0)  + ";\n}\n" );
 	        printStream.println( sb );
 	        
 			for(String style : cssOrder) {
