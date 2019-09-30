@@ -86,16 +86,16 @@ public final class Xliterator extends Application {
     private String defaultFontFamily        = null;
     private DraggableTabPane tabpane        = new DraggableTabPane();
     private MenuItem loadInternalMenuItem   = new MenuItem( "Load Selected Transliteration" );
-    //private EditorTab editorTab           = new EditorTab( "Mapping Editor" );
+
     private SyntaxHighlighterTab syntaxHighlighterTab = new SyntaxHighlighterTab( "Syntax Highlighter" );
     private ConvertTextTab textTab            = new ConvertTextTab( "Convert Text", this );
     private ConvertFilesTab filesTab          = new ConvertFilesTab( "Convert Files", this );
     private ProcessorManager processorManager = new ProcessorManager();
     
     private ArrayList<EditorTab> editorTabs = new ArrayList<EditorTab>(); 
-    // private int currentEditorIndex = 0;
-    private EditorTab currentEditorTab = null;
-    private EditorTab selectedEditorTab   = null;
+
+    private EditorTab currentEditorTab  = null;
+    private EditorTab selectedEditorTab = null;
     
     private final int APP_WIDTH  = 800;
     private final int APP_HEIGHT = 800;
@@ -162,15 +162,7 @@ public final class Xliterator extends Application {
     		menuItem.setOnAction( evt -> setScriptIn( script ) );
     		menu.getItems().add( menuItem );
     	}
-    	
-    	// Menu for the first edtior tab:
-    	/*
-    	menu.getItems().add( new SeparatorMenuItem() );
-    	RadioMenuItem editorTabItem = new RadioMenuItem( "Use Editor" );
-    	editorTabItem.setOnAction( evt -> setUseEditor() );
-    	menu.getItems().add( editorTabItem );
-    	*/
-        		
+    		
     	return menu;
     }
     
@@ -560,15 +552,6 @@ public final class Xliterator extends Application {
         textConverterTabViewMenuItem.setGraphic( textConverterOnView );
         textConverterTabViewMenuItem.getProperties().put( "show", true );	
         textConverterTabViewMenuItem.setOnAction( evt -> tabToggler(textConverterTabViewMenuItem, textTab, textConverterOnView, textConverterOffView) );
-
-        /*
-        ImageView editorOnView = new ImageView( visibleIcon );
-        ImageView editorOffView = new ImageView( visibleIcon );
-        editorOffView.setEffect( monochrome );
-        editorTabViewMenuItem.setGraphic( editorOffView );
-        editorTabViewMenuItem.getProperties().put( "show", false );	
-        editorTabViewMenuItem.setOnAction( evt -> tabToggler(editorTabViewMenuItem, editorTab, editorOnView, editorOffView) );
-        */
         
         ImageView syntaxHighlighterOnView = new ImageView( visibleIcon );
         ImageView syntaxHighlighterOffView = new ImageView( visibleIcon );
