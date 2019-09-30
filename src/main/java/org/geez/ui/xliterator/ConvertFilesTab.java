@@ -98,9 +98,9 @@ public class ConvertFilesTab extends XliteratorTab {
     private void processFile(File inputFile, ListView<Label> listView, int listIndex) {
 
         try {
-        	String inputFilePath = inputFile.getPath();
-        	String outputFilePath = null;	
-    		String extension = FilenameUtils.getExtension( inputFilePath );
+        	String inputFilePath   = inputFile.getPath();
+        	String outputFilePath  = null;	
+    		String extension       = FilenameUtils.getExtension( inputFilePath );
     		String editorRulesText = null;
     		
     		if( selectedTransliteration.equals( XliteratorNew.useSelectedEdtior ) ) {

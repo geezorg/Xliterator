@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
+import org.geez.convert.helpers.ICUHelper;
 import org.xml.sax.SAXException;
 
 import com.google.gson.JsonArray;
@@ -22,7 +23,7 @@ import com.google.gson.JsonParser;
 import com.ibm.icu.text.Transliterator;
 
 
-public class XliteratorConfig {
+public class XliteratorConfig extends ICUHelper {
 	
 	private String userConfigFilePath = "transliterations.json";
 	private String transformsIndex    = "common/transforms/index.json";
@@ -33,28 +34,12 @@ public class XliteratorConfig {
 		load( userConfigFilePath );
 	}
 	
-	public XliteratorConfig( String configFilePath )  throws URISyntaxException, IOException {
+	public XliteratorConfig( String configFilePath ) throws URISyntaxException, IOException {
 		load( configFilePath );
 	}
-	
-	
-    private String readLineByLineJava8(String filePath)
-    {
-        StringBuilder contentBuilder = new StringBuilder();
-        try (Stream<String> stream = Files.lines( Paths.get(filePath), StandardCharsets.UTF_8))
-        {
-            stream.forEach(s -> contentBuilder.append(s).append("\n"));
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return contentBuilder.toString();
-    }
     
     
     public List<String> getInScripts( boolean skipInternal ) {
-    	
     	if( skipInternal ) {
     		ArrayList<String> scriptList = new ArrayList<String>();
             JsonObject scripts = config.getAsJsonObject("Scripts");
@@ -90,7 +75,6 @@ public class XliteratorConfig {
     
     
     public List<String> getOutScripts( String inScript, boolean skipInternal ) {
-    	
     	if( skipInternal ) {
     		ArrayList<String> scriptList = new ArrayList<String>();
 
@@ -241,7 +225,7 @@ public class XliteratorConfig {
 	// beyond its primary purpose (an interface to the index.json file , but not presently
 	// clear where to place it
 	protected void registerDependencies(ArrayList<String> dependencies) throws IOException, SAXException  {
-    	ConvertDocxGenericUnicodeFont converter = new ConvertDocxGenericUnicodeFont();
+    	// ConvertDocxGenericUnicodeFont converter = new ConvertDocxGenericUnicodeFont();
 		for( String alias: dependencies ) {
 	  		if( registered.contains( alias ) ) {
 	  			continue;
@@ -253,24 +237,7 @@ public class XliteratorConfig {
 	  		String rulesFilePath = (path.contains( "/" ) ) ? path : "common/transforms/" + path ; 
 	  		String direction = object.get( "direction" ).getAsString();
 	  		
-	  		int icuDirection = (direction.equals("both") || direction.equals("forward"))
-	 				 ? Transliterator.FORWARD 
-	 				 : Transliterator.REVERSE // || direction.equals("reverse") 
-	 				 ;
-	  		
-	  		String rulesText = null;
-	    	File rulesFile = new File( rulesFilePath );
-
-	    	if( rulesFile.exists() ) {
-	    		rulesText = converter.readRulesResourceFile(  rulesFilePath );
-	    	}
-	    	else {
-	    		rulesText = converter.readRulesResourceFile(  rulesFilePath );
-	    	}
-	    	
-	    	
-	  		Transliterator dependency = Transliterator.createFromRules( alias, rulesText, icuDirection );
-	  		Transliterator.registerInstance( dependency );
+	  		registerTransliteration( alias, direction, rulesFilePath );
 	  		registered.add( alias );
 		}
 	}
