@@ -53,17 +53,20 @@
 		},
 		"Devanagari" : {
 			"Arabic" : [
-				{ "name": "Arabic", "direction": "forward", "path": "Devanagari-Arabic.xml",
+				{
+				  "name": "Arabic", "direction": "forward", "path": "Devanagari-Arabic.xml",
 				  "dependencies": [ "Devanagari-InterIndic", "InterIndic-Arabic" ]
 				}
 			],
 			"Bengali" : [
-				{ "name": "Bengali", "direction": "forward", "path": "Devanagari-Bengali.xml",
+				{
+				  "name": "Bengali", "direction": "forward", "path": "Devanagari-Bengali.xml",
 				  "dependencies": [ "Devanagari-InterIndic", "InterIndic-Bengali" ]
 				}
 			],
 			"InterIndic" : [
-				{ "name": "InterIndic", "direction": "forward", "path": "Devanagari-InterIndic.xml",
+				{
+				  "name": "InterIndic", "direction": "forward", "path": "Devanagari-InterIndic.xml",
                                   "alias": "Devanagari-InterIndic", "visibility": "internal"
 				}
 			]
@@ -196,6 +199,18 @@
 				{ "name": "BGN", "direction": "forward", "path": "Hebrew-Latin-BGN.xml" }
 			]
 		},
+		"Hiragana" : {
+			"Latin" : [
+				{
+				  "name": "Latin", "direction": "both", "path": "Hiragana-Latin.xml", "alias": "Hiragana-Latin",
+				  "dependencies": [ "Hiragana-Katakana", "Katakana-Latin" ]
+				}
+			],
+			"Katakana" : [
+				{ "name": "Katakana", "direction": "both", "path": "Hiragana-Katakana.xml", "alias": "Katakana-Hiragana" }
+			]
+
+		},
 		"Latin" : {
 			"ASCII" : [
 				{ "name": "ASCII", "direction": "both", "path": "Latin-ASCII.xml" }
@@ -225,6 +240,12 @@
 			"Ethiopic" : [
 				{ "name": "Ethiopic", "direction": "both", "path": "Latin-Ethiopic.xml" }
 			]
+		},
+		"Katakana" : {
+			"Latin" : [
+				{ "name": "BGN", "direction": "forward", "path": "Katakana-Latin-BGN.xml", "alias": "Katakana-Latin" }
+			]
+
 		},
 		"Sinhala" : {
 			"IPA" : [
