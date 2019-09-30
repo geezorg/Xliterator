@@ -30,9 +30,7 @@ public class ProcessorManager {
 			processorDocx.stashConverter( (ConvertFontSystem)converter );
 			processor = processorDocx;
 		}
-		
 		return processor;
-		
 	}
 	
 	public DocumentProcessor getFileProcessor(String extension) {
@@ -59,6 +57,6 @@ public class ProcessorManager {
 		}
 		
 		return processor;
-		
 	}
+	
 }

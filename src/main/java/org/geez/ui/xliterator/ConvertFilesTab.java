@@ -21,6 +21,7 @@ import org.geez.convert.ProcessorManager;
 import org.geez.convert.docx.DocxProcessor;
 import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
 import org.geez.convert.fontsystem.ConvertFontSystem;
+import org.geez.convert.text.ConvertTextString;
 import org.geez.ui.Xliterator;
 import org.geez.ui.XliteratorNew;
 
@@ -103,11 +104,24 @@ public class ConvertFilesTab extends XliteratorTab {
 
         try {
         	String inputFilePath = inputFile.getPath();
-        	String outputFilePath = null;
-    		
+        	String outputFilePath = null;	
     		String extension = FilenameUtils.getExtension( inputFilePath );
-    		DocumentProcessor processor = processorManager.getFileProcessor( selectedTransliteration, transliterationDirection, extension );
-    		// DocumentProcessor processor = processorManager.getFileProcessor( extension );
+    		String editorRulesText = null;
+    		
+    		if( selectedTransliteration.equals( XliteratorNew.useSelectedEdtior ) ) {
+	    		EditorTab editorTab = xlit.getSelectedEditorTab();
+	    		if( editorTab == null ) {
+	    			// TODO: add error alert
+	    			return;
+	    		}
+	    		editorRulesText = editorTab.getEditor().getText();
+    		}
+
+    		DocumentProcessor processor = ( editorRulesText == null )
+    				? processorManager.getFileProcessor( selectedTransliteration, transliterationDirection, extension )
+    				: processorManager.getEditorTextProcessor( selectedTransliteration, transliterationDirection, extension, editorRulesText )
+    				;
+    		
     		
     		// a new converter instance is created for each file in a list. since if we can cache and reuse a converter.
     		// it may be necessary to reset the converter so it is in a neutral state
