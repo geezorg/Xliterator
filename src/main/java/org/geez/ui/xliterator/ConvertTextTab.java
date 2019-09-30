@@ -6,7 +6,7 @@ import java.util.prefs.Preferences;
 
 import org.fxmisc.richtext.StyleClassedTextArea;
 import org.geez.convert.text.ConvertTextString;
-import org.geez.ui.XliteratorNew;
+import org.geez.ui.Xliterator;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -33,9 +33,9 @@ public class ConvertTextTab extends XliteratorTab {
     private final String textAreaOutFontFacePref = "org.geez.ui.xliterator.convertTextTab.textAreaOut.font.face";
     private final String textAreaOutFontSizePref = "org.geez.ui.xliterator.convertTextTab.textAreaOut.font.size";
 
-	private XliteratorNew xlit = null; // used to get a handle on rules text
+	private Xliterator xlit = null; // used to get a handle on rules text
 	
-	public ConvertTextTab(String title, XliteratorNew xlit) {
+	public ConvertTextTab(String title, Xliterator xlit) {
 		super( title );
 		setup( xlit );
 	}    
@@ -55,7 +55,7 @@ public class ConvertTextTab extends XliteratorTab {
     			registeredDependencies.put( selectedTransliteration , "true" );
     		}
 	    	ConvertTextString stringConverter = null;
-	    	if( selectedTransliteration.equals( XliteratorNew.useSelectedEdtior ) ) {
+	    	if( selectedTransliteration.equals( Xliterator.useSelectedEdtior ) ) {
 	    		// do not save the converter because the text may change:
 	    		// The ConvertTextString constructor needs to be reworked here, see notes within its source file:
 	    		// stringConverter = new ConvertTextString( editor.getText(), direction, true );
@@ -93,7 +93,7 @@ public class ConvertTextTab extends XliteratorTab {
 		}
     }
     
-    public void setup(XliteratorNew xlit) {
+    public void setup(Xliterator xlit) {
     	this.xlit = xlit;
         textAreaIn.setPrefHeight(313);
         textAreaOut.setPrefHeight(313);

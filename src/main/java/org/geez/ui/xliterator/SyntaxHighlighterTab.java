@@ -20,7 +20,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
-import org.geez.ui.XliteratorNew;
+import org.geez.ui.Xliterator;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -81,7 +81,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 			)
 	);
     
-	private XliteratorNew xlit = null;
+	private Xliterator xlit = null;
 
 	public SyntaxHighlighterTab( String title ) {
 		super(title);
@@ -185,7 +185,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
     	label.setStyle( style );
     }
     
-    public void load( final Stage stage, final XliteratorNew xlit ) {
+    public void load( final Stage stage, final Xliterator xlit ) {
     	this.xlit = xlit;
 		if( styles.isEmpty() ) {
 			ClassLoader classLoader = this.getClass().getClassLoader();

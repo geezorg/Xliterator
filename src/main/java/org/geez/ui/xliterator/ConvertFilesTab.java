@@ -22,7 +22,7 @@ import org.geez.convert.docx.DocxProcessor;
 import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
 import org.geez.convert.fontsystem.ConvertFontSystem;
 import org.geez.ui.Xliterator;
-import org.geez.ui.XliteratorNew;
+import org.geez.ui.Xliterator;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -61,9 +61,9 @@ public class ConvertFilesTab extends XliteratorTab {
 	private StatusBar statusBar = null;
 	
     private final String fileOutFontPref = "org.geez.ui.xliterator.convertFilesTab.fontOut";
-	private XliteratorNew xlit = null; // used to get a handle on rules text
+	private Xliterator xlit = null; // used to get a handle on rules text
 
-	public ConvertFilesTab(String title, XliteratorNew xlit) {
+	public ConvertFilesTab(String title, Xliterator xlit) {
 		super( title );
 		this.xlit = xlit;
 		this.defaultFontFamily = "Arial";
@@ -103,7 +103,7 @@ public class ConvertFilesTab extends XliteratorTab {
     		String extension       = FilenameUtils.getExtension( inputFilePath );
     		String editorRulesText = null;
     		
-    		if( selectedTransliteration.equals( XliteratorNew.useSelectedEdtior ) ) {
+    		if( selectedTransliteration.equals( Xliterator.useSelectedEdtior ) ) {
 	    		EditorTab editorTab = xlit.getSelectedEditorTab();
 	    		if( editorTab == null ) {
 	    			// TODO: add error alert
