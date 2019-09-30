@@ -108,8 +108,8 @@ public class ICUEditor extends CodeArea {
 
     private String originalText = "";
     
-	private String defaultStylesheet = "styles/icu-highlighting.css";
-	private String userStylesheet    = "styles/user-highlighting.css";
+	public static final String defaultStylesheet = "styles/icu-highlighting.css";
+	public static final String userStylesheet    = "styles/user-highlighting.css";
 
     public ICUEditor() {
     	String osName = System.getProperty("os.name");
@@ -176,23 +176,14 @@ public class ICUEditor extends CodeArea {
         
     }
     
-    public void setStyle(Scene scene) {
-    	// review this issues:
-    	// 1) if we add the stylesheet to the scene, does it apply for all tabs?  - seems OK
-    	// 2) Can tabs have their own scene?
-    	// 3) can we create a tab with a StackPane as shown in the scene?
-    	//  Find out how to add a scrollbar to a TextArea / CodeArea / Tab
-    	//
-		// Scene scenex = new Scene(new StackPane( new VirtualizedScrollPane<>(this) ), 600, 400);
-    	
-    	// this.setBackground( new Background( new BackgroundFill(Color.rgb(0, 4, 0), CornerRadii.EMPTY, Insets.EMPTY)) ); ;
-		ClassLoader classLoader = this.getClass().getClassLoader();
-		InputStream inputStream = classLoader.getResourceAsStream( userStylesheet );
+    
+    public static void loadStylesheets(Scene scene) {
+		InputStream inputStream = ClassLoader.getSystemResourceAsStream( userStylesheet ); 
 		if( inputStream == null ) {
-			scene.getStylesheets().add( classLoader.getResource( defaultStylesheet ).toExternalForm() );
+			scene.getStylesheets().add( ClassLoader.getSystemResource( defaultStylesheet ).toExternalForm() );
 		}
 		else {
-			scene.getStylesheets().add( classLoader.getResource( userStylesheet ).toExternalForm() );
+			scene.getStylesheets().add( ClassLoader.getSystemResource( userStylesheet ).toExternalForm() );
 		}
 		
     }

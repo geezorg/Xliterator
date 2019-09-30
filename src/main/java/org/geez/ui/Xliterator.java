@@ -3,7 +3,9 @@ package org.geez.ui;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,6 +16,7 @@ import org.geez.convert.ProcessorManager;
 import org.geez.ui.xliterator.ConvertFilesTab;
 import org.geez.ui.xliterator.ConvertTextTab;
 import org.geez.ui.xliterator.EditorTab;
+import org.geez.ui.xliterator.ICUEditor;
 import org.geez.ui.xliterator.SyntaxHighlighterTab;
 import org.geez.ui.xliterator.XliteratorConfig;
 import org.geez.ui.xliterator.XliteratorTab;
@@ -74,6 +77,7 @@ public final class Xliterator extends Application {
 	private Menu inScriptMenu   = null;
 	private Menu outVariantMenu = null;
 	private Menu outScriptMenu  = null;
+	final Menu tabsMenu = new Menu( "Tabs" );
 	// an object could be introduced to hold the various transliteration attributes:
 	private String selectedTransliteration  = null;
 	private String transliterationDirection = null;
@@ -107,6 +111,9 @@ public final class Xliterator extends Application {
     
     private Stage primaryStage = null;
 	private XliteratorConfig config = null;
+	
+    private Image visibleIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
+    private ColorAdjust monochrome = new ColorAdjust();
 	
 	
 	public XliteratorConfig getConfig() {
@@ -285,7 +292,7 @@ public final class Xliterator extends Application {
         editorTab.setDefaultFontFamily( defaultFontFamily );
         editorTab.setClosable( true );
         editorTab.setup(saveMenuItem, saveAsMenuItem);
-        editorTab.getEditor().setStyle( primaryStage.getScene() );
+        // editorTab.setStyle( primaryStage.getScene() );
         editorTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().multiply(0.8) );
         editorTab.setOnSelectionChanged( evt -> {
         	if( editorTab.isSelected() ) {
@@ -530,15 +537,13 @@ public final class Xliterator extends Application {
         //
         //=========================== BEGIN TABS MENU ===========================================
         //
-        final Menu tabsMenu = new Menu( "Tabs" );
+        
         MenuItem fileConverterTabViewMenuItem = new MenuItem( "File Converter" );
         MenuItem textConverterTabViewMenuItem = new MenuItem( "Text Converter" );
         MenuItem syntaxHighlighterTabViewMenuItem = new MenuItem( "Syntax Highlighter" );
 
         tabsMenu.getItems().addAll( fileConverterTabViewMenuItem, textConverterTabViewMenuItem );
         
-        Image visibleIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
-        ColorAdjust monochrome = new ColorAdjust();
         monochrome.setSaturation(-1);
         
 
@@ -742,9 +747,11 @@ public final class Xliterator extends Application {
         rootGroup.setPadding( new Insets(8, 8, 8, 8) );
  
         Scene scene = new Scene(rootGroup, APP_WIDTH, APP_HEIGHT);
-        ClassLoader classLoader = this.getClass().getClassLoader();
-        scene.getStylesheets().add( classLoader.getResource( xlitStylesheet ).toExternalForm() );
         stage.setScene( scene ); 
+        
+    	ClassLoader classLoader = this.getClass().getClassLoader();
+        scene.getStylesheets().add( classLoader.getResource( xlitStylesheet ).toExternalForm() );
+		ICUEditor.loadStylesheets( scene );
 
         scene.getWindow().addEventFilter( WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent );
         
@@ -1012,6 +1019,25 @@ public final class Xliterator extends Application {
     			: "templates/icu-text-template.txt" 
     	;
     	try {
+    		// this should probably be changed to use createNewEditor 
+    		EditorTab newTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
+    		newTab.getEditor().loadResourceFile( template );
+    	}
+    	catch(Exception ex) {
+        	errorAlert(ex, "Error opening: " + template );
+    	}
+    	
+    } 
+    
+    private void createNewFileOld(String title, String type ) {
+    	
+    	String template = ( "XML".equals(type) )
+    			? "templates/icu-xml-template.xml"
+    			: "templates/icu-text-template.txt" 
+    	;
+    	try {
+    		// this should probably be changed to use createNewEditor 
+    		
     		EditorTab newTab = new EditorTab( "Untitled" );
     		newTab.setDefaultFontFamily( defaultFontFamily );
     		newTab.setup(saveMenuItem, saveAsMenuItem);
@@ -1027,7 +1053,7 @@ public final class Xliterator extends Application {
     		});
     		
             
-    		newTab.getEditor().setStyle( primaryStage.getScene() );
+    		// newTab.getEditor().setStyle( primaryStage.getScene() );
     		newTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().multiply(0.8) );
 
     		tabpane.getSelectionModel().select( newTab );
