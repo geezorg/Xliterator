@@ -275,16 +275,6 @@ public class ConvertFilesTab extends XliteratorTab {
         appendMenu.getItems().add( "With a space" );
         appendMenu.getItems().add( "  • With a space and with ()" );
         appendMenu.setOnAction( evt -> { appendStyle = appendMenu.getSelectionModel().getSelectedItem(); } );
-
-        /*
-        CheckBox appendOutputCheckbox = new CheckBox( "Append transliterated output?" );
-        openFilesCheckbox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            public void changed(ObservableValue<? extends Boolean> ov,
-                Boolean old_val, Boolean new_val) {
-                    appendOutput = new_val.booleanValue();
-            }
-        });
-        */
         
         
         Region bottomSpacer = new Region();
