@@ -7,12 +7,18 @@ import java.util.prefs.Preferences;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -56,7 +62,20 @@ public class EditorTab extends XliteratorTab {
         MenuBar editorMenutBar  = new MenuBar();
         editorMenutBar.getMenus().addAll( editorFontMenu, editorFontSizeMenu );
         
-        VBox editorVBox = new VBox( editorMenutBar, new StackPane( new VirtualizedScrollPane<>( editor ) ) );
+        Button register = new Button( "Register" );
+        register.setTooltip( new Tooltip( "Register with ICU Transliterator Library" ) );
+
+        Button unregister = new Button( "Unregister" );
+        unregister.setTooltip( new Tooltip( "Unegister with ICU Transliterator Library" ) );
+        
+        HBox controls = new HBox();
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.SOMETIMES);
+        controls.setAlignment( Pos.CENTER_LEFT);
+        controls.getChildren().addAll( editorMenutBar, spacer, unregister, register );
+        
+        
+        VBox editorVBox = new VBox( controls, new StackPane( new VirtualizedScrollPane<>( editor ) ) );
         this.setContent( editorVBox );
         
         
