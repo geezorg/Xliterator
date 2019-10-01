@@ -114,8 +114,8 @@ public final class Xliterator extends Application {
 	private XliteratorConfig config = null;
 	
     private Image visibleIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
-    private Image snapshotArrowForward = new Image( ClassLoader.getSystemResourceAsStream( "images/right-arrow.png" ) );
-    private Image snapshotArrowBoth    = new Image( ClassLoader.getSystemResourceAsStream( "images/exchange-arrows.png" ) );
+    private Image arrowForwardIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_right_grey_18x18.png" ) ); 
+    private Image arrowBothIcon    = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_double_grey_18x18.png" ) );
     private ColorAdjust monochrome = new ColorAdjust();
 	
 	
@@ -249,10 +249,10 @@ public final class Xliterator extends Application {
     	        		
     	        		ImageView imageView = null;
     	        		if( direction.equals( "both" ) ) {
-    	        			imageView= new ImageView( snapshotArrowBoth );
+    	        			imageView= new ImageView( arrowBothIcon );
     	        		}
     	        		else {
-    	        			imageView= new ImageView( snapshotArrowForward );    	        			
+    	        			imageView= new ImageView( arrowForwardIcon );    	        			
     	        		}
     	                menuItem.setGraphic( imageView );
     	                
@@ -285,10 +285,10 @@ public final class Xliterator extends Application {
         		
         		ImageView imageView = null;
         		if( direction.equals( "both" ) ) {
-        			imageView= new ImageView( snapshotArrowBoth );
+        			imageView= new ImageView( arrowBothIcon );
         		}
         		else {
-        			imageView= new ImageView( snapshotArrowForward );    	        			
+        			imageView= new ImageView( arrowForwardIcon );    	        			
         		}
                 menuItem.setGraphic( imageView );
                 
