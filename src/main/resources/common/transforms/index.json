@@ -2,8 +2,14 @@
 	"Scripts": {
 		"Arabic" : {
 			"Latin" : [
-				{ "name": "Latin", "direction": "both", "path": "Arabic-Latin.xml" } ,
-				{ "name": "BGN", "direction": "forward", "path": "Arabic-Latin-BGN.xml" }
+					{
+					"BGN": [
+						{ "name": "Arabic", "direction": "forward", "path": "Arabic-Latin-BGN.xml" },
+						{ "name": "Pashto", "direction": "forward", "path": "Pashto-Latin-BGN.xml" },
+						{ "name": "Persian", "direction": "forward", "path": "Persian-Latin-BGN.xml" }
+					]
+				 },
+				{ "name": "Latin", "direction": "both", "path": "Arabic-Latin.xml" } 
 			],
 			"IPA" : [
 				{ "name": "Farsi", "direction": "forward", "path": "fa-fa_FONIPA.xml" },
@@ -23,6 +29,80 @@
 		"Belarusian" : {
 			"Latin" : [
 				{ "name": "BGN", "direction": "forward", "path": "Belarusian-Latin-BGN.xml" }
+			]
+		},
+		"Bengali" : {
+			"Arabic" : [
+				{
+				  "name": "Arabic", "direction": "forward", "path": "Bengali-Arabic.xml",
+				  "alias": "Bengali-Arabic", "dependencies": [ "Bengali-InterIndic", "Bengali-Arabic" ]
+				}
+			],
+			"Devanagari" : [
+				{
+				  "name": "Devanagari", "direction": "forward", "path": "Bengali-Devanagari.xml",
+				  "alias": "Bengali-Arabic", "dependencies": [ "Bengali-InterIndic", "InterIndic-Devanagari" ]
+				}
+			],
+			"Gujarti" : [
+				{
+				  "name": "Gujarti", "direction": "forward", "path": "Bengali-Gujarati.xml",
+				  "alias": "Bengali-Gujarati", "dependencies": [ "Bengali-InterIndic", "InterIndic-Gujarti" ]
+				}
+			],
+			"Gurmukhi" : [
+				{
+				  "name": "Gurmukhi", "direction": "forward", "path": "Bengali-Gurmukhi.xml",
+				  "alias": "Bengali-Gurmukhi", "dependencies": [ "Bengali-InterIndic", "InterIndic-Gurmukhi" ]
+				}
+			],
+			"InterIndic" : [
+				{
+				  "name": "InterIndic", "direction": "forward", "path": "Bengali-InterIndic.xml",
+                                  "alias": "Bengali-InterIndic", "visibility": "internal"
+				}
+			],
+			"Kannada" : [
+				{
+				  "name": "Kannada", "direction": "forward", "path": "Bengali-Kannada.xml",
+				   "alias": "Bengali-Kannada", "dependencies": [ "Bengali-InterIndic", "InterIndic-Kannada" ]
+				}
+			],
+			"Latin" : [
+				{
+				  "name": "Latin", "direction": "forward", "path": "Bengali-Latin.xml",
+				  "alias": "Bengali-Latin", "dependencies": [ "Bengali-InterIndic", "InterIndic-Latin" ]
+				}
+			],
+			"Malayalam" : [
+				{
+				  "name": "Malayalam", "direction": "forward", "path": "Bengali-Malayalam.xml",
+				  "alias": "Bengali-Malayalam", "dependencies": [ "Bengali-InterIndic", "InterIndic-Malayalam" ]
+				}
+			],
+			"Oriya" : [
+				{
+				  "name": "Oriya", "direction": "forward", "path": "Bengali-Oriya.xml",
+				  "alias": "Bengali-Oriya", "dependencies": [ "Bengali-InterIndic", "InterIndic-Oriya" ]
+				}
+			],
+			"Tamil" : [
+				{
+				  "name": "Tamil", "direction": "forward", "path": "Bengali-Tamil.xml",
+				  "alias": "Bengali-Tamil", "dependencies": [ "Bengali-InterIndic", "InterIndic-Tamil" ]
+				}
+			],
+			"Telugu" : [
+				{
+				  "name": "Telugu", "direction": "forward", "path": "Bengali-Telugu.xml",
+				  "alias": "Bengali-Telugu", "dependencies": [ "Bengali-InterIndic", "InterIndic-Telugu" ]
+				}
+			],
+			"Urdu" : [
+				{
+				  "name": "Urdu", "direction": "forward", "path": "Bengali-ur.xml",
+				  "alias": "Bengali-ur", "dependencies": [ "Bengali-InterIndic", "InterIndic-ur" ]
+				}
 			]
 		},
 		"Cyrillic" : {
@@ -55,19 +135,73 @@
 			"Arabic" : [
 				{
 				  "name": "Arabic", "direction": "forward", "path": "Devanagari-Arabic.xml",
-				  "dependencies": [ "Devanagari-InterIndic", "InterIndic-Arabic" ]
+				  "alias": "Devanagari-Arabic", "dependencies": [ "Devanagari-InterIndic", "Devanagari-Arabic" ]
 				}
 			],
 			"Bengali" : [
 				{
 				  "name": "Bengali", "direction": "forward", "path": "Devanagari-Bengali.xml",
-				  "dependencies": [ "Devanagari-InterIndic", "InterIndic-Bengali" ]
+				  "alias": "Devanagari-Bengali", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Bengali" ]
+				}
+			],
+			"Tulugu" : [
+				{
+				  "name": "Tulugu", "direction": "forward", "path": "Devanagari-Tulugu.xml",
+				  "alias": "Devanagari-Tulugu", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Tulugu" ]
+				}
+			],
+			"Malayalam" : [
+				{
+				  "name": "Malayalam", "direction": "forward", "path": "Devanagari-Malayalam.xml",
+				  "alias": "Devanagari-Malayalam", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Malayalam" ]
+				}
+			],
+			"Gujararti" : [
+				{
+				  "name": "Gujararti", "direction": "forward", "path": "Devanagari-Gujararti.xml",
+				  "alias": "Devanagari-Gujararti", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Gujararti" ]
+				}
+			],
+			"Gurmukhi" : [
+				{
+				  "name": "Gurmukhi", "direction": "forward", "path": "Devanagari-Gurmukhi.xml",
+			   	  "alias": "Devanagari-Gurmukhi", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Gurmukhi" ]
 				}
 			],
 			"InterIndic" : [
 				{
 				  "name": "InterIndic", "direction": "forward", "path": "Devanagari-InterIndic.xml",
                                   "alias": "Devanagari-InterIndic", "visibility": "internal"
+				}
+			],
+			"Kannada" : [
+				{
+				  "name": "Kannada", "direction": "forward", "path": "Devanagari-Kannada.xml",
+				  "alias": "Devanagari-Kannada", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Kannada" ]
+				}
+			],
+			"Latin" : [
+				{
+				  "name": "Latin", "direction": "forward", "path": "Devanagari-Latin.xml",
+				  "alias": "Devanagari-Latin", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Latin" ]
+				}
+			],
+			"Oriya" : [
+				{
+				  "name": "Oriya", "direction": "forward", "path": "Devanagari-Oriya.xml",
+				  "alias": "Devanagari-Oriya", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Oriya" ]
+				}
+			],
+			"Tamil" : [
+				{
+				  "name": "Tamil", "direction": "forward", "path": "Devanagari-Tamil.xml",
+				  "alias": "Devanagari-Tamil", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Tamil" ]
+				}
+			],
+			"Urdu" : [
+				{
+				  "name": "Urdu", "direction": "forward", "path": "Devanagari-ur.xml",
+				  "alias": "Devanagari-ur", "dependencies": [ "Devanagari-InterIndic", "InterIndic-ur" ]
 				}
 			]
 		},
@@ -132,9 +266,9 @@
 				  "alias": "InterIndic-Tamil", "visibility": "internal"
 				}
 			],
-			"Telegu" : [
+			"Tulugu" : [
 				{
-				  "name": "Telegu", "direction": "forward", "path": "InterIndic-Telugu.xml",
+				  "name": "Tulugu", "direction": "forward", "path": "InterIndic-Telugu.xml",
 				  "alias": "InterIndic-Telugu", "visibility": "internal"
 				}
 			],
@@ -172,6 +306,228 @@
     				{ "name": "UNGEGN", "direction": "both", "path": "Greek_Latin_UNGEGN.xml" }
     			]
  		},
+		"Gujarati" : {
+			"Arabic" : [
+				{
+				  "name": "Arabic", "direction": "forward", "path": "Gujarati-Arabic.xml",
+				  "alias": "Gujarati-Arabic", "dependencies": [ "Gujarati-InterIndic", "Gujarati-Arabic" ]
+				}
+			],
+			"Bengali" : [
+				{
+				  "name": "Bengali", "direction": "forward", "path": "Bengali-Gujarati.xml",
+				  "alias": "Bengali-Gujarati", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Bengali" ]
+				}
+			],
+			"Devanagari" : [
+				{
+				  "name": "Devanagari", "direction": "forward", "path": "Gujarati-Devanagari.xml",
+				  "alias": "Gujarati-Devanagari", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Devanagari" ]
+				}
+			],
+			"Malayalam" : [
+				{
+				  "name": "Malayalam", "direction": "forward", "path": "Gujarati-Malayalam.xml",
+				  "alias": "Gujarati-Malayalam", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Malayalam" ]
+				}
+			],
+			"Gurmukhi" : [
+				{
+				  "name": "Gurmukhi", "direction": "forward", "path": "Gujarati-Gurmukhi.xml",
+				  "alias": "Gujarati-Gurmukhi", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Gurmukhi" ]
+				}
+			],
+			"InterIndic" : [
+				{
+				  "name": "InterIndic", "direction": "forward", "path": "Gujarati-InterIndic.xml",
+                                  "alias": "Gujarati-InterIndic", "visibility": "internal"
+				}
+			],
+			"Kannada" : [
+				{
+				  "name": "Kannada", "direction": "forward", "path": "Gujarati-Kannada.xml",
+				   "alias": "Gujarati-Kannada", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Kannada" ]
+				}
+			],
+			"Latin" : [
+				{
+				  "name": "Latin", "direction": "forward", "path": "Gujarati-Latin.xml",
+				  "alias": "Gujarati-Latin", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Latin" ]
+				}
+			],
+			"Oriya" : [
+				{
+				  "name": "Oriya", "direction": "forward", "path": "Gujarati-Oriya.xml",
+				  "alias": "Gujarati-Oriya", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Oriya" ]
+				}
+			],
+			"Tamil" : [
+				{
+				  "name": "Tamil", "direction": "forward", "path": "Gujarati-Tamil.xml",
+				  "alias": "Gujarati-Tamil", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Tamil" ]
+				}
+			],
+			"Telugu" : [
+				{
+				  "name": "Telugu", "direction": "forward", "path": "Gujarati-Telugu.xml",
+				  "alias": "Gujarati-Telugu", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Telugu" ]
+				}
+			],
+			"Urdu" : [
+				{
+				  "name": "Urdu", "direction": "forward", "path": "Gujarati-ur.xml",
+				  "alias": "Gujarati-ur", "dependencies": [ "Gujarati-InterIndic", "InterIndic-ur" ]
+				}
+			]
+		},
+		"Gurmukhi" : {
+			"Arabic" : [
+				{
+				  "name": "Arabic", "direction": "forward", "path": "Gurmukhi-Arabic.xml",
+				  "alias": "Gurmukhi-Arabic", "dependencies": [ "Gurmukhi-InterIndic", "Gurmukhi-Arabic" ]
+				}
+			],
+			"Bengali" : [
+				{
+				  "name": "Bengali", "direction": "forward", "path": "Bengali-Gurmukhi.xml",
+				  "alias": "Bengali-Gurmukhi", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Bengali" ]
+				}
+			],
+			"Devanagari" : [
+				{
+				  "name": "Devanagari", "direction": "forward", "path": "Gurmukhi-Devanagari.xml",
+				  "alias": "Gurmukhi-Devanagari", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Devanagari" ]
+				}
+			],
+			"Malayalam" : [
+				{
+				  "name": "Malayalam", "direction": "forward", "path": "Gurmukhi-Malayalam.xml",
+				  "alias": "Gurmukhi-Malayalam", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Malayalam" ]
+				}
+			],
+			"Gujararti" : [
+				{
+				  "name": "Gujararti", "direction": "forward", "path": "Gurmukhi-Gujararti.xml",
+				  "alias": "Gurmukhi-Gujararti", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Gujararti" ]
+				}
+			],
+			"Kannada" : [
+				{
+				  "name": "Kannada", "direction": "forward", "path": "Gurmukhi-Kannada.xml",
+			   	  "alias": "Gurmukhi-Kannada", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Kannada" ]
+				}
+			],
+			"InterIndic" : [
+				{
+				  "name": "InterIndic", "direction": "forward", "path": "Gurmukhi-InterIndic.xml",
+                                  "alias": "Gurmukhi-InterIndic", "visibility": "internal"
+				}
+			],
+			"Latin" : [
+				{
+				  "name": "Latin", "direction": "forward", "path": "Gurmukhi-Latin.xml",
+				  "alias": "Gurmukhi-Latin", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Latin" ]
+				}
+			],
+			"Oriya" : [
+				{
+				  "name": "Oriya", "direction": "forward", "path": "Gurmukhi-Oriya.xml",
+				  "alias": "Gurmukhi-Oriya", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Oriya" ]
+				}
+			],
+			"Tamil" : [
+				{
+				  "name": "Tamil", "direction": "forward", "path": "Gurmukhi-Tamil.xml",
+				  "alias": "Gurmukhi-Tamil", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Tamil" ]
+				}
+			],
+			"Telugu" : [
+				{
+				  "name": "Telugu", "direction": "forward", "path": "Gurmukhi-Telugu.xml",
+				  "alias": "Gurmukhi-Telugu", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Telugu" ]
+				}
+			],
+			"Urdu" : [
+				{
+				  "name": "Urdu", "direction": "forward", "path": "Gurmukhi-ur.xml",
+				  "alias": "Gurmukhi-ur", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-ur" ]
+				}
+			]
+		},
+		"Kannada" : {
+			"Arabic" : [
+				{
+				  "name": "Arabic", "direction": "forward", "path": "Kannada-Arabic.xml",
+				  "alias": "Kannada-Arabic", "dependencies": [ "Kannada-InterIndic", "Kannada-Arabic" ]
+				}
+			],
+			"Bengali" : [
+				{
+				  "name": "Bengali", "direction": "forward", "path": "Bengali-Kannada.xml",
+				  "alias": "Bengali-Kannada", "dependencies": [ "Kannada-InterIndic", "InterIndic-Bengali" ]
+				}
+			],
+			"Devanagari" : [
+				{
+				  "name": "Devanagari", "direction": "forward", "path": "Kannada-Devanagari.xml",
+				  "alias": "Kannada-Devanagari", "dependencies": [ "Kannada-InterIndic", "InterIndic-Devanagari" ]
+				}
+			],
+			"Gujararti" : [
+				{
+				  "name": "Gujararti", "direction": "forward", "path": "Kannada-Gujararti.xml",
+				  "alias": "Kannada-Gujararti", "dependencies": [ "Kannada-InterIndic", "InterIndic-Gujararti" ]
+				}
+			],
+			"Gurmukhi" : [
+				{
+				  "name": "Gurmukhi", "direction": "forward", "path": "Kannada-Gurmukhi.xml",
+			   	  "alias": "Kannada-Gurmukhi", "dependencies": [ "Kannada-InterIndic", "InterIndic-Gurmukhi" ]
+				}
+			],
+			"InterIndic" : [
+				{
+				  "name": "InterIndic", "direction": "forward", "path": "Kannada-InterIndic.xml",
+                                  "alias": "Kannada-InterIndic", "visibility": "internal"
+				}
+			],
+			"Latin" : [
+				{
+				  "name": "Latin", "direction": "forward", "path": "Kannada-Latin.xml",
+				  "alias": "Kannada-Latin", "dependencies": [ "Kannada-InterIndic", "InterIndic-Latin" ]
+				}
+			],
+			"Malayalam" : [
+				{
+				  "name": "Malayalam", "direction": "forward", "path": "Kannada-Malayalam.xml",
+				  "alias": "Kannada-Malayalam", "dependencies": [ "Kannada-InterIndic", "InterIndic-Malayalam" ]
+				}
+			],
+			"Oriya" : [
+				{
+				  "name": "Oriya", "direction": "forward", "path": "Kannada-Oriya.xml",
+				  "alias": "Kannada-Oriya", "dependencies": [ "Kannada-InterIndic", "InterIndic-Oriya" ]
+				}
+			],
+			"Tamil" : [
+				{
+				  "name": "Tamil", "direction": "forward", "path": "Kannada-Tamil.xml",
+				  "alias": "Kannada-Tamil", "dependencies": [ "Kannada-InterIndic", "InterIndic-Tamil" ]
+				}
+			],
+			"Telugu" : [
+				{
+				  "name": "Telugu", "direction": "forward", "path": "Kannada-Telugu.xml",
+				  "alias": "Kannada-Telugu", "dependencies": [ "Kannada-InterIndic", "InterIndic-Telugu" ]
+				}
+			],
+			"Urdu" : [
+				{
+				  "name": "Urdu", "direction": "forward", "path": "Kannada-ur.xml",
+				  "alias": "Kannada-ur", "dependencies": [ "Kannada-InterIndic", "InterIndic-ur" ]
+				}
+			]
+		},
 		"Hangul" : {
 			"Latin" : [
 				{ "name": "BGN", "direction": "forward", "path": "Korean-Latin-BGN.xml" }
@@ -211,6 +567,12 @@
 			]
 
 		},
+		"Katakana" : {
+			"Latin" : [
+				{ "name": "BGN", "direction": "forward", "path": "Katakana-Latin-BGN.xml", "alias": "Katakana-Latin" }
+			]
+
+		},
 		"Latin" : {
 			"ASCII" : [
 				{ "name": "ASCII", "direction": "both", "path": "Latin-ASCII.xml" }
@@ -241,15 +603,305 @@
 				{ "name": "Ethiopic", "direction": "both", "path": "Latin-Ethiopic.xml" }
 			]
 		},
-		"Katakana" : {
+		"Malayalam" : {
+			"Arabic" : [
+				{
+				  "name": "Arabic", "direction": "forward", "path": "Malayalam-Arabic.xml",
+				  "alias": "Malayalam-Arabic", "dependencies": [ "Malayalam-InterIndic", "Malayalam-Arabic" ]
+				}
+			],
+			"Bengali" : [
+				{
+				  "name": "Bengali", "direction": "forward", "path": "Bengali-Malayalam.xml",
+				  "alias": "Bengali-Malayalam", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Bengali" ]
+				}
+			],
+			"Devanagari" : [
+				{
+				  "name": "Devanagari", "direction": "forward", "path": "Malayalam-Devanagari.xml",
+				  "alias": "Malayalam-Devanagari", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Devanagari" ]
+				}
+			],
+			"Gujarti" : [
+				{
+				  "name": "Gujarti", "direction": "forward", "path": "Malayalam-Gujarati.xml",
+				  "alias": "Malayalam-Gujarati", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Gujarti" ]
+				}
+			],
+			"Gurmukhi" : [
+				{
+				  "name": "Gurmukhi", "direction": "forward", "path": "Malayalam-Gurmukhi.xml",
+				  "alias": "Malayalam-Gurmukhi", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Gurmukhi" ]
+				}
+			],
+			"Kannada" : [
+				{
+				  "name": "Kannada", "direction": "forward", "path": "Malayalam-Kannada.xml",
+				  "alias": "Malayalam-Kannada", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Kannada" ]
+				}
+			],
+			"InterIndic" : [
+				{
+				  "name": "InterIndic", "direction": "forward", "path": "Malayalam-InterIndic.xml",
+                                  "alias": "Malayalam-InterIndic", "visibility": "internal"
+				}
+			],
 			"Latin" : [
-				{ "name": "BGN", "direction": "forward", "path": "Katakana-Latin-BGN.xml", "alias": "Katakana-Latin" }
+				{
+				  "name": "Latin", "direction": "forward", "path": "Malayalam-Latin.xml",
+				  "alias": "Malayalam-Latin", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Latin" ]
+				}
+			],
+			"Oriya" : [
+				{
+				  "name": "Oriya", "direction": "forward", "path": "Malayalam-Oriya.xml",
+				  "alias": "Malayalam-Oriya", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Oriya" ]
+				}
+			],
+			"Tamil" : [
+				{
+				  "name": "Tamil", "direction": "forward", "path": "Malayalam-Tamil.xml",
+				  "alias": "Malayalam-Tamil", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Tamil" ]
+				}
+			],
+			"Telugu" : [
+				{
+				  "name": "Telugu", "direction": "forward", "path": "Malayalam-Telugu.xml",
+				  "alias": "Malayalam-Telugu", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Telugu" ]
+				}
+			],
+			"Urdu" : [
+				{
+				  "name": "Urdu", "direction": "forward", "path": "Malayalam-ur.xml",
+				  "alias": "Malayalam-ur", "dependencies": [ "Malayalam-InterIndic", "InterIndic-ur" ]
+				}
 			]
-
+		},
+		"Oriya" : {
+			"Arabic" : [
+				{
+				  "name": "Arabic", "direction": "forward", "path": "Oriya-Arabic.xml",
+				  "alias": "Oriya-Arabic", "dependencies": [ "Oriya-InterIndic", "Oriya-Arabic" ]
+				}
+			],
+			"Bengali" : [
+				{
+				  "name": "Bengali", "direction": "forward", "path": "Oriya-Bengali.xml",
+				  "alias": "Oriya-Bengali", "dependencies": [ "Oriya-InterIndic", "InterIndic-Bengali" ]
+				}
+			],
+			"Devanagari" : [
+				{
+				  "name": "Devanagari", "direction": "forward", "path": "Oriya-Devanagari.xml",
+				  "alias": "Oriya-Devanagari", "dependencies": [ "Oriya-InterIndic", "InterIndic-Devanagari" ]
+				}
+			],
+			"Gujararti" : [
+				{
+				  "name": "Gujararti", "direction": "forward", "path": "Oriya-Gujararti.xml",
+				  "alias": "Oriya-Gujararti", "dependencies": [ "Oriya-InterIndic", "InterIndic-Gujararti" ]
+				}
+			],
+			"Gurmukhi" : [
+				{
+				  "name": "Gurmukhi", "direction": "forward", "path": "Oriya-Gurmukhi.xml",
+			   	  "alias": "Oriya-Gurmukhi", "dependencies": [ "Oriya-InterIndic", "InterIndic-Gurmukhi" ]
+				}
+			],
+			"Kannada" : [
+				{
+				  "name": "Kannada", "direction": "forward", "path": "Oriya-Kannada.xml",
+				  "alias": "Oriya-Kannada", "dependencies": [ "Oriya-InterIndic", "InterIndic-Kannada" ]
+				}
+			],
+			"InterIndic" : [
+				{
+				  "name": "InterIndic", "direction": "forward", "path": "Oriya-InterIndic.xml",
+                                  "alias": "Oriya-InterIndic", "visibility": "internal"
+				}
+			],
+			"Latin" : [
+				{
+				  "name": "Latin", "direction": "forward", "path": "Oriya-Latin.xml",
+				  "alias": "Oriya-Latin", "dependencies": [ "Oriya-InterIndic", "InterIndic-Latin" ]
+				}
+			],
+			"Malayalam" : [
+				{
+				  "name": "Malayalam", "direction": "forward", "path": "Oriya-Malayalam.xml",
+				  "alias": "Oriya-Malayalam", "dependencies": [ "Oriya-InterIndic", "InterIndic-Malayalam" ]
+				}
+			],
+			"Tamil" : [
+				{
+				  "name": "Tamil", "direction": "forward", "path": "Oriya-Tamil.xml",
+				  "alias": "Oriya-Tamil", "dependencies": [ "Oriya-InterIndic", "InterIndic-Tamil" ]
+				}
+			],
+			"Telugu" : [
+				{
+				  "name": "Telugu", "direction": "forward", "path": "Oriya-Telugu.xml",
+				  "alias": "Oriya-Telugu", "dependencies": [ "Oriya-InterIndic", "InterIndic-Telugu" ]
+				}
+			],
+			"Urdu" : [
+				{
+				  "name": "Urdu", "direction": "forward", "path": "Oriya-ur.xml",
+				  "alias": "Oriya-ur", "dependencies": [ "Oriya-InterIndic", "InterIndic-ur" ]
+				}
+			]
 		},
 		"Sinhala" : {
 			"IPA" : [
 				{ "name": "Sinhalese", "direction": "forward", "path": "si-si_FONIPA.xml" }
+			]
+		},
+		"Tamil" : {
+			"Arabic" : [
+				{
+				  "name": "Arabic", "direction": "forward", "path": "Tamil-Arabic.xml",
+				  "alias": "Tamil-Arabic", "dependencies": [ "Tamil-InterIndic", "Tamil-Arabic" ]
+				}
+			],
+			"Bengali" : [
+				{
+				  "name": "Bengali", "direction": "forward", "path": "Tamil-Bengali.xml",
+				  "alias": "Tamil-Bengali", "dependencies": [ "Tamil-InterIndic", "InterIndic-Bengali" ]
+				}
+			],
+			"Devanagari" : [
+				{
+				  "name": "Devanagari", "direction": "forward", "path": "Tamil-Devanagari.xml",
+				  "alias": "Tamil-Devanagari", "dependencies": [ "Tamil-InterIndic", "InterIndic-Devanagari" ]
+				}
+			],
+			"Malayalam" : [
+				{
+				  "name": "Malayalam", "direction": "forward", "path": "Tamil-Malayalam.xml",
+				  "alias": "Tamil-Malayalam", "dependencies": [ "Tamil-InterIndic", "InterIndic-Malayalam" ]
+				}
+			],
+			"Gujararti" : [
+				{
+				  "name": "Gujararti", "direction": "forward", "path": "Tamil-Gujararti.xml",
+				  "alias": "Tamil-Gujararti", "dependencies": [ "Tamil-InterIndic", "InterIndic-Gujararti" ]
+				}
+			],
+			"Gurmukhi" : [
+				{
+				  "name": "Gurmukhi", "direction": "forward", "path": "Tamil-Gurmukhi.xml",
+			   	  "alias": "Tamil-Gurmukhi", "dependencies": [ "Tamil-InterIndic", "InterIndic-Gurmukhi" ]
+				}
+			],
+			"InterIndic" : [
+				{
+				  "name": "InterIndic", "direction": "forward", "path": "Tamil-InterIndic.xml",
+                                  "alias": "Tamil-InterIndic", "visibility": "internal"
+				}
+			],
+			"Latin" : [
+				{
+				  "name": "Latin", "direction": "forward", "path": "Tamil-Latin.xml",
+				  "alias": "Tamil-Latin", "dependencies": [ "Tamil-InterIndic", "InterIndic-Latin" ]
+				}
+			],
+			"Kannada" : [
+				{
+				  "name": "Kannada", "direction": "forward", "path": "Tamil-Kannada.xml",
+				  "alias": "Tamil-Kannada", "dependencies": [ "Tamil-InterIndic", "InterIndic-Kannada" ]
+				}
+			],
+			"Oriya" : [
+				{
+				  "name": "Oriya", "direction": "forward", "path": "Tamil-Oriya.xml",
+				  "alias": "Tamil-Oriya", "dependencies": [ "Tamil-InterIndic", "InterIndic-Oriya" ]
+				}
+			],
+			"Telugu" : [
+				{
+				  "name": "Telugu", "direction": "forward", "path": "Tamil-Telugu.xml",
+				  "alias": "Tamil-Telugu", "dependencies": [ "Tamil-InterIndic", "InterIndic-Telugu" ]
+				}
+			],
+			"Urdu" : [
+				{
+				  "name": "Urdu", "direction": "forward", "path": "Tamil-ur.xml",
+				  "alias": "Tamil-ur", "dependencies": [ "Tamil-InterIndic", "InterIndic-ur" ]
+				}
+			]
+		},
+		"Tulugu" : {
+			"Arabic" : [
+				{
+				  "name": "Arabic", "direction": "forward", "path": "Tulugu-Arabic.xml",
+				  "alias": "Tulugu-Arabic", "dependencies": [ "Tulugu-InterIndic", "Tulugu-Arabic" ]
+				}
+			],
+			"Bengali" : [
+				{
+				  "name": "Bengali", "direction": "forward", "path": "Tulugu-Bengali.xml",
+				  "alias": "Tulugu-Bengali", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Bengali" ]
+				}
+			],
+			"Devanagari" : [
+				{
+				  "name": "Devanagari", "direction": "forward", "path": "Tulugu-Devanagari.xml",
+				  "alias": "Tulugu-Arabic", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Devanagari" ]
+				}
+			],
+			"Malayalam" : [
+				{
+				  "name": "Malayalam", "direction": "forward", "path": "Tulugu-Malayalam.xml",
+				  "alias": "Tulugu-Malayalam", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Malayalam" ]
+				}
+			],
+			"Gujararti" : [
+				{
+				  "name": "Gujararti", "direction": "forward", "path": "Tulugu-Gujararti.xml",
+				  "alias": "Tulugu-Gujararti", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Gujararti" ]
+				}
+			],
+			"Gurmukhi" : [
+				{
+				  "name": "Gurmukhi", "direction": "forward", "path": "Tulugu-Gurmukhi.xml",
+			   	  "alias": "Tulugu-Gurmukhi", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Gurmukhi" ]
+				}
+			],
+			"InterIndic" : [
+				{
+				  "name": "InterIndic", "direction": "forward", "path": "Tulugu-InterIndic.xml",
+                                  "alias": "Tulugu-InterIndic", "visibility": "internal"
+				}
+			],
+			"Latin" : [
+				{
+				  "name": "Latin", "direction": "forward", "path": "Tulugu-Latin.xml",
+				  "alias": "Tulugu-Latin", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Latin" ]
+				}
+			],
+			"Kannada" : [
+				{
+				  "name": "Kannada", "direction": "forward", "path": "Tulugu-Kannada.xml",
+				  "alias": "Tulugu-Kannada", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Kannada" ]
+				}
+			],
+			"Oriya" : [
+				{
+				  "name": "Oriya", "direction": "forward", "path": "Tulugu-Oriya.xml",
+				  "alias": "Tulugu-Oriya", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Oriya" ]
+				}
+			],
+			"Tamil" : [
+				{
+				  "name": "Tamil", "direction": "forward", "path": "Tulugu-Tamil.xml",
+				  "alias": "Tulugu-Tamil", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Tamil" ]
+				}
+			],
+			"Urdu" : [
+				{
+				  "name": "Urdu", "direction": "forward", "path": "Tulugu-ur.xml",
+				  "alias": "Tulugu-ur", "dependencies": [ "Tulugu-InterIndic", "InterIndic-ur" ]
+				}
 			]
 		},
 		"Thaana" : {
