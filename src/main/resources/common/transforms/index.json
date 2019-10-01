@@ -2,7 +2,7 @@
 	"Scripts": {
 		"Arabic" : {
 			"Latin" : [
-					{
+				{
 					"BGN": [
 						{ "name": "Arabic", "direction": "forward", "path": "Arabic-Latin-BGN.xml" },
 						{ "name": "Pashto", "direction": "forward", "path": "Pashto-Latin-BGN.xml" },
@@ -533,7 +533,10 @@
 				{ "name": "BGN", "direction": "forward", "path": "Korean-Latin-BGN.xml" }
 			]
 		},
-		"Hani" : {
+		"Hans" : {
+			"Hans Traditional" : [
+					{ "name": "Simplified → Traditional", "direction": "both", "path": "Simplified-Traditional.xml", "alias": "Simplified-Traditional" }
+			],
 			"Latin" : [
 				{
 			 	  "name": "Latin", "direction": "forward", "path": "Han-Latin.xml" ,
