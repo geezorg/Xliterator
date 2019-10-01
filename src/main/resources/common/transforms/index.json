@@ -563,7 +563,7 @@
 				}
 			],
 			"Katakana" : [
-				{ "name": "Katakana", "direction": "both", "path": "Hiragana-Katakana.xml", "alias": "Katakana-Hiragana" }
+				{ "name": "Katakana", "direction": "both", "path": "Hiragana-Katakana.xml", "alias": "Hiragana-Katakana" }
 			]
 
 		},

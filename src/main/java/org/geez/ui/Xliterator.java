@@ -323,8 +323,22 @@ public final class Xliterator extends Application {
         editorTabs.add( editorTab );
         
     	RadioMenuItem editorTabItem = new RadioMenuItem( title );
-    	editorTabItem.setOnAction( evt -> setUseEditor( title ) );
+    	editorTabItem.setOnAction( evt -> {
+    		setUseEditor( title ); 
+    		selectedEditorTab = editorTab;
+	    	selectedTransliteration = useSelectedEdtior; 
+	    	filesTab.setScriptIn( useSelectedEdtior );
+	    	textTab.setScriptIn( useSelectedEdtior );
+	   	 	outScriptMenu.getItems().clear();
+	   	 	scriptOut = null;
+			outVariantMenu.getItems().clear();
+			variantOut = null;
+	    	scriptInText.setText( "[Editor]" );
+	    	scriptOutText.setText( "[Editor]" );
+	    	variantOutText.setText( "[Editor]" );
+    	});
     	editorTabItem.setMnemonicParsing( false );
+    	// editorTabItem.getProperties().put( "selection", useSelectedEdtior );
     	inScriptMenu.getItems().add( editorTabItem );
 
         
@@ -342,10 +356,10 @@ public final class Xliterator extends Application {
         saveAsMenuItem.setDisable(false); 
     	
 		tabToggler( 
-				editorTabViewMenuItem,
-				editorTab, 
-				(ImageView)editorTab.getProperties().get( "editorOnView" ), 
-				(ImageView)editorTab.getProperties().get( "editorOffView" )
+			editorTabViewMenuItem,
+			editorTab, 
+			(ImageView)editorTab.getProperties().get( "editorOnView" ), 
+			(ImageView)editorTab.getProperties().get( "editorOffView" )
 		);
 		
         return editorTab;
@@ -568,6 +582,9 @@ public final class Xliterator extends Application {
         //
         loadInternalMenuItem.setOnAction( evt -> {
         		// load into a new editor tab
+	        	if( selectedTransliteration.equals( useSelectedEdtior) ) {
+	        		return;
+	        	}
             	try {
             		currentEditorTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
             		currentEditorTab.getEditor().loadResourceFile( selectedTransliteration );
@@ -963,7 +980,7 @@ public final class Xliterator extends Application {
 	    		RadioMenuItem rItem = (RadioMenuItem)item;
 	    		if ( title.equals( rItem.getText() ) ) {
 	    			rItem.setSelected( true );
-	    	    	selectedTransliteration = useSelectedEdtior; // TODO: before convertering, check if the title matches an editor tab
+	    	    	// TODO: before convertering, check if the title matches an editor tab
 	    		}
 	    		else {
 	    			rItem.setSelected( false );
