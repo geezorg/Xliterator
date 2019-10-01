@@ -13,6 +13,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -131,6 +132,8 @@ public class ConvertTextTab extends XliteratorTab {
         textAreaInDecreaseFontSizeButton.setOnAction( evt -> {
         	decrementFontSize( textAreaIn );
         });
+        textAreaInIncreaseFontSizeButton.setTooltip( new Tooltip( "Increase Font Size" ) );
+        textAreaInDecreaseFontSizeButton.setTooltip( new Tooltip( "Descrease Font Size" ) );
         // textAreaInMenuBox.setPrefHeight( 32.0 );
         
 
@@ -174,6 +177,9 @@ public class ConvertTextTab extends XliteratorTab {
         textAreaOutMenuBox.setPadding(new Insets(2, 2, 2, 2));
         textAreaOutMenuBox.setSpacing( 4 );
         
+        textAreaOutIncreaseFontSizeButton.setTooltip( new Tooltip( "Increase Font Size" ) );
+        textAreaOutDecreaseFontSizeButton.setTooltip( new Tooltip( "Descrease Font Size" ) );
+        
         VBox textVbox = new VBox( textAreaInMenuBox, textAreaIn, textAreaOutMenuBox, textAreaOut );
         textVbox.autosize();
         this.setContent( textVbox );
@@ -202,6 +208,8 @@ public class ConvertTextTab extends XliteratorTab {
     		this.selectedTransliteration = scriptIn;
 			convertButtonUp.setDisable( false );
 			convertButtonDown.setDisable( false );
+			convertButtonDown.setTooltip( new Tooltip( "Convert in forward direction" )  );
+			convertButtonUp.setTooltip( new Tooltip( "Convert in reverse direction" ) );
     	}
     	else {
 			convertButtonUp.setDisable( true );
@@ -212,7 +220,9 @@ public class ConvertTextTab extends XliteratorTab {
     public void setScriptOut(String scriptOut ) {
     	super.setScriptOut(scriptOut);
 		convertButtonUp.setDisable( true );
+		convertButtonUp.setTooltip( new Tooltip( "Convert from: " + scriptOut + " to " + scriptIn )  );
 		convertButtonDown.setDisable( true );
+		convertButtonDown.setTooltip( new Tooltip( "Convert from: " + scriptIn + " to " + scriptOut ) );
     }
       
     public void setVariantOut( String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies ) {
