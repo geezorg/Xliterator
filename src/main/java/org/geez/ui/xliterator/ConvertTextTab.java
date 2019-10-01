@@ -54,7 +54,7 @@ public class ConvertTextTab extends XliteratorTab {
     	}
     	
     	try {
-    		if( (dependencies != null) && ( "false".equals( registeredDependencies.get( selectedTransliteration) ) ) ) {
+    		if( (dependencies != null) && ( "false".equals( registeredDependencies.get(selectedTransliteration) ) ) ) {
     			xlit.getConfig().registerDependencies( dependencies );
     			registeredDependencies.put( selectedTransliteration , "true" );
     		}
@@ -198,8 +198,15 @@ public class ConvertTextTab extends XliteratorTab {
    
     public void setScriptIn(String scriptIn ) {
     	super.setScriptIn(scriptIn);
-		convertButtonUp.setDisable( true );
-		convertButtonDown.setDisable( true );
+    	if( scriptIn.equals( Xliterator.useSelectedEdtior ) ) {
+    		this.selectedTransliteration = scriptIn;
+			convertButtonUp.setDisable( false );
+			convertButtonDown.setDisable( false );
+    	}
+    	else {
+			convertButtonUp.setDisable( true );
+			convertButtonDown.setDisable( true );
+    	}
     }
     
     public void setScriptOut(String scriptOut ) {

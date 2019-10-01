@@ -6,21 +6,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Stream;
 
-import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
 import org.geez.convert.helpers.ICUHelper;
 import org.xml.sax.SAXException;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.ibm.icu.text.Transliterator;
 
 
 public class XliteratorConfig extends ICUHelper {
@@ -40,8 +35,10 @@ public class XliteratorConfig extends ICUHelper {
     
     
     public List<String> getInScripts( boolean skipInternal ) {
+		ArrayList<String> scriptList = null;
+		
     	if( skipInternal ) {
-    		ArrayList<String> scriptList = new ArrayList<String>();
+    		scriptList = new ArrayList<String>();
             JsonObject scripts = config.getAsJsonObject("Scripts");
     		
             for(String inScriptKey: scripts.keySet() ) {
@@ -67,16 +64,20 @@ public class XliteratorConfig extends ICUHelper {
             		scriptList.add( inScriptKey );
             	}
     		}
-    		return scriptList;
+    	}
+    	else {
+    		scriptList = new ArrayList<String>( config.getAsJsonObject("Scripts").keySet() );
     	}
     	
-        return new ArrayList<String>( config.getAsJsonObject("Scripts").keySet() );
+        Collections.sort(scriptList);
+        return scriptList;
     }
     
     
     public List<String> getOutScripts( String inScript, boolean skipInternal ) {
+		ArrayList<String> scriptList = null;
     	if( skipInternal ) {
-    		ArrayList<String> scriptList = new ArrayList<String>();
+    		scriptList = new ArrayList<String>();
 
         	JsonObject inScriptObj = config.getAsJsonObject("Scripts").getAsJsonObject( inScript );
         	for(String outScript: inScriptObj.keySet()) {
@@ -94,10 +95,13 @@ public class XliteratorConfig extends ICUHelper {
                 }
 			}
     		
-    		return scriptList;
+    	}
+    	else {
+    		scriptList = new ArrayList<String>( config.getAsJsonObject("Scripts").keySet() );
     	}
     	
-        return new ArrayList<String>( config.getAsJsonObject("Scripts").getAsJsonObject( inScript ).keySet() );
+        Collections.sort(scriptList);
+        return scriptList;
     }
     
     

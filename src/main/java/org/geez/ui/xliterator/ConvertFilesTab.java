@@ -118,6 +118,8 @@ public class ConvertFilesTab extends XliteratorTab {
     				;
     		
     		
+    				// TODO: use a editor title for filename when editor is in use
+    				
     		// a new converter instance is created for each file in a list. since if we can cache and reuse a converter.
     		// it may be necessary to reset the converter so it is in a neutral state
     		if ( extension.equals( "txt") ) {
@@ -351,7 +353,14 @@ public class ConvertFilesTab extends XliteratorTab {
     
     public void setScriptIn(String scriptIn ) {
     	super.setScriptIn(scriptIn);
-		convertButton.setDisable( true );
+    	if( scriptIn.equals( Xliterator.useSelectedEdtior ) ) {
+    		this.selectedTransliteration = scriptIn;
+			convertButton.setDisable( false );
+    	}
+    	else {
+			convertButton.setDisable( true );
+    	}
+
     }
     
     
