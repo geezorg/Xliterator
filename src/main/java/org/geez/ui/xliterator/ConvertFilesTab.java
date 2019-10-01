@@ -102,6 +102,7 @@ public class ConvertFilesTab extends XliteratorTab {
         	String outputFilePath  = null;	
     		String extension       = FilenameUtils.getExtension( inputFilePath );
     		String editorRulesText = null;
+    		String systemName      = null;
     		
     		if( selectedTransliteration.equals( Xliterator.useSelectedEdtior ) ) {
 	    		EditorTab editorTab = xlit.getSelectedEditorTab();
@@ -110,23 +111,32 @@ public class ConvertFilesTab extends XliteratorTab {
 	    			return;
 	    		}
 	    		editorRulesText = editorTab.getEditor().getText();
+	    		// check if empty
+	    		if( editorRulesText == null ) {
+	    			// TODO: add error alert
+	    			return;
+	    		}
+	    		
+	    		systemName = editorTab.getTitle().replace( " ", "-" );
+	    		systemName = systemName.replaceAll("\\.(\\w+)$", "" );
     		}
-
-    		DocumentProcessor processor = ( editorRulesText == null )
-    				? processorManager.getFileProcessor( selectedTransliteration, transliterationDirection, extension )
-    				: processorManager.getEditorTextProcessor( selectedTransliteration, transliterationDirection, extension, editorRulesText )
-    				;
+    		else {
+    			systemName = scriptOut.replace( " ", "-" ) + variantOut.replace( " ", "-" ); // subvariant
+    		}
     		
     		
-    				// TODO: use a editor title for filename when editor is in use
+    		DocumentProcessor processor = ( selectedTransliteration.equals( Xliterator.useSelectedEdtior )  )
+    				? processorManager.getEditorTextProcessor( selectedTransliteration, transliterationDirection, extension, editorRulesText )
+    				: processorManager.getFileProcessor( selectedTransliteration, transliterationDirection, extension )
+    		;
     				
     		// a new converter instance is created for each file in a list. since if we can cache and reuse a converter.
     		// it may be necessary to reset the converter so it is in a neutral state
     		if ( extension.equals( "txt") ) {
-            	outputFilePath = inputFilePath.replaceAll("\\.txt", "-" + scriptOut.replace( " ", "-" ) + ".txt");
+            	outputFilePath = inputFilePath.replaceAll("\\.txt", "-" + systemName + ".txt");
     		}
     		else {
-            	outputFilePath = inputFilePath.replaceAll("\\.docx", "-" + scriptOut.replace( " ", "-" ) + ".docx");
+            	outputFilePath = inputFilePath.replaceAll("\\.docx", "-" + systemName + ".docx");
             	
     			ArrayList<String> targetTypefaces = new ArrayList<String>( documentFontsMenu.getCheckModel().getCheckedItems() );
     			
