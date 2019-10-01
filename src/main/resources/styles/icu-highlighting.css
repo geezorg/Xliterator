@@ -1,47 +1,70 @@
 // Review https://www.sublimetext.com/docs/3/color_schemes.html#colors
 
-.tagmark {
-    -fx-fill: gray;
+
+// ICU Syntax Highlighting
+.paragraph-text .text {
+	-fx-fill: black;
 }
-.anytag {
-    -fx-fill: crimson;
+
+#icuEditor .caret {
+	-fx-stroke:  black;
 }
-.paren {
+
+#convertText .caret {
+	-fx-stroke:  black;
+}
+
+#icuEditor .forwardArrow {
+	-fx-fill: #008e00;
+	-fx-font-weight: bold;
+}
+
+#icuEditor .reverseArrow {
+	-fx-fill: orangered;
+	-fx-font-weight: bold;
+}
+
+#icuEditor .bothArrow {
+	-fx-fill: mediumvioletred;
+	-fx-font-weight: bold;
+}
+
+#icuEditor .variable {
+	-fx-fill: cyan;
+}
+
+#icuEditor .comment {
+	-fx-fill: teal;
+}
+
+#icuEditor .directive {
+	-fx-fill: black;
+}
+
+#icuEditor .identifier {
+	-fx-fill: orange;
+}
+
+#icuEditor .paren {
     -fx-fill: firebrick;
     -fx-font-weight: bold;
 }
-.attribute {
+
+
+// XML Syntax Highlighting
+#icuEditor .tagmark {
+    -fx-fill: gray;
+}
+#icuEditor .anytag {
+    -fx-fill: crimson;
+}
+#icuEditor .attribute {
     -fx-fill: darkviolet;
 }
-.avalue {
+#icuEditor .avalue {
     -fx-fill: black;
 }
-
-.comment {
-	-fx-fill: teal;
-}
-.cdata {
-    -fx-font-weight: bold;
+#icuEditor .cdata {
 	-fx-fill: blue;
-}
-.variable {
-	-fx-fill: cyan;
-}
-.directive {
-	-fx-fill: black;
-}
-.identifier {
-	-fx-fill: orange;
-}
-.forwardArrow {
 	-fx-font-weight: bold;
-	-fx-fill: #008e00;
-}
-.reverseArrow {
-	-fx-font-weight: bold;
-	-fx-fill: orangered;
-}
-.bothArrow {
-	-fx-font-weight: bold;
-	-fx-fill: mediumvioletred;
 }
