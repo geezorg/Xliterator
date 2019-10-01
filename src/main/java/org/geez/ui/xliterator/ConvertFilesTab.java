@@ -121,7 +121,7 @@ public class ConvertFilesTab extends XliteratorTab {
 	    		systemName = systemName.replaceAll("\\.(\\w+)$", "" );
     		}
     		else {
-    			systemName = scriptOut.replace( " ", "-" ) + variantOut.replace( " ", "-" ); // subvariant
+    			systemName = scriptOut.replace( " ", "-" ) + variantOut.replace( " ", "-" ); // subvariant ?
     		}
     		
     		
@@ -380,8 +380,8 @@ public class ConvertFilesTab extends XliteratorTab {
     }
     
       
-    public void setVariantOut(String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies ) {
-    	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection, dependencies);
+    public void setVariantOut(String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies, String alias ) {
+    	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection, dependencies, alias);
 
     	if( inputFileList != null ) {
     		convertButton.setDisable( false );

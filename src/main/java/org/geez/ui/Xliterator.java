@@ -3,9 +3,7 @@ package org.geez.ui;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URI;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,7 +29,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -82,6 +79,7 @@ public final class Xliterator extends Application {
 	// an object could be introduced to hold the various transliteration attributes:
 	private String selectedTransliteration  = null;
 	private String transliterationDirection = null;
+	private String transliterationAlias = null;
 	private ArrayList<String> transliterationDependencies = null;
 	
     private String defaultFontFamily        = null;
@@ -239,10 +237,17 @@ public final class Xliterator extends Application {
     	        				dependencies.add( dependenciesJSON.get(k).getAsString() );
     	        			}
     	        		}
+    	                
+    	                String alias = (subvariant.has("alias")) ? subvariant.get("alias").getAsString() : null;
+    	                if( alias != null ) {
+    	                	menuItem.getProperties().put( "alias", alias );
+    	                }
+    	                
     	        		menuItem.setOnAction( evt -> { 
     	        			this.selectedTransliteration  = transliterationID; 
     	        			this.transliterationDirection = direction; 
     	        			this.transliterationDependencies = (dependencies.isEmpty()) ? null: dependencies;
+    	        			this.transliterationAlias = alias;
     	        			setVariantOut( subVariantKey + " - " + name ); 
     	        		});
     	        		menuItem.setId( transliterationID );
@@ -255,7 +260,6 @@ public final class Xliterator extends Application {
     	        			imageView= new ImageView( arrowForwardIcon );    	        			
     	        		}
     	                menuItem.setGraphic( imageView );
-    	                
     	                
     	        		variantSubMenu.getItems().add( menuItem );
     		    	}
@@ -275,11 +279,19 @@ public final class Xliterator extends Application {
         				dependencies.add( dependenciesJSON.get(j).getAsString() );
         			}
         		}
+        		
+                
+                String alias = (variant.has( "alias") ) ? variant.get("alias").getAsString() : null;
+                if( alias != null ) {
+                	menuItem.getProperties().put( "alias", alias );
+                }
+                
         		menuItem.setOnAction( evt -> {
         			this.selectedTransliteration = transliterationID;
         			this.transliterationDirection = direction;
         			this.transliterationDependencies = (dependencies.isEmpty()) ? null: dependencies;
-        			setVariantOut( name ); 
+        			this.transliterationAlias = alias;
+        			setVariantOut( name); 
         		});
         		menuItem.setId( transliterationID );
         		
@@ -308,7 +320,13 @@ public final class Xliterator extends Application {
     	EditorTab editorTab = new EditorTab( title );
         editorTab.setDefaultFontFamily( defaultFontFamily );
         editorTab.setClosable( true );
-        editorTab.setup(saveMenuItem, saveAsMenuItem);
+    	
+    	editorTab.getProperties().put( "direction", transliterationDirection );
+        if( transliterationAlias != null ) {
+        	editorTab.getProperties().put( "alias", transliterationAlias );
+        }
+        editorTab.setup(primaryStage, config, saveMenuItem, saveAsMenuItem);
+        
         // editorTab.setStyle( primaryStage.getScene() );
         editorTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().multiply(0.8) );
         editorTab.setOnSelectionChanged( evt -> {
@@ -895,7 +913,7 @@ public final class Xliterator extends Application {
         
         variantOut = prefs.get( variantOutPreference, null );
         if( variantOut != null) {
-        	setVariantOut( variantOut );
+        	setVariantOut( variantOut ); // TODO: store the alias as a preference
         }
 
     }
@@ -979,8 +997,9 @@ public final class Xliterator extends Application {
     	this.variantOut = variantOut;
     	variantOutText.setText( variantOut );
         loadInternalMenuItem.setDisable( false );
-    	filesTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection, transliterationDependencies );
-    	textTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection, transliterationDependencies );
+        
+    	filesTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection, transliterationDependencies, transliterationAlias );
+    	textTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection, transliterationDependencies, transliterationAlias );
     	setMenuItemSelection( outVariantMenu, variantOut );
     }
     private String caseOption = null;
@@ -1094,9 +1113,10 @@ public final class Xliterator extends Application {
     	
     	setScriptIn( "Ethiopic" );
     	setScriptOut( "IPA" );
-    	setVariantOut( "Amharic" );
+    	setVariantOut( "Amharic");
     	selectedTransliteration = "am-am_FONIPA.xml";
     	transliterationDirection = "both";
+    	transliterationAlias = "am-fonipa-t-am";
 
     	for(MenuItem item: outScriptMenu.getItems() ) {
     		((RadioMenuItem)item).setSelected( false );

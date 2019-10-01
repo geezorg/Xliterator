@@ -225,8 +225,8 @@ public class ConvertTextTab extends XliteratorTab {
 		convertButtonDown.setTooltip( new Tooltip( "Convert from: " + scriptIn + " to " + scriptOut ) );
     }
       
-    public void setVariantOut( String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies ) {
-    	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection, dependencies);
+    public void setVariantOut( String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies, String alias ) {
+    	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection, dependencies, alias);
     	this.selectedTransliteration = selectedTransliteration;
 		registeredDependencies.put( selectedTransliteration , "false" );
 		convertButtonUp.setDisable( false );
