@@ -8,6 +8,9 @@ import com.ibm.icu.text.Transliterator;
 
 public class ConvertDocxGenericUnicodeFont extends ConvertFontSystem {
 
+	public ConvertDocxGenericUnicodeFont() {
+		super();
+	}
 	public ConvertDocxGenericUnicodeFont( String rulesFile, String transliterationDirection ) {
 		
 		try {
@@ -27,7 +30,7 @@ public class ConvertDocxGenericUnicodeFont extends ConvertFontSystem {
 		
 		try {
 			String rulesText = editorText;
-			if( editorText.startsWith( "<?xml" ) ) {
+			if( editorText.trim().startsWith( "<?xml" ) ) {
 				rulesText = readRulesStringXML( editorText );
 			}
 			xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), rulesText, Transliterator.FORWARD );

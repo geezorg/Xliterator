@@ -1,69 +1,48 @@
 package org.geez.ui;
 
 import java.awt.Desktop;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Optional;
+import java.util.prefs.Preferences;
 
-import org.apache.commons.io.FilenameUtils;
-import org.controlsfx.control.CheckComboBox;
 import org.controlsfx.control.StatusBar;
-import org.docx4j.openpackaging.exceptions.Docx4JException;
-import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
-import org.docx4j.openpackaging.parts.WordprocessingML.MainDocumentPart;
-import org.fxmisc.flowless.VirtualizedScrollPane;
-import org.geez.convert.Converter;
-import org.geez.convert.DocumentProcessor;
-import org.geez.convert.docx.DocxProcessor;
-import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
-import org.geez.convert.fontsystem.ConvertFontSystem;
-import org.geez.convert.text.ConvertTextString;
-import org.geez.convert.text.TextFileProcessor;
-import org.geez.transliterate.XliteratorConfig;
+import org.geez.convert.ProcessorManager;
+import org.geez.ui.xliterator.ConvertFilesTab;
+import org.geez.ui.xliterator.ConvertTextTab;
+import org.geez.ui.xliterator.EditorTab;
+import org.geez.ui.xliterator.ICUEditor;
+import org.geez.ui.xliterator.SyntaxHighlighterTab;
+import org.geez.ui.xliterator.XliteratorConfig;
+import org.geez.ui.xliterator.XliteratorTab;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import de.endrullis.draggabletabs.DraggableTabPane;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Tooltip;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -74,53 +53,76 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import javafx.stage.WindowEvent;
 
  
 
 public final class Xliterator extends Application {
  
-	private static final String VERSION = "v0.5.0";
+	private static final String VERSION = "v0.6.0";
     private Desktop desktop = Desktop.getDesktop();
 
-	private String scriptIn  = null; // alphabetic based default
-	private String scriptOut = null;
+	private String scriptIn   = null; // alphabetic based default
+	private String scriptOut  = null;
 	private String variantOut = null;
-	private boolean openOutput = true;
-	private List<File> inputFileList = null;
-	private File externalIcuFile = null;
 	protected StatusBar statusBar = new StatusBar();
-	private boolean converted = false;
-	private Menu inScriptMenu  = null;
+	private Menu inScriptMenu   = null;
 	private Menu outVariantMenu = null;
 	private Menu outScriptMenu  = null;
-	private final Button convertButton = new Button("Convert");
-	private final Button convertButtonDown = new Button(); // ( "⬇" );
-    private final Button convertButtonUp = new Button(); // ( "⬆" );
-	private String selectedTransliteration = null;
+	final Menu tabsMenu = new Menu( "Tabs" );
+	// an object could be introduced to hold the various transliteration attributes:
+	private String selectedTransliteration  = null;
 	private String transliterationDirection = null;
-    private ICUEditor editor = new ICUEditor();
-    private final TextArea textAreaIn = new TextArea();
-    private final TextArea textAreaOut = new TextArea();
-    private String defaultFont = null;
-    private CheckComboBox<String> documentFontsMenu = new CheckComboBox<String>();
-    MenuItem loadInternalMenuItem = new MenuItem( "Load Selected Transliteration" );
+	private String transliterationAlias = null;
+	private ArrayList<String> transliterationDependencies = null;
+	
+    private String defaultFontFamily        = null;
+    private DraggableTabPane tabpane        = new DraggableTabPane();
+    private MenuItem loadInternalMenuItem   = new MenuItem( "Load Selected Transliteration" );
+
+    private SyntaxHighlighterTab syntaxHighlighterTab = new SyntaxHighlighterTab( "Syntax Highlighter" );
+    private ConvertTextTab textTab            = new ConvertTextTab( "Convert Text", this );
+    private ConvertFilesTab filesTab          = new ConvertFilesTab( "Convert Files", this );
+    private ProcessorManager processorManager = new ProcessorManager();
+    
+    private ArrayList<EditorTab> editorTabs = new ArrayList<EditorTab>(); 
+
+    private EditorTab currentEditorTab  = null;
+    private EditorTab selectedEditorTab = null;
     
     private final int APP_WIDTH  = 800;
     private final int APP_HEIGHT = 800;
     
-	private XliteratorConfig config = null;
-	private DocxProcessor processorDocx = new DocxProcessor();
-	private TextFileProcessor processorTxt = new TextFileProcessor();
-
+	private String xlitStylesheet = "styles/xliterator.css";
 	
-	private void errorAlert(Exception ex, String header ) {
+    public static final String scriptInPreference   = "org.geez.ui.xliterator.scriptIn";
+    public static final String scriptOutPreference  = "org.geez.ui.xliterator.scriptOut";
+    public static final String variantOutPreference = "org.geez.ui.xliterator.variantOut";
+    public static final String useSelectedEdtior    = "org.geez.ui.xliterator.editor.selected";
+    public static final String transliterationIdPreference        = "org.geez.ui.xliterator.transliterationId";
+    public static final String transliterationDirectionPreference = "org.geez.ui.xliterator.transliterationDirection";
+    
+    private Stage primaryStage = null;
+	private XliteratorConfig config = null;
+	
+    private Image visibleIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
+    private Image arrowForwardIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_right_grey_18x18.png" ) ); 
+    private Image arrowBothIcon    = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_double_grey_18x18.png" ) );
+    private ColorAdjust monochrome = new ColorAdjust();
+	
+	
+	public XliteratorConfig getConfig() {
+		return config;
+	}
+	
+	
+	private void errorAlert( Exception ex, String header ) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle( "An Exception has occured" );
         alert.setHeaderText( header );
@@ -129,7 +131,7 @@ public final class Xliterator extends Application {
 	}
 
 	
-	private void errorAlert(String title, String message ) {
+	private void errorAlert( String title, String message ) {
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle( title );
         alert.setHeaderText( message );
@@ -137,148 +139,49 @@ public final class Xliterator extends Application {
         alert.showAndWait();
 	}
 	
-	// Do not change the Editor Tab title if a file has never been loaded
-	// Do not use FileWriter( icuFile ); if icuFile is still null
-	private String saveEditorToFile(String newContent) throws IOException {
-		  // Create file 
-		  if( editor.getContent() == null )
-			  return null;
-		  FileWriter fstream = new FileWriter( externalIcuFile );
-		  BufferedWriter out = new BufferedWriter( fstream );
-		  out.write( newContent );
-		  //Close the output stream
-		  out.close();
-		  
-		  return externalIcuFile.getName();
-	}
-	
-	private String saveAsEditorToFile(Stage stage, String newContent, String fileName) throws IOException {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Save ICU File");
-		if( fileName != null ) {
-			fileChooser.setInitialFileName( fileName );
-		}
-		File file = fileChooser.showSaveDialog( stage );
-		if (file == null) {
-			return null;
-		}
-		// Create file 
-		FileWriter fstream = new FileWriter( file );
-		BufferedWriter out = new BufferedWriter (fstream );
-		out.write( newContent );
-		//Close the output stream
-		out.close();
-		externalIcuFile = file;
-		
-		return file.getName();
-    }
-	
-    private static void configureFileChooser( final FileChooser fileChooser ) {      
-    	fileChooser.setTitle("View Word Files");
-        fileChooser.setInitialDirectory(
-        		new File( System.getProperty("user.home") )
-        );                 
-        fileChooser.getExtensionFilters().add(
-        		new FileChooser.ExtensionFilter("*.docx & *.txt", "*.docx", "*.txt")
-        );
-    }
-    
 	
     private static void configureFileChooserICU( final FileChooser fileChooser ) {      
-    	fileChooser.setTitle("View Word Files");
+    	fileChooser.setTitle( "View Word Files" );
         fileChooser.setInitialDirectory(
-        		new File( System.getProperty("user.home") )
+        		new File( System.getProperty( "user.home" ) )
         );                 
         fileChooser.getExtensionFilters().add(
-        		new FileChooser.ExtensionFilter("*.xml", "*.xml")
+        		new FileChooser.ExtensionFilter( "*.xml", "*.xml" )
         );
     }
     
-    private ChoiceBox<String> createFontChoiceBox(String component, String defaultSelection) {  
-    	ChoiceBox<String> choiceBox = new ChoiceBox<>();
-    	for(String font: javafx.scene.text.Font.getFamilies() ) {
-    		choiceBox.getItems().add( font );
-    	}
-    	choiceBox.getSelectionModel().select( defaultSelection );
-        choiceBox.setOnAction( evt -> setFont( choiceBox.getSelectionModel().getSelectedItem(), component ) );
-        
-        return choiceBox;    
-    }
     
-    private ChoiceBox<String> createFontChoiceBox(String component) {
-    	return createFontChoiceBox(component, defaultFont);
-    }
-    private Menu createFontMenu(String component) {
-    	Menu menu = new Menu();
-    	menu.setId( "transparent" );
-    	menu.setGraphic( createFontChoiceBox( component ) );
-        return menu;
-    }
-    
-
-    private Menu createFontSizeMenu() {
-    	Menu menu = new Menu();
-    	menu.setId( "transparent" );
-    	ChoiceBox<String> choiceBox = new ChoiceBox<>();
-    	for(int i=10 ; i < 24; i++ ) {
-    		String size = String.valueOf(i);
-    		choiceBox.getItems().add( size );
-    	}
-    	choiceBox.getSelectionModel().select( "12" );
-        choiceBox.setOnAction( evt -> setFontSize( choiceBox.getSelectionModel().getSelectedItem() ) );
-    	menu.setGraphic( choiceBox );
-
-    	/*
-    	Menu menu = new Menu( "Font Size" );
-        ToggleGroup groupInMenu = new ToggleGroup();
-        
-    	for(int i=10 ; i < 24; i++ ) {
-    		RadioMenuItem menuItem = new RadioMenuItem( String.valueOf(i) );
-    		menuItem.setToggleGroup( groupInMenu );
-    		String size = String.valueOf(i);
-    		menuItem.setOnAction( evt -> setFontSize( size ) ); 
-    		if( i == 12 ) {
-    			menuItem.setSelected( true );
-    		}
-    		menu.getItems().add( menuItem );
-    	}
-    	*/
-        
-        return menu;
-    }
-    
-    
-    private Menu createInScriptsMenu(final Stage stage) {
+    private Menu createInScriptsMenu( final Stage stage ) {
     	Menu menu = new Menu( "Script _In" );
         ToggleGroup groupInMenu = new ToggleGroup();
         
         // Create menu from the scripts in the configuration file:
-    	List<String> scripts = config.getInScripts();
+    	List<String> scripts = config.getInScripts( true );
     	for(String script: scripts) {
     		RadioMenuItem menuItem = new RadioMenuItem( script );
     		menuItem.setToggleGroup( groupInMenu );
     		menuItem.setOnAction( evt -> setScriptIn( script ) );
     		menu.getItems().add( menuItem );
     	}
-    	
-    	// Menu for the first edtior tab:
-    	menu.getItems().add( new SeparatorMenuItem() );
-    	RadioMenuItem editTabItem = new RadioMenuItem( "Use Editor" );
-    	editTabItem.setOnAction( 
-    			new EventHandler<ActionEvent>() {
-    				@Override
-    				public void handle(final ActionEvent e) {
-    					// TODO toggle off all other menu
-    					/*
-    					final FileChooser fileChooser = new FileChooser();
-    					configureFileChooserICU(fileChooser);    
-    					icuFile = fileChooser.showOpenDialog( stage );
-    					*/
-    				}	
-    	});
-    	menu.getItems().add( editTabItem );
-        		
+    		
     	return menu;
+    }
+    
+    
+    private void tabToggler( MenuItem menuItem, XliteratorTab tab, ImageView onView, ImageView offFile ){
+    	boolean show = (boolean)menuItem.getProperties().get( "show" );
+    	show =! show;
+    	menuItem.getProperties().put( "show", show );
+    	
+    	if( show ) {
+    		tabpane.getTabs().add( tab );
+    		menuItem.setGraphic( onView );
+        	tabpane.getSelectionModel().select( tab );
+    	}
+    	else {
+    		tabpane.getTabs().remove( tab );
+    		menuItem.setGraphic( offFile );
+    	}
     }
     
     
@@ -292,7 +195,7 @@ public final class Xliterator extends Application {
     	
         ToggleGroup groupOutMenu = new ToggleGroup();
         
-    	List<String> scripts = config.getOutScripts(outScript);
+    	List<String> scripts = config.getOutScripts(outScript, true);
     	for(String script: scripts) {
     		RadioMenuItem menuItem = new RadioMenuItem( script );
     		menuItem.setToggleGroup( groupOutMenu );
@@ -302,7 +205,7 @@ public final class Xliterator extends Application {
     	return outScriptMenu;
     }
     
-    
+
     private Menu createOutVaraintsMenu(String outVariant) {
     	outVariantMenu.getItems().clear();
         ToggleGroup groupVariantOutMenu = new ToggleGroup();
@@ -310,19 +213,54 @@ public final class Xliterator extends Application {
     	JsonArray variants = config.getVariants(scriptIn, scriptOut);
     	for (int i = 0; i < variants.size(); i++) {
     		JsonObject variant = variants.get(i).getAsJsonObject();
+    		if( variant.has( "visibility" ) && ("internal".equals( variant.get("vsibility").getAsString() ) ) ) {
+    			continue;
+    		}
     		if( variant.get("name") == null ) {
     			for(String subVariantKey: variant.keySet() ) {
     				Menu variantSubMenu = new Menu( subVariantKey );
     				JsonArray subvariants = variant.getAsJsonArray( subVariantKey );
     		    	for (int j = 0; j < subvariants.size(); j++) {
     		    		JsonObject subvariant = subvariants.get(j).getAsJsonObject();
+        	    		if( subvariant.has( "visibility" ) && ("internal".equals( subvariant.get("vsibility").getAsString() ) ) ) {
+        	    			continue;
+        	    		}
     	    			String name = subvariant.get("name").getAsString();
     	        		RadioMenuItem menuItem = new RadioMenuItem( name );
     	        		menuItem.setToggleGroup( groupVariantOutMenu );
     	        		String transliterationID = subvariant.get( "path" ).getAsString();
     	        		String direction = subvariant.get( "direction" ).getAsString();
-    	        		menuItem.setOnAction( evt -> { this.selectedTransliteration = transliterationID; this.transliterationDirection = direction; setVariantOut( subVariantKey + " - " + name ); });
+    	        		ArrayList<String> dependencies = new ArrayList<String>();
+    	        		if( subvariant.has( "dependencies" ) ) {
+    	        			JsonArray dependenciesJSON = subvariant.getAsJsonArray( "dependencies" );
+    	        			for (int k = 0; k < dependenciesJSON.size(); k++) {
+    	        				dependencies.add( dependenciesJSON.get(k).getAsString() );
+    	        			}
+    	        		}
+    	                
+    	                String alias = (subvariant.has("alias")) ? subvariant.get("alias").getAsString() : null;
+    	                if( alias != null ) {
+    	                	menuItem.getProperties().put( "alias", alias );
+    	                }
+    	                
+    	        		menuItem.setOnAction( evt -> { 
+    	        			this.selectedTransliteration  = transliterationID; 
+    	        			this.transliterationDirection = direction; 
+    	        			this.transliterationDependencies = (dependencies.isEmpty()) ? null: dependencies;
+    	        			this.transliterationAlias = alias;
+    	        			setVariantOut( subVariantKey + " - " + name ); 
+    	        		});
     	        		menuItem.setId( transliterationID );
+    	        		
+    	        		ImageView imageView = null;
+    	        		if( direction.equals( "both" ) ) {
+    	        			imageView= new ImageView( arrowBothIcon );
+    	        		}
+    	        		else {
+    	        			imageView= new ImageView( arrowForwardIcon );    	        			
+    	        		}
+    	                menuItem.setGraphic( imageView );
+    	                
     	        		variantSubMenu.getItems().add( menuItem );
     		    	}
             		outVariantMenu.getItems().add( variantSubMenu );
@@ -334,8 +272,38 @@ public final class Xliterator extends Application {
         		menuItem.setToggleGroup( groupVariantOutMenu );
         		String transliterationID = variant.get( "path" ).getAsString();
         		String direction = variant.get( "direction" ).getAsString();
-        		menuItem.setOnAction( evt -> { this.selectedTransliteration = transliterationID; this.transliterationDirection = direction; setVariantOut( name ); } );
+        		ArrayList<String> dependencies = new ArrayList<String>();
+        		if( variant.has( "dependencies" ) ) {
+        			JsonArray dependenciesJSON = variant.getAsJsonArray( "dependencies" );
+        			for (int j = 0; j < dependenciesJSON.size(); j++) {
+        				dependencies.add( dependenciesJSON.get(j).getAsString() );
+        			}
+        		}
+        		
+                
+                String alias = (variant.has( "alias") ) ? variant.get("alias").getAsString() : null;
+                if( alias != null ) {
+                	menuItem.getProperties().put( "alias", alias );
+                }
+                
+        		menuItem.setOnAction( evt -> {
+        			this.selectedTransliteration = transliterationID;
+        			this.transliterationDirection = direction;
+        			this.transliterationDependencies = (dependencies.isEmpty()) ? null: dependencies;
+        			this.transliterationAlias = alias;
+        			setVariantOut( name); 
+        		});
         		menuItem.setId( transliterationID );
+        		
+        		ImageView imageView = null;
+        		if( direction.equals( "both" ) ) {
+        			imageView= new ImageView( arrowBothIcon );
+        		}
+        		else {
+        			imageView= new ImageView( arrowForwardIcon );    	        			
+        		}
+                menuItem.setGraphic( imageView );
+                
         		outVariantMenu.getItems().add( menuItem );
     		}
     	}
@@ -347,29 +315,109 @@ public final class Xliterator extends Application {
     }
     
 
-    private void populateDocumentFontsMenu() {
-    	ObservableList<String> fonts = FXCollections.observableArrayList();  	
-    	try {
-	    	for( File file: inputFileList) {
-	    		String extension = FilenameUtils.getExtension( file.getPath() );
-	    		if( "docx".equals( extension) ) {
-					WordprocessingMLPackage wordMLPackage = WordprocessingMLPackage.load( file );		
-					MainDocumentPart documentPart = wordMLPackage.getMainDocumentPart();
-					for( String font: documentPart.fontsInUse() ) {
-						fonts.add( font );
-		       		}
-	    		}
-	    	}
-    	}
-    	catch( Docx4JException ex ) {
-    		errorAlert(ex, "An error occured while reading documents." );
-    	}
+    private final MenuItem fileMenuItem = new MenuItem( "Select Files..." ); 
+    private EditorTab createNewEditor( String title, Menu tabsMenu, Image visibleIcon, ColorAdjust monochrome ) {
+    	EditorTab editorTab = new EditorTab( title );
+        editorTab.setDefaultFontFamily( defaultFontFamily );
+        editorTab.setClosable( true );
     	
-    	documentFontsMenu.getItems().addAll( fonts );
-        documentFontsMenu.setDisable( false );
+    	editorTab.getProperties().put( "direction", transliterationDirection );
+        if( transliterationAlias != null ) {
+        	editorTab.getProperties().put( "alias", transliterationAlias );
+        }
+        editorTab.setup(primaryStage, config, saveMenuItem, saveAsMenuItem);
+        
+        // editorTab.setStyle( primaryStage.getScene() );
+        editorTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().multiply(0.8) );
+        editorTab.setOnSelectionChanged( evt -> {
+        	if( editorTab.isSelected() ) {
+        		fileMenuItem.setDisable( true );
+        		if ( variantOut == null )
+        			loadInternalMenuItem.setDisable( true );
+        		else
+        			loadInternalMenuItem.setDisable( false );
+        		if(! "".equals( editorTab.getEditor().getText() ) ) {
+        			saveMenuItem.setDisable( false );
+        			saveAsMenuItem.setDisable( false );
+        		}
+        		currentEditorTab = editorTab;
+        		toggleEditMenu( false );
+        	}
+    		// System.out.println( "Selected: " + editorTab.getTitle() + " isSelected: " + editorTab.isSelected() );
+        });
+        
+        MenuItem editorTabViewMenuItem = new MenuItem( title );
+        ImageView editorOnView  = new ImageView( visibleIcon );
+        ImageView editorOffView = new ImageView( visibleIcon );
+        editorOffView.setEffect( monochrome );
+        editorTabViewMenuItem.setGraphic( editorOffView );
+        editorTabViewMenuItem.getProperties().put( "show", false );
+        editorTabViewMenuItem.setMnemonicParsing( false );
+        editorTabViewMenuItem.setOnAction( evt -> tabToggler(editorTabViewMenuItem, editorTab, editorOnView, editorOffView) );
+        tabsMenu.getItems().add( editorTabViewMenuItem );
+        
+        editorTab.getProperties().put( "editorTabViewMenuItem", editorTabViewMenuItem );
+        editorTab.getProperties().put( "editorOnView", editorOnView );
+        editorTab.getProperties().put( "editorOffView", editorOffView );
+
+        if( editorTabs.size() == 0 ) {
+        	inScriptMenu.getItems().add( new SeparatorMenuItem() );
+        }
+        editorTabs.add( editorTab );
+        
+    	RadioMenuItem editorTabItem = new RadioMenuItem( title );
+    	editorTabItem.setOnAction( evt -> {
+    		setUseEditor( title ); 
+    		selectedEditorTab = editorTab;
+	    	selectedTransliteration = useSelectedEdtior; 
+	    	filesTab.setScriptIn( useSelectedEdtior );
+	    	textTab.setScriptIn( useSelectedEdtior );
+	   	 	outScriptMenu.getItems().clear();
+	   	 	scriptOut = null;
+			outVariantMenu.getItems().clear();
+			variantOut = null;
+	    	scriptInText.setText( "[Editor]" );
+	    	scriptOutText.setText( "[Editor]" );
+	    	variantOutText.setText( "[Editor]" );
+    	});
+    	editorTabItem.setMnemonicParsing( false );
+    	// editorTabItem.getProperties().put( "selection", useSelectedEdtior );
+    	inScriptMenu.getItems().add( editorTabItem );
+
+        
+        editorTab.setOnClosed( evt -> {
+        	// check to save file
+        	editorTabs.remove( editorTab );
+        	inScriptMenu.getItems().remove( editorTabItem );
+            if( editorTabs.size() == 0 ) {
+            	int lastIndex = inScriptMenu.getItems().size() - 1;  // this should be the separator index
+            	inScriptMenu.getItems().remove( lastIndex );
+            }
+        });
+        
+        saveMenuItem.setDisable(false); // because the new editor will appear in the foreground
+        saveAsMenuItem.setDisable(false); 
+    	
+		tabToggler( 
+			editorTabViewMenuItem,
+			editorTab, 
+			(ImageView)editorTab.getProperties().get( "editorOnView" ), 
+			(ImageView)editorTab.getProperties().get( "editorOffView" )
+		);
+		
+        return editorTab;
     }
     
-    private Tab editTab  = new Tab( "Mapping Editor" );
+    
+    final Menu editMenu = new Menu( "Edit" );
+    private void toggleEditMenu(boolean disable) {
+    	for (MenuItem item: editMenu.getItems() ) {
+    		item.setDisable( disable );
+    	}
+    }
+    
+    final MenuItem saveMenuItem = new MenuItem( "_Save" );
+    final MenuItem saveAsMenuItem = new MenuItem( "Save As..." );
     @Override
     public void start(final Stage stage) {
     	try {
@@ -379,595 +427,497 @@ public final class Xliterator extends Application {
     		System.err.println( ex );
     		System.exit(0);
     	}
-        stage.setTitle("Xliterator - An ICU Based Transliterator");
-        Image logoImage = new Image( ClassLoader.getSystemResourceAsStream("images/Xliterator.png") );
+    	primaryStage = stage;
+    	
+        stage.setTitle( "Xliterator - An ICU Based Transliterator" );
+        Image logoImage = new Image( ClassLoader.getSystemResourceAsStream( "images/Xliterator.png" ) );
         stage.getIcons().add( logoImage );
         String osName = System.getProperty("os.name");
         if( osName.equals("Mac OS X") ) {
             com.apple.eawt.Application.getApplication().setDockIconImage( SwingFXUtils.fromFXImage(logoImage, null) );  
-            defaultFont = "Kefa";
+            defaultFontFamily = "Kefa";
         }
+        textTab.setDefaultFontFamily( defaultFontFamily );
         
-        TabPane tabpane = new TabPane();
-    	Tab textTab  = new Tab( "Convert Text" );
-        Tab filesTab = new Tab( "Convert Files" );
-        editTab.setClosable( false ); // future set to true when multiple editors are supported
-        textTab.setClosable( false );
-        filesTab.setClosable( false );
-    	
-        tabpane.getTabs().addAll( editTab, textTab, filesTab );
         
-        MenuItem saveMenuItem = new MenuItem( "_Save" );
-        saveMenuItem.setOnAction( actionEvent ->
-        	{
-        		try {
-        			String newFileName = null;
-	        		if( externalIcuFile == null) {
-	        			if( "*Mapping Editor".equals( editTab.getText() ) ) {
-	        				newFileName = saveAsEditorToFile( stage, editor.getText(), null );
-	        			}
-	        			else { // probably loaded from a resource
-	        				newFileName = editTab.getText();
-	        				if( newFileName.charAt(0) == '*' ) {
-	        					newFileName = newFileName.substring(1);
-	        				}
-	        				newFileName = saveAsEditorToFile( stage, editor.getText(), newFileName );
-	        			}
-	        		} 
-	        		else {
-	        			newFileName = saveEditorToFile( editor.getText() );
-	        		}
-	        		if( newFileName != null ) { // the user cancelled
-	        			editTab.setText( editTab.getText().substring(1) );
-	        		}
-        		}
-	        	catch (Exception ex){
-	        		errorAlert( "Error occured saving file",  "An error occured while saving the file \"" + externalIcuFile.getPath() + "\":\n" + ex.getMessage() );
-	        	}
-        	});
+        // Create and configure menus:
+        
+        
+        //
+        //=========================== BEGIN FILE MENU =============================================
+        //
+        final Menu fileMenu = new Menu("_File");
+        
+
+		final Menu newMenu = new Menu( "New File" );
+		final MenuItem xmlMenuItem = new MenuItem( "XML" );
+		xmlMenuItem.setOnAction( evt -> createNewFile( "Untitled", "XML" ) );
+		xmlMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN));
+		final MenuItem txtMenuItem = new MenuItem( "TXT" );
+		txtMenuItem.setOnAction( evt -> createNewFile( "Untitled", "TXT" ) );
+		newMenu.getItems().addAll( xmlMenuItem, txtMenuItem );
+
+
+        fileMenuItem.setDisable( true );
+        
+        saveMenuItem.setOnAction( actionEvent -> currentEditorTab.saveContent( stage, false ) );
         saveMenuItem.setDisable(true);
         saveMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN));
         
-        MenuItem saveAsMenuItem = new MenuItem( "Save As..." );
-        saveAsMenuItem.setOnAction( actionEvent ->
-	    	{
-	    		try {
-	        		String newFileName = saveAsEditorToFile( stage, editor.getText(), editTab.getText() );
-	        		if( newFileName != null ) {
-	        			editTab.setText( newFileName );
-	        		}
-	    		}
-	        	catch (Exception ex){
-	        		errorAlert( "Error occured saving file",  "An error occured while saving the file \"" + externalIcuFile.getPath() + "\":\n" + ex.getMessage() );
-	        	}
-	    	});
+        saveAsMenuItem.setOnAction( actionEvent -> currentEditorTab.saveContent( stage, true ) );
         saveAsMenuItem.setDisable(true);
-        
-        editor.textProperty().addListener( (obs, oldText, newText) -> {
-    		String label = editTab.getText();
-        	if( editor.hasContentChanged(newText) ) {
-        		if( label.charAt(0) != '*' ) {
-        			editTab.setText( "*" + editTab.getText() );
-        			saveMenuItem.setDisable( false );
-        		}
-        	}
-        	else {
-        		if( label.charAt(0) == '*' ) {
-        			editTab.setText( editTab.getText().substring(1) );
-        			saveMenuItem.setDisable( true );
-        		}
-        	}
-			saveAsMenuItem.setDisable( false );
-        });
+        saveAsMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN) );
 
-        inScriptMenu =  createInScriptsMenu( stage );
-        outScriptMenu  = new Menu( "Script _Out" );
-        outVariantMenu = new Menu( "_Variant" );
-
-        final Menu fileMenu = new Menu("_File"); 
-        final FileChooser fileChooser = new FileChooser();
-        
-        ListView<Label> listView = new ListView<Label>();
-        listView.setEditable(false);
-        listView.setPrefHeight( 125 ); // 205 for screenshots
-        listView.setPrefWidth( 310 );
-        ObservableList<Label> data = FXCollections.observableArrayList();
-        VBox listVBox = new VBox( listView );
-        listView.autosize();
-        // create menu items 
-        final MenuItem fileMenuItem = new MenuItem( "Select Files..." ); 
-        fileMenuItem.setOnAction(
-            new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(final ActionEvent e) {
-                	listView.getItems().clear();
-                	configureFileChooser(fileChooser);    
-                    inputFileList = fileChooser.showOpenMultipleDialog( stage );
-                    
-                    if ( inputFileList != null ) {
-                    	for( File file: inputFileList) {
-                    		Label rowLabel = new Label( file.getName() );
-                    		data.add( rowLabel );
-                    		Tooltip tooltip = new Tooltip( file.getPath() );
-                    		rowLabel.setTooltip( tooltip );
-                    	} 
-
-                    	listView.setItems( data );
-                    	if( variantOut != null ) {
-                    		convertButton.setDisable( false );
-                    	}
-                    	populateDocumentFontsMenu();
-                    }
-                }
-            }
-        );
-        fileMenuItem.setDisable( true );
-    	// This should be moved under the top level "File" menu and is 
 
     	// Add transliteration file selection option:
-		MenuItem openMenuItem = new MenuItem( "Open ICU File..." );
-        openMenuItem.setOnAction(
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(final ActionEvent e) {
-                        final FileChooser fileChooser = new FileChooser();
-                    	configureFileChooserICU(fileChooser);    
-                    	externalIcuFile = fileChooser.showOpenDialog( stage );
-                        if( externalIcuFile == null ) {
-                        	return;
-                        }
-                        try {
-                        	// editor.replaceText( FileUtils.readFileToString(icuFile, StandardCharsets.UTF_8) );
-                        	editor.loadFile( externalIcuFile );
-                        	editTab.setText( externalIcuFile.getName() );
-                        	setUseEditor(); // TODO: set transliteration direction?
-                            convertButtonDown.setDisable( false );
-                            convertButtonUp.setDisable( true );
-                        	if( editor.getText().contains( "↔" ) ) {
-                        		transliterationDirection = "both";
-                                convertButtonUp.setDisable( false );
-                        	} else {
-                        		transliterationDirection = "forward"; // TODO: confirm this, it might be reverse only
-                        	}
-                        	saveMenuItem.setDisable(false);
-                        	saveAsMenuItem.setDisable(false);
-                        }
-                        catch(IOException ex) {
-                        	errorAlert(ex, "Error opening: " + externalIcuFile.getName() );
-                        }
-                    }
-                }
-        );
+		final MenuItem openMenuItem = new MenuItem( "Open ICU File..." );
+        openMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN));
 		
         loadInternalMenuItem.setDisable( true );
-        loadInternalMenuItem.setOnAction(
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(final ActionEvent e) {
-                    	try {
-                        	editor.loadResourceFile( selectedTransliteration );
-                        	editTab.setText( selectedTransliteration );
-                        	saveMenuItem.setDisable(false);
-                        	saveAsMenuItem.setDisable(false);
-                        }
-                        catch(IOException ex) {
-                        	errorAlert(ex, "Error opening: " + externalIcuFile.getName() );
-                        }
-                    }
-                }
-        );
+        loadInternalMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.SHORTCUT_DOWN));
         
-        MenuItem exitMenuItem = new MenuItem("Exit");
-        exitMenuItem.setOnAction(actionEvent -> Platform.exit());
-        fileMenu.getItems().addAll( fileMenuItem, openMenuItem, loadInternalMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), exitMenuItem ); 
-        
-        
-        final Menu helpMenu = new Menu( "Help" );
-        final MenuItem aboutMenuItem = new MenuItem( "About" );
-        helpMenu.getItems().add( aboutMenuItem );
-        
-        aboutMenuItem.setOnAction(
-            new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(final ActionEvent e) {
-			        Alert alert = new Alert(AlertType.INFORMATION);
-			        alert.setTitle( "About The Xliterator" );
-			        alert.setHeaderText( "An ICU based transliteration utility " + VERSION );
-			        
-			        FlowPane fp = new FlowPane();
-			        Label label = new Label( "Visit the project homepage on" );
-			        Hyperlink link = new Hyperlink("GitHub");
-			        fp.getChildren().addAll( label, link);
-
-			        link.setOnAction( (event) -> {
-	                    alert.close();
-	                    try {
-		                    URI uri = new URI( "https://github.com/geezorg/Xliterator/" );
-		                    desktop.browse( uri );
-	                    }
-	                    catch(Exception ex) {
-	                    	
-	                    }
-			        });
-
-			        alert.getDialogPane().contentProperty().set( fp );
-			        alert.showAndWait();
-                }
-            }
-        );
-        
-        final MenuItem demoMenuItem = new MenuItem( "Load Demo" );
-        helpMenu.getItems().add( demoMenuItem );
-        demoMenuItem.setOnAction( evt -> { loadDemo(); saveMenuItem.setDisable(false); saveAsMenuItem.setDisable(false); } );
-        
-        // create a menubar 
-        MenuBar leftBar = new MenuBar();  
-  
-        // add menu to menubar 
-        leftBar.getMenus().addAll( fileMenu, inScriptMenu, outScriptMenu , outVariantMenu );
-        
-        
-        //=========================== BEGIN FILES TAB =============================================
-        documentFontsMenu.setDisable( true );
-       // MenuBar fileConverterMenuBar = new MenuBar();
-        //Menu fileConverterFontMenu = createFontMenu( "file-converter" );
-        //fileConverterMenuBar.getMenus().addAll( fileConverterFontMenu );
-        ChoiceBox<String> outputFontMenu = createFontChoiceBox( "fileConverter", "Arial" );
-        HBox filesTabMenuBox = new HBox( new Text( "Output Font:" ), outputFontMenu, new Text( "Document Fonts:" ), documentFontsMenu );
-        filesTabMenuBox.setPadding(new Insets(2, 2, 2, 2));
-        filesTabMenuBox.setSpacing(4);
-        filesTabMenuBox.setAlignment( Pos.CENTER_LEFT );
-        convertButton.setDisable( true );
-        convertButton.setOnAction( event -> {
-        	convertButton.setDisable( true );
-        	convertButton.getProperties().put( "fontOut", outputFontMenu.getSelectionModel().getSelectedItem() );
-        	convertFiles( convertButton, listView ); 
+        MenuItem quitMenuItem = new MenuItem( "_Quit Xliterator" );
+        quitMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN));
+        quitMenuItem.setOnAction( evt -> {
+    			Window window = primaryStage.getScene().getWindow();
+    			window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
         });
         
-        CheckBox openFilesCheckbox = new CheckBox( "Open file(s) after conversion?");
-        openFilesCheckbox.selectedProperty().addListener(new ChangeListener<Boolean>() {
-            public void changed(ObservableValue<? extends Boolean> ov,
-                Boolean old_val, Boolean new_val) {
-                    openOutput = new_val.booleanValue();
-            }
-        });
-        openFilesCheckbox.setSelected(true);
         
-        Region bottomSpacer = new Region();
-        HBox.setHgrow(bottomSpacer, Priority.SOMETIMES);
-        HBox hbottomBox = new HBox( openFilesCheckbox, bottomSpacer, convertButton );
-        hbottomBox.setPadding(new Insets(4, 0, 4, 0));
-        hbottomBox.setAlignment( Pos.CENTER_LEFT );
-
-        VBox filesVbox = new VBox( filesTabMenuBox, listVBox, hbottomBox );
-        filesTab.setContent( filesVbox );
-        //=========================== END FILES TAB =============================================
+        fileMenu.getItems().addAll( newMenu, fileMenuItem, openMenuItem, loadInternalMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), quitMenuItem ); 
         
-        //=========================== BEGIN TEXT TAB ============================================
+        //
+        //=========================== END FILE MENU =============================================
         
-        textAreaIn.setPrefHeight(300);
-        textAreaOut.setPrefHeight(300);
-        // textAreaIn.setFont( Font.font( defaultFont, FontWeight.NORMAL, 12) );
-        textAreaIn.setStyle("-fx-font-family: '" + defaultFont + "'; -fx-font-size: 12;"  );
-        textAreaIn.getProperties().put( "font-family", defaultFont );
-        textAreaIn.getProperties().put( "font-size", "12" );
-        textAreaOut.setStyle("-fx-font-family: '" + defaultFont + "'; -fx-font-size: 12;"  );
-        textAreaOut.getProperties().put( "font-family", defaultFont );
-        textAreaOut.getProperties().put( "font-size", "12" );
         
-       //  Menu textAreaInFontMenu = createFontMenu( "textAreaIn" );
-        
-
-        Button textAreaInIncreaseFontSizeButton = new Button( "+" ); 
-        Button textAreaInDecreaseFontSizeButton = new Button( "-" );
-        HBox textAreaInMenuBox = new HBox( createFontChoiceBox( "textAreaIn" ), textAreaInIncreaseFontSizeButton, textAreaInDecreaseFontSizeButton);
-        textAreaInMenuBox.setPadding(new Insets(2, 2, 2, 2));
-        textAreaInMenuBox.setSpacing(4);
-        textAreaInIncreaseFontSizeButton.setOnAction( event -> {
-        	incrementFontSize( "textAreaIn" );
-        });
-        textAreaInDecreaseFontSizeButton.setOnAction( event -> {
-        	decrementFontSize( "textAreaIn" );
-        });
-        
-
-        ClassLoader classLoader = this.getClass().getClassLoader();
-        Image imageDown = new Image( classLoader.getResourceAsStream( "images/arrow-circle-down.png" ) );
-        ImageView imageViewDown = new ImageView( imageDown );
-        imageViewDown.setFitHeight( 18 );
-        imageViewDown.setFitWidth( 18 );
-        convertButtonDown.setGraphic( imageViewDown );
-
-        // convertButtonDown.setStyle( "-fx-font-size: 24;");
-        convertButtonDown.setDisable( true );
-        convertButtonDown.setOnAction( event -> {
-        	convertTextArea( textAreaIn, textAreaOut, "forward" ); 
-        });
-        
-        Image imageUp = new Image( classLoader.getResourceAsStream( "images/arrow-circle-up.png" ) );
-        ImageView imageViewUp = new ImageView( imageUp );
-        imageViewUp.setFitHeight( 18 );
-        imageViewUp.setFitWidth( 18 );
-        convertButtonUp.setGraphic( imageViewUp );
-        // convertButtonUp.setStyle( "-fx-font-size: 24;");
-        convertButtonUp.setDisable( true );
-        convertButtonUp.setOnAction( event -> {
-        	convertTextArea( textAreaOut, textAreaIn, "reverse" ); 
-        });
-        
-        Button textAreaOutIncreaseFontSizeButton = new Button( "+" ); 
-        Button textAreaOutDecreaseFontSizeButton = new Button( "-" );
-        textAreaOutIncreaseFontSizeButton.setOnAction( event -> {
-        	incrementFontSize( "textAreaOut" );
-        });
-        textAreaOutDecreaseFontSizeButton.setOnAction( event -> {
-        	decrementFontSize( "textAreaOut" );
-        });
-        Region hspacer = new Region();
-        hspacer.prefWidth( 200 );
-        HBox.setHgrow(hspacer, Priority.SOMETIMES);
-        HBox hUpDownButtonBox = new HBox( createFontChoiceBox( "textAreaOut" ), textAreaOutIncreaseFontSizeButton, textAreaOutDecreaseFontSizeButton, hspacer, convertButtonDown, convertButtonUp );
-        hUpDownButtonBox.setAlignment(Pos.CENTER_LEFT);
-        hUpDownButtonBox.setPadding(new Insets(2, 2, 2, 2));
-        hUpDownButtonBox.setSpacing( 4 );
-        
-        VBox textVbox = new VBox( textAreaInMenuBox, textAreaIn, hUpDownButtonBox, textAreaOut );
-        textTab.setContent( textVbox );
-        //=========================== END TEXT TAB ==============================================
-
-        //=========================== BEGIN EDITOR TAB ===========================================
-
-        Menu editorFontMenu = createFontMenu( "editor" );
-        Menu editorFontSizeMenu = createFontSizeMenu();
-        MenuBar editorMenutBar = new MenuBar();
-        editorMenutBar.getMenus().addAll( editorFontMenu, editorFontSizeMenu );
-        VBox editorVBox = new VBox( editorMenutBar, new StackPane( new VirtualizedScrollPane<>( editor ) ) );
-        editTab.setContent( editorVBox );
-       
-        //=========================== END EDITOR TAB ==============================================
-
-        
-        // VBox vbottomBox = new VBox( hbottomBox, statusBar,  textAreaIn, hUpDownButtonBox, textAreaOut );
-        
-        editTab.setOnSelectionChanged( evt -> {
-        	if( editTab.isSelected() ) {
-        		fileMenuItem.setDisable( true );
-        		openMenuItem.setDisable( false );
-        		if ( variantOut == null )
-        			loadInternalMenuItem.setDisable( true );
-        		else
-        			loadInternalMenuItem.setDisable( false );
-        		if(! "".equals( editor.getText() ) ) {
-        			saveMenuItem.setDisable( false );
-        			saveAsMenuItem.setDisable( false );
-        		}
-        	}
-        } );
-        textTab.setOnSelectionChanged( evt -> {
-        	if( textTab.isSelected() ) {
-        		fileMenuItem.setDisable( true );
-        		openMenuItem.setDisable( true );
-        		loadInternalMenuItem.setDisable( true );
-        		saveMenuItem.setDisable( true );
-        		saveAsMenuItem.setDisable( true );
-        	}
-        } );
+        //
+        // We have prerequisite objects to configure the tabs and tabpane, lets do so now:
+        //
+        //=========================== BEGIN FILES TAB ===========================================
+        filesTab.setClosable( false );
+        filesTab.setProcessor( processorManager );
+        filesTab.setComponents(fileMenuItem, statusBar, stage);
         filesTab.setOnSelectionChanged( evt -> {
         	if( filesTab.isSelected() ) {
         		fileMenuItem.setDisable( false );
-        		openMenuItem.setDisable( true );
-        		loadInternalMenuItem.setDisable( true );
+        		// loadInternalMenuItem.setDisable( true );
         		saveMenuItem.setDisable( true );
         		saveAsMenuItem.setDisable( true );
+        		toggleEditMenu( true );
         	}
-        } );
+        });
+        //=========================== END FILES TAB =============================================
+
         
+        //=========================== BEGIN TEXT TAB ============================================
+        // textTab.setup();  //
+        textTab.setDefaultFontFamily( defaultFontFamily );
+        textTab.setClosable( false );
+        textTab.setOnSelectionChanged( evt -> {
+        	if( textTab.isSelected() ) {
+        		// fileMenuItem.setDisable( true );
+        		// loadInternalMenuItem.setDisable( true );
+        		saveMenuItem.setDisable( true );
+        		saveAsMenuItem.setDisable( true );
+        		currentEditorTab = null;
+        		toggleEditMenu( true );
+        	}
+        });
+        //=========================== END TEXT TAB =============================================
+        
+        // Setup the tabs:
+        tabpane.getTabs().addAll( textTab );
+        //
+        //  End of Tab & TabPane setup
+        //
+        
+        
+        //
+        //=========================== BEGIN SCRIPT MENUS =============================================
+        // 
+        inScriptMenu   = createInScriptsMenu( stage );
+        outScriptMenu  = new Menu( "Script _Out" );
+        outVariantMenu = new Menu( "_Variant" );
+        //
+        //=========================== END SCRIPT MENUS =============================================
+        //
+        
+
+        //
+        //=========================== BEGIN HELP MENU =============================================
+        //
+        final Menu helpMenu = new Menu( "Help" );
+        final MenuItem aboutMenuItem = new MenuItem( "About" );
+        helpMenu.getItems().add( aboutMenuItem );
+
+        
+        aboutMenuItem.setOnAction( evt -> {
+		        Alert alert = new Alert(AlertType.INFORMATION);
+		        alert.setTitle( "About The Xliterator" );
+		        alert.setHeaderText( "An ICU based transliteration utility " + VERSION );
+		        
+		        FlowPane fp = new FlowPane();
+		        Label label = new Label( "Visit the project homepage on" );
+		        Hyperlink link = new Hyperlink( "GitHub" );
+		        fp.getChildren().addAll( label, link );
+		
+		        link.setOnAction( (event) -> {
+		            alert.close();
+		            try {
+		                URI uri = new URI( "https://github.com/geezorg/Xliterator/" );
+		                desktop.browse( uri );
+		            }
+		            catch(Exception ex) {
+		            	
+		            }
+		        });
+		
+		        alert.getDialogPane().contentProperty().set( fp );
+		        alert.showAndWait();
+        });
+        
+        final MenuItem demoMenuItem = new MenuItem( "Load Demo" );
+        helpMenu.getItems().add( demoMenuItem );
+        //
+        //=========================== END HELP MENU =============================================
+        //
+        
+        
+        //
+        //=========================== BEGIN TABS MENU ===========================================
+        //
+        
+        MenuItem fileConverterTabViewMenuItem = new MenuItem( "File Converter" );
+        MenuItem textConverterTabViewMenuItem = new MenuItem( "Text Converter" );
+        MenuItem syntaxHighlighterTabViewMenuItem = new MenuItem( "Syntax Highlighter" );
+
+        tabsMenu.getItems().addAll( fileConverterTabViewMenuItem, textConverterTabViewMenuItem );
+        
+        monochrome.setSaturation(-1);
+        
+
+        ImageView fileConverterOnView = new ImageView( visibleIcon );
+        ImageView fileConverterOffView = new ImageView( visibleIcon );
+        fileConverterOffView.setEffect( monochrome );
+        fileConverterTabViewMenuItem.setGraphic( fileConverterOffView );
+        fileConverterTabViewMenuItem.getProperties().put( "show", false );	
+        fileConverterTabViewMenuItem.setOnAction( evt -> tabToggler(fileConverterTabViewMenuItem, filesTab, fileConverterOnView, fileConverterOffView) );
+   
+        ImageView textConverterOnView = new ImageView( visibleIcon );
+        ImageView textConverterOffView = new ImageView( visibleIcon );
+        textConverterOffView.setEffect( monochrome );
+        textConverterTabViewMenuItem.setGraphic( textConverterOnView );
+        textConverterTabViewMenuItem.getProperties().put( "show", true );	
+        textConverterTabViewMenuItem.setOnAction( evt -> tabToggler(textConverterTabViewMenuItem, textTab, textConverterOnView, textConverterOffView) );
+        
+        ImageView syntaxHighlighterOnView = new ImageView( visibleIcon );
+        ImageView syntaxHighlighterOffView = new ImageView( visibleIcon );
+        syntaxHighlighterOffView.setEffect( monochrome );
+        syntaxHighlighterTabViewMenuItem.setGraphic( syntaxHighlighterOffView );
+        syntaxHighlighterTabViewMenuItem.getProperties().put( "show", false );
+        syntaxHighlighterTabViewMenuItem.setOnAction( evt -> tabToggler(syntaxHighlighterTabViewMenuItem, syntaxHighlighterTab, syntaxHighlighterOnView, syntaxHighlighterOffView) );
+        //
+        //=========================== END TABS MENU =============================================
+        //
+        
+        //
+        //=========================== BEGIN UPDATE FILE MENU ENTRIES ============================
+        //
+        loadInternalMenuItem.setOnAction( evt -> {
+        		// load into a new editor tab
+	        	if( selectedTransliteration.equals( useSelectedEdtior) ) {
+	        		return;
+	        	}
+            	try {
+            		currentEditorTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
+            		currentEditorTab.getEditor().loadResourceFile( selectedTransliteration );
+                }
+                catch(IOException ex) {
+                	errorAlert(ex, "Error opening: " + selectedTransliteration );
+                }
+        });
+        openMenuItem.setOnAction( evt -> {
+		        final FileChooser fileChooser = new FileChooser();
+		    	configureFileChooserICU(fileChooser);    
+		    	File externalIcuFile = fileChooser.showOpenDialog( stage );
+		        if( externalIcuFile == null ) {
+		        	return;
+		        }
+		        try {
+		        	currentEditorTab = createNewEditor( externalIcuFile.getName(), tabsMenu, visibleIcon, monochrome );
+		        	currentEditorTab.loadFile( externalIcuFile );
+		        	textTab.enableConvertForward( true );
+		        	textTab.enableConvertReverse( false );
+		        	// TODO: if an XML file, scan for ="both"
+		        	if( currentEditorTab.getEditor().getText().contains( "↔" ) ) {
+		        		transliterationDirection = "both";
+		                textTab.enableConvertBoth( true );
+		        	} else {
+		        		transliterationDirection = "forward"; // TODO: confirm this, it might be reverse only
+		        	}
+		        }
+		        catch(IOException ex) {
+		        	errorAlert(ex, "Error opening: " + externalIcuFile.getName() );
+		        }
+        });
+        
+        demoMenuItem.setOnAction( evt -> loadDemo(tabsMenu, visibleIcon, monochrome) );
+        //
+        //=========================== END UPDATE FILE MENU ENTRIES ============================
+        //
+        
+        //
+        //=========================== BEGIN PREFERENCES MENU ====================================
+        //
+        final Menu preferencesMenu = new Menu( "Preferences" );
+        final MenuItem makeDefaultMappingMenuItem = new MenuItem( "Save Default Mapping" );
+        final MenuItem makeDefaultFontsMenuItem   = new MenuItem( "Save Font Selections" );
+
+        makeDefaultMappingMenuItem.setOnAction( evt -> saveDefaultMapping() );
+        makeDefaultFontsMenuItem.setOnAction( evt -> saveDefaultFontSelections() );
+        
+        final Menu caseConversionMenu = new Menu( "Convert Case" );
+        final RadioMenuItem lowercaseMenuItem = new RadioMenuItem( "lowercase" );
+        final RadioMenuItem uppercaseMenuItem = new RadioMenuItem( "UPPERCASE" );
+        final RadioMenuItem titlecaseMenuItem = new RadioMenuItem( "Title Case" );
+        final ToggleGroup caseGroup = new ToggleGroup();
+        lowercaseMenuItem.setToggleGroup( caseGroup );
+        uppercaseMenuItem.setToggleGroup( caseGroup );
+        titlecaseMenuItem.setToggleGroup( caseGroup );
+        
+        lowercaseMenuItem.setOnAction( evt -> setCaseOption( lowercaseMenuItem ) );
+        uppercaseMenuItem.setOnAction( evt -> setCaseOption( uppercaseMenuItem ) );
+        titlecaseMenuItem.setOnAction( evt -> setCaseOption( titlecaseMenuItem ) );
+        caseConversionMenu.getItems().addAll( lowercaseMenuItem, uppercaseMenuItem, titlecaseMenuItem );
+        
+        final MenuItem syntaxHighlightEditorMenuItem = new MenuItem( "Edit Syntax Highlighting" );
+        syntaxHighlightEditorMenuItem.setOnAction( evt -> {
+        	syntaxHighlightEditorMenuItem.setDisable( true );
+        	tabsMenu.getItems().add( syntaxHighlighterTabViewMenuItem );
+        	tabToggler( syntaxHighlighterTabViewMenuItem, syntaxHighlighterTab, syntaxHighlighterOnView, syntaxHighlighterOffView );
+        	launchSyntaxHightlightEditor( stage ); 
+        });
+        
+        syntaxHighlighterTab.setOnCloseRequest( evt -> {
+        	syntaxHighlightEditorMenuItem.setDisable( false );
+        	tabsMenu.getItems().remove(syntaxHighlighterTabViewMenuItem);
+        });
+        
+        syntaxHighlighterTab.setOnSelectionChanged( evt -> {
+        	if( syntaxHighlighterTab.isSelected() ) {
+        		toggleEditMenu( true );
+        	}
+        });
+      
+
+        preferencesMenu.getItems().addAll( makeDefaultMappingMenuItem, makeDefaultFontsMenuItem, caseConversionMenu, syntaxHighlightEditorMenuItem );
+        //
+        //=========================== END PREFERENCES MENU ======================================
+        //
+        
+        //
+        //=========================== BEGIN EDIT MENU ===========================================
+        //
+        
+        // TODO:  This menu needs to work with which ever text area is in focus
+        
+        MenuItem findMenuItem = new MenuItem("Find…");
+        findMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.F, KeyCombination.SHORTCUT_DOWN) );
+        findMenuItem.setOnAction( evt -> currentEditorTab.getEditor().findWord(stage) );
+        
+        MenuItem replaceMenuItem = new MenuItem("Replace…");
+        replaceMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.R, KeyCombination.SHORTCUT_DOWN) );
+        replaceMenuItem.setOnAction( evt -> currentEditorTab.getEditor().replace(stage) );
+        
+        MenuItem undoMenuItem = new MenuItem( "Undo" );
+        undoMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.U, KeyCombination.SHORTCUT_DOWN) );
+        undoMenuItem.setOnAction( evt -> currentEditorTab.getEditor().undo() );
+
+        MenuItem redoMenuItem = new MenuItem( "Redo" );
+        redoMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.Y, KeyCombination.SHORTCUT_DOWN) );
+        redoMenuItem.setOnAction( evt -> currentEditorTab.getEditor().redo() );
+
+        MenuItem cutMenuItem = new MenuItem( "Cut" );
+        cutMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.X, KeyCombination.SHORTCUT_DOWN) );
+        cutMenuItem.setOnAction( evt -> currentEditorTab.getEditor().cut() );
+
+        MenuItem copyMenuItem = new MenuItem( "Copy" );
+        copyMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.C, KeyCombination.SHORTCUT_DOWN) );
+        copyMenuItem.setOnAction( evt -> currentEditorTab.getEditor().copy() );
+
+        MenuItem pasteMenuItem = new MenuItem( "Paste" );
+        pasteMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.V, KeyCombination.SHORTCUT_DOWN) );
+        pasteMenuItem.setOnAction( evt -> currentEditorTab.getEditor().paste() );
+
+        // MenuItem deleteMenuItem = new MenuItem( "Delete" );
+        // deleteMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.V, KeyCombination.SHORTCUT_DOWN) );
+        // deleteMenuItem.setOnAction( evt -> editorTab.getEditor().replaceSelection() );
+
+        MenuItem selectAllMenuItem = new MenuItem( "Select All" );
+        selectAllMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN) );
+        selectAllMenuItem.setOnAction( evt -> currentEditorTab.getEditor().selectAll() );
+        
+        editMenu.getItems().addAll( undoMenuItem, redoMenuItem, cutMenuItem, copyMenuItem, pasteMenuItem, /* deleteMenuItem, */ new SeparatorMenuItem(), findMenuItem, replaceMenuItem, new SeparatorMenuItem(), selectAllMenuItem);
+		toggleEditMenu( true );
+        //
+        //=========================== END EDIT MENU ==============================================
+        //
+                
+        
+        
+        // create the left menubar 
+        final MenuBar leftBar = new MenuBar();  
+  
+        // add menus to the left menubar 
+        leftBar.getMenus().addAll( fileMenu, editMenu, tabsMenu, inScriptMenu, outScriptMenu , outVariantMenu );
+
         
         statusBar.setText( "" );
         updateStatusMessage();
      
-        MenuBar rightBar = new MenuBar();
-        rightBar.getMenus().addAll( helpMenu );
+        final MenuBar rightBar = new MenuBar();
+        rightBar.getMenus().addAll( preferencesMenu, helpMenu );
         Region spacer = new Region();
         spacer.getStyleClass().add("menu-bar");
         HBox.setHgrow(spacer, Priority.SOMETIMES);
         HBox menubars = new HBox(leftBar, spacer, rightBar);
         menubars.setAlignment( Pos.CENTER_LEFT);
-       // menubars.setPadding( new Insets(4, 4, 4, 4) );
  
         final BorderPane rootGroup = new BorderPane();
         rootGroup.setTop( menubars );
-        // rootGroup.setCenter( listVBox );
-        // rootGroup.setBottom( vbottomBox );
         rootGroup.setCenter( tabpane );
         rootGroup.setBottom( statusBar );
         rootGroup.setPadding( new Insets(8, 8, 8, 8) );
  
         Scene scene = new Scene(rootGroup, APP_WIDTH, APP_HEIGHT);
-        scene.getStylesheets().add( classLoader.getResource("styles/xliterator.css").toExternalForm() );
         stage.setScene( scene ); 
-        editor.setStyle( scene );
-        editor.prefHeightProperty().bind( stage.heightProperty().multiply(0.8) );
+        
+    	ClassLoader classLoader = this.getClass().getClassLoader();
+        scene.getStylesheets().add( classLoader.getResource( xlitStylesheet ).toExternalForm() );
+		ICUEditor.loadStylesheets( scene );
+
+        scene.getWindow().addEventFilter( WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent );
+        
+        // Check for a saved user menu preference:
+        checkPreferences();
+        
+        stage.setAlwaysOnTop(false);
         stage.show();
     }
+    
+    private void closeWindowEvent(WindowEvent event) {
+    	for(EditorTab editorTab: editorTabs) {
+	    	if( editorTab.hasUnsavedChanges() ) {
+	    		Alert alert = saveAndExitAlert( "Confirm Exit", "Exit without saving?", "Unsaved changes will be lost." );
+	            alert.initOwner( primaryStage.getOwner() );
+	            Optional<ButtonType> response = alert.showAndWait();
+	
+	            if( response.isPresent() ) {
+	            	ButtonType type = response.get();
+	                if( type.getButtonData() == ButtonData.CANCEL_CLOSE ) {
+	                    event.consume();
+	                }
+	                else if( type.getButtonData() == ButtonData.YES ) {
+	                	editorTab.saveContent( primaryStage, false );
+	                }
+	            }
+	    	}
+    	}
+    }
+
+    
+    private Alert saveAndExitAlert(String title, String header, String message) {
+        ButtonType buttonTypeSaveAndExit = new ButtonType( "Save and Exit", ButtonData.YES );
+        ButtonType buttonTypeExit = new ButtonType( "Exit", ButtonData.NO );
+        ButtonType buttonTypeCancel = new ButtonType( "Cancel", ButtonData.CANCEL_CLOSE );
+
+    	Alert alert = new Alert(AlertType.CONFIRMATION);
+    	alert.setTitle( title );
+    	alert.setHeaderText( header );
+    	alert.setContentText( message );
+    	
+        alert.getButtonTypes().setAll( buttonTypeSaveAndExit, buttonTypeExit, buttonTypeCancel );
+    	
+    	return alert;
+    }
+    
+    private Alert saveOrContinue(String title, String header, String message) {
+        ButtonType buttonTypeSave = new ButtonType( "Yes", ButtonData.YES );
+        ButtonType buttonTypeContinue = new ButtonType( "No", ButtonData.NO );
+        ButtonType buttonTypeCancel = new ButtonType( "Cancel", ButtonData.CANCEL_CLOSE );
+
+    	Alert alert = new Alert(AlertType.CONFIRMATION);
+    	alert.setTitle( title );
+    	alert.setHeaderText( header );
+    	alert.setContentText( message );
+    	
+        alert.getButtonTypes().setAll( buttonTypeSave, buttonTypeCancel, buttonTypeContinue );
+    	
+    	return alert;
+    }
+
+    
+    private boolean checkUnsavedChanges() {
+    	if( currentEditorTab.hasUnsavedChanges() ) {
+    		Alert alert = saveOrContinue( "Confirm Replace", "Save changes before loading?", "Unsaved changes will be lost." );
+            alert.initOwner( primaryStage.getOwner() );
+            Optional<ButtonType> response = alert.showAndWait();
+
+            if( response.isPresent() ) {
+            	ButtonType type = response.get();
+                if( type.getButtonData() == ButtonData.CANCEL_CLOSE ) {
+                	return false;
+                }
+                if( type.getButtonData() == ButtonData.YES ) {
+                	currentEditorTab.saveContent( primaryStage, false );
+                }
+            } 
+    	}
+    	
+    	return true;
+    }
  
+    
     public static void main(String[] args) {
         Application.launch(args);
     }
- 
-    private void convertFiles(Button convertButton, ListView<Label> listView) {
-        if ( inputFileList != null ) {
-        	if( converted ) {
-        		// this is a re-run, reset file names;
-        		for(Label label: listView.getItems()) {
-        			label.setStyle( "" );
-        			label.setText( label.getText().replaceFirst( "\u2713 ", "" ) );
-        		}
-        		listView.refresh();
-        		converted = false;
-        	}
-            int i = 0;
-            for (File file : inputFileList) {
-                processFile( file, convertButton, listView, i );
-                i++;
-                
-                // this sleep seems to help slower CPUs
-                // when a list of files is processed, and
-                // avoids an exception from wordMLPackage.save( outputFile );
-                try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-             }
-            converted = true;
-         } 
+
+    private void saveDefaultMapping() {
+        // Retrieve the user preference node for the package com.mycompany
+        Preferences prefs = Preferences.userNodeForPackage( Xliterator.class );
+
+        prefs.put( scriptInPreference, scriptIn );
+        prefs.put( scriptOutPreference, scriptOut );
+        prefs.put( variantOutPreference, variantOut );
+        prefs.put( transliterationIdPreference, selectedTransliteration );
+        prefs.put( transliterationDirectionPreference, transliterationDirection );
     }
+
     
-    HashMap<String,ConvertTextString> textStringConverts = new HashMap<String,ConvertTextString>();    
-    private void convertTextArea(TextArea textAreaIn, TextArea textAreaOut, String direction) {
-    	String textIn = textAreaIn.getText();
-    	if( textIn == null )
-    		return;
-    	
-    	ConvertTextString stringConverter = null;
-    	if( "Use Editor".equals( selectedTransliteration ) ) {
-    		// do not save the converter because the text may change:
-    		try {
-    			stringConverter = new ConvertTextString( editor.getText(), direction, true );
-    		}
-    		catch(Exception ex) {
-            	errorAlert(ex, "Translteration Defition Error. Correct to Proceed." );
-    			return;
-    		}
-    	}
-    	else {
-	    	String transliterationKey = selectedTransliteration + "-" + direction ;
-	    	
-	    	if(! textStringConverts.containsKey( transliterationKey ) ) {
-	    		textStringConverts.put( transliterationKey, new ConvertTextString( selectedTransliteration, direction ) );
-	    	}
-	    	stringConverter = textStringConverts.get( transliterationKey );
-    	}
-    	
+    private void checkPreferences() {
+        Preferences prefs = Preferences.userNodeForPackage( Xliterator.class );
 
-    	stringConverter.setText( textIn );
-    	
-    	textAreaOut.clear();
-        
-    	textAreaOut.setText( stringConverter.convertText( textIn ) );
-    	if( "both".equals( transliterationDirection ) ) {
-    		convertButtonUp.setDisable( false );
-    	}  
-    }
-    
-    
-    Converter converter = null;
-	DocumentProcessor processor = null;
-    private void processFile(File inputFile, Button convertButton, ListView<Label> listView, int listIndex) {
-		File outputFile;
-		
-        try {
-        	String inputFilePath = inputFile.getPath();
-    		
-    		String extension = FilenameUtils.getExtension( inputFilePath );
-    		// a new converter instance is created for each file in a list. since if we can cache and reuse a converter.
-    		// it may be necessary to reset the converter so it is in a neutral state
-    		if ( extension.equals( "txt") ) {
-            	String outputFilePath = inputFilePath.replaceAll("\\.txt", "-" + scriptOut.replace( " ", "-" ) + ".txt");
-            	outputFile =  new File ( outputFilePath );
-            	
-            	if( selectedTransliteration.equals( "Use Editor") ) {
-            		converter = new ConvertTextString( editor.getText(), "forward", true );	
-            	}
-            	else {
-            		converter = new ConvertTextString( selectedTransliteration, transliterationDirection );
-            	}
-        		processorTxt.addConverter( (ConvertTextString)converter );
-    			processor = processorTxt;
-    		}
-    		else {
-            	String outputFilePath = inputFilePath.replaceAll("\\.docx", "-" + scriptOut.replace( " ", "-" ) + ".docx");
-            	outputFile =  new File ( outputFilePath );
-
-            	if( selectedTransliteration.equals( "Use Editor") ) {
-            		converter = new ConvertDocxGenericUnicodeFont( editor.getText() );	
-            	}
-            	else {
-            		converter = new ConvertDocxGenericUnicodeFont( selectedTransliteration, transliterationDirection );
-            	}
-
-
-    			ArrayList<String> targetTypefaces = new ArrayList<String>( documentFontsMenu.getCheckModel().getCheckedItems() );
-    			((ConvertDocxGenericUnicodeFont)converter).setTargetTypefaces( targetTypefaces );
-
-    			processorDocx.setFontOut( (String)convertButton.getProperties().get("fontOut") );
-        		processorDocx.addConverter( (ConvertFontSystem)converter );
-    			processor = processorDocx;
-    		}
-    		
-    		processor.setFiles( inputFile, outputFile );
-
-    		
-    		
-    		// references:
-    		// https://stackoverflow.com/questions/49222017/javafx-make-threads-wait-and-threadsave-gui-update
-    		// https://stackoverflow.com/questions/47419949/propagate-progress-information-from-callable-to-task
-            Task<Void> task = new Task<Void>() {
-                @Override protected Void call() throws Exception {
-                	
-                	updateProgress(0.0,1.0);
-                	processor.progressProperty().addListener( 
-                		(obs, oldProgress, newProgress) -> updateProgress( newProgress.doubleValue(), 1.0 )
-                	);
-                	updateMessage("[" +  (listIndex+1) + "/" + listView.getItems().size() + "]" );
-                	processor.call();
-                	updateProgress(1.0, 1.0);
-
-    				done();
-            		return null;
-                } 
-            };
-            
-            statusBar.progressProperty().bind( task.progressProperty() );
-            statusBar.textProperty().bind( task.messageProperty() );
-            
-           	// remove bindings again
-            task.setOnSucceeded( event -> { 
-            	statusBar.progressProperty().unbind();
-            	if ( openOutput ) {
-            		if ( outputFile.exists() ) {
-            			try { 
-            				desktop.open( outputFile ); 
-            			}
-            			catch(IOException ex) {
-            				errorAlert( "File IO Exception", "An error has occured opening the file:\n" + ex  );
-            			}
-            		}
-            		else {
-            			errorAlert( "Output file not found", "The output file \"" + outputFile.getPath() + "\" could not be found.  Conversation has likely failed." );
-            		}
-            	}
-            	Label label = listView.getItems().get( listIndex );
-                label.setText( "\u2713 " + label.getText() );
-                label.setStyle( "-fx-font-style: italic;" );
-                listView.refresh();
-                convertButton.setDisable( false );
-            
-            });
-            Thread convertThread = new Thread(task);
-            convertThread.start();
-            
-            //convertThread.join();
-
-        }
-        catch (Exception ex) {
-        	Logger.getLogger( Xliterator.class.getName() ).log( Level.SEVERE, null, ex );
+        scriptIn   = prefs.get( scriptInPreference, null );
+        if( scriptIn != null) {
+        	setScriptIn( scriptIn );
         }
         
+        scriptOut  = prefs.get( scriptOutPreference, null );
+        if( scriptOut != null) {
+        	setScriptOut( scriptOut );
+        }
+        
+        
+        selectedTransliteration  = prefs.get( transliterationIdPreference, null );
+        transliterationDirection = prefs.get( transliterationDirectionPreference, null );
+        
+        variantOut = prefs.get( variantOutPreference, null );
+        if( variantOut != null) {
+        	setVariantOut( variantOut ); // TODO: store the alias as a preference
+        }
+
     }
     
-
     Text scriptInText = new Text( "[None]" );
     Text scriptOutText = new Text( "[None]" );
     Text variantOutText = new Text( "[None]" );
@@ -994,12 +944,10 @@ public final class Xliterator extends Application {
         Text vout = new Text("Variant: ");
         vout.setStyle("-fx-font-weight: bold;");
         
-        
         flowIn.getChildren().addAll(in, scriptInText );
         flowOut.getChildren().addAll(out, scriptOutText );
         flowVOut.getChildren().addAll(vout, variantOutText );
        
-        
         Separator separator1 = new Separator();
         separator1.setOrientation(Orientation.VERTICAL);
         separator1.setPadding( new Insets(0,0,0,6) );
@@ -1008,11 +956,9 @@ public final class Xliterator extends Application {
         separator2.setOrientation(Orientation.VERTICAL);
         separator2.setPadding( new Insets(0,0,0,6) );
         
-        
         Separator separator3 = new Separator();
         separator2.setOrientation(Orientation.VERTICAL);
         separator2.setPadding( new Insets(0,0,0,6) );
-        
         
         HBox hbox = new HBox();
         hbox.getChildren().addAll( flowIn, separator1, flowOut, separator2, flowVOut, separator3 );
@@ -1020,19 +966,21 @@ public final class Xliterator extends Application {
         hbox.setPadding( new Insets(2,0,0,0) );
         hbox.setSpacing(0.0);
         
-        // working with a single flow leads to bad visual effects when the app size changes when the
-        // font name changes, so we use an hbox instead
+        // working with a single flow leads to bad visual effects when the app size changes or
+        // when the font name changes, so we use an hbox instead
         // flow.getChildren().addAll( in, systemInText, separator1, out, systemOutText, separator2 );
         
         statusBar.getLeftItems().add( hbox );
     }
+    
     private void setScriptIn(String scriptIn) {
     	this.scriptIn = scriptIn;
     	scriptInText.setText( scriptIn );
     	createOutScriptsMenu( scriptIn );
-		convertButton.setDisable( true );
-        convertButtonDown.setDisable( true );
         loadInternalMenuItem.setDisable( true );
+    	filesTab.setScriptIn( scriptIn );
+    	textTab.setScriptIn( scriptIn );
+    	setMenuItemSelection( inScriptMenu, scriptIn );
     }
     private void setScriptOut(String scriptOut) {
     	this.scriptOut = scriptOut;
@@ -1040,98 +988,43 @@ public final class Xliterator extends Application {
     	scriptOutText.setText( scriptOut );
     	variantOutText.setText( "[None]" );
     	createOutVaraintsMenu( scriptOut );
-		convertButton.setDisable( true );
-        convertButtonDown.setDisable( true );
         loadInternalMenuItem.setDisable( true );
+    	filesTab.setScriptOut( scriptIn );
+    	textTab.setScriptOut(scriptOut);
+    	setMenuItemSelection( outScriptMenu, scriptOut );
     }
     private void setVariantOut(String variantOut) {
     	this.variantOut = variantOut;
     	variantOutText.setText( variantOut );
-    	if( inputFileList != null ) {
-    		convertButton.setDisable( false );
-    	}
-        convertButtonDown.setDisable( false );
         loadInternalMenuItem.setDisable( false );
-        if( "both".equals( transliterationDirection ) ) {
-        	convertButtonUp.setDisable( false );
-        }
-        else {
-        	convertButtonUp.setDisable( true );        	
-        }
+        
+    	filesTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection, transliterationDependencies, transliterationAlias );
+    	textTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection, transliterationDependencies, transliterationAlias );
+    	setMenuItemSelection( outVariantMenu, variantOut );
     }
-    
-
-    private void setFont(String font, String component) {
-    	if( "textAreaIn".equals( component) ) {
-    		textAreaIn.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + textAreaIn.getProperties().get("font-size") + ";" ); 
-    		textAreaIn.getProperties().put( "font-family", font );
-    	}
-    	else if( "textAreaOut".equals( component) ) {
-    		textAreaOut.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + textAreaOut.getProperties().get("font-size") + ";" );
-    		textAreaOut.getProperties().put( "font-family", font );
-    	}
-    	else if( "fileConverter".equals( component) ) {
-    		
+    private String caseOption = null;
+    private void setCaseOption(RadioMenuItem menuItem) {
+    	String label = menuItem.getText().toLowerCase();
+    	if( label.equals( caseOption ) ) {
+    		// already selected, so this is a toggle off:
+    		caseOption = null;
+    		menuItem.setSelected( false );
     	}
     	else {
-    		// set the font in all components, unless already set for the text areas
-    		String fontSize = (String) editor.getProperties().get("font-size");
-    		editor.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + fontSize + ";" );
-    		
-    		if( textAreaIn.getProperties().get( "font-family") == null ) {
-    			textAreaIn.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + fontSize + ";" ); 
-    		}
-    		if( textAreaOut.getProperties().get( "font-family") == null ) {
-    			textAreaOut.setStyle( "-fx-font-family: '" + font + "'; -fx-font-size: " + fontSize + ";" ); 
-    		}
+    		caseOption = label;
     	}
+    	textTab.setCaseOption( caseOption );
+    	filesTab.setCaseOption( caseOption );
     }
     
     
-    private void setFontSize(String fontSize) {        
-		String fontFamily = (String) editor.getProperties().get("font-family");
-		editor.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" );
-		editor.getProperties().put( "font-size", fontSize );
-		
-		if( textAreaIn.getProperties().get( "font-size") == null ) {
-			textAreaIn.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
-		}
-		if( textAreaOut.getProperties().get( "font-size") == null ) {
-			textAreaOut.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
-		}
-    }
-
-    private void incrementFontSize(String component) {
-    	TextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
-
-    	String fontFamily = (String) textArea.getProperties().get("font-family");
-    	int newSize = Integer.parseInt( (String)textArea.getProperties().get("font-size") ) + 1;
-    	if( newSize <= 24 ) {
-    		String fontSize = String.valueOf( newSize );
-    		textArea.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
-    		textArea.getProperties().put( "font-size", fontSize );
-    	}
-    }
-
-    private void decrementFontSize(String component) {
-    	TextArea textArea = ( "textAreaIn".equals(component) ) ? textAreaIn : textAreaOut ;
-
-    	String fontFamily = (String) textArea.getProperties().get("font-family");
-    	int newSize = Integer.parseInt( (String)textArea.getProperties().get("font-size") ) - 1;
-    	if( newSize >= 10 ) {
-    		String fontSize = String.valueOf( newSize );
-    		textArea.setStyle( "-fx-font-family: '" + fontFamily + "'; -fx-font-size: " + fontSize + ";" ); 
-    		textArea.getProperties().put( "font-size", fontSize );
-    	}
-    }
-    
-    private void setUseEditor() {    	
+    private void setUseEditor(String title) {    	
     	for(MenuItem item: inScriptMenu.getItems() ) {
     		if( item.getClass() == RadioMenuItem.class ) {
 	    		RadioMenuItem rItem = (RadioMenuItem)item;
-	    		if ( "Use Editor".equals( rItem.getText() ) ) {
+	    		if ( title.equals( rItem.getText() ) ) {
 	    			rItem.setSelected( true );
-	    	    	selectedTransliteration = rItem.getText();
+	    	    	// TODO: before convertering, check if the title matches an editor tab
 	    		}
 	    		else {
 	    			rItem.setSelected( false );
@@ -1140,45 +1033,106 @@ public final class Xliterator extends Application {
     	}
     }
     
-    private void loadDemo() {
-    	textAreaIn.clear();
-    	textAreaOut.clear();
-    	textAreaIn.setText( "ሰላም ዓለም" );
+    
+    private void setMenuItemSelection(Menu menu, String selection) {    	
+    	for(MenuItem item: menu.getItems() ) {
+    		if( item.getClass() == RadioMenuItem.class ) {
+	    		RadioMenuItem rItem = (RadioMenuItem)item;
+	    		if ( selection.equals( rItem.getText() ) ) {
+	    			rItem.setSelected( true );
+	    		}
+	    		else {
+	    			rItem.setSelected( false );
+	    		}
+    		}
+    	}
+    }
+    
+    
+    private void saveDefaultFontSelections() {
+    	filesTab.saveDefaultFontSelections();
+    	textTab.saveDefaultFontSelections();
+    	currentEditorTab.saveDefaultFontSelections();
+    }
+    
+    
+    private void createNewFile(String title, String type ) {
+    	
+    	String template = ( "XML".equals(type) )
+    			? "templates/icu-xml-template.xml"
+    			: "templates/icu-text-template.txt" 
+    	;
+    	try {
+    		// this should probably be changed to use createNewEditor 
+    		EditorTab newTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
+    		newTab.getEditor().loadResourceFile( template );
+    	}
+    	catch(Exception ex) {
+        	errorAlert(ex, "Error opening: " + template );
+    	}
+    	
+    }
+    
+    
+    private void launchSyntaxHightlightEditor( Stage stage ) {
+    	if( syntaxHighlighterTab == null) {
+    		// closed previously
+    		syntaxHighlighterTab = new SyntaxHighlighterTab( "Syntax Highlighter" );
+    	}
+    	if( syntaxHighlighterTab.isLoaded() ) {
+    		// this check may be unnecessary, it *should* not be able to enter this method if
+    		// the syntax highlight editor is already loaded
+    		return;
+    	}
+    	syntaxHighlighterTab.load( stage, this );
+    	tabpane.getSelectionModel().select(syntaxHighlighterTab);
+    }
+    
+    
+    public ArrayList<EditorTab> getEditorTabs() {
+    	return editorTabs;
+    }
+    
+    
+    public EditorTab getActiveEditorTab() {
+    	return currentEditorTab;
+    }
+    
+    
+    public EditorTab getSelectedEditorTab() {
+    	return selectedEditorTab;
+    }
+    
+    public ConvertTextTab getConvertTextTab() {
+    	return textTab;
+    }
+    
+    private void loadDemo(Menu tabsMenu, Image visibleIcon, ColorAdjust monochrome) {
+    	textTab.clearAll();
+    	textTab.setTextIn( "ሰላም ዓለም" );
     	
     	setScriptIn( "Ethiopic" );
     	setScriptOut( "IPA" );
-    	setVariantOut( "Amharic" );
+    	setVariantOut( "Amharic");
     	selectedTransliteration = "am-am_FONIPA.xml";
     	transliterationDirection = "both";
+    	transliterationAlias = "am-fonipa-t-am";
 
     	for(MenuItem item: outScriptMenu.getItems() ) {
     		((RadioMenuItem)item).setSelected( false );
-    		/*
-    		RadioMenuItem rItem = (RadioMenuItem)item;
-    		if ( "IPA".equals( rItem.getText() ) ) {
-    			rItem.setSelected( true );
-    		}
-    		*/
     	}
     	for(MenuItem item: outVariantMenu.getItems() ) {
     		((RadioMenuItem)item).setSelected( false );
-    		/*
-    		RadioMenuItem rItem = (RadioMenuItem)item;
-    		if ( "Amharic".equals( rItem.getText() ) ) {
-    			rItem.setSelected( true );
-    		}
-    		*/
     	}
     	
-    	
     	try {
-        	editor.loadResourceFile( selectedTransliteration );
-        	editTab.setText( selectedTransliteration );
-
-        	setUseEditor();
+    		currentEditorTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
+    		currentEditorTab.getEditor().loadResourceFile( selectedTransliteration );
+    		// currentEditorTab.setText( selectedTransliteration );
+    		setUseEditor( selectedTransliteration );
         }
         catch(IOException ex) {
-        	errorAlert(ex, "Error opening: " + externalIcuFile.getName() );
+        	errorAlert(ex, "Error opening: " + selectedTransliteration );
         }
     }
 
