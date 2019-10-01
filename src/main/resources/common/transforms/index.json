@@ -281,15 +281,15 @@
 		},
 		"Ethiopic" : {
          		"IPA" : [
-				{ "name": "Amharic", "direction": "both", "path": "am-am_FONIPA.xml" }
+				  { "name": "Amharic", "direction": "both", "path": "am-am_FONIPA.xml" }
 			],
 			"Latin" : [
-		        	{
-		        	"Amharic" : [
- 						{ "name": "BGN", "direction": "forward", "path": "Amharic-Latin-BGN.xml" }
+				  { "name": "Aethiopica", "direction": "both", "path": "Ethiopic-Latin-Aethiopica.xml" },
+				{
+				  "BGN" : [
+						{ "name": "Amharic", "direction": "forward", "path": "Amharic-Latin-BGN.xml" }
 					]
-				 },
-				 { "name": "Aethiopica", "direction": "both", "path": "Ethiopic-Latin-Aethiopica.xml" }
+				  }
     			]
 		},
 		"Georgian" : {

@@ -482,7 +482,7 @@ public final class Xliterator extends Application {
         filesTab.setOnSelectionChanged( evt -> {
         	if( filesTab.isSelected() ) {
         		fileMenuItem.setDisable( false );
-        		loadInternalMenuItem.setDisable( true );
+        		// loadInternalMenuItem.setDisable( true );
         		saveMenuItem.setDisable( true );
         		saveAsMenuItem.setDisable( true );
         		toggleEditMenu( true );
@@ -497,8 +497,8 @@ public final class Xliterator extends Application {
         textTab.setClosable( false );
         textTab.setOnSelectionChanged( evt -> {
         	if( textTab.isSelected() ) {
-        		fileMenuItem.setDisable( true );
-        		loadInternalMenuItem.setDisable( true );
+        		// fileMenuItem.setDisable( true );
+        		// loadInternalMenuItem.setDisable( true );
         		saveMenuItem.setDisable( true );
         		saveAsMenuItem.setDisable( true );
         		currentEditorTab = null;
