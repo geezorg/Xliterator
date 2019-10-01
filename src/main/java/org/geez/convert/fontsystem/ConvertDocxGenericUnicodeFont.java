@@ -30,7 +30,7 @@ public class ConvertDocxGenericUnicodeFont extends ConvertFontSystem {
 		
 		try {
 			String rulesText = editorText;
-			if( editorText.startsWith( "<?xml" ) ) {
+			if( editorText.trim().startsWith( "<?xml" ) ) {
 				rulesText = readRulesStringXML( editorText );
 			}
 			xlit = Transliterator.createFromRules( "Xliterator-" + UUID.randomUUID(), rulesText, Transliterator.FORWARD );

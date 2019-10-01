@@ -241,7 +241,7 @@ public class XliteratorConfig extends ICUHelper {
 	  		String rulesFilePath = (path.contains( "/" ) ) ? path : "common/transforms/" + path ; 
 	  		String direction = object.get( "direction" ).getAsString();
 	  		
-	  		registerTransliteration( alias, direction, rulesFilePath );
+	  		registerTransliterationFile( alias, direction, rulesFilePath );
 	  		registered.add( alias );
 		}
 	}

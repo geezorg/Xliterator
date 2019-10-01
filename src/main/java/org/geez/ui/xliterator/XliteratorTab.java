@@ -13,9 +13,10 @@ import javafx.scene.control.Menu;
 public abstract class XliteratorTab extends DraggableTab {
 	
 	protected boolean converted = false;
-	protected String scriptIn = null;
-	protected String scriptOut = null;
+	protected String scriptIn   = null;
+	protected String scriptOut  = null;
 	protected String variantOut = null;
+	protected String alias = null;
 	protected String selectedTransliteration = null;
 	protected String transliterationDirection = null;
 	protected String caseOption = null;
@@ -133,11 +134,12 @@ public abstract class XliteratorTab extends DraggableTab {
     }
     
     
-    public void setVariantOut( String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies ) {
+    public void setVariantOut( String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies , String alias) {
     	this.variantOut = variantOut;
     	this.selectedTransliteration  = selectedTransliteration;
     	this.transliterationDirection = transliterationDirection;
     	this.dependencies = dependencies;
+    	this.alias = alias;
     }
     
     
