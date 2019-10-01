@@ -31,6 +31,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -113,6 +114,8 @@ public final class Xliterator extends Application {
 	private XliteratorConfig config = null;
 	
     private Image visibleIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
+    private Image snapshotArrowForward = new Image( ClassLoader.getSystemResourceAsStream( "images/right-arrow.png" ) );
+    private Image snapshotArrowBoth    = new Image( ClassLoader.getSystemResourceAsStream( "images/exchange-arrows.png" ) );
     private ColorAdjust monochrome = new ColorAdjust();
 	
 	
@@ -204,7 +207,7 @@ public final class Xliterator extends Application {
     	return outScriptMenu;
     }
     
-    
+
     private Menu createOutVaraintsMenu(String outVariant) {
     	outVariantMenu.getItems().clear();
         ToggleGroup groupVariantOutMenu = new ToggleGroup();
@@ -243,6 +246,17 @@ public final class Xliterator extends Application {
     	        			setVariantOut( subVariantKey + " - " + name ); 
     	        		});
     	        		menuItem.setId( transliterationID );
+    	        		
+    	        		ImageView imageView = null;
+    	        		if( direction.equals( "both" ) ) {
+    	        			imageView= new ImageView( snapshotArrowBoth );
+    	        		}
+    	        		else {
+    	        			imageView= new ImageView( snapshotArrowForward );    	        			
+    	        		}
+    	                menuItem.setGraphic( imageView );
+    	                
+    	                
     	        		variantSubMenu.getItems().add( menuItem );
     		    	}
             		outVariantMenu.getItems().add( variantSubMenu );
@@ -268,6 +282,16 @@ public final class Xliterator extends Application {
         			setVariantOut( name ); 
         		});
         		menuItem.setId( transliterationID );
+        		
+        		ImageView imageView = null;
+        		if( direction.equals( "both" ) ) {
+        			imageView= new ImageView( snapshotArrowBoth );
+        		}
+        		else {
+        			imageView= new ImageView( snapshotArrowForward );    	        			
+        		}
+                menuItem.setGraphic( imageView );
+                
         		outVariantMenu.getItems().add( menuItem );
     		}
     	}
@@ -278,6 +302,7 @@ public final class Xliterator extends Application {
     	return outVariantMenu;
     }
     
+
     private final MenuItem fileMenuItem = new MenuItem( "Select Files..." ); 
     private EditorTab createNewEditor( String title, Menu tabsMenu, Image visibleIcon, ColorAdjust monochrome ) {
     	EditorTab editorTab = new EditorTab( title );
@@ -499,7 +524,7 @@ public final class Xliterator extends Application {
         //=========================== END SCRIPT MENUS =============================================
         //
         
-        
+
         //
         //=========================== BEGIN HELP MENU =============================================
         //
