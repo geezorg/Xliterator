@@ -92,7 +92,7 @@ public class ConvertTextTab extends XliteratorTab {
 	    	}
 		}
 		catch(Exception ex) {
-        	errorAlert(ex, "Translteration Defition Error. Correct to Proceed." );
+        	errorAlert(ex, "Translteration Definition Error. Correct to Proceed." );
 			return;
 		}
     }

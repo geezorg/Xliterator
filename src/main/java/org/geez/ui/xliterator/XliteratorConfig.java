@@ -97,7 +97,7 @@ public class XliteratorConfig extends ICUHelper {
     		
     	}
     	else {
-    		scriptList = new ArrayList<String>( config.getAsJsonObject("Scripts").keySet() );
+    		scriptList = new ArrayList<String>( config.getAsJsonObject("Scripts").getAsJsonObject( inScript ).keySet() );
     	}
     	
         Collections.sort(scriptList);
