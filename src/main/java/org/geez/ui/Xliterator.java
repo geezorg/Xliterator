@@ -1128,7 +1128,6 @@ public final class Xliterator extends Application {
     	try {
     		currentEditorTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
     		currentEditorTab.getEditor().loadResourceFile( selectedTransliteration );
-    		// currentEditorTab.setText( selectedTransliteration );
     		setUseEditor( selectedTransliteration );
         }
         catch(IOException ex) {

@@ -75,7 +75,7 @@ public class EditorTab extends XliteratorTab {
         Menu editorFontMenu     = createFontMenu( editor );
         Menu editorFontSizeMenu = createFontSizeMenu( editor );
         
-        transliterationDirection = (String)getProperties().get( "alias" );
+        alias = (String)getProperties().get( "alias" );
         
         MenuBar editorMenutBar  = new MenuBar();
         editorMenutBar.getMenus().addAll( editorFontMenu, editorFontSizeMenu );
