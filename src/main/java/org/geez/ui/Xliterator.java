@@ -112,8 +112,8 @@ public final class Xliterator extends Application {
 	private XliteratorConfig config = null;
 	
     private Image visibleIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
-    private Image arrowForwardIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_right_grey_18x18.png" ) ); 
-    private Image arrowBothIcon    = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_double_grey_18x18.png" ) );
+    private Image arrowForwardIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_right_grey_16x16.png" ) ); 
+    private Image arrowBothIcon    = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_double_grey_16x16.png" ) );
     private ColorAdjust monochrome = new ColorAdjust();
 	
 	
