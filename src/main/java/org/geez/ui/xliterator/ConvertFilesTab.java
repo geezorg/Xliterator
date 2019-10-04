@@ -22,7 +22,6 @@ import org.geez.convert.docx.DocxProcessor;
 import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
 import org.geez.convert.fontsystem.ConvertFontSystem;
 import org.geez.ui.Xliterator;
-import org.geez.ui.Xliterator;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
