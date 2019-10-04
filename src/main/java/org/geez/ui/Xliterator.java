@@ -61,7 +61,6 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
- 
 
 public final class Xliterator extends Application {
  
@@ -578,6 +577,22 @@ public final class Xliterator extends Application {
         
         final MenuItem demoMenuItem = new MenuItem( "Load Demo" );
         helpMenu.getItems().add( demoMenuItem );
+        
+        final Menu developerMenu = new Menu( "Developer" );
+        final MenuItem makeJsonMenuItem = new MenuItem( "Create JSON Index" );
+        developerMenu.getItems().add( makeJsonMenuItem );
+        helpMenu.getItems().add( developerMenu );
+        
+        makeJsonMenuItem.setOnAction( evn -> {
+	        final FileChooser fileChooser = new FileChooser();
+	    	configureFileChooserICU(fileChooser);    
+	    	File spreadsheetFile = fileChooser.showOpenDialog( stage );
+	        if( spreadsheetFile == null ) {
+	        	return;
+	        }
+	        System.out.println( "Developer > Make JSON" );
+        });
+        
         //
         //=========================== END HELP MENU =============================================
         //
