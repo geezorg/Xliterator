@@ -78,19 +78,19 @@ public final class Xliterator extends Application {
 	// an object could be introduced to hold the various transliteration attributes:
 	private String selectedTransliteration  = null;
 	private String transliterationDirection = null;
-	private String transliterationAlias = null;
+	private String transliterationAlias     = null;
 	private ArrayList<String> transliterationDependencies = null;
 	
-    private String defaultFontFamily        = null;
-    private DraggableTabPane tabpane        = new DraggableTabPane();
-    private MenuItem loadInternalMenuItem   = new MenuItem( "Load Selected Transliteration" );
+    private String defaultFontFamily          = null;
+    private DraggableTabPane tabpane          = new DraggableTabPane();
+    private MenuItem loadInternalMenuItem     = new MenuItem( "Load Selected Transliteration" );
 
     private SyntaxHighlighterTab syntaxHighlighterTab = new SyntaxHighlighterTab( "Syntax Highlighter" );
     private ConvertTextTab textTab            = new ConvertTextTab( "Convert Text", this );
     private ConvertFilesTab filesTab          = new ConvertFilesTab( "Convert Files", this );
     private ProcessorManager processorManager = new ProcessorManager();
     
-    private ArrayList<EditorTab> editorTabs = new ArrayList<EditorTab>(); 
+    private ArrayList<EditorTab> editorTabs   = new ArrayList<EditorTab>(); 
 
     private EditorTab currentEditorTab  = null;
     private EditorTab selectedEditorTab = null;
@@ -579,11 +579,25 @@ public final class Xliterator extends Application {
         helpMenu.getItems().add( demoMenuItem );
         
         final Menu developerMenu = new Menu( "Developer" );
+        final MenuItem referenceSpreadsheetMenuItem = new MenuItem( "Get Reference Spreadshet" );
         final MenuItem makeJsonMenuItem = new MenuItem( "Create JSON Index" );
-        developerMenu.getItems().add( makeJsonMenuItem );
+        developerMenu.getItems().addAll( referenceSpreadsheetMenuItem, makeJsonMenuItem );
         helpMenu.getItems().add( developerMenu );
         
-        makeJsonMenuItem.setOnAction( evn -> {
+        referenceSpreadsheetMenuItem.setOnAction( evt -> {
+        	File spreadsheet = config.exportReferenceSpreadsheet( stage );
+        	if( spreadsheet == null ) {
+        		return;
+        	}
+        	try {
+        		desktop.open( spreadsheet );
+        	}
+        	catch(IOException ex) {
+        		errorAlert( ex, "Could not open: " +spreadsheet.getPath() );
+        	}
+        });
+        
+        makeJsonMenuItem.setOnAction( evt -> {
 	        final FileChooser fileChooser = new FileChooser();
 	    	configureFileChooserICU(fileChooser);    
 	    	File spreadsheetFile = fileChooser.showOpenDialog( stage );

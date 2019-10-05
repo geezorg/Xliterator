@@ -1,21 +1,31 @@
 package org.geez.ui.xliterator;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.geez.convert.helpers.ICUHelper;
 import org.xml.sax.SAXException;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 
 public class XliteratorConfig extends ICUHelper {
@@ -313,5 +323,49 @@ public class XliteratorConfig extends ICUHelper {
         // System.out.println( gson.toJson( targetObject ) );
         
     }
+    
+    
+    
+    public File exportReferenceSpreadsheet( Stage stage ) {
+    	File targetFile = null;
+		try {
+			String spreadsheetName = "ICU-Transliterations.xlsx";
+			
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setInitialFileName( spreadsheetName );
+			fileChooser.setTitle( "Save Transliteratios Spreadsheet" );
+			
+
+			targetFile = fileChooser.showSaveDialog( stage );
+			if (targetFile == null) {  // the user cancelled the save
+				return null;
+			}
+			// Create file 
+			// FileWriter fstream = new FileWriter( targetFile );
+			// BufferedWriter out = new BufferedWriter ( fstream );
+			
+			InputStream in = ClassLoader.getSystemResourceAsStream( "data/" + spreadsheetName );
+			OutputStream out = new FileOutputStream( targetFile );
+			IOUtils.copy(in, out);
+			
+			//Close the output stream
+			//out.close();
+		}
+    	catch (Exception ex){
+    		errorAlert( ex, "An error occured while saving the file \"" + targetFile.getPath() + "\":"  );
+    	}
+		
+		return targetFile;
+	}
+    
+	
+    
+	protected void errorAlert( Exception ex, String header ) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle( "An Exception has occured" );
+        alert.setHeaderText( header );
+        alert.setContentText( ex.getMessage() );
+        alert.showAndWait();
+	}
     
 }
