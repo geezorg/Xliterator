@@ -15,6 +15,7 @@ import org.geez.ui.xliterator.ConvertFilesTab;
 import org.geez.ui.xliterator.ConvertTextTab;
 import org.geez.ui.xliterator.EditorTab;
 import org.geez.ui.xliterator.ICUEditor;
+import org.geez.ui.xliterator.JsonIndexGenerator;
 import org.geez.ui.xliterator.SyntaxHighlighterTab;
 import org.geez.ui.xliterator.XliteratorConfig;
 import org.geez.ui.xliterator.XliteratorTab;
@@ -140,7 +141,7 @@ public final class Xliterator extends Application {
 	
 	
     private static void configureFileChooserICU( final FileChooser fileChooser ) {      
-    	fileChooser.setTitle( "View Word Files" );
+    	fileChooser.setTitle( "View ICU Files" );
         fileChooser.setInitialDirectory(
         		new File( System.getProperty( "user.home" ) )
         );                 
@@ -460,26 +461,26 @@ public final class Xliterator extends Application {
         fileMenuItem.setDisable( true );
         
         saveMenuItem.setOnAction( actionEvent -> currentEditorTab.saveContent( stage, false ) );
-        saveMenuItem.setDisable(true);
-        saveMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN));
+        saveMenuItem.setDisable( true );
+        saveMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN) );
         
         saveAsMenuItem.setOnAction( actionEvent -> currentEditorTab.saveContent( stage, true ) );
-        saveAsMenuItem.setDisable(true);
+        saveAsMenuItem.setDisable( true );
         saveAsMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN) );
 
 
     	// Add transliteration file selection option:
 		final MenuItem openMenuItem = new MenuItem( "Open ICU File..." );
-        openMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN));
+        openMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN) );
 		
         loadInternalMenuItem.setDisable( true );
-        loadInternalMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.SHORTCUT_DOWN));
+        loadInternalMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.L, KeyCombination.SHORTCUT_DOWN) );
         
         MenuItem quitMenuItem = new MenuItem( "_Quit Xliterator" );
-        quitMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN));
+        quitMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN)) ;
         quitMenuItem.setOnAction( evt -> {
     			Window window = primaryStage.getScene().getWindow();
-    			window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
+    			window.fireEvent( new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST) );
         });
         
         
@@ -599,11 +600,20 @@ public final class Xliterator extends Application {
         
         makeJsonMenuItem.setOnAction( evt -> {
 	        final FileChooser fileChooser = new FileChooser();
-	    	configureFileChooserICU(fileChooser);    
+	    	fileChooser.setTitle( "Select an Excel File" );
+	        fileChooser.setInitialDirectory(
+	        		new File( System.getProperty( "user.home" ) )
+	        );                 
+	        fileChooser.getExtensionFilters().add(
+	        		new FileChooser.ExtensionFilter( "*.xlsx", "*.xlsx" )
+	        );
 	    	File spreadsheetFile = fileChooser.showOpenDialog( stage );
 	        if( spreadsheetFile == null ) {
 	        	return;
 	        }
+	        JsonIndexGenerator generator = new JsonIndexGenerator( stage );
+	        generator.generateIndex( spreadsheetFile );
+
 	        System.out.println( "Developer > Make JSON" );
         });
         
@@ -667,7 +677,7 @@ public final class Xliterator extends Application {
         });
         openMenuItem.setOnAction( evt -> {
 		        final FileChooser fileChooser = new FileChooser();
-		    	configureFileChooserICU(fileChooser);    
+		    	configureFileChooserICU(fileChooser);
 		    	File externalIcuFile = fileChooser.showOpenDialog( stage );
 		        if( externalIcuFile == null ) {
 		        	return;
