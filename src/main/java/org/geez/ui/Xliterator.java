@@ -1,7 +1,9 @@
 package org.geez.ui;
 
 import java.awt.Desktop;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -612,7 +614,10 @@ public final class Xliterator extends Application {
 	        	return;
 	        }
 	        JsonIndexGenerator generator = new JsonIndexGenerator( stage );
-	        generator.generateIndex( spreadsheetFile );
+	        
+	        String jsonIndex = generator.generateIndex( spreadsheetFile );
+	        
+	        exportConvertedSpreadsheet( stage, jsonIndex );
         });
         
         //
@@ -1171,5 +1176,35 @@ public final class Xliterator extends Application {
         	errorAlert(ex, "Error opening: " + selectedTransliteration );
         }
     }
+    
+    
+    
+    public File exportConvertedSpreadsheet( Stage stage, String jsonIndex ) {
+    	File targetFile = null;
+		try {
+			
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setInitialFileName( "transliterations.json" );
+			fileChooser.setTitle( "Save Transliteratios Spreadsheet" );
+			
+
+			targetFile = fileChooser.showSaveDialog( stage );
+			if (targetFile == null) {  // the user cancelled the save
+				return null;
+			}
+			// Create file 
+			FileWriter fstream = new FileWriter( targetFile );
+			BufferedWriter out = new BufferedWriter ( fstream );
+			out.write( jsonIndex );
+			
+			//Close the output stream
+			out.close();
+		}
+    	catch (Exception ex){
+    		errorAlert( ex, "An error occured while saving the file \"" + targetFile.getPath() + "\":"  );
+    	}
+		
+		return targetFile;
+	}   
 
 }

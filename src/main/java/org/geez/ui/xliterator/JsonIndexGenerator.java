@@ -20,6 +20,8 @@ import org.xlsx4j.sml.Row;
 import org.xlsx4j.sml.SheetData;
 import org.xlsx4j.sml.Worksheet;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
@@ -38,7 +40,7 @@ public class JsonIndexGenerator {
 	}
 
 	
-	public void generateIndex( File spreadsheetFile ) {
+	public String generateIndex( File spreadsheetFile ) {
 
 		try {
 			
@@ -50,16 +52,17 @@ public class JsonIndexGenerator {
 		
 			DataFormatter formatter = new DataFormatter();
 
-			// Now lets print the cell content
-			displayContent(sheet, formatter);
+			return convertContext(sheet, formatter);
 		}
 		catch( Exception ex ) {
 			System.err.println( ex );
 		}
+		
+		return null;
 	}
 	
 	
-	private static void displayContent(WorksheetPart sheet, DataFormatter formatter) throws Docx4JException {
+	private static String convertContext(WorksheetPart sheet, DataFormatter formatter) throws Docx4JException {
 
 		Worksheet ws = sheet.getContents();
 		SheetData data = ws.getSheetData();
@@ -227,7 +230,9 @@ public class JsonIndexGenerator {
 			scriptOutArray.add( variantOutObject );
 		}
 		
-		System.err.println( index.toString() );
+		Gson gson = new GsonBuilder().setPrettyPrinting().create();
+		
+		return gson.toJson( index );
 		
 	}
 	
