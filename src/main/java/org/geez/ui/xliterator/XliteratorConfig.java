@@ -322,8 +322,7 @@ public class XliteratorConfig extends ICUHelper {
         // Gson gson = new GsonBuilder().setPrettyPrinting().create();
         // System.out.println( gson.toJson( targetObject ) );
         
-    }
-    
+    } 
     
     
     public File exportReferenceSpreadsheet( Stage stage ) {
