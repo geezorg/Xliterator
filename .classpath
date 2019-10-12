@@ -6,7 +6,6 @@
 		</attributes>
 		<accessrules>
 			<accessrule kind="accessible" pattern="javafx/**"/>
-			<accessrule kind="accessible" pattern="com/apple/eawt/**"/>
 		</accessrules>
 	</classpathentry>
 	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
