@@ -613,8 +613,6 @@ public final class Xliterator extends Application {
 	        }
 	        JsonIndexGenerator generator = new JsonIndexGenerator( stage );
 	        generator.generateIndex( spreadsheetFile );
-
-	        System.out.println( "Developer > Make JSON" );
         });
         
         //

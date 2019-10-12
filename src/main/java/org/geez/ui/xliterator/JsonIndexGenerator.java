@@ -20,6 +20,7 @@ import org.xlsx4j.sml.Row;
 import org.xlsx4j.sml.SheetData;
 import org.xlsx4j.sml.Worksheet;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javafx.stage.FileChooser;
@@ -85,8 +86,8 @@ public class JsonIndexGenerator {
 		for (Row r : rows ) {
 			System.out.println("row " + r.getR() );		
 			
-			String file = null, scriptIn = null, variantIn = null, scriptOut = null,
-					variantOut = null, direction = null, alias = null, backwardAlias = null,
+			String file = null, scriptIn = null, variantIn = "_base", scriptOut = null,
+					variantOut = "_base", direction = null, alias = null, backwardAlias = null,
 					dependencies = null, visibility = null, tooltip = null;
 			
 			
@@ -103,6 +104,15 @@ public class JsonIndexGenerator {
 						
 					case 'C':
 						variantIn = formatter.formatCellValue( c );
+						if( variantIn == null ) {
+							variantIn = "_base";
+						}
+						else {
+							variantIn = variantIn.trim();
+							if( "".equals( variantIn ) ) {
+								variantIn = "_base";
+							}
+						}
 						break;
 						
 					case 'D':
@@ -111,6 +121,15 @@ public class JsonIndexGenerator {
 						
 					case 'E':
 						variantOut = formatter.formatCellValue( c );
+						if( variantOut == null ) {
+							variantOut = "_base";
+						}
+						else {
+							variantOut = variantOut.trim();
+							if( "".equals( variantOut ) ) {
+								variantOut = "_base";
+							}
+						}
 						break;
 						
 					case 'F':
@@ -119,30 +138,93 @@ public class JsonIndexGenerator {
 						
 					case 'G':
 						alias = formatter.formatCellValue( c );
+						if( alias != null ) {
+							alias = alias.trim();
+							if( "".equals( alias ) ) {
+								alias = null;
+							}
+						}
 						break;
 							
 					case 'H':
 						backwardAlias = formatter.formatCellValue( c );
+						if( backwardAlias != null ) {
+							backwardAlias = backwardAlias.trim();
+							if( "".equals( backwardAlias) ) {
+								backwardAlias = null;
+							}
+						}
 						break;
 						
 					case 'I':
-						dependencies = formatter.formatCellValue( c );
-						break;
-					
+							visibility = formatter.formatCellValue( c );
+							if( visibility != null ) {
+								visibility = visibility.trim();
+								if( "".equals( visibility) ) {
+									visibility = null;
+								}
+							}
+							break;
+
 					case 'J':
-						visibility = formatter.formatCellValue( c );
+						dependencies = formatter.formatCellValue( c );
+						if( dependencies != null ) {
+							dependencies = dependencies.trim();
+							if( "".equals( dependencies ) ) {
+								dependencies = null;
+							}
+						}
 						break;
-						
+	
 					case 'K':
 						tooltip = formatter.formatCellValue( c );
+						if( tooltip != null ) {
+							tooltip = tooltip.trim();
+							if( "".equals( tooltip) ) {
+								tooltip = null;
+							}
+						}
 						break;	
 				}
 			}
 
-			if(! index.has( scriptIn ) ) {
-				index.add( scriptIn, new JsonObject() );
+			if(! scripts.has( scriptIn ) ) {
+				scripts.add( scriptIn, new JsonObject() );
 			}
-
+			JsonObject scriptInObject = scripts.get( scriptIn ).getAsJsonObject();
+			if(! scriptInObject.has( variantIn ) ) {
+				scriptInObject.add( variantIn,  new JsonObject() );
+			}
+			JsonObject variantInObject = scriptInObject.get( variantIn ).getAsJsonObject();
+			if(! variantInObject.has( scriptOut ) ) {
+				variantInObject.add( scriptOut,  new JsonArray() );
+			}
+			JsonArray scriptOutArray = variantInObject.get( scriptOut ).getAsJsonArray();
+			JsonObject variantOutObject = new JsonObject();
+			variantOutObject.addProperty( "new", variantOut );
+			variantOutObject.addProperty( "direction", direction );
+			if( (alias != null) ) {
+				variantOutObject.addProperty( "alias", alias );
+			}
+			if( (backwardAlias != null) ) {
+				variantOutObject.addProperty( "backwardAlias", backwardAlias );
+			}
+			if( (visibility != null) ) {
+				variantOutObject.addProperty( "visibility", visibility );
+			}
+			if( (tooltip != null) ) {
+				variantOutObject.addProperty( "tooltip", tooltip );
+			}
+			if( (dependencies != null) ) {
+				JsonArray dependencyArray = new JsonArray();
+				String[] tempArray = dependencies.split( "," );
+				for(String dependency: tempArray) {
+					dependencyArray.add( dependency );
+				}
+				variantOutObject.add( "dependencies", dependencyArray );
+			}
+			
+			scriptOutArray.add( variantOutObject );
 		}
 		
 		System.err.println( index.toString() );
