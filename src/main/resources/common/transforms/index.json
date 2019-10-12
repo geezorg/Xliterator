@@ -8,7 +8,7 @@
 						{ "name": "Pashto", "direction": "forward", "path": "Pashto-Latin-BGN.xml" },
 						{ "name": "Persian", "direction": "forward", "path": "Persian-Latin-BGN.xml" }
 					]
-				 },
+				},
 				{ "name": "Latin", "direction": "both", "path": "Arabic-Latin.xml" } 
 			],
 			"IPA" : [

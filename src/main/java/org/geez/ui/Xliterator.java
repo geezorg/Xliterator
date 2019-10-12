@@ -1,7 +1,9 @@
 package org.geez.ui;
 
 import java.awt.Desktop;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import org.geez.ui.xliterator.ConvertFilesTab;
 import org.geez.ui.xliterator.ConvertTextTab;
 import org.geez.ui.xliterator.EditorTab;
 import org.geez.ui.xliterator.ICUEditor;
+import org.geez.ui.xliterator.JsonIndexGenerator;
 import org.geez.ui.xliterator.SyntaxHighlighterTab;
 import org.geez.ui.xliterator.XliteratorConfig;
 import org.geez.ui.xliterator.XliteratorTab;
@@ -61,7 +64,6 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.stage.WindowEvent;
 
- 
 
 public final class Xliterator extends Application {
  
@@ -79,19 +81,19 @@ public final class Xliterator extends Application {
 	// an object could be introduced to hold the various transliteration attributes:
 	private String selectedTransliteration  = null;
 	private String transliterationDirection = null;
-	private String transliterationAlias = null;
+	private String transliterationAlias     = null;
 	private ArrayList<String> transliterationDependencies = null;
 	
-    private String defaultFontFamily        = null;
-    private DraggableTabPane tabpane        = new DraggableTabPane();
-    private MenuItem loadInternalMenuItem   = new MenuItem( "Load Selected Transliteration" );
+    private String defaultFontFamily          = null;
+    private DraggableTabPane tabpane          = new DraggableTabPane();
+    private MenuItem loadInternalMenuItem     = new MenuItem( "Load Selected Transliteration" );
 
     private SyntaxHighlighterTab syntaxHighlighterTab = new SyntaxHighlighterTab( "Syntax Highlighter" );
     private ConvertTextTab textTab            = new ConvertTextTab( "Convert Text", this );
     private ConvertFilesTab filesTab          = new ConvertFilesTab( "Convert Files", this );
     private ProcessorManager processorManager = new ProcessorManager();
     
-    private ArrayList<EditorTab> editorTabs = new ArrayList<EditorTab>(); 
+    private ArrayList<EditorTab> editorTabs   = new ArrayList<EditorTab>(); 
 
     private EditorTab currentEditorTab  = null;
     private EditorTab selectedEditorTab = null;
@@ -112,8 +114,8 @@ public final class Xliterator extends Application {
 	private XliteratorConfig config = null;
 	
     private Image visibleIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
-    private Image arrowForwardIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_right_grey_18x18.png" ) ); 
-    private Image arrowBothIcon    = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_double_grey_18x18.png" ) );
+    private Image arrowForwardIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_right_grey_16x16.png" ) ); 
+    private Image arrowBothIcon    = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_double_grey_16x16.png" ) );
     private ColorAdjust monochrome = new ColorAdjust();
 	
 	
@@ -141,7 +143,7 @@ public final class Xliterator extends Application {
 	
 	
     private static void configureFileChooserICU( final FileChooser fileChooser ) {      
-    	fileChooser.setTitle( "View Word Files" );
+    	fileChooser.setTitle( "View ICU Files" );
         fileChooser.setInitialDirectory(
         		new File( System.getProperty( "user.home" ) )
         );                 
@@ -461,26 +463,26 @@ public final class Xliterator extends Application {
         fileMenuItem.setDisable( true );
         
         saveMenuItem.setOnAction( actionEvent -> currentEditorTab.saveContent( stage, false ) );
-        saveMenuItem.setDisable(true);
-        saveMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN));
+        saveMenuItem.setDisable( true );
+        saveMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN) );
         
         saveAsMenuItem.setOnAction( actionEvent -> currentEditorTab.saveContent( stage, true ) );
-        saveAsMenuItem.setDisable(true);
+        saveAsMenuItem.setDisable( true );
         saveAsMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.A, KeyCombination.SHORTCUT_DOWN) );
 
 
     	// Add transliteration file selection option:
 		final MenuItem openMenuItem = new MenuItem( "Open ICU File..." );
-        openMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN));
+        openMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.O, KeyCombination.SHORTCUT_DOWN) );
 		
         loadInternalMenuItem.setDisable( true );
-        loadInternalMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.L, KeyCombination.SHORTCUT_DOWN));
+        loadInternalMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.L, KeyCombination.SHORTCUT_DOWN) );
         
         MenuItem quitMenuItem = new MenuItem( "_Quit Xliterator" );
-        quitMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN));
+        quitMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN)) ;
         quitMenuItem.setOnAction( evt -> {
     			Window window = primaryStage.getScene().getWindow();
-    			window.fireEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST));
+    			window.fireEvent( new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST) );
         });
         
         
@@ -578,6 +580,46 @@ public final class Xliterator extends Application {
         
         final MenuItem demoMenuItem = new MenuItem( "Load Demo" );
         helpMenu.getItems().add( demoMenuItem );
+        
+        final Menu developerMenu = new Menu( "Developer" );
+        final MenuItem referenceSpreadsheetMenuItem = new MenuItem( "Get Reference Spreadshet" );
+        final MenuItem makeJsonMenuItem = new MenuItem( "Create JSON Index" );
+        developerMenu.getItems().addAll( referenceSpreadsheetMenuItem, makeJsonMenuItem );
+        helpMenu.getItems().add( developerMenu );
+        
+        referenceSpreadsheetMenuItem.setOnAction( evt -> {
+        	File spreadsheet = config.exportReferenceSpreadsheet( stage );
+        	if( spreadsheet == null ) {
+        		return;
+        	}
+        	try {
+        		desktop.open( spreadsheet );
+        	}
+        	catch(IOException ex) {
+        		errorAlert( ex, "Could not open: " +spreadsheet.getPath() );
+        	}
+        });
+        
+        makeJsonMenuItem.setOnAction( evt -> {
+	        final FileChooser fileChooser = new FileChooser();
+	    	fileChooser.setTitle( "Select an Excel File" );
+	        fileChooser.setInitialDirectory(
+	        		new File( System.getProperty( "user.home" ) )
+	        );                 
+	        fileChooser.getExtensionFilters().add(
+	        		new FileChooser.ExtensionFilter( "*.xlsx", "*.xlsx" )
+	        );
+	    	File spreadsheetFile = fileChooser.showOpenDialog( stage );
+	        if( spreadsheetFile == null ) {
+	        	return;
+	        }
+	        JsonIndexGenerator generator = new JsonIndexGenerator( stage );
+	        
+	        String jsonIndex = generator.generateIndex( spreadsheetFile );
+	        
+	        exportConvertedSpreadsheet( stage, jsonIndex );
+        });
+        
         //
         //=========================== END HELP MENU =============================================
         //
@@ -638,7 +680,7 @@ public final class Xliterator extends Application {
         });
         openMenuItem.setOnAction( evt -> {
 		        final FileChooser fileChooser = new FileChooser();
-		    	configureFileChooserICU(fileChooser);    
+		    	configureFileChooserICU(fileChooser);
 		    	File externalIcuFile = fileChooser.showOpenDialog( stage );
 		        if( externalIcuFile == null ) {
 		        	return;
@@ -1128,12 +1170,41 @@ public final class Xliterator extends Application {
     	try {
     		currentEditorTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
     		currentEditorTab.getEditor().loadResourceFile( selectedTransliteration );
-    		// currentEditorTab.setText( selectedTransliteration );
     		setUseEditor( selectedTransliteration );
         }
         catch(IOException ex) {
         	errorAlert(ex, "Error opening: " + selectedTransliteration );
         }
     }
+    
+    
+    
+    public File exportConvertedSpreadsheet( Stage stage, String jsonIndex ) {
+    	File targetFile = null;
+		try {
+			
+			FileChooser fileChooser = new FileChooser();
+			fileChooser.setInitialFileName( "transliterations.json" );
+			fileChooser.setTitle( "Save Transliteratios Spreadsheet" );
+			
+
+			targetFile = fileChooser.showSaveDialog( stage );
+			if (targetFile == null) {  // the user cancelled the save
+				return null;
+			}
+			// Create file 
+			FileWriter fstream = new FileWriter( targetFile );
+			BufferedWriter out = new BufferedWriter ( fstream );
+			out.write( jsonIndex );
+			
+			//Close the output stream
+			out.close();
+		}
+    	catch (Exception ex){
+    		errorAlert( ex, "An error occured while saving the file \"" + targetFile.getPath() + "\":"  );
+    	}
+		
+		return targetFile;
+	}   
 
 }

@@ -75,7 +75,7 @@ public class EditorTab extends XliteratorTab {
         Menu editorFontMenu     = createFontMenu( editor );
         Menu editorFontSizeMenu = createFontSizeMenu( editor );
         
-        transliterationDirection = (String)getProperties().get( "alias" );
+        alias = (String)getProperties().get( "alias" );
         
         MenuBar editorMenutBar  = new MenuBar();
         editorMenutBar.getMenus().addAll( editorFontMenu, editorFontSizeMenu );
@@ -92,6 +92,7 @@ public class EditorTab extends XliteratorTab {
         	directionBox.getSelectionModel().select(0);
         }
 
+        Button unregister = new Button( "Unregister" );
         Button register = new Button( "Register" );
         register.setTooltip( new Tooltip( "Register alias for current session" ) );
         register.setOnAction( evt -> {
@@ -108,6 +109,7 @@ public class EditorTab extends XliteratorTab {
         			config.registerTransliteration( alias, direction, editor.getText() );
         			// getProperties().put( "direction", direction );
         			getProperties().put( "alias", alias );
+        			unregister.setDisable( false );
         		}
         		catch(Exception ex) {
         			errorAlert(ex, "A registration problem has occured:" );
@@ -116,7 +118,8 @@ public class EditorTab extends XliteratorTab {
         	
         });
 
-        Button unregister = new Button( "Unregister" );
+        
+        unregister.setDisable( true );
         unregister.setTooltip( new Tooltip( "Unegister with ICU Transliterator Library" ) );
         unregister.setOnAction( evt -> {
         	Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -127,6 +130,7 @@ public class EditorTab extends XliteratorTab {
         	Optional<ButtonType> result = alert.showAndWait();
         	if (result.get() == ButtonType.OK){
         	   config.unregisterTransliteration( alias );
+        	   unregister.setDisable( true );
         	}
         }); 
         
