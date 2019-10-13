@@ -75,7 +75,7 @@ public class EditorTab extends XliteratorTab {
         Menu editorFontMenu     = createFontMenu( editor );
         Menu editorFontSizeMenu = createFontSizeMenu( editor );
         
-        alias = (String)getProperties().get( "alias" );
+        // alias = (String)getProperties().get( "alias" );
         
         MenuBar editorMenutBar  = new MenuBar();
         editorMenutBar.getMenus().addAll( editorFontMenu, editorFontSizeMenu );
@@ -84,7 +84,7 @@ public class EditorTab extends XliteratorTab {
         ChoiceBox<String> directionBox = new ChoiceBox<String>();
         directionBox.getItems().addAll( "Forward", "Both" );
         
-        transliterationDirection = (String)getProperties().get( "direction" );
+        // transliterationDirection = (String)getProperties().get( "direction" );
         if( "both".equals( transliterationDirection ) ) {
         	directionBox.getSelectionModel().select(1);	
         }
@@ -108,7 +108,7 @@ public class EditorTab extends XliteratorTab {
         			String direction = directionBox.getSelectionModel().getSelectedItem().toLowerCase();
         			config.registerTransliteration( alias, direction, editor.getText() );
         			// getProperties().put( "direction", direction );
-        			getProperties().put( "alias", alias );
+        			// getProperties().put( "alias", alias );
         			unregister.setDisable( false );
         		}
         		catch(Exception ex) {
@@ -305,7 +305,7 @@ public class EditorTab extends XliteratorTab {
     	Label label1 = new Label("Alias: ");
     	Label label2 = new Label("Direction: ");
     	TextField aliasField = new TextField();
-    	String oldAlias = (String)getProperties().get( "alias" );
+    	String oldAlias = alias; // (String)getProperties().get( "alias" );
     	if( oldAlias != null ) {
     		aliasField.setText( oldAlias );
     	}
