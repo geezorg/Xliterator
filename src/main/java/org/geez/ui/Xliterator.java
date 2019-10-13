@@ -7,6 +7,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.prefs.Preferences;
@@ -71,6 +72,7 @@ public final class Xliterator extends Application {
     private Desktop desktop = Desktop.getDesktop();
 
 	private String scriptIn   = null; // alphabetic based default
+	private String variantIn = null;
 	private String scriptOut  = null;
 	private String variantOut = null;
 	protected StatusBar statusBar = new StatusBar();
@@ -158,12 +160,39 @@ public final class Xliterator extends Application {
         ToggleGroup groupInMenu = new ToggleGroup();
         
         // Create menu from the scripts in the configuration file:
-    	List<String> scripts = config.getInScripts( true );
-    	for(String script: scripts) {
-    		RadioMenuItem menuItem = new RadioMenuItem( script );
-    		menuItem.setToggleGroup( groupInMenu );
-    		menuItem.setOnAction( evt -> setScriptIn( script ) );
-    		menu.getItems().add( menuItem );
+    	JsonObject scripts = config.getInScripts();
+    	ArrayList<String> scriptInList = new ArrayList<String>( scripts.keySet() );
+    	Collections.sort( scriptInList );
+    	
+    	for(String scriptInKey : scriptInList) {
+			//JsonObject script = scripts.getAsJsonObject( scriptKey );
+    		JsonArray variantsIn = scripts.getAsJsonArray( scriptInKey );
+    		int size = variantsIn.size();
+    		if ( size == 0 ) {
+    			RadioMenuItem menuItem = new RadioMenuItem( scriptInKey );
+    			menuItem.setToggleGroup( groupInMenu );
+        		menuItem.setOnAction( evt -> setScriptIn( scriptInKey, "_base" ) );
+        		menu.getItems().add( menuItem );
+    		}
+    		else {
+    			Menu scriptMenu = new Menu( scriptInKey );
+    			for(int i=0; i<size; i++) {
+    				String variantInKey = variantsIn.get(i).getAsString();
+    				RadioMenuItem menuItem = new RadioMenuItem( variantInKey );
+        			menuItem.setToggleGroup( groupInMenu );
+        			scriptMenu.getItems().add( menuItem );
+        			
+    				if( "_base".equals( variantInKey ) ) {
+    					menuItem.setText( scriptInKey );
+            			scriptMenu.getItems().add( new SeparatorMenuItem() );
+    				}
+
+            		menuItem.setOnAction( evt -> setScriptIn( scriptInKey, variantInKey ) );
+
+    			}
+    			menu.getItems().add( scriptMenu );
+    		}
+    		
     	}
     		
     	return menu;
@@ -187,7 +216,7 @@ public final class Xliterator extends Application {
     }
     
     
-    private Menu createOutScriptsMenu(String outScript) {
+    private Menu createOutScriptsMenu(String scriptIn, String variantIn) {
    	 	outScriptMenu.getItems().clear();
    	 	scriptOut = null;
 		outVariantMenu.getItems().clear();
@@ -197,13 +226,38 @@ public final class Xliterator extends Application {
     	
         ToggleGroup groupOutMenu = new ToggleGroup();
         
-    	List<String> scripts = config.getOutScripts(outScript, true);
-    	for(String script: scripts) {
-    		RadioMenuItem menuItem = new RadioMenuItem( script );
-    		menuItem.setToggleGroup( groupOutMenu );
-    		menuItem.setOnAction( evt -> setScriptOut( script ) );
-    		outScriptMenu.getItems().add( menuItem );
+    	JsonObject scriptsOut = config.getOutScripts(scriptIn, variantIn);
+    	ArrayList<String> scriptOutList = new ArrayList<String>( scriptsOut.keySet() );
+    	Collections.sort( scriptOutList );
+    	
+    	for(String scriptOutKey : scriptOutList) {
+    		JsonArray variantsOut = scriptsOut.getAsJsonArray( scriptOutKey );
+    		int size = variantsOut.size();
+    		if ( size == 0 ) {
+    			RadioMenuItem menuItem = new RadioMenuItem( scriptOutKey );
+    			menuItem.setToggleGroup( groupOutMenu );
+        		menuItem.setOnAction( evt -> setScriptOut( scriptOutKey, "_base" ) );
+        		outScriptMenu.getItems().add( menuItem );
+    		}
+    		else {
+    			Menu scriptMenu = new Menu( scriptOutKey );
+    			for(int i=0; i<size; i++) {
+    				String variantOutKey = variantsOut.get(i).getAsString();
+    				RadioMenuItem menuItem = new RadioMenuItem( variantOutKey );
+            		scriptMenu.getItems().add( menuItem );
+    				if( "_base".equals( variantOutKey ) ) {
+    					menuItem.setText( scriptOutKey );
+            			scriptMenu.getItems().add( new SeparatorMenuItem() );
+    				}
+
+        			menuItem.setToggleGroup( groupOutMenu );
+            		menuItem.setOnAction( evt -> setScriptOut( scriptOutKey, variantOutKey ) );
+
+    			}
+    			outScriptMenu.getItems().add( scriptMenu );
+    		}
     	}
+    	
     	return outScriptMenu;
     }
     
@@ -811,7 +865,7 @@ public final class Xliterator extends Application {
         final MenuBar leftBar = new MenuBar();  
   
         // add menus to the left menubar 
-        leftBar.getMenus().addAll( fileMenu, editMenu, tabsMenu, inScriptMenu, outScriptMenu , outVariantMenu );
+        leftBar.getMenus().addAll( fileMenu, editMenu, tabsMenu, inScriptMenu, outScriptMenu /* , outVariantMenu */);
 
         
         statusBar.setText( "" );
@@ -841,7 +895,7 @@ public final class Xliterator extends Application {
         scene.getWindow().addEventFilter( WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent );
         
         // Check for a saved user menu preference:
-        checkPreferences();
+        // checkPreferences();
         
         stage.setAlwaysOnTop(false);
         stage.show();
@@ -941,12 +995,12 @@ public final class Xliterator extends Application {
 
         scriptIn   = prefs.get( scriptInPreference, null );
         if( scriptIn != null) {
-        	setScriptIn( scriptIn );
+        	setScriptIn( scriptIn, "FIXME" );
         }
         
         scriptOut  = prefs.get( scriptOutPreference, null );
         if( scriptOut != null) {
-        	setScriptOut( scriptOut );
+        	setScriptOut( scriptOut, "FIXME" );
         }
         
         
@@ -1015,21 +1069,22 @@ public final class Xliterator extends Application {
         statusBar.getLeftItems().add( hbox );
     }
     
-    private void setScriptIn(String scriptIn) {
+    private void setScriptIn(String scriptIn, String variantIn) {
     	this.scriptIn = scriptIn;
+    	this.variantIn = variantIn;
     	scriptInText.setText( scriptIn );
-    	createOutScriptsMenu( scriptIn );
+    	createOutScriptsMenu( scriptIn, variantIn );
         loadInternalMenuItem.setDisable( true );
     	filesTab.setScriptIn( scriptIn );
     	textTab.setScriptIn( scriptIn );
     	setMenuItemSelection( inScriptMenu, scriptIn );
     }
-    private void setScriptOut(String scriptOut) {
+    private void setScriptOut(String scriptOut, String variantOut) {
     	this.scriptOut = scriptOut;
-    	this.variantOut = null;
+    	this.variantOut = variantOut;
     	scriptOutText.setText( scriptOut );
     	variantOutText.setText( "[None]" );
-    	createOutVaraintsMenu( scriptOut );
+    	// createOutVaraintsMenu( scriptOut );
         loadInternalMenuItem.setDisable( true );
     	filesTab.setScriptOut( scriptIn );
     	textTab.setScriptOut(scriptOut);
@@ -1153,9 +1208,9 @@ public final class Xliterator extends Application {
     	textTab.clearAll();
     	textTab.setTextIn( "ሰላም ዓለም" );
     	
-    	setScriptIn( "Ethiopic" );
-    	setScriptOut( "IPA" );
-    	setVariantOut( "Amharic");
+    	setScriptIn( "Ethiopic", "Amharic" );
+    	setScriptOut( "IPA",  "_base" );
+    	// setVariantOut( "Amharic");
     	selectedTransliteration = "am-am_FONIPA.xml";
     	transliterationDirection = "both";
     	transliterationAlias = "am-fonipa-t-am";
