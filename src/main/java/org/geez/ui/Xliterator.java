@@ -78,7 +78,7 @@ public final class Xliterator extends Application {
 	private JsonObject transliteration = null;
 	protected StatusBar statusBar = new StatusBar();
 	private Menu inScriptMenu   = null;
-	private Menu outVariantMenu = null;
+	// private Menu outVariantMenu = null;
 	private Menu outScriptMenu  = null;
 	
 	private Menu  inScriptMenuLast = null;
@@ -239,10 +239,10 @@ public final class Xliterator extends Application {
     private Menu createOutScriptsMenu(String scriptIn, String variantIn) {
    	 	outScriptMenu.getItems().clear();
    	 	scriptOut = null;
-		outVariantMenu.getItems().clear();
+		// outVariantMenu.getItems().clear();
 		variantOut = null;
     	scriptOutText.setText( "[None]" );
-    	variantOutText.setText( "[None]" );
+    	resourceText.setText( "[None]" );
     	
         ToggleGroup groupOutMenu = new ToggleGroup();
         
@@ -436,11 +436,13 @@ public final class Xliterator extends Application {
         editorTab.setDefaultFontFamily( defaultFontFamily );
         editorTab.setClosable( true );
     	
-        editorTab.getProperties().put( "transliteration", transliteration );
+        editorTab.setTransliteration(transliteration);
+        /*
     	editorTab.getProperties().put( "direction", transliterationDirection );
         if( transliterationAlias != null ) {
         	editorTab.getProperties().put( "alias", transliterationAlias );
         }
+        */
         editorTab.setup(primaryStage, config, saveMenuItem, saveAsMenuItem);
         
         // editorTab.setStyle( primaryStage.getScene() );
@@ -490,11 +492,11 @@ public final class Xliterator extends Application {
 	    	textTab.setScriptIn( useSelectedEdtior );
 	   	 	outScriptMenu.getItems().clear();
 	   	 	scriptOut = null;
-			outVariantMenu.getItems().clear();
+			// outVariantMenu.getItems().clear();
 			variantOut = null;
 	    	scriptInText.setText( "[Editor]" );
 	    	scriptOutText.setText( "[Editor]" );
-	    	variantOutText.setText( "[Editor]" );
+	    	resourceText.setText( "Editor: " + title );
     	});
     	editorTabItem.setMnemonicParsing( false );
     	// editorTabItem.getProperties().put( "selection", useSelectedEdtior );
@@ -653,7 +655,7 @@ public final class Xliterator extends Application {
         // 
         inScriptMenu   = createInScriptsMenu( stage );
         outScriptMenu  = new Menu( "Script _Out" );
-        outVariantMenu = new Menu( "_Variant" );
+         //outVariantMenu = new Menu( "_Variant" );
         //
         //=========================== END SCRIPT MENUS =============================================
         //
@@ -1078,16 +1080,16 @@ public final class Xliterator extends Application {
     
     Text scriptInText = new Text( "[None]" );
     Text scriptOutText = new Text( "[None]" );
-    Text variantOutText = new Text( "[None]" );
+    Text resourceText = new Text( "[None]" );
     // status bar reference:
     // https://jar-download.com/artifacts/org.controlsfx/controlsfx-samples/8.40.14/source-code/org/controlsfx/samples/HelloStatusBar.java
     private void updateStatusMessage() {
     	scriptInText.setStyle( "-fx-font-weight: bold;" );
     	scriptOutText.setStyle( "-fx-font-weight: bold;" );
-    	variantOutText.setStyle( "-fx-font-weight: bold;" );
+    	resourceText.setStyle( "-fx-font-weight: bold;" );
     	scriptInText.setFill( Color.RED );
     	scriptOutText.setFill( Color.GREEN );
-    	variantOutText.setFill( Color.BLUE );
+    	resourceText.setFill( Color.BLUE );
         
     	TextFlow flowIn = new TextFlow();
         TextFlow flowOut = new TextFlow();
@@ -1099,12 +1101,12 @@ public final class Xliterator extends Application {
         Text out = new Text("Out: ");
         out.setStyle("-fx-font-weight: bold;");
         
-        Text vout = new Text("Variant: ");
-        vout.setStyle("-fx-font-weight: bold;");
+        Text rout = new Text("Resource: ");
+        rout.setStyle("-fx-font-weight: bold;");
         
         flowIn.getChildren().addAll(in, scriptInText );
         flowOut.getChildren().addAll(out, scriptOutText );
-        flowVOut.getChildren().addAll(vout, variantOutText );
+        flowVOut.getChildren().addAll(rout, resourceText );
        
         Separator separator1 = new Separator();
         separator1.setOrientation(Orientation.VERTICAL);
@@ -1148,7 +1150,7 @@ public final class Xliterator extends Application {
     	setTransliteration( transliteration );
 		
     	scriptOutText.setText( scriptOut + " / " + variantOut );
-    	variantOutText.setText( "Internal: " + selectedTransliteration );
+    	resourceText.setText( "Internal: " + selectedTransliteration );
     	// createOutVaraintsMenu( scriptOut );
         loadInternalMenuItem.setDisable( true );
     	filesTab.setScriptOut( scriptIn );
@@ -1313,9 +1315,6 @@ public final class Xliterator extends Application {
     	transliterationAlias = "am-fonipa-t-am";
 
     	for(MenuItem item: outScriptMenu.getItems() ) {
-    		((RadioMenuItem)item).setSelected( false );
-    	}
-    	for(MenuItem item: outVariantMenu.getItems() ) {
     		((RadioMenuItem)item).setSelected( false );
     	}
     	
