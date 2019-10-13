@@ -4,6 +4,7 @@
       "Persian": {
         "IPA": [
           {
+            "path": "fa-fa_FONIPA.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-fonipa-t-fa"
@@ -11,6 +12,7 @@
         ],
         "Latin": [
           {
+            "path": "Persian-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Persian-Latin/BGN"
@@ -20,6 +22,7 @@
       "Uighur": {
         "IPA": [
           {
+            "path": "ug-ug_FONIPA.xml",
             "name": "Uighur",
             "direction": "forward",
             "alias": "ug-fonipa-t-ug"
@@ -29,11 +32,13 @@
       "_base": {
         "Latin": [
           {
+            "path": "Arabic-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Arabic-Latin/BGN"
           },
           {
+            "path": "Arabic-Latin.xml",
             "name": "_base",
             "direction": "both",
             "alias": "Arabic-Latin",
@@ -46,6 +51,7 @@
       "Western": {
         "Arabic": [
           {
+            "path": "hy_AREVMDA-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-hy-arevmda",
@@ -55,6 +61,7 @@
             ]
           },
           {
+            "path": "hy_AREVMDA-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-hy-arevmda",
@@ -66,6 +73,7 @@
         ],
         "Cherokee": [
           {
+            "path": "hy_AREVMDA-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-hy-arevmda",
@@ -77,6 +85,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "hy_AREVMDA-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-hy-arevmda",
@@ -88,6 +97,7 @@
         ],
         "IPA": [
           {
+            "path": "hy_AREVMDA-hy_AREVMDA_FONIPA.xml",
             "name": "Western Armenian",
             "direction": "forward",
             "alias": "hy-arevmda-fonipa-t-hy-arevmda"
@@ -97,6 +107,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "hy-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-hy",
@@ -106,6 +117,7 @@
             ]
           },
           {
+            "path": "hy-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-hy",
@@ -117,6 +129,7 @@
         ],
         "Cherokee": [
           {
+            "path": "hy-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-hy",
@@ -128,6 +141,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "hy-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-hy",
@@ -139,6 +153,7 @@
         ],
         "IPA": [
           {
+            "path": "hy-hy_FONIPA.xml",
             "name": "Armenian",
             "direction": "forward",
             "alias": "hy-fonipa-t-hy"
@@ -146,6 +161,7 @@
         ],
         "Latin": [
           {
+            "path": "Armenian-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Armenian-Latin/BGN"
@@ -157,6 +173,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "Bengali-Arabic.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Bengali-Arabic",
@@ -168,6 +185,7 @@
         ],
         "Devanagari": [
           {
+            "path": "Bengali-Devanagari.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Bengali-Devanagari",
@@ -179,6 +197,7 @@
         ],
         "Gujarati": [
           {
+            "path": "Bengali-Gujarati.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Bengali-Gujarati",
@@ -190,6 +209,7 @@
         ],
         "Gurmukhi": [
           {
+            "path": "Bengali-Gurmukhi.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Bengali-Gurmukhi",
@@ -201,6 +221,7 @@
         ],
         "InterIndic": [
           {
+            "path": "Bengali-InterIndic.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -208,6 +229,7 @@
         ],
         "Kannada": [
           {
+            "path": "Bengali-Kannada.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Bengali-Kannada",
@@ -219,6 +241,7 @@
         ],
         "Latin": [
           {
+            "path": "Bengali-Latin.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Bengali-Latin",
@@ -230,6 +253,7 @@
         ],
         "Malayalam": [
           {
+            "path": "Bengali-Malayalam.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Bengali-Malayalam",
@@ -241,6 +265,7 @@
         ],
         "Oriya": [
           {
+            "path": "Bengali-Oriya.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Bengali-Oriya",
@@ -252,6 +277,7 @@
         ],
         "Tamil": [
           {
+            "path": "Bengali-Tamil.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Bengali-Tamil",
@@ -263,6 +289,7 @@
         ],
         "Telugu": [
           {
+            "path": "Bengali-Telugu.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Bengali-Telugu",
@@ -274,6 +301,7 @@
         ],
         "Urdu": [
           {
+            "path": "Bengali-ur.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ur-t-und-beng",
@@ -289,6 +317,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "my-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-my",
@@ -298,6 +327,7 @@
             ]
           },
           {
+            "path": "my-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-my",
@@ -309,6 +339,7 @@
         ],
         "Burmese": [
           {
+            "path": "my-t-my-s0-zawgyi.xml",
             "name": "Zawgyi",
             "direction": "forward",
             "alias": "my-t-my-s0-zawgyi",
@@ -317,6 +348,7 @@
         ],
         "Cherokee": [
           {
+            "path": "my-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-my",
@@ -328,6 +360,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "my-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-my",
@@ -339,6 +372,7 @@
         ],
         "IPA": [
           {
+            "path": "my-my_FONIPA.xml",
             "name": "Burmese",
             "direction": "forward",
             "alias": "my-fonipa-t-my"
@@ -346,6 +380,7 @@
         ],
         "Zawgyi": [
           {
+            "path": "my-t-my-d0-zawgyi.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "my-t-my-d0-zawgyi"
@@ -357,6 +392,7 @@
       "_base": {
         "IPA": [
           {
+            "path": "chr-chr_FONIPA.xml",
             "name": "Cherokee",
             "direction": "forward",
             "alias": "chr-fonipa-t-chr"
@@ -368,16 +404,19 @@
       "Azerbaijani": {
         "Cyrillic": [
           {
+            "path": "az-Lower.xml",
             "name": "Lower",
             "direction": "forward",
             "alias": "az-t-d0-lower"
           },
           {
+            "path": "az-Title.xml",
             "name": "Title",
             "direction": "forward",
             "alias": "az-t-d0-title"
           },
           {
+            "path": "az-Upper.xml",
             "name": "Upper",
             "direction": "forward",
             "alias": "az-t-d0-upper"
@@ -385,6 +424,7 @@
         ],
         "Latin": [
           {
+            "path": "Azerbaijani-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Azerbaijani-Latin/BGN"
@@ -394,6 +434,7 @@
       "Belarusian": {
         "Latin": [
           {
+            "path": "Belarusian-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Belarusian-Latin/BGN"
@@ -403,6 +444,7 @@
       "Bulgarian": {
         "Latin": [
           {
+            "path": "Bulgarian-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Bulgarian-Latin/BGN"
@@ -412,6 +454,7 @@
       "Kazakh": {
         "Latin": [
           {
+            "path": "Kazakh-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Kazakh-Latin/BGN"
@@ -421,6 +464,7 @@
       "Kirghiz": {
         "Latin": [
           {
+            "path": "Kirghiz-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Kirghiz-Latin/BGN"
@@ -430,6 +474,7 @@
       "Macedonian": {
         "Latin": [
           {
+            "path": "Macedonian-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Macedonian-Latin/BGN"
@@ -439,11 +484,13 @@
       "Mongolian": {
         "Latin": [
           {
+            "path": "Mongolian-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Mongolian-Latin/BGN"
           },
           {
+            "path": "mn-mn_Latn-MNS.xml",
             "name": "MNS",
             "direction": "forward",
             "alias": "mn-Latn-t-mn-m0-mns"
@@ -453,6 +500,7 @@
       "Russian": {
         "Han": [
           {
+            "path": "ru-zh.xml",
             "name": "Simplified",
             "direction": "forward",
             "alias": "zh-t-ru",
@@ -461,6 +509,7 @@
         ],
         "Katakana": [
           {
+            "path": "ru-ja.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ja-t-ru"
@@ -468,6 +517,7 @@
         ],
         "Latin": [
           {
+            "path": "Russian-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Russian-Latin/BGN"
@@ -477,6 +527,7 @@
       "Serbian": {
         "Latin": [
           {
+            "path": "Serbian-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Serbian-Latin/BGN"
@@ -486,6 +537,7 @@
       "Turkmen": {
         "Latin": [
           {
+            "path": "Turkmen-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Turkmen-Latin/BGN"
@@ -495,6 +547,7 @@
       "Ukrainian": {
         "Latin": [
           {
+            "path": "Ukrainian-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Ukrainian-Latin/BGN"
@@ -504,11 +557,13 @@
       "Uzbek": {
         "Latin": [
           {
+            "path": "Uzbek-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Uzbek-Latin/BGN"
           },
           {
+            "path": "uz_Cyrl-uz_Latn.xml",
             "name": "Uzbek",
             "direction": "both",
             "alias": "uz-Latn-t-uz-cyrl",
@@ -519,6 +574,7 @@
       "_base": {
         "Latin": [
           {
+            "path": "Cyrillic-Latin.xml",
             "name": "_base",
             "direction": "both",
             "alias": "Cyrillic-Latin",
@@ -531,6 +587,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "Devanagari-Arabic.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Devanagari-Arabic",
@@ -542,6 +599,7 @@
         ],
         "Bengali": [
           {
+            "path": "Devanagari-Bengali.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Devanagari-Bengali",
@@ -553,6 +611,7 @@
         ],
         "Gujarati": [
           {
+            "path": "Devanagari-Gujarati.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Devanagari-Gujarati",
@@ -564,6 +623,7 @@
         ],
         "Gurmukhi": [
           {
+            "path": "Devanagari-Gurmukhi.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Devanagari-Gurmukhi",
@@ -575,6 +635,7 @@
         ],
         "InterIndic": [
           {
+            "path": "Devanagari-InterIndic.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal",
@@ -586,6 +647,7 @@
         ],
         "Kannada": [
           {
+            "path": "Devanagari-Kannada.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Devanagari-Kannada"
@@ -593,6 +655,7 @@
         ],
         "Latin": [
           {
+            "path": "Devanagari-Latin.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Devanagari-Latin",
@@ -604,6 +667,7 @@
         ],
         "Malayalam": [
           {
+            "path": "Devanagari-Malayalam.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Devanagari-Malayalam",
@@ -615,6 +679,7 @@
         ],
         "Oriya": [
           {
+            "path": "Devanagari-Oriya.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Devanagari-Oriya",
@@ -626,6 +691,7 @@
         ],
         "Tamil": [
           {
+            "path": "Devanagari-Tamil.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Devanagari-Tamil",
@@ -637,6 +703,7 @@
         ],
         "Telugu": [
           {
+            "path": "Devanagari-Telugu.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Devanagari-Telugu",
@@ -648,6 +715,7 @@
         ],
         "Urdu": [
           {
+            "path": "Devanagari-ur.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ur-t-und-deva",
@@ -663,6 +731,7 @@
       "_base": {
         "Latin": [
           {
+            "path": "Maldivian-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Maldivian-Latin/BGN"
@@ -674,6 +743,7 @@
       "Amharic": {
         "Arabic": [
           {
+            "path": "am-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-am",
@@ -683,6 +753,7 @@
             ]
           },
           {
+            "path": "am-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-am",
@@ -694,6 +765,7 @@
         ],
         "Cherokee": [
           {
+            "path": "am-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-am",
@@ -705,6 +777,7 @@
         ],
         "IPA": [
           {
+            "path": "am-am_FONIPA.xml",
             "name": "Amharic",
             "direction": "both",
             "alias": "am-fonipa-t-am",
@@ -713,6 +786,7 @@
         ],
         "Latin": [
           {
+            "path": "Amharic-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Amharic-Latin/BGN"
@@ -724,16 +798,19 @@
       "_base": {
         "Latin": [
           {
+            "path": "Georgian-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Georgian-Latin/BGN"
           },
           {
+            "path": "Georgian-Latin-BGN_1981.xml",
             "name": "BGN (1981)",
             "direction": "forward",
             "alias": "ka-Latn-t-ka-m0-bgn-1981"
           },
           {
+            "path": "Georgian-Latin.xml",
             "name": "_base",
             "direction": "both",
             "alias": "Georgian-Latin",
@@ -746,6 +823,7 @@
       "Modern (1453-)": {
         "Latin": [
           {
+            "path": "Greek-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Greek-Latin/BGN"
@@ -755,16 +833,19 @@
       "Modern Greek (1453-)": {
         "Greek": [
           {
+            "path": "el-Lower.xml",
             "name": "Lower",
             "direction": "forward",
             "alias": "el-t-d0-lower"
           },
           {
+            "path": "el-Title.xml",
             "name": "Title",
             "direction": "forward",
             "alias": "el-t-d0-title"
           },
           {
+            "path": "el-Upper.xml",
             "name": "Upper",
             "direction": "forward",
             "alias": "el-t-d0-upper"
@@ -774,12 +855,14 @@
       "_base": {
         "Latin": [
           {
+            "path": "Greek_Latin_UNGEGN.xml",
             "name": "UNGEGN",
             "direction": "both",
             "alias": "Greek-Latin/UNGEGN",
             "backwardAlias": "Latin-Greek/UNGEGN"
           },
           {
+            "path": "Greek-Latin.xml",
             "name": "_base",
             "direction": "both",
             "alias": "Greek-Latin",
@@ -792,6 +875,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "Gujarati-Arabic.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gujarati-Arabic",
@@ -803,6 +887,7 @@
         ],
         "Bengali": [
           {
+            "path": "Gujarati-Bengali.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gujarati-Bengali",
@@ -814,6 +899,7 @@
         ],
         "Devanagari": [
           {
+            "path": "Gujarati-Devanagari.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gujarati-Devanagari",
@@ -825,6 +911,7 @@
         ],
         "Gurmukhi": [
           {
+            "path": "Gujarati-Gurmukhi.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gujarati-Gurmukhi",
@@ -836,6 +923,7 @@
         ],
         "InterIndic": [
           {
+            "path": "Gujarati-InterIndic.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -843,6 +931,7 @@
         ],
         "Kannada": [
           {
+            "path": "Gujarati-Kannada.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gujarati-Kannada",
@@ -854,6 +943,7 @@
         ],
         "Latin": [
           {
+            "path": "Gujarati-Latin.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gujarati-Latin",
@@ -865,6 +955,7 @@
         ],
         "Malayalam": [
           {
+            "path": "Gujarati-Malayalam.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gujarati-Malayalam",
@@ -876,6 +967,7 @@
         ],
         "Oriya": [
           {
+            "path": "Gujarati-Oriya.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gujarati-Oriya",
@@ -887,6 +979,7 @@
         ],
         "Tamil": [
           {
+            "path": "Gujarati-Tamil.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gujarati-Tamil",
@@ -898,6 +991,7 @@
         ],
         "Telugu": [
           {
+            "path": "Gujarati-Telugu.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gujarati-Telugu",
@@ -909,6 +1003,7 @@
         ],
         "Urdu": [
           {
+            "path": "Gujarati-ur.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ur-t-und-gujr",
@@ -924,6 +1019,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "Gurmukhi-Arabic.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gurmukhi-Arabic",
@@ -935,6 +1031,7 @@
         ],
         "Bengali": [
           {
+            "path": "Gurmukhi-Bengali.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gurmukhi-Bengali",
@@ -946,6 +1043,7 @@
         ],
         "Devanagari": [
           {
+            "path": "Gurmukhi-Devanagari.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gurmukhi-Devanagari",
@@ -957,6 +1055,7 @@
         ],
         "Gujarati": [
           {
+            "path": "Gurmukhi-Gujarati.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gurmukhi-Gujarati",
@@ -968,6 +1067,7 @@
         ],
         "InterIndic": [
           {
+            "path": "Gurmukhi-InterIndic.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -975,6 +1075,7 @@
         ],
         "Kannada": [
           {
+            "path": "Gurmukhi-Kannada.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gurmukhi-Kannada",
@@ -986,6 +1087,7 @@
         ],
         "Latin": [
           {
+            "path": "Gurmukhi-Latin.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gurmukhi-Latin",
@@ -997,6 +1099,7 @@
         ],
         "Malayalam": [
           {
+            "path": "Gurmukhi-Malayalam.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gurmukhi-Malayalam",
@@ -1008,6 +1111,7 @@
         ],
         "Oriya": [
           {
+            "path": "Gurmukhi-Oriya.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gurmukhi-Oriya",
@@ -1019,6 +1123,7 @@
         ],
         "Tamil": [
           {
+            "path": "Gurmukhi-Tamil.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gurmukhi-Tamil",
@@ -1030,6 +1135,7 @@
         ],
         "Telugu": [
           {
+            "path": "Gurmukhi-Telugu.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Gurmukhi-Telugu",
@@ -1041,6 +1147,7 @@
         ],
         "Urdu": [
           {
+            "path": "Gurmukhi-ur.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ur-t-und-guru",
@@ -1056,6 +1163,7 @@
       "Names": {
         "Latin": [
           {
+            "path": "Han-Latin-Names.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "und-Latn-t-und-hani-m0-prprname",
@@ -1069,6 +1177,7 @@
       "Simplified variant": {
         "Han": [
           {
+            "path": "Simplified-Traditional.xml",
             "name": "Traditional variant",
             "direction": "both",
             "alias": "Simplified-Traditional",
@@ -1079,6 +1188,7 @@
       "_base": {
         "Latin": [
           {
+            "path": "Han-Latin.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Han-Latin"
@@ -1086,6 +1196,7 @@
         ],
         "Spacedhan": [
           {
+            "path": "Han-Spacedhan.xml",
             "name": "_base",
             "direction": "both",
             "visibility": "internal",
@@ -1100,6 +1211,7 @@
       "Jamo": {
         "Latin": [
           {
+            "path": "Jamo-Latin.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Jamo-Latin",
@@ -1112,11 +1224,13 @@
       "_base": {
         "Latin": [
           {
+            "path": "Korean-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Korean-Latin/BGN"
           },
           {
+            "path": "Hangul-Latin.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Hangul-Latin",
@@ -1131,11 +1245,13 @@
       "_base": {
         "Latin": [
           {
+            "path": "Hebrew-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Hebrew-Latin/BGN"
           },
           {
+            "path": "Hebrew-Latin.xml",
             "name": "_base",
             "direction": "both",
             "alias": "Hebrew-Latin",
@@ -1148,6 +1264,7 @@
       "_base": {
         "Katakana": [
           {
+            "path": "Hiragana-Katakana.xml",
             "name": "_base",
             "direction": "both",
             "alias": "Hiragana-Katakana",
@@ -1156,6 +1273,7 @@
         ],
         "Latin": [
           {
+            "path": "Hiragana-Latin.xml",
             "name": "_base",
             "direction": "both",
             "alias": "Hiragana-Latin",
@@ -1172,6 +1290,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "InterIndic-Arabic.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -1179,6 +1298,7 @@
         ],
         "Bengali": [
           {
+            "path": "InterIndic-Bengali.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -1186,6 +1306,7 @@
         ],
         "Devanagari": [
           {
+            "path": "InterIndic-Devanagari.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -1193,6 +1314,7 @@
         ],
         "Gujarati": [
           {
+            "path": "InterIndic-Gujarati.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -1200,6 +1322,7 @@
         ],
         "Gurmukhi": [
           {
+            "path": "InterIndic-Gurmukhi.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -1207,6 +1330,7 @@
         ],
         "Kannada": [
           {
+            "path": "InterIndic-Kannada.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -1214,6 +1338,7 @@
         ],
         "Latin": [
           {
+            "path": "InterIndic-Latin.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -1221,6 +1346,7 @@
         ],
         "Malayalam": [
           {
+            "path": "InterIndic-Malayalam.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -1228,6 +1354,7 @@
         ],
         "Oriya": [
           {
+            "path": "InterIndic-Oriya.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -1235,6 +1362,7 @@
         ],
         "Tamil": [
           {
+            "path": "InterIndic-Tamil.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -1242,6 +1370,7 @@
         ],
         "Telugu": [
           {
+            "path": "InterIndic-Telugu.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -1249,6 +1378,7 @@
         ],
         "Urdu": [
           {
+            "path": "InterIndic-ur.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -1260,6 +1390,7 @@
       "Czech": {
         "Hangul": [
           {
+            "path": "cs_FONIPA-ko.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ko-t-cs-fonipa"
@@ -1267,6 +1398,7 @@
         ],
         "Katakana": [
           {
+            "path": "cs_FONIPA-ja.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ja-t-cs-fonipa"
@@ -1276,6 +1408,7 @@
       "Polish": {
         "Katakana": [
           {
+            "path": "pl_FONIPA-ja.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ja-t-pl-fonipa"
@@ -1285,6 +1418,7 @@
       "Romanian": {
         "Katakana": [
           {
+            "path": "ro_FONIPA-ja.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ja-t-ro-fonipa"
@@ -1294,6 +1428,7 @@
       "Slovak": {
         "Katakana": [
           {
+            "path": "sk_FONIPA-ja.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ja-t-sk-fonipa"
@@ -1303,6 +1438,7 @@
       "Spanish (Latin America)": {
         "Ethiopic": [
           {
+            "path": "es_FONIPA-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-es-fonipa",
@@ -1314,6 +1450,7 @@
         ],
         "Han": [
           {
+            "path": "es_FONIPA-zh.xml",
             "name": "Simplified",
             "direction": "forward",
             "alias": "zh-t-es-fonipa"
@@ -1321,6 +1458,7 @@
         ],
         "IPA": [
           {
+            "path": "es_FONIPA-es_419_FONIPA.xml",
             "name": "Spanish (Latin America)",
             "direction": "forward",
             "alias": "es-419-fonipa-t-es-fonipa",
@@ -1332,6 +1470,7 @@
         ],
         "Katakana": [
           {
+            "path": "es_FONIPA-ja.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ja-t-es-fonipa"
@@ -1341,6 +1480,7 @@
       "_base": {
         "Latin": [
           {
+            "path": "IPA-XSampa.xml",
             "name": "X-SAMPA",
             "direction": "both",
             "alias": "IPA-XSampa",
@@ -1353,6 +1493,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "Kannada-Arabic.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Kannada-Arabic",
@@ -1364,6 +1505,7 @@
         ],
         "Bengali": [
           {
+            "path": "Kannada-Bengali.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Kannada-Bengali",
@@ -1375,6 +1517,7 @@
         ],
         "Devanagari": [
           {
+            "path": "Kannada-Devanagari.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Kannada-Devanagari",
@@ -1386,6 +1529,7 @@
         ],
         "Gujarati": [
           {
+            "path": "Kannada-Gujarati.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Kannada-Gujarati",
@@ -1397,6 +1541,7 @@
         ],
         "Gurmukhi": [
           {
+            "path": "Kannada-Gurmukhi.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Kannada-Gurmukhi",
@@ -1408,6 +1553,7 @@
         ],
         "InterIndic": [
           {
+            "path": "Kannada-InterIndic.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -1415,6 +1561,7 @@
         ],
         "Latin": [
           {
+            "path": "Kannada-Latin.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Kannada-Latin",
@@ -1426,6 +1573,7 @@
         ],
         "Malayalam": [
           {
+            "path": "Kannada-Malayalam.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Kannada-Malayalam",
@@ -1437,6 +1585,7 @@
         ],
         "Oriya": [
           {
+            "path": "Kannada-Oriya.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Kannada-Oriya",
@@ -1448,6 +1597,7 @@
         ],
         "Tamil": [
           {
+            "path": "Kannada-Tamil.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Kannada-Tamil",
@@ -1459,6 +1609,7 @@
         ],
         "Telugu": [
           {
+            "path": "Kannada-Telugu.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Kannada-Telugu",
@@ -1470,6 +1621,7 @@
         ],
         "Urdu": [
           {
+            "path": "Kannada-ur.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ur-t-und-knda",
@@ -1485,6 +1637,7 @@
       "Fullwidth": {
         "Katakana": [
           {
+            "path": "Fullwidth-Halfwidth.xml",
             "name": "Halfwidth",
             "direction": "both",
             "alias": "und-t-d0-hwidth",
@@ -1495,6 +1648,7 @@
       "_base": {
         "Latin": [
           {
+            "path": "Katakana-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Katakana-Latin/BGN"
@@ -1506,6 +1660,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "kk-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-kk",
@@ -1515,6 +1670,7 @@
             ]
           },
           {
+            "path": "kk-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-kk",
@@ -1526,6 +1682,7 @@
         ],
         "Cherokee": [
           {
+            "path": "kk-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-kk",
@@ -1537,6 +1694,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "kk-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-kk",
@@ -1548,6 +1706,7 @@
         ],
         "IPA": [
           {
+            "path": "kk-kk_FONIPA.xml",
             "name": "Kazakh",
             "direction": "forward",
             "alias": "kk-fonipa-t-kk"
@@ -1559,6 +1718,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "ky-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-ky",
@@ -1568,6 +1728,7 @@
             ]
           },
           {
+            "path": "ky-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-ky",
@@ -1579,6 +1740,7 @@
         ],
         "Cherokee": [
           {
+            "path": "ky-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-ky",
@@ -1590,6 +1752,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "ky-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-ky",
@@ -1601,6 +1764,7 @@
         ],
         "IPA": [
           {
+            "path": "ky-ky_FONIPA.xml",
             "name": "Kirghiz",
             "direction": "forward",
             "alias": "ky-fonipa-t-ky"
@@ -1612,6 +1776,7 @@
       "Accents (Decomposed)": {
         "Latin": [
           {
+            "path": "Any-Accents.xml",
             "name": "Accents (Normalized)",
             "direction": "both",
             "alias": "und-t-d0-accents",
@@ -1622,6 +1787,7 @@
       "ASCII Symbols": {
         "Latin": [
           {
+            "path": "Any-Publishing.xml",
             "name": "Unicode Symbols",
             "direction": "both",
             "alias": "und-t-d0-publish",
@@ -1632,6 +1798,7 @@
       "Chamorro": {
         "Arabic": [
           {
+            "path": "ch-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-ch",
@@ -1641,6 +1808,7 @@
             ]
           },
           {
+            "path": "ch-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-ch",
@@ -1652,6 +1820,7 @@
         ],
         "Cherokee": [
           {
+            "path": "ch-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-ch",
@@ -1663,6 +1832,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "ch-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-ch",
@@ -1674,6 +1844,7 @@
         ],
         "IPA": [
           {
+            "path": "ch-ch_FONIPA.xml",
             "name": "Chamorro",
             "direction": "forward",
             "alias": "ch-fonipa-t-ch"
@@ -1683,6 +1854,7 @@
       "Czech": {
         "Arabic": [
           {
+            "path": "cs-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-cs",
@@ -1692,6 +1864,7 @@
             ]
           },
           {
+            "path": "cs-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-cs",
@@ -1703,6 +1876,7 @@
         ],
         "Cherokee": [
           {
+            "path": "cs-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-cs",
@@ -1714,6 +1888,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "cs-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-cs",
@@ -1725,6 +1900,7 @@
         ],
         "Hangul": [
           {
+            "path": "cs-ko.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ko-t-cs",
@@ -1736,6 +1912,7 @@
         ],
         "IPA": [
           {
+            "path": "cs-cs_FONIPA.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "cs-fonipa-t-cs",
@@ -1747,6 +1924,7 @@
         ],
         "Katakana": [
           {
+            "path": "cs-ja.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ja-t-cs",
@@ -1760,6 +1938,7 @@
       "Dutch": {
         "Latin": [
           {
+            "path": "nl-Title.xml",
             "name": "Title",
             "direction": "forward",
             "alias": "nl-t-d0-title"
@@ -1769,11 +1948,13 @@
       "Esperanto": {
         "Arabic": [
           {
+            "path": "eo-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-eo"
           },
           {
+            "path": "eo-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-eo",
@@ -1785,6 +1966,7 @@
         ],
         "Cherokee": [
           {
+            "path": "eo-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-eo",
@@ -1796,6 +1978,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "eo-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-eo",
@@ -1807,6 +1990,7 @@
         ],
         "IPA": [
           {
+            "path": "eo-eo_FONIPA.xml",
             "name": "Esperanto",
             "direction": "forward",
             "alias": "eo-fonipa-t-eo",
@@ -1820,6 +2004,7 @@
       "German": {
         "ASCII": [
           {
+            "path": "de-ASCII.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "de-t-de-d0-ascii"
@@ -1829,6 +2014,7 @@
       "Hausa": {
         "Latin": [
           {
+            "path": "ha-ha_NE.xml",
             "name": "Niger",
             "direction": "forward",
             "alias": "ha-NE-t-ha"
@@ -1838,6 +2024,7 @@
       "Interlingua (International Auxiliary Language Association)": {
         "Arabic": [
           {
+            "path": "ia-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-ia",
@@ -1847,6 +2034,7 @@
             ]
           },
           {
+            "path": "ia-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-ia",
@@ -1858,6 +2046,7 @@
         ],
         "Cherokee": [
           {
+            "path": "ia-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-ia",
@@ -1869,6 +2058,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "ia-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-ia",
@@ -1880,6 +2070,7 @@
         ],
         "IPA": [
           {
+            "path": "ia-ia_FONIPA.xml",
             "name": "Interlingua (International Auxiliary Language Association)",
             "direction": "forward",
             "alias": "ia-fonipa-t-ia"
@@ -1889,6 +2080,7 @@
       "Italian": {
         "Ethiopic": [
           {
+            "path": "it-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-it"
@@ -1896,6 +2088,7 @@
         ],
         "Katakana": [
           {
+            "path": "it-ja.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ja-t-it"
@@ -1905,6 +2098,7 @@
       "Klingon": {
         "Arabic": [
           {
+            "path": "tlh-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-tlh",
@@ -1914,6 +2108,7 @@
             ]
           },
           {
+            "path": "tlh-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-tlh",
@@ -1925,6 +2120,7 @@
         ],
         "Cherokee": [
           {
+            "path": "tlh-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-tlh",
@@ -1936,6 +2132,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "tlh-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-tlh",
@@ -1947,6 +2144,7 @@
         ],
         "IPA": [
           {
+            "path": "tlh-tlh_FONIPA.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "tlh-fonipa-t-tlh"
@@ -1956,16 +2154,19 @@
       "Lithuanian": {
         "Latin": [
           {
+            "path": "lt-Lower.xml",
             "name": "Lower",
             "direction": "forward",
             "alias": "lt-t-d0-lower"
           },
           {
+            "path": "lt-Title.xml",
             "name": "Title",
             "direction": "forward",
             "alias": "lt-t-d0-title"
           },
           {
+            "path": "lt-Upper.xml",
             "name": "Upper",
             "direction": "forward",
             "alias": "lt-t-d0-upper"
@@ -1975,6 +2176,7 @@
       "Lower Sorbian": {
         "IPA": [
           {
+            "path": "dsb-dsb_FONIPA.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "dsb-fonipa-t-dsb"
@@ -1984,6 +2186,7 @@
       "Navajo": {
         "IPA": [
           {
+            "path": "nv-nv_FONIPA.xml",
             "name": "Navajo",
             "direction": "forward",
             "alias": "nv-fonipa-t-nv"
@@ -1993,6 +2196,7 @@
       "Pinyin": {
         "Cyrillic": [
           {
+            "path": "zh_Latn_PINYIN-ru.xml",
             "name": "Russian",
             "direction": "forward",
             "alias": "ru-t-zh-latn-pinyin",
@@ -2001,6 +2205,7 @@
         ],
         "Latin": [
           {
+            "path": "Pinyin-NumericPinyin.xml",
             "name": "Pinyin-Numeric",
             "direction": "both"
           }
@@ -2009,6 +2214,7 @@
       "Polish": {
         "Arabic": [
           {
+            "path": "pl-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-pl",
@@ -2018,6 +2224,7 @@
             ]
           },
           {
+            "path": "pl-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-pl",
@@ -2029,6 +2236,7 @@
         ],
         "Cherokee": [
           {
+            "path": "pl-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-pl",
@@ -2040,6 +2248,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "pl-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-pl",
@@ -2051,6 +2260,7 @@
         ],
         "IPA": [
           {
+            "path": "pl-pl_FONIPA.xml",
             "name": "Polish",
             "direction": "forward",
             "alias": "pl-fonipa-t-pl"
@@ -2058,6 +2268,7 @@
         ],
         "Katakana": [
           {
+            "path": "pl-ja.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ja-t-pl",
@@ -2071,6 +2282,7 @@
       "Romanian": {
         "Arabic": [
           {
+            "path": "ro-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-ro",
@@ -2080,6 +2292,7 @@
             ]
           },
           {
+            "path": "ro-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-ro",
@@ -2091,6 +2304,7 @@
         ],
         "Cherokee": [
           {
+            "path": "ro-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-ro",
@@ -2102,6 +2316,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "ro-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-ro",
@@ -2113,6 +2328,7 @@
         ],
         "IPA": [
           {
+            "path": "ro-ro_FONIPA.xml",
             "name": "Romanian",
             "direction": "forward",
             "alias": "ro-fonipa-t-ro"
@@ -2120,6 +2336,7 @@
         ],
         "Katakana": [
           {
+            "path": "ro-ja.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ja-t-ro",
@@ -2133,6 +2350,7 @@
       "Romanji": {
         "Cyrillic": [
           {
+            "path": "ja_Latn-ru.xml",
             "name": "Russian",
             "direction": "forward",
             "alias": "ru-t-ja-latn",
@@ -2141,6 +2359,7 @@
         ],
         "Hangul": [
           {
+            "path": "ja_Latn-ko.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ko-t-ja-latn",
@@ -2151,6 +2370,7 @@
       "Rumantsch Sursilvan": {
         "Arabic": [
           {
+            "path": "rm_SURSILV-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-rm-sursilv",
@@ -2160,6 +2380,7 @@
             ]
           },
           {
+            "path": "rm_SURSILV-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-rm-sursilv",
@@ -2171,6 +2392,7 @@
         ],
         "Cherokee": [
           {
+            "path": "rm_SURSILV-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-rm-sursilv",
@@ -2182,6 +2404,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "rm_SURSILV-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-rm-sursilv",
@@ -2193,6 +2416,7 @@
         ],
         "IPA": [
           {
+            "path": "rm_SURSILV-rm_FONIPA_SURSILV.xml",
             "name": "Rumantsch Sursilvan",
             "direction": "forward",
             "alias": "rm-fonipa-sursilv-t-rm-sursilv"
@@ -2202,6 +2426,7 @@
       "Russian": {
         "Latin": [
           {
+            "path": "ru_Latn-ru-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Latin-Russian/BGN"
@@ -2211,6 +2436,7 @@
       "Slovak": {
         "Arabic": [
           {
+            "path": "sk-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-sk",
@@ -2220,6 +2446,7 @@
             ]
           },
           {
+            "path": "sk-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-sk",
@@ -2231,6 +2458,7 @@
         ],
         "Cherokee": [
           {
+            "path": "sk-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-sk",
@@ -2242,6 +2470,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "sk-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-sk",
@@ -2253,6 +2482,7 @@
         ],
         "IPA": [
           {
+            "path": "sk-sk_FONIPA.xml",
             "name": "Slovak",
             "direction": "forward",
             "alias": "sk-fonipa-t-sk"
@@ -2260,6 +2490,7 @@
         ],
         "Katakana": [
           {
+            "path": "sk-ja.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ja-t-sk",
@@ -2273,6 +2504,7 @@
       "Spanish": {
         "Arabic": [
           {
+            "path": "es-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-es",
@@ -2282,6 +2514,7 @@
             ]
           },
           {
+            "path": "es-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-es",
@@ -2293,6 +2526,7 @@
         ],
         "Cherokee": [
           {
+            "path": "es-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-es",
@@ -2304,6 +2538,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "es-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-es",
@@ -2315,6 +2550,7 @@
         ],
         "Han": [
           {
+            "path": "es-zh.xml",
             "name": "Simplified",
             "direction": "forward",
             "alias": "zh-t-es",
@@ -2326,6 +2562,7 @@
         ],
         "IPA": [
           {
+            "path": "es-es_FONIPA.xml",
             "name": "Spanish",
             "direction": "forward",
             "alias": "es-fonipa-t-es",
@@ -2337,6 +2574,7 @@
         ],
         "Katakana": [
           {
+            "path": "es-ja.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ja-t-es",
@@ -2350,6 +2588,7 @@
       "Spanish (Latin America)": {
         "Arabic": [
           {
+            "path": "es_419-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-es-419",
@@ -2359,6 +2598,7 @@
             ]
           },
           {
+            "path": "es_419-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-es-419",
@@ -2370,6 +2610,7 @@
         ],
         "Cherokee": [
           {
+            "path": "es_419-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-es-419",
@@ -2381,6 +2622,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "es_419-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-es-419",
@@ -2392,6 +2634,7 @@
         ],
         "Han": [
           {
+            "path": "es_419-zh.xml",
             "name": "Simplified",
             "direction": "forward",
             "alias": "zh-t-es-419",
@@ -2403,6 +2646,7 @@
         ],
         "Katakana": [
           {
+            "path": "es_419-ja.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ja-t-es-419",
@@ -2416,16 +2660,19 @@
       "Turkish": {
         "Latin": [
           {
+            "path": "tr-Lower.xml",
             "name": "Lower",
             "direction": "forward",
             "alias": "tr-t-d0-lower"
           },
           {
+            "path": "tr-Title.xml",
             "name": "Title",
             "direction": "forward",
             "alias": "tr-t-d0-title"
           },
           {
+            "path": "tr-Upper.xml",
             "name": "Upper",
             "direction": "forward",
             "alias": "tr-t-d0-upper"
@@ -2435,6 +2682,7 @@
       "Venetian": {
         "IPA": [
           {
+            "path": "vec-vec_FONIPA.xml",
             "name": "Venetian",
             "direction": "forward",
             "alias": "vec-fonipa-t-vec"
@@ -2444,6 +2692,7 @@
       "Welsh": {
         "IPA": [
           {
+            "path": "cy-fonipa-t-cy.xml",
             "name": "Welsh",
             "direction": "forward",
             "alias": "cy-fonipa-t-cy"
@@ -2453,6 +2702,7 @@
       "Xhosa": {
         "Arabic": [
           {
+            "path": "xh-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-xh",
@@ -2462,6 +2712,7 @@
             ]
           },
           {
+            "path": "xh-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-xh",
@@ -2473,6 +2724,7 @@
         ],
         "Cherokee": [
           {
+            "path": "xh-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-xh",
@@ -2484,6 +2736,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "xh-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-xh",
@@ -2495,6 +2748,7 @@
         ],
         "IPA": [
           {
+            "path": "xh-xh_FONIPA.xml",
             "name": "Xhosa",
             "direction": "forward",
             "alias": "xh-fonipa-t-xh"
@@ -2504,6 +2758,7 @@
       "Yoruba": {
         "Latin": [
           {
+            "path": "yo-yo_BJ.xml",
             "name": "Benin",
             "direction": "forward",
             "alias": "yo-BJ-t-yo"
@@ -2513,6 +2768,7 @@
       "Zulu": {
         "Arabic": [
           {
+            "path": "zu-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-zu",
@@ -2522,6 +2778,7 @@
             ]
           },
           {
+            "path": "zu-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-zu",
@@ -2533,6 +2790,7 @@
         ],
         "Cherokee": [
           {
+            "path": "zu-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-zu",
@@ -2544,6 +2802,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "zu-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-zu",
@@ -2555,6 +2814,7 @@
         ],
         "IPA": [
           {
+            "path": "zu-zu_FONIPA.xml",
             "name": "Zulu",
             "direction": "forward",
             "alias": "zu-fonipa-t-zu"
@@ -2564,6 +2824,7 @@
       "_base": {
         "Armenian": [
           {
+            "path": "Latin-Armenian.xml",
             "name": "_base",
             "direction": "both",
             "alias": "Latin-Armenian",
@@ -2572,6 +2833,7 @@
         ],
         "ASCII": [
           {
+            "path": "Latin-ASCII.xml",
             "name": "_base",
             "direction": "both",
             "alias": "und-t-d0-ascii"
@@ -2579,6 +2841,7 @@
         ],
         "Bengali": [
           {
+            "path": "Latin-Bengali.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Latin-Bengali",
@@ -2590,6 +2853,7 @@
         ],
         "Bopomofo": [
           {
+            "path": "Latin-Bopomofo.xml",
             "name": "_base",
             "direction": "both",
             "alias": "Latin-Bopomofo",
@@ -2598,6 +2862,7 @@
         ],
         "Devanagari": [
           {
+            "path": "Latin-Devanagari.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Latin-Devanagari",
@@ -2609,6 +2874,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "Latin-Ethiopic.xml",
             "name": "_base",
             "direction": "both",
             "alias": "Latin-Ethiopic",
@@ -2617,6 +2883,7 @@
         ],
         "Gujarati": [
           {
+            "path": "Latin-Gujarati.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Latin-Gujarati",
@@ -2628,6 +2895,7 @@
         ],
         "Gurmukhi": [
           {
+            "path": "Latin-Gurmukhi.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Latin-Gurmukhi",
@@ -2639,16 +2907,19 @@
         ],
         "Hangul": [
           {
+            "path": "Latin-ConjoiningJamo.xml",
             "name": "Conjoining Jamo",
             "direction": "both",
             "visibility": "internal"
           },
           {
+            "path": "Latin-Jamo.xml",
             "name": "Jamo",
             "direction": "forward",
             "alias": "Latin-Jamo"
           },
           {
+            "path": "Latin-Hangul.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Latin-Hangul",
@@ -2660,6 +2931,7 @@
         ],
         "InterIndic": [
           {
+            "path": "Latin-InterIndic.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -2667,6 +2939,7 @@
         ],
         "IPA": [
           {
+            "path": "la-la_FONIPA.xml",
             "name": "Latin",
             "direction": "forward",
             "alias": "la-fonipa-t-la"
@@ -2674,6 +2947,7 @@
         ],
         "Kannada": [
           {
+            "path": "Latin-Kannada.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Latin-Kannada",
@@ -2685,6 +2959,7 @@
         ],
         "Katakana": [
           {
+            "path": "Latin-Katakana.xml",
             "name": "_base",
             "direction": "both",
             "alias": "Latin-Katakana",
@@ -2693,6 +2968,7 @@
         ],
         "Malayalam": [
           {
+            "path": "Latin-Malayalam.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Latin-Malayalam",
@@ -2704,6 +2980,7 @@
         ],
         "Oriya": [
           {
+            "path": "Latin-Oriya.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Latin-Oriya",
@@ -2715,6 +2992,7 @@
         ],
         "Pinyin": [
           {
+            "path": "Latin-NumericPinyin.xml",
             "name": "Numeric",
             "direction": "both",
             "alias": "und-pinyin-t-d0-npinyin",
@@ -2723,6 +3001,7 @@
         ],
         "Tamil": [
           {
+            "path": "Latin-Tamil.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Latin-Tamil",
@@ -2734,6 +3013,7 @@
         ],
         "Telugu": [
           {
+            "path": "Latin-Telugu.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Latin-Telugu",
@@ -2745,6 +3025,7 @@
         ],
         "Thaana": [
           {
+            "path": "Thaana-Latin.xml",
             "name": "_base",
             "direction": "both",
             "alias": "Latin-Thaana",
@@ -2753,6 +3034,7 @@
         ],
         "Thai": [
           {
+            "path": "Latin-Thai.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Latin-Thai",
@@ -2768,6 +3050,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "Malayalam-Arabic.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Malayalam-Arabic",
@@ -2779,6 +3062,7 @@
         ],
         "Bengali": [
           {
+            "path": "Malayalam-Bengali.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Malayalam-Bengali",
@@ -2790,6 +3074,7 @@
         ],
         "Devanagari": [
           {
+            "path": "Malayalam-Devanagari.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Malayalam-Devanagari",
@@ -2801,6 +3086,7 @@
         ],
         "Gujarati": [
           {
+            "path": "Malayalam-Gujarati.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Malayalam-Gujarati",
@@ -2812,6 +3098,7 @@
         ],
         "Gurmukhi": [
           {
+            "path": "Malayalam-Gurmukhi.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Malayalam-Gurmukhi",
@@ -2823,6 +3110,7 @@
         ],
         "InterIndic": [
           {
+            "path": "Malayalam-InterIndic.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -2830,6 +3118,7 @@
         ],
         "Kannada": [
           {
+            "path": "Malayalam-Kannada.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Malayalam-Kannada",
@@ -2841,6 +3130,7 @@
         ],
         "Latin": [
           {
+            "path": "Malayalam-Latin.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Malayalam-Latin",
@@ -2852,6 +3142,7 @@
         ],
         "Oriya": [
           {
+            "path": "Malayalam-Oriya.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Malayalam-Oriya",
@@ -2863,6 +3154,7 @@
         ],
         "Tamil": [
           {
+            "path": "Malayalam-Tamil.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Malayalam-Tamil",
@@ -2874,6 +3166,7 @@
         ],
         "Telugu": [
           {
+            "path": "Malayalam-Telugu.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Malayalam-Telugu",
@@ -2885,6 +3178,7 @@
         ],
         "Urdu": [
           {
+            "path": "Malayalam-ur.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ur-t-und-mlym",
@@ -2900,6 +3194,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "sat-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-sat",
@@ -2909,6 +3204,7 @@
             ]
           },
           {
+            "path": "sat-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-sat",
@@ -2920,6 +3216,7 @@
         ],
         "Cherokee": [
           {
+            "path": "sat-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-sat",
@@ -2931,6 +3228,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "sat-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-sat",
@@ -2942,6 +3240,7 @@
         ],
         "IPA": [
           {
+            "path": "sat_Olck-sat_FONIPA.xml",
             "name": "Ol Chiki",
             "direction": "forward",
             "alias": "sat-fonipa-t-sat-olck"
@@ -2953,6 +3252,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "Oriya-Arabic.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Oriya-Arabic",
@@ -2964,6 +3264,7 @@
         ],
         "Bengali": [
           {
+            "path": "Oriya-Bengali.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Oriya-Bengali",
@@ -2975,6 +3276,7 @@
         ],
         "Devanagari": [
           {
+            "path": "Oriya-Devanagari.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Oriya-Devanagari",
@@ -2986,6 +3288,7 @@
         ],
         "Gujarati": [
           {
+            "path": "Oriya-Gujarati.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Oriya-Gujarati",
@@ -2997,6 +3300,7 @@
         ],
         "Gurmukhi": [
           {
+            "path": "Oriya-Gurmukhi.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Oriya-Gurmukhi",
@@ -3008,6 +3312,7 @@
         ],
         "InterIndic": [
           {
+            "path": "Oriya-InterIndic.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -3015,6 +3320,7 @@
         ],
         "Kannada": [
           {
+            "path": "Oriya-Kannada.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Oriya-Kannada",
@@ -3026,6 +3332,7 @@
         ],
         "Latin": [
           {
+            "path": "Oriya-Latin.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Oriya-Latin",
@@ -3037,6 +3344,7 @@
         ],
         "Malayalam": [
           {
+            "path": "Oriya-Malayalam.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Oriya-Malayalam",
@@ -3048,6 +3356,7 @@
         ],
         "Tamil": [
           {
+            "path": "Oriya-Tamil.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Oriya-Tamil",
@@ -3059,6 +3368,7 @@
         ],
         "Telugu": [
           {
+            "path": "Oriya-Telugu.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Oriya-Telugu",
@@ -3070,6 +3380,7 @@
         ],
         "Urdu": [
           {
+            "path": "Oriya-ur.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ur-t-und-orya",
@@ -3085,6 +3396,7 @@
       "_base": {
         "Latin": [
           {
+            "path": "Pashto-Latin-BGN.xml",
             "name": "BGN",
             "direction": "forward",
             "alias": "Pashto-Latin/BGN"
@@ -3096,6 +3408,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "si-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-si",
@@ -3105,6 +3418,7 @@
             ]
           },
           {
+            "path": "si-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-si",
@@ -3116,6 +3430,7 @@
         ],
         "Cherokee": [
           {
+            "path": "si-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-si",
@@ -3127,6 +3442,7 @@
         ],
         "Ethiopic": [
           {
+            "path": "si-am.xml",
             "name": "Amharic",
             "direction": "forward",
             "alias": "am-t-si",
@@ -3138,6 +3454,7 @@
         ],
         "IPA": [
           {
+            "path": "si-si_FONIPA.xml",
             "name": "Sinhala",
             "direction": "forward",
             "alias": "si-fonipa-t-si"
@@ -3145,6 +3462,7 @@
         ],
         "Latin": [
           {
+            "path": "si-si_Latn.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "si-Latn-t-si"
@@ -3156,6 +3474,7 @@
       "_base": {
         "Latin": [
           {
+            "path": "Syriac-Latin.xml",
             "name": "_base",
             "direction": "both",
             "alias": "Syriac-Latin",
@@ -3168,6 +3487,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "Tamil-Arabic.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Tamil-Arabic",
@@ -3179,6 +3499,7 @@
         ],
         "Bengali": [
           {
+            "path": "Tamil-Bengali.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Tamil-Bengali",
@@ -3190,6 +3511,7 @@
         ],
         "Devanagari": [
           {
+            "path": "Tamil-Devanagari.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Tamil-Devanagari",
@@ -3201,6 +3523,7 @@
         ],
         "Gujarati": [
           {
+            "path": "Tamil-Gujarati.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Tamil-Gujarati",
@@ -3212,6 +3535,7 @@
         ],
         "Gurmukhi": [
           {
+            "path": "Tamil-Gurmukhi.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Tamil-Gurmukhi",
@@ -3223,6 +3547,7 @@
         ],
         "InterIndic": [
           {
+            "path": "Tamil-InterIndic.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal"
@@ -3230,6 +3555,7 @@
         ],
         "IPA": [
           {
+            "path": "ta-ta_FONIPA.xml",
             "name": "Tamil",
             "direction": "forward",
             "alias": "ta-fonipa-t-ta"
@@ -3237,6 +3563,7 @@
         ],
         "Kannada": [
           {
+            "path": "Tamil-Kannada.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Tamil-Kannada",
@@ -3248,6 +3575,7 @@
         ],
         "Latin": [
           {
+            "path": "Tamil-Latin.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Tamil-Latin",
@@ -3259,6 +3587,7 @@
         ],
         "Malayalam": [
           {
+            "path": "Tamil-Malayalam.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Tamil-Malayalam",
@@ -3270,6 +3599,7 @@
         ],
         "Oriya": [
           {
+            "path": "Tamil-Oriya.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Tamil-Oriya",
@@ -3281,6 +3611,7 @@
         ],
         "Telugu": [
           {
+            "path": "Tamil-Telugu.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Tamil-Telugu",
@@ -3292,6 +3623,7 @@
         ],
         "Urdu": [
           {
+            "path": "Tamil-ur.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ur-t-und-taml",
@@ -3307,6 +3639,7 @@
       "_base": {
         "Arabic": [
           {
+            "path": "Telugu-Arabic.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Telugu-Arabic",
@@ -3318,6 +3651,7 @@
         ],
         "Bengali": [
           {
+            "path": "Telugu-Bengali.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Telugu-Bengali",
@@ -3329,6 +3663,7 @@
         ],
         "Devanagari": [
           {
+            "path": "Telugu-Devanagari.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Telugu-Devanagari",
@@ -3340,6 +3675,7 @@
         ],
         "Gujarati": [
           {
+            "path": "Telugu-Gujarati.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Telugu-Gujarati",
@@ -3351,6 +3687,7 @@
         ],
         "Gurmukhi": [
           {
+            "path": "Telugu-Gurmukhi.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Telugu-Gurmukhi"
@@ -3358,6 +3695,7 @@
         ],
         "InterIndic": [
           {
+            "path": "Telugu-InterIndic.xml",
             "name": "_base",
             "direction": "forward",
             "visibility": "internal",
@@ -3369,6 +3707,7 @@
         ],
         "Kannada": [
           {
+            "path": "Telugu-Kannada.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Telugu-Kannada",
@@ -3380,6 +3719,7 @@
         ],
         "Latin": [
           {
+            "path": "Telugu-Latin.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Telugu-Latin",
@@ -3391,6 +3731,7 @@
         ],
         "Malayalam": [
           {
+            "path": "Telugu-Malayalam.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Telugu-Malayalam",
@@ -3402,6 +3743,7 @@
         ],
         "Oriya": [
           {
+            "path": "Telugu-Oriya.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Telugu-Oriya",
@@ -3413,6 +3755,7 @@
         ],
         "Tamil": [
           {
+            "path": "Telugu-Tamil.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Telugu-Tamil",
@@ -3424,6 +3767,7 @@
         ],
         "Urdu": [
           {
+            "path": "Telugu-ur.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ur-t-und-telu",
@@ -3439,6 +3783,7 @@
       "Logical": {
         "Latin": [
           {
+            "path": "ThaiLogical-Latin.xml",
             "name": "_base",
             "direction": "both",
             "visibility": "internal"
@@ -3448,6 +3793,7 @@
       "Tai Viet": {
         "IPA": [
           {
+            "path": "blt-fonipa-t-blt.xml",
             "name": "Tai Viet",
             "direction": "forward",
             "alias": "blt-fonipa-t-blt"
@@ -3457,6 +3803,7 @@
       "_base": {
         "Latin": [
           {
+            "path": "Thai-Latin.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "Thai-Latin",
@@ -3468,6 +3815,7 @@
         ],
         "Thai": [
           {
+            "path": "Thai-ThaiLogical.xml",
             "name": "Logical",
             "direction": "both",
             "visibility": "internal",
@@ -3477,6 +3825,7 @@
             ]
           },
           {
+            "path": "Thai-ThaiSemi.xml",
             "name": "Semicolon",
             "direction": "both",
             "visibility": "internal"
@@ -3488,11 +3837,13 @@
       "_base": {
         "Arabic": [
           {
+            "path": "und_FONIPA-fa.xml",
             "name": "Persian",
             "direction": "forward",
             "alias": "fa-t-und-fonipa"
           },
           {
+            "path": "und_FONIPA-ar.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "ar-t-und-fonipa"
@@ -3500,6 +3851,7 @@
         ],
         "Cherokee": [
           {
+            "path": "und_FONIPA-chr.xml",
             "name": "_base",
             "direction": "forward",
             "alias": "chr-t-und-fonipa"
@@ -3511,6 +3863,7 @@
       "_base": {
         "Latin": [
           {
+            "path": "CanadianAboriginal-Latin.xml",
             "name": "_base",
             "direction": "both",
             "alias": "Latin-CanadianAboriginal",

@@ -80,6 +80,10 @@ public final class Xliterator extends Application {
 	private Menu inScriptMenu   = null;
 	private Menu outVariantMenu = null;
 	private Menu outScriptMenu  = null;
+	
+	private Menu  inScriptMenuLast = null;
+	private Menu outScriptMenuLast = null;
+	
 	final Menu tabsMenu = new Menu( "Tabs" );
 	// an object could be introduced to hold the various transliteration attributes:
 	private String selectedTransliteration  = null;
@@ -119,6 +123,7 @@ public final class Xliterator extends Application {
     private Image visibleIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
     private Image arrowForwardIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_right_grey_16x16.png" ) ); 
     private Image arrowBothIcon    = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_double_grey_16x16.png" ) );
+    private Image checkIcon        = new Image( ClassLoader.getSystemResourceAsStream( "images/check_black_16x16.png" ) );
     private ColorAdjust monochrome = new ColorAdjust();
 	
 	
@@ -174,6 +179,10 @@ public final class Xliterator extends Application {
     			menuItem.setToggleGroup( groupInMenu );
         		menuItem.setOnAction( evt -> setScriptIn( scriptInKey, "_base" ) );
         		menu.getItems().add( menuItem );
+    			if( inScriptMenuLast != null ) {
+    				inScriptMenuLast.setGraphic( null );
+    				inScriptMenuLast = null;
+    			}
     		}
     		else {
     			Menu scriptMenu = new Menu( scriptInKey );
@@ -188,7 +197,14 @@ public final class Xliterator extends Application {
             			scriptMenu.getItems().add( new SeparatorMenuItem() );
     				}
 
-            		menuItem.setOnAction( evt -> setScriptIn( scriptInKey, variantInKey ) );
+            		menuItem.setOnAction( evt -> {
+            			if( inScriptMenuLast != null ) {
+            				inScriptMenuLast.setGraphic( null );
+            			}
+            			setScriptIn( scriptInKey, variantInKey );    		
+            			scriptMenu.setGraphic( new ImageView( checkIcon ) );
+            			inScriptMenuLast = scriptMenu;
+            		});
 
     			}
     			menu.getItems().add( scriptMenu );
@@ -243,6 +259,20 @@ public final class Xliterator extends Application {
         		menuItem.setOnAction( evt -> setScriptOut( scriptOutKey, "_base", variantOutObject ) );
         		menuItem.getProperties().put( "jsonObject", variantOutObject );
         		outScriptMenu.getItems().add( menuItem );
+        		
+    			if( outScriptMenuLast != null ) {
+    				outScriptMenuLast.setGraphic( null );
+    				outScriptMenuLast = null;
+    			}
+        		
+        		ImageView imageView = null;
+        		if( "both".equals( variantOutObject.get("direction").getAsString() ) ) {
+        			imageView = new ImageView( arrowBothIcon );
+        		}
+        		else {
+        			imageView = new ImageView( arrowForwardIcon );    	        			
+        		}
+                menuItem.setGraphic( imageView );
     		}
     		else {
     			Menu scriptMenu = new Menu( scriptOutKey );
@@ -257,9 +287,24 @@ public final class Xliterator extends Application {
 
         			menuItem.setToggleGroup( groupOutMenu );
         			JsonObject variantOutObject = variantsOut.get(i).getAsJsonObject();
-            		menuItem.setOnAction( evt -> setScriptOut( scriptOutKey, variantOutKey, variantOutObject) );
+            		menuItem.setOnAction( evt -> {
+            			if( outScriptMenuLast != null ) {
+            				outScriptMenuLast.setGraphic( null );
+            			}
+            			setScriptOut( scriptOutKey, variantOutKey, variantOutObject );
+            			scriptMenu.setGraphic( new ImageView( checkIcon ) );
+            			outScriptMenuLast = scriptMenu;
+            		});
             		menuItem.getProperties().put( "jsonObject", variantsOut.get(i).getAsJsonObject() );
-
+            		
+	        		ImageView imageView = null;
+	        		if( "both".equals( variantOutObject.get("direction").getAsString() ) ) {
+	        			imageView = new ImageView( arrowBothIcon );
+	        		}
+	        		else {
+	        			imageView = new ImageView( arrowForwardIcon );    	        			
+	        		}
+	                menuItem.setGraphic( imageView );
     			}
     			outScriptMenu.getItems().add( scriptMenu );
     		}
@@ -1090,6 +1135,20 @@ public final class Xliterator extends Application {
     	this.scriptOut = scriptOut;
     	this.variantOut = variantOut;
     	this.selectedTransliterationObject = transliteration;
+    	
+		this.selectedTransliteration  = transliteration.get( "file").getAsString();
+		this.transliterationDirection = transliteration.get( "direction").getAsString();
+		this.transliterationAlias = (transliteration.has("alias")) ? transliteration.get("alias").getAsString() : null;
+		
+		ArrayList<String> dependencies = new ArrayList<String>();
+		if( transliteration.has( "dependencies" ) ) {
+			JsonArray dependenciesJSON = transliteration.getAsJsonArray( "dependencies" );
+			for (int k = 0; k < dependenciesJSON.size(); k++) {
+				dependencies.add( dependenciesJSON.get(k).getAsString() );
+			}
+		}		
+		this.transliterationDependencies = (dependencies.isEmpty()) ? null: dependencies;
+		
     	scriptOutText.setText( scriptOut );
     	variantOutText.setText( "[None]" );
     	// createOutVaraintsMenu( scriptOut );
@@ -1218,6 +1277,7 @@ public final class Xliterator extends Application {
     	
     	setScriptIn( "Ethiopic", "Amharic" );
     	setScriptOut( "IPA",  "_base", null );
+    	// get the corresponding object from the index
     	// setVariantOut( "Amharic");
     	selectedTransliteration = "am-am_FONIPA.xml";
     	transliterationDirection = "both";

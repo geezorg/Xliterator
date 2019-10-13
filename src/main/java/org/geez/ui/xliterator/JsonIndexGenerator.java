@@ -89,7 +89,7 @@ public class JsonIndexGenerator {
 		for (Row r : rows ) {
 			System.out.println("row " + r.getR() );		
 			
-			String file = null, scriptIn = null, variantIn = "_base", scriptOut = null,
+			String path = null, scriptIn = null, variantIn = "_base", scriptOut = null,
 					variantOut = "_base", direction = null, alias = null, backwardAlias = null,
 					dependencies = null, visibility = null, tooltip = null;
 			
@@ -98,7 +98,7 @@ public class JsonIndexGenerator {
 
 				switch( c.getR().charAt(0) ) {
 					case 'A':
-						file      = formatter.formatCellValue( c );
+						path      = formatter.formatCellValue( c );
 						break;
 						
 					case 'B':
@@ -204,6 +204,7 @@ public class JsonIndexGenerator {
 			}
 			JsonArray scriptOutArray = variantInObject.get( scriptOut ).getAsJsonArray();
 			JsonObject variantOutObject = new JsonObject();
+			variantOutObject.addProperty( "path", path );
 			variantOutObject.addProperty( "name", variantOut );
 			variantOutObject.addProperty( "direction", direction );
 			if( (alias != null) ) {
