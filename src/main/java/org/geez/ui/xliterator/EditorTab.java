@@ -71,6 +71,12 @@ public class EditorTab extends XliteratorTab {
 	}
     
     
+	private String selectedDirection = null;
+	public String getSelectedDirection() {
+		return selectedDirection;
+	}
+	
+	
 	public void setup(Stage primaryStage, XliteratorConfig config, MenuItem saveMenuItem, MenuItem saveAsMenuItem ) {
         Menu editorFontMenu     = createFontMenu( editor );
         Menu editorFontSizeMenu = createFontSizeMenu( editor );
@@ -91,6 +97,9 @@ public class EditorTab extends XliteratorTab {
         else {
         	directionBox.getSelectionModel().select(0);
         }
+        directionBox.setOnAction( evt -> {
+        	selectedDirection = directionBox.getSelectionModel().getSelectedItem().toLowerCase();
+        });
 
         Button unregister = new Button( "Unregister" );
         Button register = new Button( "Register" );
@@ -105,8 +114,8 @@ public class EditorTab extends XliteratorTab {
         		// String alias = selections.getKey();
         		// String direction = selections.getKey();
         		try {
-        			String direction = directionBox.getSelectionModel().getSelectedItem().toLowerCase();
-        			config.registerTransliteration( alias, direction, editor.getText() );
+        			// String direction = directionBox.getSelectionModel().getSelectedItem().toLowerCase();
+        			config.registerTransliteration( alias, selectedDirection, editor.getText() );
         			// getProperties().put( "direction", direction );
         			// getProperties().put( "alias", alias );
         			unregister.setDisable( false );
