@@ -15,6 +15,7 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -34,6 +35,9 @@ public class ConvertTextTab extends XliteratorTab {
     
 	private final Button convertButtonDown = new Button(); // ( "⬇" );
     private final Button convertButtonUp   = new Button(); // ( "⬆" );
+    private final CheckBox autoConversionCheckBox = new CheckBox( "Auto Convert" );
+    private boolean autoConvertDown = true;
+    private boolean autoConvertUp = true;
     
     private final String textAreaInFontFacePref  = "org.geez.ui.xliterator.convertTextTab.textAreaIn.font.face";
     private final String textAreaInFontSizePref  = "org.geez.ui.xliterator.convertTextTab.textAreaIn.font.size";
@@ -48,9 +52,9 @@ public class ConvertTextTab extends XliteratorTab {
 	}    
     
 	private HashMap<String,String> registeredDependencies = new HashMap<String,String>();
-	private String selectedTransliteration = null;
+	// private String selectedTransliteration = null;
     HashMap<String,ConvertTextString> textStringConverts = new HashMap<String,ConvertTextString>();    
-    private void convertTextArea(StyleClassedTextArea textAreaIn, StyleClassedTextArea textAreaOut, String direction) {
+    private void convertTextAreaOld(StyleClassedTextArea textAreaIn, StyleClassedTextArea textAreaOut, String direction) {
     	String textIn = textAreaIn.getText();
     	if( textIn == null ) {
     		return;
@@ -76,7 +80,7 @@ public class ConvertTextTab extends XliteratorTab {
 	    		stringConverter.setRules( editorTab.getEditor().getText(), direction );
 	    	}
 	    	else {
-		    	String transliterationKey = selectedTransliteration + "-" + direction ;
+		    	String transliterationKey = ((alias == null ) ? selectedTransliteration : alias) + "-" + direction ;
 		    	
 		    	if(! textStringConverts.containsKey( transliterationKey ) ) {
 		    		textStringConverts.put( transliterationKey, new ConvertTextString( selectedTransliteration, direction ) );
@@ -87,23 +91,109 @@ public class ConvertTextTab extends XliteratorTab {
 	    	stringConverter.setCaseOption( caseOption );
 	    	stringConverter.setText( textIn );
 	    	
-	    	textAreaOut.clear();
+	    	// textAreaOut.clear();
 	        
 	    	textAreaOut.replaceText( stringConverter.convertText( textIn ) );
-	    	if( "both".equals( transliterationDirection ) ) {
-	    		convertButtonUp.setDisable( false );
-	    	}
 		}
 		catch(Exception ex) {
         	errorAlert(ex, "Translteration Definition Error. Correct to Proceed." );
 			return;
 		}
     }
-    
+
+
+	ConvertTextString stringConverterDown = null;
+	ConvertTextString stringConverterUp = null;
+	private void initializeStringConverters() {
+		
+		try {	
+	    	if( selectedTransliteration.equals( Xliterator.useSelectedEdtior ) ) {
+	    		// do not save the converter because the text may change:
+	    		// The ConvertTextString constructor needs to be reworked here, see notes within its source file:
+	    		// stringConverter = new ConvertTextString( editor.getText(), direction, true );
+	    		
+	    		EditorTab editorTab = xlit.getSelectedEditorTab();
+	    		if( editorTab == null ) {
+	    			// error alert
+	    			return;
+	    		}
+	    		transliterationDirection = editorTab.getSelectedDirection();
+	    		stringConverterDown = new ConvertTextString();
+	    		stringConverterDown.setRules( editorTab.getEditor().getText(), transliterationDirection );
+	    		
+	    		if( "both".equals( transliterationDirection ) ) {
+	        		stringConverterUp = new ConvertTextString();
+	        		stringConverterUp.setRules( editorTab.getEditor().getText(), "reverse" );    	
+	        		stringConverterUp.setCaseOption( caseOption );
+	    		}
+	    	}
+	    	else {
+		    	String transliterationKeyForward = ((alias == null ) ? selectedTransliteration : alias) + "-" + transliterationDirection ;
+		    	
+		    	if(! textStringConverts.containsKey( transliterationKeyForward ) ) {
+		    		textStringConverts.put( transliterationKeyForward, new ConvertTextString( selectedTransliteration, transliterationDirection ) );
+		    	}
+		    	stringConverterDown = textStringConverts.get( transliterationKeyForward );
+		    	
+	    		if( "both".equals( transliterationDirection ) ) {
+	    	    	String transliterationKeyReverse = ((alias == null ) ? selectedTransliteration : alias) + "-reverse" ;
+	    	    	
+	    	    	if(! textStringConverts.containsKey( transliterationKeyReverse ) ) {
+	    	    		textStringConverts.put( transliterationKeyReverse, new ConvertTextString( selectedTransliteration, "reverse" ) );
+	    	    	}
+	    	    	stringConverterUp = textStringConverts.get( transliterationKeyReverse );   
+	    	    	stringConverterUp.setCaseOption( caseOption );
+	    		}
+	    		
+	    		if( (dependencies != null) && ( "false".equals( registeredDependencies.get(selectedTransliteration) ) ) ) {
+	    			// TBD: update registerDependencies to handle reverses:
+	    			xlit.getConfig().registerDependencies( dependencies );
+	    			registeredDependencies.put( selectedTransliteration , "true" );
+	    		}
+	    	}
+    	
+		}
+		catch(Exception ex) {
+	    	errorAlert(ex, "Translteration Definition Error. Correct to Proceed." );
+			return;
+		}
+    	
+    	stringConverterDown.setCaseOption( caseOption );
+	}
+	
+	public void setCaseOption( String caseOption ) {
+		super.setCaseOption( caseOption );
+		if( stringConverterUp != null ) {
+			stringConverterUp.setCaseOption( caseOption );
+		}
+		if(  stringConverterDown != null ) {
+			stringConverterDown.setCaseOption( caseOption );
+		}
+	}
+	
+    private void convertTextArea(StyleClassedTextArea textAreaIn, StyleClassedTextArea textAreaOut, ConvertTextString stringConverter) {
+    	String textIn = textAreaIn.getText();
+    	if( textIn == null ) {
+    		return;
+    	}
+    	
+    	/*
+		if( stringConverter == null ) {
+			initializeStringConverters();
+		}
+		*/
+
+    	// stringConverter.setText( textIn );
+    	
+    	// textAreaOut.clear();
+        
+    	textAreaOut.replaceText( stringConverter.convertText( textIn ) );
+
+    }
     public void setup(Xliterator xlit) {
     	this.xlit = xlit;
-        textAreaIn.setPrefHeight(313);
-        textAreaOut.setPrefHeight(313);
+        textAreaIn.setPrefHeight( 313 );
+        textAreaOut.setPrefHeight( 313 );
         textAreaIn.setId( "convertText" );
         textAreaOut.setId( "convertText" );
         /*
@@ -149,7 +239,10 @@ public class ConvertTextTab extends XliteratorTab {
         // convertButtonDown.setStyle( "-fx-font-size: 24;");
         convertButtonDown.setDisable( true );
         convertButtonDown.setOnAction( event -> {
-        	convertTextArea( textAreaIn, textAreaOut, "forward" ); 
+        	if( stringConverterDown == null ) {
+        		initializeStringConverters();
+        	}
+        	convertTextArea( textAreaIn, textAreaOut, stringConverterDown ); 
         });
         
         Image imageUp = new Image( classLoader.getResourceAsStream( "images/arrow-circle-up.png" ) );
@@ -160,7 +253,10 @@ public class ConvertTextTab extends XliteratorTab {
         // convertButtonUp.setStyle( "-fx-font-size: 24;");
         convertButtonUp.setDisable( true );
         convertButtonUp.setOnAction( event -> {
-        	convertTextArea( textAreaOut, textAreaIn, "reverse" ); 
+        	if( stringConverterUp == null ) {
+        		initializeStringConverters();
+        	}
+        	convertTextArea( textAreaOut, textAreaIn, stringConverterUp ); 
         });
         
         Button textAreaOutIncreaseFontSizeButton = new Button( "+" ); 
@@ -171,10 +267,16 @@ public class ConvertTextTab extends XliteratorTab {
         textAreaOutDecreaseFontSizeButton.setOnAction( event -> {
         	decrementFontSize( textAreaOut );
         });
+        autoConversionCheckBox.setOnAction( evt -> {
+        	autoConvertDown = autoConvertUp = autoConversionCheckBox.isSelected();
+        });
+        autoConversionCheckBox.setSelected( true );
+        autoConversionCheckBox.setDisable( true );
+        
         Region hspacer = new Region();
         hspacer.prefWidth( 200 );
         HBox.setHgrow(hspacer, Priority.SOMETIMES);
-        HBox textAreaOutMenuBox = new HBox( createFontChoiceBox( textAreaOut ), textAreaOutIncreaseFontSizeButton, textAreaOutDecreaseFontSizeButton, hspacer, convertButtonDown, convertButtonUp );
+        HBox textAreaOutMenuBox = new HBox( createFontChoiceBox( textAreaOut ), textAreaOutIncreaseFontSizeButton, textAreaOutDecreaseFontSizeButton, hspacer, autoConversionCheckBox, convertButtonDown, convertButtonUp );
         textAreaOutMenuBox.setAlignment(Pos.CENTER_LEFT);
         textAreaOutMenuBox.setPadding(new Insets(2, 2, 2, 2));
         textAreaOutMenuBox.setSpacing( 4 );
@@ -212,6 +314,8 @@ public class ConvertTextTab extends XliteratorTab {
 			convertButtonDown.setDisable( false );
 			convertButtonDown.setTooltip( new Tooltip( "Convert in forward direction" )  );
 			convertButtonUp.setTooltip( new Tooltip( "Convert in reverse direction" ) );
+			stringConverterDown = null;
+			stringConverterUp = null;
     	}
     	else {
 			convertButtonUp.setDisable( true );
@@ -219,13 +323,15 @@ public class ConvertTextTab extends XliteratorTab {
     	}
     }
     
+    /*
     public void setScriptOut(String scriptOut ) {
     	super.setScriptOut(scriptOut);
-		convertButtonUp.setDisable( true );
+		// convertButtonUp.setDisable( true );
 		convertButtonUp.setTooltip( new Tooltip( "Convert from: " + scriptOut + " to " + scriptIn )  );
-		convertButtonDown.setDisable( true );
+		// convertButtonDown.setDisable( true );
 		convertButtonDown.setTooltip( new Tooltip( "Convert from: " + scriptIn + " to " + scriptOut ) );
     }
+    */
       
     public void setVariantOut( String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies, String alias ) {
     	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection, dependencies, alias);
@@ -242,17 +348,47 @@ public class ConvertTextTab extends XliteratorTab {
     }
   
     public void setTransliteration( JsonObject transliteration ) {
-    	super.setTransliteration( transliteration);
+    	if( this.transliteration == null ) {
+            // this must be the first call to the method, only set the listener once
+            textAreaIn.textProperty().addListener( (obs, oldText, newText) -> {
+            	if( autoConvertDown ) {
+                	if( stringConverterDown == null ) {
+                		initializeStringConverters();
+                	}
+            		autoConvertUp = false;
+            		convertTextArea( textAreaIn, textAreaOut, stringConverterDown );
+            		autoConvertUp = true;
+            	}
+            }); 		
+    	}
+    	super.setTransliteration( transliteration );
+    	
+    	stringConverterDown = null;
+    	stringConverterUp = null;
     	
 		registeredDependencies.put( selectedTransliteration , "false" );
+		convertButtonUp.setTooltip( new Tooltip( "Convert from: " + scriptOut + " to " + scriptIn )  );
+		convertButtonDown.setTooltip( new Tooltip( "Convert from: " + scriptIn + " to " + scriptOut ) );
 		convertButtonUp.setDisable( false );
 		convertButtonDown.setDisable( false );
+        autoConversionCheckBox.setDisable( false );
 		
-        if( "both".equals( transliterationDirection ) ) {
+        if( "both".equals( transliterationDirection ) ) {	
         	convertButtonUp.setDisable( false );
+            textAreaOut.textProperty().addListener( (obs, oldText, newText) -> {
+            	// only do this if reverse is supported
+            	if( autoConvertUp ) {
+                	if( stringConverterUp == null ) {
+                		initializeStringConverters();
+                	}
+            		autoConvertDown = false;
+            		convertTextArea( textAreaOut, textAreaIn, stringConverterUp );
+            		autoConvertDown = true;
+            	}
+            });
         }
         else {
-        	convertButtonUp.setDisable( true );        	
+        	convertButtonUp.setDisable( true );
         }
     }
         

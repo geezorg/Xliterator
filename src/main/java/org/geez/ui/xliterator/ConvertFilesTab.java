@@ -267,12 +267,17 @@ public class ConvertFilesTab extends XliteratorTab {
         });
         
         CheckBox openFilesCheckbox = new CheckBox( "Open file(s) after conversion?");
+        openFilesCheckbox.setOnAction( evt -> {
+        	openOutput = openFilesCheckbox.isSelected();
+        });
+        /*
         openFilesCheckbox.selectedProperty().addListener(new ChangeListener<Boolean>() {
             public void changed(ObservableValue<? extends Boolean> ov,
                 Boolean old_val, Boolean new_val) {
                     openOutput = new_val.booleanValue();
             }
         });
+        */
         openFilesCheckbox.setSelected(true);
         
         
