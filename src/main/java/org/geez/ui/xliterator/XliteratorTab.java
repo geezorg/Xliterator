@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import org.fxmisc.richtext.StyleClassedTextArea;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import de.endrullis.draggabletabs.DraggableTab;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -25,6 +28,8 @@ public abstract class XliteratorTab extends DraggableTab {
 	protected String fontFamily = null;
 	protected String fontSize = null;
 	protected ArrayList<String> dependencies = null;
+	
+	protected JsonObject transliteration = null;
 	
     
 	public XliteratorTab( String title ) {
@@ -141,6 +146,25 @@ public abstract class XliteratorTab extends DraggableTab {
     	this.dependencies = dependencies;
     	this.alias = alias;
     }
+    
+    
+    public void setTransliteration( JsonObject transliteration ) {
+    	this.transliteration = transliteration;
+    	
+    	this.variantOut               = transliteration.get( "name" ).getAsString();;
+    	this.selectedTransliteration  = transliteration.get( "path" ).getAsString();
+    	this.transliterationDirection = transliteration.get( "direction" ).getAsString();
+    	this.alias = ( transliteration.has( "alias" ) ) ? transliteration.get( "alias" ).getAsString() : null ;
+    	
+		ArrayList<String> dependencies = new ArrayList<String>();
+		if( transliteration.has( "dependencies" ) ) {
+			JsonArray dependenciesJSON = transliteration.getAsJsonArray( "dependencies" );
+			for (int k = 0; k < dependenciesJSON.size(); k++) {
+				dependencies.add( dependenciesJSON.get(k).getAsString() );
+			}
+		}		
+		this.dependencies = (dependencies.isEmpty()) ? null: dependencies;
+  	}
     
     
     public void setCaseOption( String caseOption ) {
