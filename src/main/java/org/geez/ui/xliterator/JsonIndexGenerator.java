@@ -204,7 +204,7 @@ public class JsonIndexGenerator {
 			}
 			JsonArray scriptOutArray = variantInObject.get( scriptOut ).getAsJsonArray();
 			JsonObject variantOutObject = new JsonObject();
-			variantOutObject.addProperty( "new", variantOut );
+			variantOutObject.addProperty( "name", variantOut );
 			variantOutObject.addProperty( "direction", direction );
 			if( (alias != null) ) {
 				variantOutObject.addProperty( "alias", alias );
