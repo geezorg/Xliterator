@@ -1,916 +1,3523 @@
 {
-	"Scripts": {
-		"Arabic" : {
-			"Latin" : [
-				{
-					"BGN": [
-						{ "name": "Arabic", "direction": "forward", "path": "Arabic-Latin-BGN.xml" },
-						{ "name": "Pashto", "direction": "forward", "path": "Pashto-Latin-BGN.xml" },
-						{ "name": "Persian", "direction": "forward", "path": "Persian-Latin-BGN.xml" }
-					]
-				},
-				{ "name": "Latin", "direction": "both", "path": "Arabic-Latin.xml" } 
-			],
-			"IPA" : [
-				{ "name": "Farsi", "direction": "forward", "path": "fa-fa_FONIPA.xml" },
-				{ "name": "Uyghur", "direction": "forward", "path": "ug-ug_FONIPA.xml" }
-			]
-		},
-		"Armenian" : {
-			"Latin" : [
-				{ "name": "BGN", "direction": "forward", "path": "Armenian-Latin-BGN.xml" }
-			]
-		},
-		"Azerbaijani" : {
-			"Latin" : [
-				{ "name": "BGN", "direction": "forward", "path": "Azerbaijani-Latin-BGN.xml" }
-			]
-		},
-		"Belarusian" : {
-			"Latin" : [
-				{ "name": "BGN", "direction": "forward", "path": "Belarusian-Latin-BGN.xml" }
-			]
-		},
-		"Bengali" : {
-			"Arabic" : [
-				{
-				  "name": "Arabic", "direction": "forward", "path": "Bengali-Arabic.xml",
-				  "alias": "Bengali-Arabic", "dependencies": [ "Bengali-InterIndic", "Bengali-Arabic" ]
-				}
-			],
-			"Devanagari" : [
-				{
-				  "name": "Devanagari", "direction": "forward", "path": "Bengali-Devanagari.xml",
-				  "alias": "Bengali-Arabic", "dependencies": [ "Bengali-InterIndic", "InterIndic-Devanagari" ]
-				}
-			],
-			"Gujarti" : [
-				{
-				  "name": "Gujarti", "direction": "forward", "path": "Bengali-Gujarati.xml",
-				  "alias": "Bengali-Gujarati", "dependencies": [ "Bengali-InterIndic", "InterIndic-Gujarti" ]
-				}
-			],
-			"Gurmukhi" : [
-				{
-				  "name": "Gurmukhi", "direction": "forward", "path": "Bengali-Gurmukhi.xml",
-				  "alias": "Bengali-Gurmukhi", "dependencies": [ "Bengali-InterIndic", "InterIndic-Gurmukhi" ]
-				}
-			],
-			"InterIndic" : [
-				{
-				  "name": "InterIndic", "direction": "forward", "path": "Bengali-InterIndic.xml",
-                                  "alias": "Bengali-InterIndic", "visibility": "internal"
-				}
-			],
-			"Kannada" : [
-				{
-				  "name": "Kannada", "direction": "forward", "path": "Bengali-Kannada.xml",
-				   "alias": "Bengali-Kannada", "dependencies": [ "Bengali-InterIndic", "InterIndic-Kannada" ]
-				}
-			],
-			"Latin" : [
-				{
-				  "name": "Latin", "direction": "forward", "path": "Bengali-Latin.xml",
-				  "alias": "Bengali-Latin", "dependencies": [ "Bengali-InterIndic", "InterIndic-Latin" ]
-				}
-			],
-			"Malayalam" : [
-				{
-				  "name": "Malayalam", "direction": "forward", "path": "Bengali-Malayalam.xml",
-				  "alias": "Bengali-Malayalam", "dependencies": [ "Bengali-InterIndic", "InterIndic-Malayalam" ]
-				}
-			],
-			"Oriya" : [
-				{
-				  "name": "Oriya", "direction": "forward", "path": "Bengali-Oriya.xml",
-				  "alias": "Bengali-Oriya", "dependencies": [ "Bengali-InterIndic", "InterIndic-Oriya" ]
-				}
-			],
-			"Tamil" : [
-				{
-				  "name": "Tamil", "direction": "forward", "path": "Bengali-Tamil.xml",
-				  "alias": "Bengali-Tamil", "dependencies": [ "Bengali-InterIndic", "InterIndic-Tamil" ]
-				}
-			],
-			"Telugu" : [
-				{
-				  "name": "Telugu", "direction": "forward", "path": "Bengali-Telugu.xml",
-				  "alias": "Bengali-Telugu", "dependencies": [ "Bengali-InterIndic", "InterIndic-Telugu" ]
-				}
-			],
-			"Urdu" : [
-				{
-				  "name": "Urdu", "direction": "forward", "path": "Bengali-ur.xml",
-				  "alias": "Bengali-ur", "dependencies": [ "Bengali-InterIndic", "InterIndic-ur" ]
-				}
-			]
-		},
-		"Cyrillic" : {
-			"Latin" : [
-				{
-				  "BGN" : [
-					{ "name": "Mongolian", "direction": "forward", "path": "Mongolian-Latin-BGN.xml" },
-					{ "name": "Serbian", "direction": "forward", "path": "Serbian-Latin-BGN.xml" },
-					{ "name": "Russian", "direction": "forward", "path": "Russian-Latin-BGN.xml" },
-					{ "name": "Ukrainian", "direction": "forward", "path": "Ukrainian-Latin-BGN.xml" },
-					{ "name": "Turkmen", "direction": "forward", "path": "Turkmen-Latin-BGN.xml" },
-					{ "name": "Uzbek", "direction": "forward", "path": "Uzbek-Latin-BGN.xml" }
-				  ],
-				  "BGN (1947)" : [
-					{ "name": "Russian", "direction": "forward", "path": "ru_Latn-ru-BGN.xml" }
-				  ],
-				  "IPA" : [
-					{ "name": "Kazakh", "direction": "forward", "path": "kk-kk_FONIPA.xml" }
-				  ]
-				},
-			        {
-				 "Mongolian" : [
-						{ "name": "BGN", "direction": "forward", "path": "Mongolian-Latin-BGN.xml" },
-						{ "name": "MNS", "direction": "forward", "path": "mn-mn_Latn-MNS.xml" }
-					]
-				}
-			]
-		},
-		"Devanagari" : {
-			"Arabic" : [
-				{
-				  "name": "Arabic", "direction": "forward", "path": "Devanagari-Arabic.xml",
-				  "alias": "Devanagari-Arabic", "dependencies": [ "Devanagari-InterIndic", "Devanagari-Arabic" ]
-				}
-			],
-			"Bengali" : [
-				{
-				  "name": "Bengali", "direction": "forward", "path": "Devanagari-Bengali.xml",
-				  "alias": "Devanagari-Bengali", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Bengali" ]
-				}
-			],
-			"Tulugu" : [
-				{
-				  "name": "Tulugu", "direction": "forward", "path": "Devanagari-Tulugu.xml",
-				  "alias": "Devanagari-Tulugu", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Tulugu" ]
-				}
-			],
-			"Malayalam" : [
-				{
-				  "name": "Malayalam", "direction": "forward", "path": "Devanagari-Malayalam.xml",
-				  "alias": "Devanagari-Malayalam", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Malayalam" ]
-				}
-			],
-			"Gujararti" : [
-				{
-				  "name": "Gujararti", "direction": "forward", "path": "Devanagari-Gujararti.xml",
-				  "alias": "Devanagari-Gujararti", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Gujararti" ]
-				}
-			],
-			"Gurmukhi" : [
-				{
-				  "name": "Gurmukhi", "direction": "forward", "path": "Devanagari-Gurmukhi.xml",
-			   	  "alias": "Devanagari-Gurmukhi", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Gurmukhi" ]
-				}
-			],
-			"InterIndic" : [
-				{
-				  "name": "InterIndic", "direction": "forward", "path": "Devanagari-InterIndic.xml",
-                                  "alias": "Devanagari-InterIndic", "visibility": "internal"
-				}
-			],
-			"Kannada" : [
-				{
-				  "name": "Kannada", "direction": "forward", "path": "Devanagari-Kannada.xml",
-				  "alias": "Devanagari-Kannada", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Kannada" ]
-				}
-			],
-			"Latin" : [
-				{
-				  "name": "Latin", "direction": "forward", "path": "Devanagari-Latin.xml",
-				  "alias": "Devanagari-Latin", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Latin" ]
-				}
-			],
-			"Oriya" : [
-				{
-				  "name": "Oriya", "direction": "forward", "path": "Devanagari-Oriya.xml",
-				  "alias": "Devanagari-Oriya", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Oriya" ]
-				}
-			],
-			"Tamil" : [
-				{
-				  "name": "Tamil", "direction": "forward", "path": "Devanagari-Tamil.xml",
-				  "alias": "Devanagari-Tamil", "dependencies": [ "Devanagari-InterIndic", "InterIndic-Tamil" ]
-				}
-			],
-			"Urdu" : [
-				{
-				  "name": "Urdu", "direction": "forward", "path": "Devanagari-ur.xml",
-				  "alias": "Devanagari-ur", "dependencies": [ "Devanagari-InterIndic", "InterIndic-ur" ]
-				}
-			]
-		},
-		"InterIndic" : {
-			"Arabic" : [
-				{
-				  "name": "Arabic", "direction": "forward", "path": "InterIndic-Arabic.xml",
-                                  "alias": "InterIndic-Arabic", "visibility": "internal"
-				}
-			],
-			"Bengali" : [
-				{
-				  "name": "Bengali", "direction": "forward", "path": "InterIndic-Bengali.xml",
-                                  "alias": "InterIndic-Bengali", "visibility": "internal"
-				}
-			],
-			"Devanagari" : [
-				{
-				  "name": "Devanagari", "direction": "forward", "path": "InterIndic-Devanagari.xml",
-				  "alias": "InterIndic-Devanagaril", "visibility": "internal"
-				}
-			],
-			"Gujarati" : [
-				{
-				  "name": "Gujarati", "direction": "forward", "path": "InterIndic-Gujarati.xml",
-				  "alias": "InterIndic-Gujarati", "visibility": "internal"
-				}
-			],
-			"Gurmukhi" : [
-				{
-				  "name": "Gurmukhi", "direction": "forward", "path": "InterIndic-Gurmukhi.xml",
-				  "alias": "InterIndic-Gurmukhi", "visibility": "internal"
-				}
-			],
-			"Kannada" : [
-				{
-				  "name": "Kannada", "direction": "forward", "path": "InterIndic-Kannada.xml",
-				  "alias": "InterIndic-Kannada", "visibility": "internal"
-				}
-			],
-			"Latin" : [
-				{
-				  "name": "Latin", "direction": "forward", "path": "InterIndic-Latin.xml",
-				  "alias": "InterIndic-Latin", "visibility": "internal"
-				}
-			],
-			"Malayalam" : [
-				{
-				  "name": "Malayalam", "direction": "forward", "path": "InterIndic-Malayalam.xml",
-				  "alias": "InterIndic-Malayalam", "visibility": "internal"
-				}
-			],
-			"Oriya" : [
-				{
-				  "name": "Oriya", "direction": "forward", "path": "InterIndic-Oriya.xml",
-				  "alias": "InterIndic-Oriya", "visibility": "internal"
-				}
-			],
-			"Tamil" : [
-				{
-				  "name": "Tamil", "direction": "forward", "path": "InterIndic-Tamil.xml",
-				  "alias": "InterIndic-Tamil", "visibility": "internal"
-				}
-			],
-			"Tulugu" : [
-				{
-				  "name": "Tulugu", "direction": "forward", "path": "InterIndic-Telugu.xml",
-				  "alias": "InterIndic-Telugu", "visibility": "internal"
-				}
-			],
-			"Urdu" : [
-				{
-				  "name": "Urdu", "direction": "forward", "path": "InterIndic-ur.xml",
-				  "alias": "InterIndic-ur", "visibility": "internal"
-				}
-			]
-		},
-		"Ethiopic" : {
-         		"IPA" : [
-				  { "name": "Amharic", "direction": "both", "path": "am-am_FONIPA.xml" }
-			],
-			"Latin" : [
-				  { "name": "Aethiopica", "direction": "both", "path": "Ethiopic-Latin-Aethiopica.xml" },
-				{
-				  "BGN" : [
-						{ "name": "Amharic", "direction": "forward", "path": "Amharic-Latin-BGN.xml" }
-					]
-				  }
-    			]
-		},
-		"Georgian" : {
-			"Latin" : [
-				{ "name": "Latin", "direction": "both", "path": "Georgian-Latin.xml" } ,
-				{ "name": "BGN", "direction": "forward", "path": "Georgian-Latin-BGN.xml" } ,
-				{ "name": "BGN (1981)", "direction": "forward", "path": "Georgian-Latin-BGN_1981.xml" } 
-			]
-		},
-		"Greek" : {
-    			"Latin" : [
-    				{ "name": "Latin", "direction": "both", "path": "Greek-Latin.xml" },
-    				{ "name": "BGN", "direction": "forward", "path": "Greek-Latin-BGN.xml" },
-    				{ "name": "UNGEGN", "direction": "both", "path": "Greek_Latin_UNGEGN.xml" }
-    			]
- 		},
-		"Gujarati" : {
-			"Arabic" : [
-				{
-				  "name": "Arabic", "direction": "forward", "path": "Gujarati-Arabic.xml",
-				  "alias": "Gujarati-Arabic", "dependencies": [ "Gujarati-InterIndic", "Gujarati-Arabic" ]
-				}
-			],
-			"Bengali" : [
-				{
-				  "name": "Bengali", "direction": "forward", "path": "Bengali-Gujarati.xml",
-				  "alias": "Bengali-Gujarati", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Bengali" ]
-				}
-			],
-			"Devanagari" : [
-				{
-				  "name": "Devanagari", "direction": "forward", "path": "Gujarati-Devanagari.xml",
-				  "alias": "Gujarati-Devanagari", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Devanagari" ]
-				}
-			],
-			"Malayalam" : [
-				{
-				  "name": "Malayalam", "direction": "forward", "path": "Gujarati-Malayalam.xml",
-				  "alias": "Gujarati-Malayalam", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Malayalam" ]
-				}
-			],
-			"Gurmukhi" : [
-				{
-				  "name": "Gurmukhi", "direction": "forward", "path": "Gujarati-Gurmukhi.xml",
-				  "alias": "Gujarati-Gurmukhi", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Gurmukhi" ]
-				}
-			],
-			"InterIndic" : [
-				{
-				  "name": "InterIndic", "direction": "forward", "path": "Gujarati-InterIndic.xml",
-                                  "alias": "Gujarati-InterIndic", "visibility": "internal"
-				}
-			],
-			"Kannada" : [
-				{
-				  "name": "Kannada", "direction": "forward", "path": "Gujarati-Kannada.xml",
-				   "alias": "Gujarati-Kannada", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Kannada" ]
-				}
-			],
-			"Latin" : [
-				{
-				  "name": "Latin", "direction": "forward", "path": "Gujarati-Latin.xml",
-				  "alias": "Gujarati-Latin", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Latin" ]
-				}
-			],
-			"Oriya" : [
-				{
-				  "name": "Oriya", "direction": "forward", "path": "Gujarati-Oriya.xml",
-				  "alias": "Gujarati-Oriya", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Oriya" ]
-				}
-			],
-			"Tamil" : [
-				{
-				  "name": "Tamil", "direction": "forward", "path": "Gujarati-Tamil.xml",
-				  "alias": "Gujarati-Tamil", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Tamil" ]
-				}
-			],
-			"Telugu" : [
-				{
-				  "name": "Telugu", "direction": "forward", "path": "Gujarati-Telugu.xml",
-				  "alias": "Gujarati-Telugu", "dependencies": [ "Gujarati-InterIndic", "InterIndic-Telugu" ]
-				}
-			],
-			"Urdu" : [
-				{
-				  "name": "Urdu", "direction": "forward", "path": "Gujarati-ur.xml",
-				  "alias": "Gujarati-ur", "dependencies": [ "Gujarati-InterIndic", "InterIndic-ur" ]
-				}
-			]
-		},
-		"Gurmukhi" : {
-			"Arabic" : [
-				{
-				  "name": "Arabic", "direction": "forward", "path": "Gurmukhi-Arabic.xml",
-				  "alias": "Gurmukhi-Arabic", "dependencies": [ "Gurmukhi-InterIndic", "Gurmukhi-Arabic" ]
-				}
-			],
-			"Bengali" : [
-				{
-				  "name": "Bengali", "direction": "forward", "path": "Bengali-Gurmukhi.xml",
-				  "alias": "Bengali-Gurmukhi", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Bengali" ]
-				}
-			],
-			"Devanagari" : [
-				{
-				  "name": "Devanagari", "direction": "forward", "path": "Gurmukhi-Devanagari.xml",
-				  "alias": "Gurmukhi-Devanagari", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Devanagari" ]
-				}
-			],
-			"Malayalam" : [
-				{
-				  "name": "Malayalam", "direction": "forward", "path": "Gurmukhi-Malayalam.xml",
-				  "alias": "Gurmukhi-Malayalam", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Malayalam" ]
-				}
-			],
-			"Gujararti" : [
-				{
-				  "name": "Gujararti", "direction": "forward", "path": "Gurmukhi-Gujararti.xml",
-				  "alias": "Gurmukhi-Gujararti", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Gujararti" ]
-				}
-			],
-			"Kannada" : [
-				{
-				  "name": "Kannada", "direction": "forward", "path": "Gurmukhi-Kannada.xml",
-			   	  "alias": "Gurmukhi-Kannada", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Kannada" ]
-				}
-			],
-			"InterIndic" : [
-				{
-				  "name": "InterIndic", "direction": "forward", "path": "Gurmukhi-InterIndic.xml",
-                                  "alias": "Gurmukhi-InterIndic", "visibility": "internal"
-				}
-			],
-			"Latin" : [
-				{
-				  "name": "Latin", "direction": "forward", "path": "Gurmukhi-Latin.xml",
-				  "alias": "Gurmukhi-Latin", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Latin" ]
-				}
-			],
-			"Oriya" : [
-				{
-				  "name": "Oriya", "direction": "forward", "path": "Gurmukhi-Oriya.xml",
-				  "alias": "Gurmukhi-Oriya", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Oriya" ]
-				}
-			],
-			"Tamil" : [
-				{
-				  "name": "Tamil", "direction": "forward", "path": "Gurmukhi-Tamil.xml",
-				  "alias": "Gurmukhi-Tamil", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Tamil" ]
-				}
-			],
-			"Telugu" : [
-				{
-				  "name": "Telugu", "direction": "forward", "path": "Gurmukhi-Telugu.xml",
-				  "alias": "Gurmukhi-Telugu", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-Telugu" ]
-				}
-			],
-			"Urdu" : [
-				{
-				  "name": "Urdu", "direction": "forward", "path": "Gurmukhi-ur.xml",
-				  "alias": "Gurmukhi-ur", "dependencies": [ "Gurmukhi-InterIndic", "InterIndic-ur" ]
-				}
-			]
-		},
-		"Kannada" : {
-			"Arabic" : [
-				{
-				  "name": "Arabic", "direction": "forward", "path": "Kannada-Arabic.xml",
-				  "alias": "Kannada-Arabic", "dependencies": [ "Kannada-InterIndic", "Kannada-Arabic" ]
-				}
-			],
-			"Bengali" : [
-				{
-				  "name": "Bengali", "direction": "forward", "path": "Bengali-Kannada.xml",
-				  "alias": "Bengali-Kannada", "dependencies": [ "Kannada-InterIndic", "InterIndic-Bengali" ]
-				}
-			],
-			"Devanagari" : [
-				{
-				  "name": "Devanagari", "direction": "forward", "path": "Kannada-Devanagari.xml",
-				  "alias": "Kannada-Devanagari", "dependencies": [ "Kannada-InterIndic", "InterIndic-Devanagari" ]
-				}
-			],
-			"Gujararti" : [
-				{
-				  "name": "Gujararti", "direction": "forward", "path": "Kannada-Gujararti.xml",
-				  "alias": "Kannada-Gujararti", "dependencies": [ "Kannada-InterIndic", "InterIndic-Gujararti" ]
-				}
-			],
-			"Gurmukhi" : [
-				{
-				  "name": "Gurmukhi", "direction": "forward", "path": "Kannada-Gurmukhi.xml",
-			   	  "alias": "Kannada-Gurmukhi", "dependencies": [ "Kannada-InterIndic", "InterIndic-Gurmukhi" ]
-				}
-			],
-			"InterIndic" : [
-				{
-				  "name": "InterIndic", "direction": "forward", "path": "Kannada-InterIndic.xml",
-                                  "alias": "Kannada-InterIndic", "visibility": "internal"
-				}
-			],
-			"Latin" : [
-				{
-				  "name": "Latin", "direction": "forward", "path": "Kannada-Latin.xml",
-				  "alias": "Kannada-Latin", "dependencies": [ "Kannada-InterIndic", "InterIndic-Latin" ]
-				}
-			],
-			"Malayalam" : [
-				{
-				  "name": "Malayalam", "direction": "forward", "path": "Kannada-Malayalam.xml",
-				  "alias": "Kannada-Malayalam", "dependencies": [ "Kannada-InterIndic", "InterIndic-Malayalam" ]
-				}
-			],
-			"Oriya" : [
-				{
-				  "name": "Oriya", "direction": "forward", "path": "Kannada-Oriya.xml",
-				  "alias": "Kannada-Oriya", "dependencies": [ "Kannada-InterIndic", "InterIndic-Oriya" ]
-				}
-			],
-			"Tamil" : [
-				{
-				  "name": "Tamil", "direction": "forward", "path": "Kannada-Tamil.xml",
-				  "alias": "Kannada-Tamil", "dependencies": [ "Kannada-InterIndic", "InterIndic-Tamil" ]
-				}
-			],
-			"Telugu" : [
-				{
-				  "name": "Telugu", "direction": "forward", "path": "Kannada-Telugu.xml",
-				  "alias": "Kannada-Telugu", "dependencies": [ "Kannada-InterIndic", "InterIndic-Telugu" ]
-				}
-			],
-			"Urdu" : [
-				{
-				  "name": "Urdu", "direction": "forward", "path": "Kannada-ur.xml",
-				  "alias": "Kannada-ur", "dependencies": [ "Kannada-InterIndic", "InterIndic-ur" ]
-				}
-			]
-		},
-		"Hangul" : {
-			"Latin" : [
-				{ "name": "BGN", "direction": "forward", "path": "Korean-Latin-BGN.xml" }
-			]
-		},
-		"Hans" : {
-			"Hans Traditional" : [
-					{ "name": "Simplified → Traditional", "direction": "both", "path": "Simplified-Traditional.xml", "alias": "Simplified-Traditional" }
-			],
-			"Latin" : [
-				{
-			 	  "name": "Latin", "direction": "forward", "path": "Han-Latin.xml" ,
-				  "dependencies": [ "Han-Spacedhan" ]
-				},
-				{
-				  "name": "Names", "direction": "forward", "path": "Han-Latin-Names.xml" ,
-				  "dependencies": [ "Han-Spacedhan" ]
-				},
-				{
-				  "name": "Spacedhan", "direction": "both", "path": "Han-Spacedhan.xml",
-				  "alias": "Han-Spacedhan", "visibility": "internal"
-				}
-			]
-		},
-		"Hebrew" : {
-			"Latin" : [
-				{ "name": "Latin", "direction": "both", "path": "Hebrew-Latin.xml" } ,
-				{ "name": "BGN", "direction": "forward", "path": "Hebrew-Latin-BGN.xml" }
-			]
-		},
-		"Hiragana" : {
-			"Latin" : [
-				{
-				  "name": "Latin", "direction": "both", "path": "Hiragana-Latin.xml", "alias": "Hiragana-Latin",
-				  "dependencies": [ "Hiragana-Katakana", "Katakana-Latin" ]
-				}
-			],
-			"Katakana" : [
-				{ "name": "Katakana", "direction": "both", "path": "Hiragana-Katakana.xml", "alias": "Hiragana-Katakana" }
-			]
-
-		},
-		"Katakana" : {
-			"Latin" : [
-				{ "name": "BGN", "direction": "forward", "path": "Katakana-Latin-BGN.xml", "alias": "Katakana-Latin" }
-			]
-
-		},
-		"Latin" : {
-			"ASCII" : [
-				{ "name": "ASCII", "direction": "both", "path": "Latin-ASCII.xml" }
-			],
-			"Armenian" : [
-				{ "name": "Armenian", "direction": "both", "path": "Latin-Armenian.xml" }
-			],
-			"Azerbaijani" : [
-				{ "name": "Lower", "direction": "forward", "path": "az-Lower.xml" },
-				{ "name": "Title", "direction": "forward", "path": "az-Title.xml" },
-				{ "name": "Upper", "direction": "forward", "path": "az-Upper.xml" }
-			],
-			"Bopopmofo" : [
-				{ "name": "Bopomofo", "direction": "both", "path": "Latin-Bopomofo.xml" }
-			],
-			"Canadian Aboriginal Syllabics": [
-				{ "name": "Latin", "direction": "both", "path": "CanadianAboriginal-Latin.xml" }
-			],
-			"IPA" : [
-				{ "name": "Chamorro", "direction": "forward", "path": "chr-chr_FONIPA.xml" },
-				{ "name": "Czech", "direction": "forward", "path": "cs-cs_FONIPA.xml" },
-				{ "name": "Esperanto", "direction": "forward", "path": "eo-eo_FONIPA.xml" },
-				{ "name": "Romanian", "direction": "forward", "path": "ro-ro_FONIPA.xml" },
-				{ "name": "Venetian", "direction": "forward", "path": "vec-vec_FONIPA.xml" },
-				{ "name": "isiZulu", "direction": "forward", "path": "zu-zu_FONIPA.xml" }
-			],
-			"Ethiopic" : [
-				{ "name": "Ethiopic", "direction": "both", "path": "Latin-Ethiopic.xml" }
-			]
-		},
-		"Malayalam" : {
-			"Arabic" : [
-				{
-				  "name": "Arabic", "direction": "forward", "path": "Malayalam-Arabic.xml",
-				  "alias": "Malayalam-Arabic", "dependencies": [ "Malayalam-InterIndic", "Malayalam-Arabic" ]
-				}
-			],
-			"Bengali" : [
-				{
-				  "name": "Bengali", "direction": "forward", "path": "Bengali-Malayalam.xml",
-				  "alias": "Bengali-Malayalam", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Bengali" ]
-				}
-			],
-			"Devanagari" : [
-				{
-				  "name": "Devanagari", "direction": "forward", "path": "Malayalam-Devanagari.xml",
-				  "alias": "Malayalam-Devanagari", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Devanagari" ]
-				}
-			],
-			"Gujarti" : [
-				{
-				  "name": "Gujarti", "direction": "forward", "path": "Malayalam-Gujarati.xml",
-				  "alias": "Malayalam-Gujarati", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Gujarti" ]
-				}
-			],
-			"Gurmukhi" : [
-				{
-				  "name": "Gurmukhi", "direction": "forward", "path": "Malayalam-Gurmukhi.xml",
-				  "alias": "Malayalam-Gurmukhi", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Gurmukhi" ]
-				}
-			],
-			"Kannada" : [
-				{
-				  "name": "Kannada", "direction": "forward", "path": "Malayalam-Kannada.xml",
-				  "alias": "Malayalam-Kannada", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Kannada" ]
-				}
-			],
-			"InterIndic" : [
-				{
-				  "name": "InterIndic", "direction": "forward", "path": "Malayalam-InterIndic.xml",
-                                  "alias": "Malayalam-InterIndic", "visibility": "internal"
-				}
-			],
-			"Latin" : [
-				{
-				  "name": "Latin", "direction": "forward", "path": "Malayalam-Latin.xml",
-				  "alias": "Malayalam-Latin", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Latin" ]
-				}
-			],
-			"Oriya" : [
-				{
-				  "name": "Oriya", "direction": "forward", "path": "Malayalam-Oriya.xml",
-				  "alias": "Malayalam-Oriya", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Oriya" ]
-				}
-			],
-			"Tamil" : [
-				{
-				  "name": "Tamil", "direction": "forward", "path": "Malayalam-Tamil.xml",
-				  "alias": "Malayalam-Tamil", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Tamil" ]
-				}
-			],
-			"Telugu" : [
-				{
-				  "name": "Telugu", "direction": "forward", "path": "Malayalam-Telugu.xml",
-				  "alias": "Malayalam-Telugu", "dependencies": [ "Malayalam-InterIndic", "InterIndic-Telugu" ]
-				}
-			],
-			"Urdu" : [
-				{
-				  "name": "Urdu", "direction": "forward", "path": "Malayalam-ur.xml",
-				  "alias": "Malayalam-ur", "dependencies": [ "Malayalam-InterIndic", "InterIndic-ur" ]
-				}
-			]
-		},
-		"Oriya" : {
-			"Arabic" : [
-				{
-				  "name": "Arabic", "direction": "forward", "path": "Oriya-Arabic.xml",
-				  "alias": "Oriya-Arabic", "dependencies": [ "Oriya-InterIndic", "Oriya-Arabic" ]
-				}
-			],
-			"Bengali" : [
-				{
-				  "name": "Bengali", "direction": "forward", "path": "Oriya-Bengali.xml",
-				  "alias": "Oriya-Bengali", "dependencies": [ "Oriya-InterIndic", "InterIndic-Bengali" ]
-				}
-			],
-			"Devanagari" : [
-				{
-				  "name": "Devanagari", "direction": "forward", "path": "Oriya-Devanagari.xml",
-				  "alias": "Oriya-Devanagari", "dependencies": [ "Oriya-InterIndic", "InterIndic-Devanagari" ]
-				}
-			],
-			"Gujararti" : [
-				{
-				  "name": "Gujararti", "direction": "forward", "path": "Oriya-Gujararti.xml",
-				  "alias": "Oriya-Gujararti", "dependencies": [ "Oriya-InterIndic", "InterIndic-Gujararti" ]
-				}
-			],
-			"Gurmukhi" : [
-				{
-				  "name": "Gurmukhi", "direction": "forward", "path": "Oriya-Gurmukhi.xml",
-			   	  "alias": "Oriya-Gurmukhi", "dependencies": [ "Oriya-InterIndic", "InterIndic-Gurmukhi" ]
-				}
-			],
-			"Kannada" : [
-				{
-				  "name": "Kannada", "direction": "forward", "path": "Oriya-Kannada.xml",
-				  "alias": "Oriya-Kannada", "dependencies": [ "Oriya-InterIndic", "InterIndic-Kannada" ]
-				}
-			],
-			"InterIndic" : [
-				{
-				  "name": "InterIndic", "direction": "forward", "path": "Oriya-InterIndic.xml",
-                                  "alias": "Oriya-InterIndic", "visibility": "internal"
-				}
-			],
-			"Latin" : [
-				{
-				  "name": "Latin", "direction": "forward", "path": "Oriya-Latin.xml",
-				  "alias": "Oriya-Latin", "dependencies": [ "Oriya-InterIndic", "InterIndic-Latin" ]
-				}
-			],
-			"Malayalam" : [
-				{
-				  "name": "Malayalam", "direction": "forward", "path": "Oriya-Malayalam.xml",
-				  "alias": "Oriya-Malayalam", "dependencies": [ "Oriya-InterIndic", "InterIndic-Malayalam" ]
-				}
-			],
-			"Tamil" : [
-				{
-				  "name": "Tamil", "direction": "forward", "path": "Oriya-Tamil.xml",
-				  "alias": "Oriya-Tamil", "dependencies": [ "Oriya-InterIndic", "InterIndic-Tamil" ]
-				}
-			],
-			"Telugu" : [
-				{
-				  "name": "Telugu", "direction": "forward", "path": "Oriya-Telugu.xml",
-				  "alias": "Oriya-Telugu", "dependencies": [ "Oriya-InterIndic", "InterIndic-Telugu" ]
-				}
-			],
-			"Urdu" : [
-				{
-				  "name": "Urdu", "direction": "forward", "path": "Oriya-ur.xml",
-				  "alias": "Oriya-ur", "dependencies": [ "Oriya-InterIndic", "InterIndic-ur" ]
-				}
-			]
-		},
-		"Sinhala" : {
-			"IPA" : [
-				{ "name": "Sinhalese", "direction": "forward", "path": "si-si_FONIPA.xml" }
-			]
-		},
-		"Tamil" : {
-			"Arabic" : [
-				{
-				  "name": "Arabic", "direction": "forward", "path": "Tamil-Arabic.xml",
-				  "alias": "Tamil-Arabic", "dependencies": [ "Tamil-InterIndic", "Tamil-Arabic" ]
-				}
-			],
-			"Bengali" : [
-				{
-				  "name": "Bengali", "direction": "forward", "path": "Tamil-Bengali.xml",
-				  "alias": "Tamil-Bengali", "dependencies": [ "Tamil-InterIndic", "InterIndic-Bengali" ]
-				}
-			],
-			"Devanagari" : [
-				{
-				  "name": "Devanagari", "direction": "forward", "path": "Tamil-Devanagari.xml",
-				  "alias": "Tamil-Devanagari", "dependencies": [ "Tamil-InterIndic", "InterIndic-Devanagari" ]
-				}
-			],
-			"Malayalam" : [
-				{
-				  "name": "Malayalam", "direction": "forward", "path": "Tamil-Malayalam.xml",
-				  "alias": "Tamil-Malayalam", "dependencies": [ "Tamil-InterIndic", "InterIndic-Malayalam" ]
-				}
-			],
-			"Gujararti" : [
-				{
-				  "name": "Gujararti", "direction": "forward", "path": "Tamil-Gujararti.xml",
-				  "alias": "Tamil-Gujararti", "dependencies": [ "Tamil-InterIndic", "InterIndic-Gujararti" ]
-				}
-			],
-			"Gurmukhi" : [
-				{
-				  "name": "Gurmukhi", "direction": "forward", "path": "Tamil-Gurmukhi.xml",
-			   	  "alias": "Tamil-Gurmukhi", "dependencies": [ "Tamil-InterIndic", "InterIndic-Gurmukhi" ]
-				}
-			],
-			"InterIndic" : [
-				{
-				  "name": "InterIndic", "direction": "forward", "path": "Tamil-InterIndic.xml",
-                                  "alias": "Tamil-InterIndic", "visibility": "internal"
-				}
-			],
-			"Latin" : [
-				{
-				  "name": "Latin", "direction": "forward", "path": "Tamil-Latin.xml",
-				  "alias": "Tamil-Latin", "dependencies": [ "Tamil-InterIndic", "InterIndic-Latin" ]
-				}
-			],
-			"Kannada" : [
-				{
-				  "name": "Kannada", "direction": "forward", "path": "Tamil-Kannada.xml",
-				  "alias": "Tamil-Kannada", "dependencies": [ "Tamil-InterIndic", "InterIndic-Kannada" ]
-				}
-			],
-			"Oriya" : [
-				{
-				  "name": "Oriya", "direction": "forward", "path": "Tamil-Oriya.xml",
-				  "alias": "Tamil-Oriya", "dependencies": [ "Tamil-InterIndic", "InterIndic-Oriya" ]
-				}
-			],
-			"Telugu" : [
-				{
-				  "name": "Telugu", "direction": "forward", "path": "Tamil-Telugu.xml",
-				  "alias": "Tamil-Telugu", "dependencies": [ "Tamil-InterIndic", "InterIndic-Telugu" ]
-				}
-			],
-			"Urdu" : [
-				{
-				  "name": "Urdu", "direction": "forward", "path": "Tamil-ur.xml",
-				  "alias": "Tamil-ur", "dependencies": [ "Tamil-InterIndic", "InterIndic-ur" ]
-				}
-			]
-		},
-		"Tulugu" : {
-			"Arabic" : [
-				{
-				  "name": "Arabic", "direction": "forward", "path": "Tulugu-Arabic.xml",
-				  "alias": "Tulugu-Arabic", "dependencies": [ "Tulugu-InterIndic", "Tulugu-Arabic" ]
-				}
-			],
-			"Bengali" : [
-				{
-				  "name": "Bengali", "direction": "forward", "path": "Tulugu-Bengali.xml",
-				  "alias": "Tulugu-Bengali", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Bengali" ]
-				}
-			],
-			"Devanagari" : [
-				{
-				  "name": "Devanagari", "direction": "forward", "path": "Tulugu-Devanagari.xml",
-				  "alias": "Tulugu-Arabic", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Devanagari" ]
-				}
-			],
-			"Malayalam" : [
-				{
-				  "name": "Malayalam", "direction": "forward", "path": "Tulugu-Malayalam.xml",
-				  "alias": "Tulugu-Malayalam", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Malayalam" ]
-				}
-			],
-			"Gujararti" : [
-				{
-				  "name": "Gujararti", "direction": "forward", "path": "Tulugu-Gujararti.xml",
-				  "alias": "Tulugu-Gujararti", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Gujararti" ]
-				}
-			],
-			"Gurmukhi" : [
-				{
-				  "name": "Gurmukhi", "direction": "forward", "path": "Tulugu-Gurmukhi.xml",
-			   	  "alias": "Tulugu-Gurmukhi", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Gurmukhi" ]
-				}
-			],
-			"InterIndic" : [
-				{
-				  "name": "InterIndic", "direction": "forward", "path": "Tulugu-InterIndic.xml",
-                                  "alias": "Tulugu-InterIndic", "visibility": "internal"
-				}
-			],
-			"Latin" : [
-				{
-				  "name": "Latin", "direction": "forward", "path": "Tulugu-Latin.xml",
-				  "alias": "Tulugu-Latin", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Latin" ]
-				}
-			],
-			"Kannada" : [
-				{
-				  "name": "Kannada", "direction": "forward", "path": "Tulugu-Kannada.xml",
-				  "alias": "Tulugu-Kannada", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Kannada" ]
-				}
-			],
-			"Oriya" : [
-				{
-				  "name": "Oriya", "direction": "forward", "path": "Tulugu-Oriya.xml",
-				  "alias": "Tulugu-Oriya", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Oriya" ]
-				}
-			],
-			"Tamil" : [
-				{
-				  "name": "Tamil", "direction": "forward", "path": "Tulugu-Tamil.xml",
-				  "alias": "Tulugu-Tamil", "dependencies": [ "Tulugu-InterIndic", "InterIndic-Tamil" ]
-				}
-			],
-			"Urdu" : [
-				{
-				  "name": "Urdu", "direction": "forward", "path": "Tulugu-ur.xml",
-				  "alias": "Tulugu-ur", "dependencies": [ "Tulugu-InterIndic", "InterIndic-ur" ]
-				}
-			]
-		},
-		"Thaana" : {
-			"Latin" : [
-				{ "name": "BGN", "direction": "forward", "path": "Maldivian-Latin-BGN.xml" }
-			]
-		}
-	}
+  "Scripts": {
+    "Arabic": {
+      "Persian": {
+        "IPA": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-fonipa-t-fa"
+          }
+        ],
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Persian-Latin/BGN"
+          }
+        ]
+      },
+      "Uighur": {
+        "IPA": [
+          {
+            "name": "Uighur",
+            "direction": "forward",
+            "alias": "ug-fonipa-t-ug"
+          }
+        ]
+      },
+      "_base": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Arabic-Latin/BGN"
+          },
+          {
+            "name": "_base",
+            "direction": "both",
+            "alias": "Arabic-Latin",
+            "backwardAlias": "Latin-Arabic"
+          }
+        ]
+      }
+    },
+    "Armenian": {
+      "Western": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-hy-arevmda",
+            "dependencies": [
+              "hy_AREVMDA-hy_AREVMDA_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-hy-arevmda",
+            "dependencies": [
+              "hy_AREVMDA-hy_AREVMDA_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-hy-arevmda",
+            "dependencies": [
+              "hy_AREVMDA-hy_AREVMDA_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-hy-arevmda",
+            "dependencies": [
+              "hy_AREVMDA-hy_AREVMDA_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Western Armenian",
+            "direction": "forward",
+            "alias": "hy-arevmda-fonipa-t-hy-arevmda"
+          }
+        ]
+      },
+      "_base": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-hy",
+            "dependencies": [
+              "hy-hy_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-hy",
+            "dependencies": [
+              "hy-hy_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-hy",
+            "dependencies": [
+              "hy-hy_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-hy",
+            "dependencies": [
+              "hy-hy_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Armenian",
+            "direction": "forward",
+            "alias": "hy-fonipa-t-hy"
+          }
+        ],
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Armenian-Latin/BGN"
+          }
+        ]
+      }
+    },
+    "Bengali": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Bengali-Arabic",
+            "dependencies": [
+              "Bengali-InterIndic",
+              " InterIndic-Arabic"
+            ]
+          }
+        ],
+        "Devanagari": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Bengali-Devanagari",
+            "dependencies": [
+              "Bengali-InterIndic",
+              " InterIndic-Devanagari"
+            ]
+          }
+        ],
+        "Gujarati": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Bengali-Gujarati",
+            "dependencies": [
+              "Bengali-InterIndic",
+              " InterIndic-Gujarati"
+            ]
+          }
+        ],
+        "Gurmukhi": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Bengali-Gurmukhi",
+            "dependencies": [
+              "Bengali-InterIndic",
+              " InterIndic-Gurmukhi"
+            ]
+          }
+        ],
+        "InterIndic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Kannada": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Bengali-Kannada",
+            "dependencies": [
+              "Bengali-InterIndic",
+              " InterIndic-Kannada"
+            ]
+          }
+        ],
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Bengali-Latin",
+            "dependencies": [
+              "Bengali-InterIndic",
+              " InterIndic-Latin"
+            ]
+          }
+        ],
+        "Malayalam": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Bengali-Malayalam",
+            "dependencies": [
+              "Bengali-InterIndic",
+              " InterIndic-Malayalam"
+            ]
+          }
+        ],
+        "Oriya": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Bengali-Oriya",
+            "dependencies": [
+              "Bengali-InterIndic",
+              " InterIndic-Oriya"
+            ]
+          }
+        ],
+        "Tamil": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Bengali-Tamil",
+            "dependencies": [
+              "Bengali-InterIndic",
+              " InterIndic-Tamil"
+            ]
+          }
+        ],
+        "Telugu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Bengali-Telugu",
+            "dependencies": [
+              "Bengali-InterIndic",
+              " InterIndic-Telugu"
+            ]
+          }
+        ],
+        "Urdu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ur-t-und-beng",
+            "dependencies": [
+              "Bengali-InterIndic",
+              " InterIndic-ur"
+            ]
+          }
+        ]
+      }
+    },
+    "Burmese": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-my",
+            "dependencies": [
+              "my-my_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-my",
+            "dependencies": [
+              "my-my_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Burmese": [
+          {
+            "name": "Zawgyi",
+            "direction": "forward",
+            "alias": "my-t-my-s0-zawgyi",
+            "tooltip": "This transform converts Unicode Burmese text into Zawgyi font encoded form."
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-my",
+            "dependencies": [
+              "my-my_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-my",
+            "dependencies": [
+              "my-my_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Burmese",
+            "direction": "forward",
+            "alias": "my-fonipa-t-my"
+          }
+        ],
+        "Zawgyi": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "my-t-my-d0-zawgyi"
+          }
+        ]
+      }
+    },
+    "Cherokee": {
+      "_base": {
+        "IPA": [
+          {
+            "name": "Cherokee",
+            "direction": "forward",
+            "alias": "chr-fonipa-t-chr"
+          }
+        ]
+      }
+    },
+    "Cyrillic": {
+      "Azerbaijani": {
+        "Cyrillic": [
+          {
+            "name": "Lower",
+            "direction": "forward",
+            "alias": "az-t-d0-lower"
+          },
+          {
+            "name": "Title",
+            "direction": "forward",
+            "alias": "az-t-d0-title"
+          },
+          {
+            "name": "Upper",
+            "direction": "forward",
+            "alias": "az-t-d0-upper"
+          }
+        ],
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Azerbaijani-Latin/BGN"
+          }
+        ]
+      },
+      "Belarusian": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Belarusian-Latin/BGN"
+          }
+        ]
+      },
+      "Bulgarian": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Bulgarian-Latin/BGN"
+          }
+        ]
+      },
+      "Kazakh": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Kazakh-Latin/BGN"
+          }
+        ]
+      },
+      "Kirghiz": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Kirghiz-Latin/BGN"
+          }
+        ]
+      },
+      "Macedonian": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Macedonian-Latin/BGN"
+          }
+        ]
+      },
+      "Mongolian": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Mongolian-Latin/BGN"
+          },
+          {
+            "name": "MNS",
+            "direction": "forward",
+            "alias": "mn-Latn-t-mn-m0-mns"
+          }
+        ]
+      },
+      "Russian": {
+        "Han": [
+          {
+            "name": "Simplified",
+            "direction": "forward",
+            "alias": "zh-t-ru",
+            "tooltip": "Transliteration of Russian into Mandarin written in simplified Chinese."
+          }
+        ],
+        "Katakana": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ja-t-ru"
+          }
+        ],
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Russian-Latin/BGN"
+          }
+        ]
+      },
+      "Serbian": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Serbian-Latin/BGN"
+          }
+        ]
+      },
+      "Turkmen": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Turkmen-Latin/BGN"
+          }
+        ]
+      },
+      "Ukrainian": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Ukrainian-Latin/BGN"
+          }
+        ]
+      },
+      "Uzbek": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Uzbek-Latin/BGN"
+          },
+          {
+            "name": "Uzbek",
+            "direction": "both",
+            "alias": "uz-Latn-t-uz-cyrl",
+            "backwardAlias": "uz-Cyrl-t-uz-latn"
+          }
+        ]
+      },
+      "_base": {
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "both",
+            "alias": "Cyrillic-Latin",
+            "backwardAlias": "Latin-Cyrillic"
+          }
+        ]
+      }
+    },
+    "Devanagari": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Devanagari-Arabic",
+            "dependencies": [
+              "Devanagari-InterIndic",
+              " InterIndic-Arabic"
+            ]
+          }
+        ],
+        "Bengali": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Devanagari-Bengali",
+            "dependencies": [
+              "Devanagari-InterIndic",
+              " InterIndic-Bengali"
+            ]
+          }
+        ],
+        "Gujarati": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Devanagari-Gujarati",
+            "dependencies": [
+              "Devanagari-InterIndic",
+              " InterIndic-Gujarati"
+            ]
+          }
+        ],
+        "Gurmukhi": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Devanagari-Gurmukhi",
+            "dependencies": [
+              "Devanagari-InterIndic",
+              " InterIndic-Gurmukhi"
+            ]
+          }
+        ],
+        "InterIndic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal",
+            "dependencies": [
+              "Devanagari-InterIndic",
+              " InterIndic-Kannada"
+            ]
+          }
+        ],
+        "Kannada": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Devanagari-Kannada"
+          }
+        ],
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Devanagari-Latin",
+            "dependencies": [
+              "Devanagari-InterIndic",
+              " InterIndic-Latin"
+            ]
+          }
+        ],
+        "Malayalam": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Devanagari-Malayalam",
+            "dependencies": [
+              "Devanagari-InterIndic",
+              " InterIndic-Malayalam"
+            ]
+          }
+        ],
+        "Oriya": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Devanagari-Oriya",
+            "dependencies": [
+              "Devanagari-InterIndic",
+              " InterIndic-Oriya"
+            ]
+          }
+        ],
+        "Tamil": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Devanagari-Tamil",
+            "dependencies": [
+              "Devanagari-InterIndic",
+              " InterIndic-Tamil"
+            ]
+          }
+        ],
+        "Telugu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Devanagari-Telugu",
+            "dependencies": [
+              "Devanagari-InterIndic",
+              " InterIndic-Telugu"
+            ]
+          }
+        ],
+        "Urdu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ur-t-und-deva",
+            "dependencies": [
+              "Devanagari-InterIndic",
+              " InterIndic-ur"
+            ]
+          }
+        ]
+      }
+    },
+    "Dhivehi": {
+      "_base": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Maldivian-Latin/BGN"
+          }
+        ]
+      }
+    },
+    "Ethiopic": {
+      "Amharic": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-am",
+            "dependencies": [
+              "am-am_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-am",
+            "dependencies": [
+              "am-am_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-am",
+            "dependencies": [
+              "am-am_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Amharic",
+            "direction": "both",
+            "alias": "am-fonipa-t-am",
+            "backwardAlias": "am-t-am-fonipa"
+          }
+        ],
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Amharic-Latin/BGN"
+          }
+        ]
+      }
+    },
+    "Georgian": {
+      "_base": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Georgian-Latin/BGN"
+          },
+          {
+            "name": "BGN (1981)",
+            "direction": "forward",
+            "alias": "ka-Latn-t-ka-m0-bgn-1981"
+          },
+          {
+            "name": "_base",
+            "direction": "both",
+            "alias": "Georgian-Latin",
+            "backwardAlias": "Latin-Georgian"
+          }
+        ]
+      }
+    },
+    "Greek": {
+      "Modern (1453-)": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Greek-Latin/BGN"
+          }
+        ]
+      },
+      "Modern Greek (1453-)": {
+        "Greek": [
+          {
+            "name": "Lower",
+            "direction": "forward",
+            "alias": "el-t-d0-lower"
+          },
+          {
+            "name": "Title",
+            "direction": "forward",
+            "alias": "el-t-d0-title"
+          },
+          {
+            "name": "Upper",
+            "direction": "forward",
+            "alias": "el-t-d0-upper"
+          }
+        ]
+      },
+      "_base": {
+        "Latin": [
+          {
+            "name": "UNGEGN",
+            "direction": "both",
+            "alias": "Greek-Latin/UNGEGN",
+            "backwardAlias": "Latin-Greek/UNGEGN"
+          },
+          {
+            "name": "_base",
+            "direction": "both",
+            "alias": "Greek-Latin",
+            "backwardAlias": "Latin-Greek"
+          }
+        ]
+      }
+    },
+    "Gujarati": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gujarati-Arabic",
+            "dependencies": [
+              "Gujarati-InterIndic",
+              " InterIndic-Arabic"
+            ]
+          }
+        ],
+        "Bengali": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gujarati-Bengali",
+            "dependencies": [
+              "Gujarati-InterIndic",
+              " InterIndic-Bengali"
+            ]
+          }
+        ],
+        "Devanagari": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gujarati-Devanagari",
+            "dependencies": [
+              "Gujarati-InterIndic",
+              " InterIndic-Devanagari"
+            ]
+          }
+        ],
+        "Gurmukhi": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gujarati-Gurmukhi",
+            "dependencies": [
+              "Gujarati-InterIndic",
+              " InterIndic-Gurmukhi"
+            ]
+          }
+        ],
+        "InterIndic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Kannada": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gujarati-Kannada",
+            "dependencies": [
+              "Gujarati-InterIndic",
+              " InterIndic-Kannada"
+            ]
+          }
+        ],
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gujarati-Latin",
+            "dependencies": [
+              "Gujarati-InterIndic",
+              " InterIndic-Latin"
+            ]
+          }
+        ],
+        "Malayalam": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gujarati-Malayalam",
+            "dependencies": [
+              "Gujarati-InterIndic",
+              " InterIndic-Malayalam"
+            ]
+          }
+        ],
+        "Oriya": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gujarati-Oriya",
+            "dependencies": [
+              "Gujarati-InterIndic",
+              " InterIndic-Oriya"
+            ]
+          }
+        ],
+        "Tamil": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gujarati-Tamil",
+            "dependencies": [
+              "Gujarati-InterIndic",
+              " InterIndic-Tamil"
+            ]
+          }
+        ],
+        "Telugu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gujarati-Telugu",
+            "dependencies": [
+              "Gujarati-InterIndic",
+              " InterIndic-Telugu"
+            ]
+          }
+        ],
+        "Urdu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ur-t-und-gujr",
+            "dependencies": [
+              "Gujarati-InterIndic",
+              " InterIndic-ur"
+            ]
+          }
+        ]
+      }
+    },
+    "Gurmukhi": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gurmukhi-Arabic",
+            "dependencies": [
+              "Gurmukhi-InterIndic",
+              " InterIndic-Arabic"
+            ]
+          }
+        ],
+        "Bengali": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gurmukhi-Bengali",
+            "dependencies": [
+              "Gurmukhi-InterIndic",
+              " InterIndic-Bengali"
+            ]
+          }
+        ],
+        "Devanagari": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gurmukhi-Devanagari",
+            "dependencies": [
+              "Gurmukhi-InterIndic",
+              " InterIndic-Devanagari"
+            ]
+          }
+        ],
+        "Gujarati": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gurmukhi-Gujarati",
+            "dependencies": [
+              "Gurmukhi-InterIndic",
+              " InterIndic-Gujarati"
+            ]
+          }
+        ],
+        "InterIndic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Kannada": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gurmukhi-Kannada",
+            "dependencies": [
+              "Gurmukhi-InterIndic",
+              " InterIndic-Kannada"
+            ]
+          }
+        ],
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gurmukhi-Latin",
+            "dependencies": [
+              "Gurmukhi-InterIndic",
+              " InterIndic-Latin"
+            ]
+          }
+        ],
+        "Malayalam": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gurmukhi-Malayalam",
+            "dependencies": [
+              "Gurmukhi-InterIndic",
+              " InterIndic-Malayalam"
+            ]
+          }
+        ],
+        "Oriya": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gurmukhi-Oriya",
+            "dependencies": [
+              "Gurmukhi-InterIndic",
+              " InterIndic-Oriya"
+            ]
+          }
+        ],
+        "Tamil": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gurmukhi-Tamil",
+            "dependencies": [
+              "Gurmukhi-InterIndic",
+              " InterIndic-Tamil"
+            ]
+          }
+        ],
+        "Telugu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Gurmukhi-Telugu",
+            "dependencies": [
+              "Gurmukhi-InterIndic",
+              " InterIndic-Telugu"
+            ]
+          }
+        ],
+        "Urdu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ur-t-und-guru",
+            "dependencies": [
+              "Gurmukhi-InterIndic",
+              " InterIndic-ur"
+            ]
+          }
+        ]
+      }
+    },
+    "Han": {
+      "Names": {
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "und-Latn-t-und-hani-m0-prprname",
+            "dependencies": [
+              "Han-Latin",
+              " Han-Spacedhan"
+            ]
+          }
+        ]
+      },
+      "Simplified variant": {
+        "Han": [
+          {
+            "name": "Traditional variant",
+            "direction": "both",
+            "alias": "Simplified-Traditional",
+            "backwardAlias": "Traditional-Simplified"
+          }
+        ]
+      },
+      "_base": {
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Han-Latin"
+          }
+        ],
+        "Spacedhan": [
+          {
+            "name": "_base",
+            "direction": "both",
+            "visibility": "internal",
+            "dependencies": [
+              "fullwidth-halfwidth"
+            ]
+          }
+        ]
+      }
+    },
+    "Hangul": {
+      "Jamo": {
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Jamo-Latin",
+            "dependencies": [
+              "ConjoiningJamo-Latin"
+            ]
+          }
+        ]
+      },
+      "_base": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Korean-Latin/BGN"
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Hangul-Latin",
+            "dependencies": [
+              "ConjoiningJamo-Latin"
+            ]
+          }
+        ]
+      }
+    },
+    "Hebrew": {
+      "_base": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Hebrew-Latin/BGN"
+          },
+          {
+            "name": "_base",
+            "direction": "both",
+            "alias": "Hebrew-Latin",
+            "backwardAlias": "Latin-Hebrew"
+          }
+        ]
+      }
+    },
+    "Hiragana": {
+      "_base": {
+        "Katakana": [
+          {
+            "name": "_base",
+            "direction": "both",
+            "alias": "Hiragana-Katakana",
+            "backwardAlias": "Katakana-Hiragana"
+          }
+        ],
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "both",
+            "alias": "Hiragana-Latin",
+            "backwardAlias": "Latin-Hiragana",
+            "dependencies": [
+              "Hiragana-Katakana",
+              " Katakana-Latin"
+            ]
+          }
+        ]
+      }
+    },
+    "InterIndic": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Bengali": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Devanagari": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Gujarati": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Gurmukhi": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Kannada": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Malayalam": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Oriya": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Tamil": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Telugu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Urdu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ]
+      }
+    },
+    "IPA": {
+      "Czech": {
+        "Hangul": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ko-t-cs-fonipa"
+          }
+        ],
+        "Katakana": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ja-t-cs-fonipa"
+          }
+        ]
+      },
+      "Polish": {
+        "Katakana": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ja-t-pl-fonipa"
+          }
+        ]
+      },
+      "Romanian": {
+        "Katakana": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ja-t-ro-fonipa"
+          }
+        ]
+      },
+      "Slovak": {
+        "Katakana": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ja-t-sk-fonipa"
+          }
+        ]
+      },
+      "Spanish (Latin America)": {
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-es-fonipa",
+            "dependencies": [
+              "es_FONIPA-ja",
+              " es-es_FONIPA"
+            ]
+          }
+        ],
+        "Han": [
+          {
+            "name": "Simplified",
+            "direction": "forward",
+            "alias": "zh-t-es-fonipa"
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Spanish (Latin America)",
+            "direction": "forward",
+            "alias": "es-419-fonipa-t-es-fonipa",
+            "dependencies": [
+              "es_FONIPA-es_419_FONIPA",
+              " es_FONIPA-zh"
+            ]
+          }
+        ],
+        "Katakana": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ja-t-es-fonipa"
+          }
+        ]
+      },
+      "_base": {
+        "Latin": [
+          {
+            "name": "X-SAMPA",
+            "direction": "both",
+            "alias": "IPA-XSampa",
+            "backwardAlias": "XSampa-IPA"
+          }
+        ]
+      }
+    },
+    "Kannada": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Kannada-Arabic",
+            "dependencies": [
+              "Kannada-InterIndic",
+              " InterIndic-Arabic"
+            ]
+          }
+        ],
+        "Bengali": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Kannada-Bengali",
+            "dependencies": [
+              "Kannada-InterIndic",
+              " InterIndic-Bengali"
+            ]
+          }
+        ],
+        "Devanagari": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Kannada-Devanagari",
+            "dependencies": [
+              "Kannada-InterIndic",
+              " InterIndic-Devanagari"
+            ]
+          }
+        ],
+        "Gujarati": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Kannada-Gujarati",
+            "dependencies": [
+              "Kannada-InterIndic",
+              " InterIndic-Gujarati"
+            ]
+          }
+        ],
+        "Gurmukhi": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Kannada-Gurmukhi",
+            "dependencies": [
+              "Kannada-InterIndic",
+              " InterIndic-Gurmukhi"
+            ]
+          }
+        ],
+        "InterIndic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Kannada-Latin",
+            "dependencies": [
+              "Kannada-InterIndic",
+              " InterIndic-Latin"
+            ]
+          }
+        ],
+        "Malayalam": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Kannada-Malayalam",
+            "dependencies": [
+              "Kannada-InterIndic",
+              " InterIndic-Malayalam"
+            ]
+          }
+        ],
+        "Oriya": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Kannada-Oriya",
+            "dependencies": [
+              "Kannada-InterIndic",
+              " InterIndic-Oriya"
+            ]
+          }
+        ],
+        "Tamil": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Kannada-Tamil",
+            "dependencies": [
+              "Kannada-InterIndic",
+              " InterIndic-Tamil"
+            ]
+          }
+        ],
+        "Telugu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Kannada-Telugu",
+            "dependencies": [
+              "Kannada-InterIndic",
+              " InterIndic-Telugu"
+            ]
+          }
+        ],
+        "Urdu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ur-t-und-knda",
+            "dependencies": [
+              "Kannada-InterIndic",
+              " InterIndic-ur"
+            ]
+          }
+        ]
+      }
+    },
+    "Katakana": {
+      "Fullwidth": {
+        "Katakana": [
+          {
+            "name": "Halfwidth",
+            "direction": "both",
+            "alias": "und-t-d0-hwidth",
+            "backwardAlias": "und-t-d0-fwidth"
+          }
+        ]
+      },
+      "_base": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Katakana-Latin/BGN"
+          }
+        ]
+      }
+    },
+    "Kazakh": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-kk",
+            "dependencies": [
+              "kk-kk_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-kk",
+            "dependencies": [
+              "kk-kk_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-kk",
+            "dependencies": [
+              "kk-kk_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-kk",
+            "dependencies": [
+              "kk-kk_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Kazakh",
+            "direction": "forward",
+            "alias": "kk-fonipa-t-kk"
+          }
+        ]
+      }
+    },
+    "Kirghiz": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-ky",
+            "dependencies": [
+              "ky-ky_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-ky",
+            "dependencies": [
+              "ky-ky_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-ky",
+            "dependencies": [
+              "ky-ky_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-ky",
+            "dependencies": [
+              "ky-ky_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Kirghiz",
+            "direction": "forward",
+            "alias": "ky-fonipa-t-ky"
+          }
+        ]
+      }
+    },
+    "Latin": {
+      "Accents (Decomposed)": {
+        "Latin": [
+          {
+            "name": "Accents (Normalized)",
+            "direction": "both",
+            "alias": "und-t-d0-accents",
+            "backwardAlias": "und-t-s0-accents"
+          }
+        ]
+      },
+      "ASCII Symbols": {
+        "Latin": [
+          {
+            "name": "Unicode Symbols",
+            "direction": "both",
+            "alias": "und-t-d0-publish",
+            "backwardAlias": "und-t-s0-publish"
+          }
+        ]
+      },
+      "Chamorro": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-ch",
+            "dependencies": [
+              "ch-ch_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-ch",
+            "dependencies": [
+              "ch-ch_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-ch",
+            "dependencies": [
+              "ch-ch_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-ch",
+            "dependencies": [
+              "ch-ch_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Chamorro",
+            "direction": "forward",
+            "alias": "ch-fonipa-t-ch"
+          }
+        ]
+      },
+      "Czech": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-cs",
+            "dependencies": [
+              "cs-cs_FONIPA",
+              " cs_FONIPA-ja"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-cs",
+            "dependencies": [
+              "cs-cs_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-cs",
+            "dependencies": [
+              "cs-cs_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-cs",
+            "dependencies": [
+              "cs-cs_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "Hangul": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ko-t-cs",
+            "dependencies": [
+              "Latin-Hangul ()",
+              " Any-ASCII"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "cs-fonipa-t-cs",
+            "dependencies": [
+              "cs-cs_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          }
+        ],
+        "Katakana": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ja-t-cs",
+            "dependencies": [
+              "cs-cs_FONIPA",
+              " cs_FONIPA-ko"
+            ]
+          }
+        ]
+      },
+      "Dutch": {
+        "Latin": [
+          {
+            "name": "Title",
+            "direction": "forward",
+            "alias": "nl-t-d0-title"
+          }
+        ]
+      },
+      "Esperanto": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-eo"
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-eo",
+            "dependencies": [
+              "eo-eo_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-eo",
+            "dependencies": [
+              "eo-eo_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-eo",
+            "dependencies": [
+              "eo-eo_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Esperanto",
+            "direction": "forward",
+            "alias": "eo-fonipa-t-eo",
+            "dependencies": [
+              "eo-eo_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          }
+        ]
+      },
+      "German": {
+        "ASCII": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "de-t-de-d0-ascii"
+          }
+        ]
+      },
+      "Hausa": {
+        "Latin": [
+          {
+            "name": "Niger",
+            "direction": "forward",
+            "alias": "ha-NE-t-ha"
+          }
+        ]
+      },
+      "Interlingua (International Auxiliary Language Association)": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-ia",
+            "dependencies": [
+              "ia-ia_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-ia",
+            "dependencies": [
+              "ia-ia_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-ia",
+            "dependencies": [
+              "ia-ia_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-ia",
+            "dependencies": [
+              "ia-ia_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Interlingua (International Auxiliary Language Association)",
+            "direction": "forward",
+            "alias": "ia-fonipa-t-ia"
+          }
+        ]
+      },
+      "Italian": {
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-it"
+          }
+        ],
+        "Katakana": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ja-t-it"
+          }
+        ]
+      },
+      "Klingon": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-tlh",
+            "dependencies": [
+              "tlh-tlh_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-tlh",
+            "dependencies": [
+              "tlh-tlh_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-tlh",
+            "dependencies": [
+              "tlh-tlh_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-tlh",
+            "dependencies": [
+              "tlh-tlh_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "tlh-fonipa-t-tlh"
+          }
+        ]
+      },
+      "Lithuanian": {
+        "Latin": [
+          {
+            "name": "Lower",
+            "direction": "forward",
+            "alias": "lt-t-d0-lower"
+          },
+          {
+            "name": "Title",
+            "direction": "forward",
+            "alias": "lt-t-d0-title"
+          },
+          {
+            "name": "Upper",
+            "direction": "forward",
+            "alias": "lt-t-d0-upper"
+          }
+        ]
+      },
+      "Lower Sorbian": {
+        "IPA": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "dsb-fonipa-t-dsb"
+          }
+        ]
+      },
+      "Navajo": {
+        "IPA": [
+          {
+            "name": "Navajo",
+            "direction": "forward",
+            "alias": "nv-fonipa-t-nv"
+          }
+        ]
+      },
+      "Pinyin": {
+        "Cyrillic": [
+          {
+            "name": "Russian",
+            "direction": "forward",
+            "alias": "ru-t-zh-latn-pinyin",
+            "tooltip": "Cyrillization of Mandarin Chinese from Pinyin into Russian (Palladius system)"
+          }
+        ],
+        "Latin": [
+          {
+            "name": "Pinyin-Numeric",
+            "direction": "both"
+          }
+        ]
+      },
+      "Polish": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-pl",
+            "dependencies": [
+              "pl-pl_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-pl",
+            "dependencies": [
+              "pl-pl_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-pl",
+            "dependencies": [
+              "pl-pl_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-pl",
+            "dependencies": [
+              "pl-pl_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Polish",
+            "direction": "forward",
+            "alias": "pl-fonipa-t-pl"
+          }
+        ],
+        "Katakana": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ja-t-pl",
+            "dependencies": [
+              "pl-pl_FONIPA",
+              " pl_FONIPA-ja"
+            ]
+          }
+        ]
+      },
+      "Romanian": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-ro",
+            "dependencies": [
+              "ro-ro_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-ro",
+            "dependencies": [
+              "ro-ro_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-ro",
+            "dependencies": [
+              "ro-ro_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-ro",
+            "dependencies": [
+              "ro-ro_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Romanian",
+            "direction": "forward",
+            "alias": "ro-fonipa-t-ro"
+          }
+        ],
+        "Katakana": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ja-t-ro",
+            "dependencies": [
+              "ro-ro_FONIPA",
+              " ro_FONIPA-ja"
+            ]
+          }
+        ]
+      },
+      "Romanji": {
+        "Cyrillic": [
+          {
+            "name": "Russian",
+            "direction": "forward",
+            "alias": "ru-t-ja-latn",
+            "tooltip": "Japanese (Rōmaji) to Russian (Cyrillic) Polivanov transliteration."
+          }
+        ],
+        "Hangul": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ko-t-ja-latn",
+            "tooltip": "Japanese (Rōmaji) to Korean (Hangul) transliteration."
+          }
+        ]
+      },
+      "Rumantsch Sursilvan": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-rm-sursilv",
+            "dependencies": [
+              "rm_SURSILV-rm_FONIPA_SURSILV",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-rm-sursilv",
+            "dependencies": [
+              "rm_SURSILV-rm_FONIPA_SURSILV",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-rm-sursilv",
+            "dependencies": [
+              "rm_SURSILV-rm_FONIPA_SURSILV",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-rm-sursilv",
+            "dependencies": [
+              "rm_SURSILV-rm_FONIPA_SURSILV",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Rumantsch Sursilvan",
+            "direction": "forward",
+            "alias": "rm-fonipa-sursilv-t-rm-sursilv"
+          }
+        ]
+      },
+      "Russian": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Latin-Russian/BGN"
+          }
+        ]
+      },
+      "Slovak": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-sk",
+            "dependencies": [
+              "sk-sk_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-sk",
+            "dependencies": [
+              "sk-sk_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-sk",
+            "dependencies": [
+              "sk-sk_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-sk",
+            "dependencies": [
+              "sk-sk_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Slovak",
+            "direction": "forward",
+            "alias": "sk-fonipa-t-sk"
+          }
+        ],
+        "Katakana": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ja-t-sk",
+            "dependencies": [
+              "sk-sk_FONIPA",
+              " sk_FONIPA-ja"
+            ]
+          }
+        ]
+      },
+      "Spanish": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-es",
+            "dependencies": [
+              "es-es_FONIPA",
+              " es_FONIPA-ja"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-es",
+            "dependencies": [
+              "es-es_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-es",
+            "dependencies": [
+              "es-es_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-es",
+            "dependencies": [
+              "es-es_FONIPA",
+              " es_FONIPA-am"
+            ]
+          }
+        ],
+        "Han": [
+          {
+            "name": "Simplified",
+            "direction": "forward",
+            "alias": "zh-t-es",
+            "dependencies": [
+              "es-es_FONIPA",
+              " es_FONIPA-es_419_FONIPA"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Spanish",
+            "direction": "forward",
+            "alias": "es-fonipa-t-es",
+            "dependencies": [
+              "es-es_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          }
+        ],
+        "Katakana": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ja-t-es",
+            "dependencies": [
+              "es-es_FONIPA",
+              " es_FONIPA-zh"
+            ]
+          }
+        ]
+      },
+      "Spanish (Latin America)": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-es-419",
+            "dependencies": [
+              "und_FONIPA-chr",
+              " es-es_FONIPA"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-es-419",
+            "dependencies": [
+              "es_FONIPA-es_419_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-es-419",
+            "dependencies": [
+              "es-es_FONIPA",
+              " es_FONIPA-es_419_FONIPA"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-es-419",
+            "dependencies": [
+              "am_FONIPA-am",
+              " es-es_FONIPA"
+            ]
+          }
+        ],
+        "Han": [
+          {
+            "name": "Simplified",
+            "direction": "forward",
+            "alias": "zh-t-es-419",
+            "dependencies": [
+              "es-es_FONIPA",
+              " es_FONIPA-es_419_FONIPA"
+            ]
+          }
+        ],
+        "Katakana": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ja-t-es-419",
+            "dependencies": [
+              "es_FONIPA-es_419_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          }
+        ]
+      },
+      "Turkish": {
+        "Latin": [
+          {
+            "name": "Lower",
+            "direction": "forward",
+            "alias": "tr-t-d0-lower"
+          },
+          {
+            "name": "Title",
+            "direction": "forward",
+            "alias": "tr-t-d0-title"
+          },
+          {
+            "name": "Upper",
+            "direction": "forward",
+            "alias": "tr-t-d0-upper"
+          }
+        ]
+      },
+      "Venetian": {
+        "IPA": [
+          {
+            "name": "Venetian",
+            "direction": "forward",
+            "alias": "vec-fonipa-t-vec"
+          }
+        ]
+      },
+      "Welsh": {
+        "IPA": [
+          {
+            "name": "Welsh",
+            "direction": "forward",
+            "alias": "cy-fonipa-t-cy"
+          }
+        ]
+      },
+      "Xhosa": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-xh",
+            "dependencies": [
+              "xh-xh_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-xh",
+            "dependencies": [
+              "xh-xh_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-xh",
+            "dependencies": [
+              "xh-xh_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-xh",
+            "dependencies": [
+              "xh-xh_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Xhosa",
+            "direction": "forward",
+            "alias": "xh-fonipa-t-xh"
+          }
+        ]
+      },
+      "Yoruba": {
+        "Latin": [
+          {
+            "name": "Benin",
+            "direction": "forward",
+            "alias": "yo-BJ-t-yo"
+          }
+        ]
+      },
+      "Zulu": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-zu",
+            "dependencies": [
+              "zu-zu_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-zu",
+            "dependencies": [
+              "zu-zu_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-zu",
+            "dependencies": [
+              "zu-zu_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-zu",
+            "dependencies": [
+              "zu-zu_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Zulu",
+            "direction": "forward",
+            "alias": "zu-fonipa-t-zu"
+          }
+        ]
+      },
+      "_base": {
+        "Armenian": [
+          {
+            "name": "_base",
+            "direction": "both",
+            "alias": "Latin-Armenian",
+            "backwardAlias": "Armenian-Latin"
+          }
+        ],
+        "ASCII": [
+          {
+            "name": "_base",
+            "direction": "both",
+            "alias": "und-t-d0-ascii"
+          }
+        ],
+        "Bengali": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Latin-Bengali",
+            "dependencies": [
+              "Latin-InterIndic",
+              " InterIndic-Bengali"
+            ]
+          }
+        ],
+        "Bopomofo": [
+          {
+            "name": "_base",
+            "direction": "both",
+            "alias": "Latin-Bopomofo",
+            "backwardAlias": "Bopomofo-Latin"
+          }
+        ],
+        "Devanagari": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Latin-Devanagari",
+            "dependencies": [
+              "Latin-InterIndic",
+              " InterIndic-Devanagari"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "_base",
+            "direction": "both",
+            "alias": "Latin-Ethiopic",
+            "backwardAlias": "Ethiopic-Latin"
+          }
+        ],
+        "Gujarati": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Latin-Gujarati",
+            "dependencies": [
+              "Latin-InterIndic",
+              " InterIndic-Gujarati"
+            ]
+          }
+        ],
+        "Gurmukhi": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Latin-Gurmukhi",
+            "dependencies": [
+              "Latin-InterIndic",
+              " InterIndic-Gurmukhi"
+            ]
+          }
+        ],
+        "Hangul": [
+          {
+            "name": "Conjoining Jamo",
+            "direction": "both",
+            "visibility": "internal"
+          },
+          {
+            "name": "Jamo",
+            "direction": "forward",
+            "alias": "Latin-Jamo"
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Latin-Hangul",
+            "dependencies": [
+              "Latin-ConjoiningJamo",
+              " Latin-ConjoiningJamo"
+            ]
+          }
+        ],
+        "InterIndic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Latin",
+            "direction": "forward",
+            "alias": "la-fonipa-t-la"
+          }
+        ],
+        "Kannada": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Latin-Kannada",
+            "dependencies": [
+              "Latin-InterIndic",
+              " InterIndic-Kannada"
+            ]
+          }
+        ],
+        "Katakana": [
+          {
+            "name": "_base",
+            "direction": "both",
+            "alias": "Latin-Katakana",
+            "backwardAlias": "Katakana-Latin"
+          }
+        ],
+        "Malayalam": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Latin-Malayalam",
+            "dependencies": [
+              "Latin-InterIndic",
+              " InterIndic-Malayalam"
+            ]
+          }
+        ],
+        "Oriya": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Latin-Oriya",
+            "dependencies": [
+              "Latin-InterIndic",
+              " InterIndic-Oriya"
+            ]
+          }
+        ],
+        "Pinyin": [
+          {
+            "name": "Numeric",
+            "direction": "both",
+            "alias": "und-pinyin-t-d0-npinyin",
+            "backwardAlias": "und-pinyin-t-s0-npinyin"
+          }
+        ],
+        "Tamil": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Latin-Tamil",
+            "dependencies": [
+              "Latin-InterIndic",
+              " InterIndic-Tamil"
+            ]
+          }
+        ],
+        "Telugu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Latin-Telugu",
+            "dependencies": [
+              "Latin-InterIndic",
+              " InterIndic-Telugu"
+            ]
+          }
+        ],
+        "Thaana": [
+          {
+            "name": "_base",
+            "direction": "both",
+            "alias": "Latin-Thaana",
+            "backwardAlias": "Thaana-Latin"
+          }
+        ],
+        "Thai": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Latin-Thai",
+            "dependencies": [
+              "Latin-ThaiLogical",
+              " ThaiLogical-Thai"
+            ]
+          }
+        ]
+      }
+    },
+    "Malayalam": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Malayalam-Arabic",
+            "dependencies": [
+              "Malayalam-InterIndic",
+              " InterIndic-Arabic"
+            ]
+          }
+        ],
+        "Bengali": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Malayalam-Bengali",
+            "dependencies": [
+              "Malayalam-InterIndic",
+              " InterIndic-Bengali"
+            ]
+          }
+        ],
+        "Devanagari": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Malayalam-Devanagari",
+            "dependencies": [
+              "Malayalam-InterIndic",
+              " InterIndic-Devanagari"
+            ]
+          }
+        ],
+        "Gujarati": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Malayalam-Gujarati",
+            "dependencies": [
+              "Malayalam-InterIndic",
+              " InterIndic-Gujarati"
+            ]
+          }
+        ],
+        "Gurmukhi": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Malayalam-Gurmukhi",
+            "dependencies": [
+              "Malayalam-InterIndic",
+              " InterIndic-Gurmukhi"
+            ]
+          }
+        ],
+        "InterIndic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Kannada": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Malayalam-Kannada",
+            "dependencies": [
+              "Malayalam-InterIndic",
+              " InterIndic-Kannada"
+            ]
+          }
+        ],
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Malayalam-Latin",
+            "dependencies": [
+              "Malayalam-InterIndic",
+              " InterIndic-Latin"
+            ]
+          }
+        ],
+        "Oriya": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Malayalam-Oriya",
+            "dependencies": [
+              "Malayalam-InterIndic",
+              " InterIndic-Oriya"
+            ]
+          }
+        ],
+        "Tamil": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Malayalam-Tamil",
+            "dependencies": [
+              "Malayalam-InterIndic",
+              " InterIndic-Tamil"
+            ]
+          }
+        ],
+        "Telugu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Malayalam-Telugu",
+            "dependencies": [
+              "Malayalam-InterIndic",
+              " InterIndic-Telugu"
+            ]
+          }
+        ],
+        "Urdu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ur-t-und-mlym",
+            "dependencies": [
+              "Malayalam-InterIndic",
+              " InterIndic-ur"
+            ]
+          }
+        ]
+      }
+    },
+    "Ol Chiki": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-sat",
+            "dependencies": [
+              "sat_Olck-sat_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-sat",
+            "dependencies": [
+              "sat_Olck-sat_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-sat",
+            "dependencies": [
+              "sat_Olck-sat_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-sat",
+            "dependencies": [
+              "sat_Olck-sat_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Ol Chiki",
+            "direction": "forward",
+            "alias": "sat-fonipa-t-sat-olck"
+          }
+        ]
+      }
+    },
+    "Oriya": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Oriya-Arabic",
+            "dependencies": [
+              "Oriya-InterIndic",
+              " InterIndic-Arabic"
+            ]
+          }
+        ],
+        "Bengali": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Oriya-Bengali",
+            "dependencies": [
+              "Oriya-InterIndic",
+              " InterIndic-Bengali"
+            ]
+          }
+        ],
+        "Devanagari": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Oriya-Devanagari",
+            "dependencies": [
+              "Oriya-InterIndic",
+              " InterIndic-Devanagari"
+            ]
+          }
+        ],
+        "Gujarati": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Oriya-Gujarati",
+            "dependencies": [
+              "Oriya-InterIndic",
+              " InterIndic-Gujarati"
+            ]
+          }
+        ],
+        "Gurmukhi": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Oriya-Gurmukhi",
+            "dependencies": [
+              "Oriya-InterIndic",
+              " InterIndic-Gurmukhi"
+            ]
+          }
+        ],
+        "InterIndic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "Kannada": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Oriya-Kannada",
+            "dependencies": [
+              "Oriya-InterIndic",
+              " InterIndic-Kannada"
+            ]
+          }
+        ],
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Oriya-Latin",
+            "dependencies": [
+              "Oriya-InterIndic",
+              " InterIndic-Latin"
+            ]
+          }
+        ],
+        "Malayalam": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Oriya-Malayalam",
+            "dependencies": [
+              "Oriya-InterIndic",
+              " InterIndic-Malayalam"
+            ]
+          }
+        ],
+        "Tamil": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Oriya-Tamil",
+            "dependencies": [
+              "Oriya-InterIndic",
+              " InterIndic-Tamil"
+            ]
+          }
+        ],
+        "Telugu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Oriya-Telugu",
+            "dependencies": [
+              "Oriya-InterIndic",
+              " InterIndic-Telugu"
+            ]
+          }
+        ],
+        "Urdu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ur-t-und-orya",
+            "dependencies": [
+              "Oriya-InterIndic",
+              " InterIndic-ur"
+            ]
+          }
+        ]
+      }
+    },
+    "Pushto": {
+      "_base": {
+        "Latin": [
+          {
+            "name": "BGN",
+            "direction": "forward",
+            "alias": "Pashto-Latin/BGN"
+          }
+        ]
+      }
+    },
+    "Sinhala": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-si",
+            "dependencies": [
+              "si-si_FONIPA",
+              " und_FONIPA-fa"
+            ]
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-si",
+            "dependencies": [
+              "si-si_FONIPA",
+              " und_FONIPA-ar"
+            ]
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-si",
+            "dependencies": [
+              "si-si_FONIPA",
+              " und_FONIPA-chr"
+            ]
+          }
+        ],
+        "Ethiopic": [
+          {
+            "name": "Amharic",
+            "direction": "forward",
+            "alias": "am-t-si",
+            "dependencies": [
+              "si-si_FONIPA",
+              " am_FONIPA-am"
+            ]
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Sinhala",
+            "direction": "forward",
+            "alias": "si-fonipa-t-si"
+          }
+        ],
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "si-Latn-t-si"
+          }
+        ]
+      }
+    },
+    "Syriac": {
+      "_base": {
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "both",
+            "alias": "Syriac-Latin",
+            "backwardAlias": "Latin-Syriac"
+          }
+        ]
+      }
+    },
+    "Tamil": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Tamil-Arabic",
+            "dependencies": [
+              "Tamil-InterIndic",
+              " InterIndic-Arabic"
+            ]
+          }
+        ],
+        "Bengali": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Tamil-Bengali",
+            "dependencies": [
+              "Tamil-InterIndic",
+              " InterIndic-Bengali"
+            ]
+          }
+        ],
+        "Devanagari": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Tamil-Devanagari",
+            "dependencies": [
+              "Tamil-InterIndic",
+              " InterIndic-Devanagari"
+            ]
+          }
+        ],
+        "Gujarati": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Tamil-Gujarati",
+            "dependencies": [
+              "Tamil-InterIndic",
+              " InterIndic-Gujarati"
+            ]
+          }
+        ],
+        "Gurmukhi": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Tamil-Gurmukhi",
+            "dependencies": [
+              "Tamil-InterIndic",
+              " InterIndic-Gurmukhi"
+            ]
+          }
+        ],
+        "InterIndic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal"
+          }
+        ],
+        "IPA": [
+          {
+            "name": "Tamil",
+            "direction": "forward",
+            "alias": "ta-fonipa-t-ta"
+          }
+        ],
+        "Kannada": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Tamil-Kannada",
+            "dependencies": [
+              "Tamil-InterIndic",
+              " InterIndic-Kannada"
+            ]
+          }
+        ],
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Tamil-Latin",
+            "dependencies": [
+              "Tamil-InterIndic",
+              " InterIndic-Latin"
+            ]
+          }
+        ],
+        "Malayalam": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Tamil-Malayalam",
+            "dependencies": [
+              "Tamil-InterIndic",
+              " InterIndic-Malayalam"
+            ]
+          }
+        ],
+        "Oriya": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Tamil-Oriya",
+            "dependencies": [
+              "Tamil-InterIndic",
+              " InterIndic-Oriya"
+            ]
+          }
+        ],
+        "Telugu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Tamil-Telugu",
+            "dependencies": [
+              "Tamil-InterIndic",
+              " InterIndic-Telugu"
+            ]
+          }
+        ],
+        "Urdu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ur-t-und-taml",
+            "dependencies": [
+              "Tamil-InterIndic",
+              " InterIndic-ur"
+            ]
+          }
+        ]
+      }
+    },
+    "Telugu": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Telugu-Arabic",
+            "dependencies": [
+              "Telugu-InterIndic",
+              " InterIndic-Arabic"
+            ]
+          }
+        ],
+        "Bengali": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Telugu-Bengali",
+            "dependencies": [
+              "Telugu-InterIndic",
+              " InterIndic-Bengali"
+            ]
+          }
+        ],
+        "Devanagari": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Telugu-Devanagari",
+            "dependencies": [
+              "Telugu-InterIndic",
+              " InterIndic-Devanagari"
+            ]
+          }
+        ],
+        "Gujarati": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Telugu-Gujarati",
+            "dependencies": [
+              "Telugu-InterIndic",
+              " InterIndic-Gujarati"
+            ]
+          }
+        ],
+        "Gurmukhi": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Telugu-Gurmukhi"
+          }
+        ],
+        "InterIndic": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "visibility": "internal",
+            "dependencies": [
+              "Telugu-InterIndic",
+              " InterIndic-Gurmukhi"
+            ]
+          }
+        ],
+        "Kannada": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Telugu-Kannada",
+            "dependencies": [
+              "Telugu-InterIndic",
+              " InterIndic-Kannada"
+            ]
+          }
+        ],
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Telugu-Latin",
+            "dependencies": [
+              "Telugu-InterIndic",
+              " InterIndic-Latin"
+            ]
+          }
+        ],
+        "Malayalam": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Telugu-Malayalam",
+            "dependencies": [
+              "Telugu-InterIndic",
+              " InterIndic-Malayalam"
+            ]
+          }
+        ],
+        "Oriya": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Telugu-Oriya",
+            "dependencies": [
+              "Telugu-InterIndic",
+              " InterIndic-Oriya"
+            ]
+          }
+        ],
+        "Tamil": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Telugu-Tamil",
+            "dependencies": [
+              "Telugu-InterIndic",
+              " InterIndic-Tamil"
+            ]
+          }
+        ],
+        "Urdu": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ur-t-und-telu",
+            "dependencies": [
+              "Telugu-InterIndic",
+              " InterIndic-ur"
+            ]
+          }
+        ]
+      }
+    },
+    "Thai": {
+      "Logical": {
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "both",
+            "visibility": "internal"
+          }
+        ]
+      },
+      "Tai Viet": {
+        "IPA": [
+          {
+            "name": "Tai Viet",
+            "direction": "forward",
+            "alias": "blt-fonipa-t-blt"
+          }
+        ]
+      },
+      "_base": {
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Thai-Latin",
+            "dependencies": [
+              "Thai-ThaiSemi",
+              " Any-BreakInternal"
+            ]
+          }
+        ],
+        "Thai": [
+          {
+            "name": "Logical",
+            "direction": "both",
+            "visibility": "internal",
+            "dependencies": [
+              "Thai-ThaiLogical",
+              " ThaiLogical-Latin"
+            ]
+          },
+          {
+            "name": "Semicolon",
+            "direction": "both",
+            "visibility": "internal"
+          }
+        ]
+      }
+    },
+    "und_FONIPA": {
+      "_base": {
+        "Arabic": [
+          {
+            "name": "Persian",
+            "direction": "forward",
+            "alias": "fa-t-und-fonipa"
+          },
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "ar-t-und-fonipa"
+          }
+        ],
+        "Cherokee": [
+          {
+            "name": "_base",
+            "direction": "forward",
+            "alias": "chr-t-und-fonipa"
+          }
+        ]
+      }
+    },
+    "Unified Canadian Aboriginal Syllabics": {
+      "_base": {
+        "Latin": [
+          {
+            "name": "_base",
+            "direction": "both",
+            "alias": "Latin-CanadianAboriginal",
+            "backwardAlias": "CanadianAboriginal-Latin"
+          }
+        ]
+      }
+    }
+  }
 }

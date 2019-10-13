@@ -75,6 +75,7 @@ public final class Xliterator extends Application {
 	private String variantIn = null;
 	private String scriptOut  = null;
 	private String variantOut = null;
+	private JsonObject selectedTransliterationObject = null;
 	protected StatusBar statusBar = new StatusBar();
 	private Menu inScriptMenu   = null;
 	private Menu outVariantMenu = null;
@@ -233,16 +234,20 @@ public final class Xliterator extends Application {
     	for(String scriptOutKey : scriptOutList) {
     		JsonArray variantsOut = scriptsOut.getAsJsonArray( scriptOutKey );
     		int size = variantsOut.size();
-    		if ( size == 0 ) {
+    		String variantOutZero = variantsOut.get(0).getAsJsonObject().get( "name" ).getAsString();
+    		if ( (size == 1) && ( "_base".equals(variantOutZero) || "IPA".equals(scriptOutKey) ) ) {
+    			// if the one element is "_base" , then 
     			RadioMenuItem menuItem = new RadioMenuItem( scriptOutKey );
     			menuItem.setToggleGroup( groupOutMenu );
-        		menuItem.setOnAction( evt -> setScriptOut( scriptOutKey, "_base" ) );
+    			JsonObject variantOutObject = variantsOut.get(0).getAsJsonObject();
+        		menuItem.setOnAction( evt -> setScriptOut( scriptOutKey, "_base", variantOutObject ) );
+        		menuItem.getProperties().put( "jsonObject", variantOutObject );
         		outScriptMenu.getItems().add( menuItem );
     		}
     		else {
     			Menu scriptMenu = new Menu( scriptOutKey );
     			for(int i=0; i<size; i++) {
-    				String variantOutKey = variantsOut.get(i).getAsString();
+    				String variantOutKey = variantsOut.get(i).getAsJsonObject().get("name").getAsString();
     				RadioMenuItem menuItem = new RadioMenuItem( variantOutKey );
             		scriptMenu.getItems().add( menuItem );
     				if( "_base".equals( variantOutKey ) ) {
@@ -251,7 +256,9 @@ public final class Xliterator extends Application {
     				}
 
         			menuItem.setToggleGroup( groupOutMenu );
-            		menuItem.setOnAction( evt -> setScriptOut( scriptOutKey, variantOutKey ) );
+        			JsonObject variantOutObject = variantsOut.get(i).getAsJsonObject();
+            		menuItem.setOnAction( evt -> setScriptOut( scriptOutKey, variantOutKey, variantOutObject) );
+            		menuItem.getProperties().put( "jsonObject", variantsOut.get(i).getAsJsonObject() );
 
     			}
     			outScriptMenu.getItems().add( scriptMenu );
@@ -993,14 +1000,14 @@ public final class Xliterator extends Application {
     private void checkPreferences() {
         Preferences prefs = Preferences.userNodeForPackage( Xliterator.class );
 
-        scriptIn   = prefs.get( scriptInPreference, null );
+        scriptIn = prefs.get( scriptInPreference, null );
         if( scriptIn != null) {
         	setScriptIn( scriptIn, "FIXME" );
         }
         
         scriptOut  = prefs.get( scriptOutPreference, null );
         if( scriptOut != null) {
-        	setScriptOut( scriptOut, "FIXME" );
+        	setScriptOut( scriptOut, "FIXME", null );
         }
         
         
@@ -1079,9 +1086,10 @@ public final class Xliterator extends Application {
     	textTab.setScriptIn( scriptIn );
     	setMenuItemSelection( inScriptMenu, scriptIn );
     }
-    private void setScriptOut(String scriptOut, String variantOut) {
+    private void setScriptOut(String scriptOut, String variantOut, JsonObject transliteration) {
     	this.scriptOut = scriptOut;
     	this.variantOut = variantOut;
+    	this.selectedTransliterationObject = transliteration;
     	scriptOutText.setText( scriptOut );
     	variantOutText.setText( "[None]" );
     	// createOutVaraintsMenu( scriptOut );
@@ -1209,7 +1217,7 @@ public final class Xliterator extends Application {
     	textTab.setTextIn( "ሰላም ዓለም" );
     	
     	setScriptIn( "Ethiopic", "Amharic" );
-    	setScriptOut( "IPA",  "_base" );
+    	setScriptOut( "IPA",  "_base", null );
     	// setVariantOut( "Amharic");
     	selectedTransliteration = "am-am_FONIPA.xml";
     	transliterationDirection = "both";

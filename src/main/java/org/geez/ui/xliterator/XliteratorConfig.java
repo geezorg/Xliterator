@@ -125,12 +125,12 @@ public class XliteratorConfig extends ICUHelper {
 		JsonObject scriptsObject = new JsonObject();
     	JsonObject inVariantObject = config.getAsJsonObject("Scripts").getAsJsonObject( inScript ).getAsJsonObject( inVariant );
     	
-    	boolean hasBase = false;
+    	JsonObject baseObject = null;
     	int outScriptSkipCount = 0;
     	for( String outScriptKey: inVariantObject.keySet() ) {
     		
 			JsonArray outVariants = inVariantObject.getAsJsonArray( outScriptKey );
-			ArrayList<String> outVariantsList = new ArrayList<String>();
+			ArrayList<JsonObject> outVariantsList = new ArrayList<JsonObject>();
 			int outVariantSkipCount = 0;
 			
 			for (int i = 0; i < outVariants.size(); i++) { // out-variants
@@ -144,32 +144,25 @@ public class XliteratorConfig extends ICUHelper {
 						scriptsObject.add( outScriptKey, new JsonArray() );
 					}
 					if( "_base".equals( outVariantKey ) ) {
-						hasBase = true;
+						baseObject = outVariant.deepCopy();
 					}
 					else {
-	    				// JsonArray inVariantsOfInScript = scriptsObject.getAsJsonArray( inScriptKey );
-	    				if(! outVariantsList.contains( outVariantKey ) ) {
-	    					// inVariantsOfInScript.add( inVariantKey );
-	    					outVariantsList.add( outVariantKey );
-	    				}
-	    				else {
-	    					System.out.println( "Skipping duplicate outVariantKey: " + outVariantKey + " for " + outScriptKey );
-	    				}
+	    				outVariantsList.add( outVariant.deepCopy() );
 					}
 				}
 			}
 				
 				
-        	if( outVariantsList.size() > 0 ) {
+        	//if( outVariantsList.size() > 0 ) {
         		JsonArray outVariantsOfInScript = scriptsObject.getAsJsonArray( outScriptKey );
-        		if( hasBase ) {
-        			outVariantsList.add( 0, "_base" );
+        		if( baseObject != null ) {
+        			outVariantsList.add( 0, baseObject);
         		}
-        		for( String outVariantKey: outVariantsList ) {
-        			outVariantsOfInScript.add( outVariantKey );
+        		for( JsonObject outVariant: outVariantsList ) {
+        			outVariantsOfInScript.add( outVariant );
         		}
-        	}
-			hasBase = false;
+        	//}
+        	baseObject = null;
 			
     	}
         	
