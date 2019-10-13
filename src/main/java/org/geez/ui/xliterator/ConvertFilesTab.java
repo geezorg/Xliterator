@@ -23,6 +23,8 @@ import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
 import org.geez.convert.fontsystem.ConvertFontSystem;
 import org.geez.ui.Xliterator;
 
+import com.google.gson.JsonObject;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -61,6 +63,7 @@ public class ConvertFilesTab extends XliteratorTab {
 	
     private final String fileOutFontPref = "org.geez.ui.xliterator.convertFilesTab.fontOut";
 	private Xliterator xlit = null; // used to get a handle on rules text
+
 
 	public ConvertFilesTab(String title, Xliterator xlit) {
 		super( title );
@@ -378,9 +381,18 @@ public class ConvertFilesTab extends XliteratorTab {
 		convertButton.setDisable( true );
     }
     
-      
+    
     public void setVariantOut(String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies, String alias ) {
     	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection, dependencies, alias);
+
+    	if( inputFileList != null ) {
+    		convertButton.setDisable( false );
+    	}
+    }
+    
+    
+    public void setTransliteration( JsonObject transliteration ) {
+    	super.setTransliteration( transliteration);
 
     	if( inputFileList != null ) {
     		convertButton.setDisable( false );

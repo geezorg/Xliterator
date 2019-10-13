@@ -75,7 +75,7 @@ public final class Xliterator extends Application {
 	private String variantIn = null;
 	private String scriptOut  = null;
 	private String variantOut = null;
-	private JsonObject selectedTransliterationObject = null;
+	private JsonObject transliteration = null;
 	protected StatusBar statusBar = new StatusBar();
 	private Menu inScriptMenu   = null;
 	private Menu outVariantMenu = null;
@@ -114,6 +114,7 @@ public final class Xliterator extends Application {
     public static final String scriptOutPreference  = "org.geez.ui.xliterator.scriptOut";
     public static final String variantOutPreference = "org.geez.ui.xliterator.variantOut";
     public static final String useSelectedEdtior    = "org.geez.ui.xliterator.editor.selected";
+    public static final String transliterationPreference          = "org.geez.ui.xliterator.transliteration";
     public static final String transliterationIdPreference        = "org.geez.ui.xliterator.transliterationId";
     public static final String transliterationDirectionPreference = "org.geez.ui.xliterator.transliterationDirection";
     
@@ -177,12 +178,14 @@ public final class Xliterator extends Application {
     		if ( size == 0 ) {
     			RadioMenuItem menuItem = new RadioMenuItem( scriptInKey );
     			menuItem.setToggleGroup( groupInMenu );
-        		menuItem.setOnAction( evt -> setScriptIn( scriptInKey, "_base" ) );
+        		menuItem.setOnAction( evt -> {
+        			setScriptIn( scriptInKey, "_base" );
+        			if( inScriptMenuLast != null ) {
+        				inScriptMenuLast.setGraphic( null );
+        				inScriptMenuLast = null;
+        			}
+        		});
         		menu.getItems().add( menuItem );
-    			if( inScriptMenuLast != null ) {
-    				inScriptMenuLast.setGraphic( null );
-    				inScriptMenuLast = null;
-    			}
     		}
     		else {
     			Menu scriptMenu = new Menu( scriptInKey );
@@ -256,14 +259,16 @@ public final class Xliterator extends Application {
     			RadioMenuItem menuItem = new RadioMenuItem( scriptOutKey );
     			menuItem.setToggleGroup( groupOutMenu );
     			JsonObject variantOutObject = variantsOut.get(0).getAsJsonObject();
-        		menuItem.setOnAction( evt -> setScriptOut( scriptOutKey, "_base", variantOutObject ) );
-        		menuItem.getProperties().put( "jsonObject", variantOutObject );
+        		menuItem.setOnAction( evt -> {
+        			setScriptOut( scriptOutKey, "_base", variantOutObject );
+            		
+        			if( outScriptMenuLast != null ) {
+        				outScriptMenuLast.setGraphic( null );
+        				outScriptMenuLast = null;
+        			}
+        		});
+        		menuItem.getProperties().put( "transliteration", variantOutObject );
         		outScriptMenu.getItems().add( menuItem );
-        		
-    			if( outScriptMenuLast != null ) {
-    				outScriptMenuLast.setGraphic( null );
-    				outScriptMenuLast = null;
-    			}
         		
         		ImageView imageView = null;
         		if( "both".equals( variantOutObject.get("direction").getAsString() ) ) {
@@ -314,6 +319,7 @@ public final class Xliterator extends Application {
     }
     
 
+    /*
     private Menu createOutVaraintsMenu(String outVariant) {
     	outVariantMenu.getItems().clear();
         ToggleGroup groupVariantOutMenu = new ToggleGroup();
@@ -321,7 +327,7 @@ public final class Xliterator extends Application {
     	JsonArray variants = config.getVariants(scriptIn, scriptOut);
     	for (int i = 0; i < variants.size(); i++) {
     		JsonObject variant = variants.get(i).getAsJsonObject();
-    		if( variant.has( "visibility" ) && ("internal".equals( variant.get("vsibility").getAsString() ) ) ) {
+    		if( variant.has( "visibility" ) && ("internal".equals( variant.get("visibility").getAsString() ) ) ) {
     			continue;
     		}
     		if( variant.get("name") == null ) {
@@ -330,7 +336,7 @@ public final class Xliterator extends Application {
     				JsonArray subvariants = variant.getAsJsonArray( subVariantKey );
     		    	for (int j = 0; j < subvariants.size(); j++) {
     		    		JsonObject subvariant = subvariants.get(j).getAsJsonObject();
-        	    		if( subvariant.has( "visibility" ) && ("internal".equals( subvariant.get("vsibility").getAsString() ) ) ) {
+        	    		if( subvariant.has( "visibility" ) && ("internal".equals( subvariant.get("visibility").getAsString() ) ) ) {
         	    			continue;
         	    		}
     	    			String name = subvariant.get("name").getAsString();
@@ -421,6 +427,7 @@ public final class Xliterator extends Application {
     	
     	return outVariantMenu;
     }
+    */
     
 
     private final MenuItem fileMenuItem = new MenuItem( "Select Files..." ); 
@@ -429,6 +436,7 @@ public final class Xliterator extends Application {
         editorTab.setDefaultFontFamily( defaultFontFamily );
         editorTab.setClosable( true );
     	
+        editorTab.getProperties().put( "transliteration", transliteration );
     	editorTab.getProperties().put( "direction", transliterationDirection );
         if( transliterationAlias != null ) {
         	editorTab.getProperties().put( "alias", transliterationAlias );
@@ -1060,9 +1068,11 @@ public final class Xliterator extends Application {
         transliterationDirection = prefs.get( transliterationDirectionPreference, null );
         
         variantOut = prefs.get( variantOutPreference, null );
+        /*
         if( variantOut != null) {
         	setVariantOut( variantOut ); // TODO: store the alias as a preference
         }
+        */
 
     }
     
@@ -1124,7 +1134,7 @@ public final class Xliterator extends Application {
     private void setScriptIn(String scriptIn, String variantIn) {
     	this.scriptIn = scriptIn;
     	this.variantIn = variantIn;
-    	scriptInText.setText( scriptIn );
+    	scriptInText.setText( scriptIn + " / " + variantIn );
     	createOutScriptsMenu( scriptIn, variantIn );
         loadInternalMenuItem.setDisable( true );
     	filesTab.setScriptIn( scriptIn );
@@ -1134,12 +1144,34 @@ public final class Xliterator extends Application {
     private void setScriptOut(String scriptOut, String variantOut, JsonObject transliteration) {
     	this.scriptOut = scriptOut;
     	this.variantOut = variantOut;
-    	this.selectedTransliterationObject = transliteration;
     	
-		this.selectedTransliteration  = transliteration.get( "file").getAsString();
-		this.transliterationDirection = transliteration.get( "direction").getAsString();
-		this.transliterationAlias = (transliteration.has("alias")) ? transliteration.get("alias").getAsString() : null;
+    	setTransliteration( transliteration );
 		
+    	scriptOutText.setText( scriptOut + " / " + variantOut );
+    	variantOutText.setText( "Internal: " + selectedTransliteration );
+    	// createOutVaraintsMenu( scriptOut );
+        loadInternalMenuItem.setDisable( true );
+    	filesTab.setScriptOut( scriptIn );
+    	textTab.setScriptOut(scriptOut);
+    	// setMenuItemSelection( outScriptMenu, scriptOut );
+    	
+        loadInternalMenuItem.setDisable( false );
+
+    	// filesTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection, transliterationDependencies, transliterationAlias );
+
+
+    	// textTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection, transliterationDependencies, transliterationAlias );
+
+    }
+    
+    
+    
+    public void setTransliteration( JsonObject transliteration ) {
+    	this.transliteration = transliteration;
+    	this.selectedTransliteration  = transliteration.get( "path" ).getAsString();
+    	this.transliterationDirection = transliteration.get( "direction" ).getAsString();
+    	this.transliterationAlias = ( transliteration.has( "alias" ) ) ? transliteration.get( "alias" ).getAsString() : null ;
+    	
 		ArrayList<String> dependencies = new ArrayList<String>();
 		if( transliteration.has( "dependencies" ) ) {
 			JsonArray dependenciesJSON = transliteration.getAsJsonArray( "dependencies" );
@@ -1149,14 +1181,10 @@ public final class Xliterator extends Application {
 		}		
 		this.transliterationDependencies = (dependencies.isEmpty()) ? null: dependencies;
 		
-    	scriptOutText.setText( scriptOut );
-    	variantOutText.setText( "[None]" );
-    	// createOutVaraintsMenu( scriptOut );
-        loadInternalMenuItem.setDisable( true );
-    	filesTab.setScriptOut( scriptIn );
-    	textTab.setScriptOut(scriptOut);
-    	setMenuItemSelection( outScriptMenu, scriptOut );
-    }
+    	filesTab.setTransliteration( transliteration );
+    	textTab.setTransliteration( transliteration );
+  	}
+    /*
     private void setVariantOut(String variantOut) {
     	this.variantOut = variantOut;
     	variantOutText.setText( variantOut );
@@ -1166,6 +1194,7 @@ public final class Xliterator extends Application {
     	textTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection, transliterationDependencies, transliterationAlias );
     	setMenuItemSelection( outVariantMenu, variantOut );
     }
+    */
     private String caseOption = null;
     private void setCaseOption(RadioMenuItem menuItem) {
     	String label = menuItem.getText().toLowerCase();

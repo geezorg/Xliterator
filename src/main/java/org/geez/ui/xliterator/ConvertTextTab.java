@@ -8,6 +8,8 @@ import org.fxmisc.richtext.StyleClassedTextArea;
 import org.geez.convert.text.ConvertTextString;
 import org.geez.ui.Xliterator;
 
+import com.google.gson.JsonObject;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -238,7 +240,22 @@ public class ConvertTextTab extends XliteratorTab {
         	convertButtonUp.setDisable( true );        	
         }
     }
-    
+  
+    public void setTransliteration( JsonObject transliteration ) {
+    	super.setTransliteration( transliteration);
+    	
+		registeredDependencies.put( selectedTransliteration , "false" );
+		convertButtonUp.setDisable( false );
+		convertButtonDown.setDisable( false );
+		
+        if( "both".equals( transliterationDirection ) ) {
+        	convertButtonUp.setDisable( false );
+        }
+        else {
+        	convertButtonUp.setDisable( true );        	
+        }
+    }
+        
     public void clearAll() {
     	textAreaIn.clear();
     	textAreaOut.clear();
