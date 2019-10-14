@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 
@@ -118,13 +117,13 @@ public final class Xliterator extends Application {
     public static final String transliterationIdPreference        = "org.geez.ui.xliterator.transliterationId";
     public static final String transliterationDirectionPreference = "org.geez.ui.xliterator.transliterationDirection";
     
-    private Stage primaryStage = null;
+    private Stage primaryStage      = null;
 	private XliteratorConfig config = null;
 	
-    private Image visibleIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
-    private Image arrowForwardIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_right_grey_16x16.png" ) ); 
-    private Image arrowBothIcon    = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_double_grey_16x16.png" ) );
-    private Image checkIcon        = new Image( ClassLoader.getSystemResourceAsStream( "images/check_black_16x16.png" ) );
+    private Image visibleIcon       = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
+    private Image arrowForwardIcon  = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_right_grey_16x16.png" ) ); 
+    private Image arrowBothIcon     = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_double_grey_16x16.png" ) );
+    private Image checkIcon          = new Image( ClassLoader.getSystemResourceAsStream( "images/check_black_16x16.png" ) );
     private ColorAdjust monochrome = new ColorAdjust();
 	
 	
@@ -246,7 +245,7 @@ public final class Xliterator extends Application {
     	
         ToggleGroup groupOutMenu = new ToggleGroup();
         
-    	JsonObject scriptsOut = config.getOutScripts(scriptIn, variantIn);
+    	JsonObject scriptsOut = config.getOutScriptsOfInScriptAndInVariant(scriptIn, variantIn);
     	ArrayList<String> scriptOutList = new ArrayList<String>( scriptsOut.keySet() );
     	Collections.sort( scriptOutList );
     	
@@ -786,8 +785,18 @@ public final class Xliterator extends Application {
 	        		return;
 	        	}
             	try {
+            		if( transliterationDependencies != null) { // load first so they apepar in the background
+            			for(String dependency: transliterationDependencies) {
+            				JsonObject dependencyObject = config.getTransliterationByName( dependency );
+            				String dependentTransliteration = dependencyObject.get( "path" ).getAsString();
+                    		EditorTab dependentEditorTab = createNewEditor( dependentTransliteration, tabsMenu, visibleIcon, monochrome );
+                    		dependentEditorTab.getEditor().loadResourceFile( dependentTransliteration );            				
+            			}
+            		}
             		currentEditorTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
             		currentEditorTab.getEditor().loadResourceFile( selectedTransliteration );
+            		
+            		// tabpane.getSelectionModel().select( currentEditorTab );
                 }
                 catch(IOException ex) {
                 	errorAlert(ex, "Error opening: " + selectedTransliteration );
@@ -1153,7 +1162,7 @@ public final class Xliterator extends Application {
     	this.variantOut = variantOut;
 		
     	String scriptOutMessage = scriptOut;
-    	if(! "_base".equals( variantIn ) ) {
+    	if(! "_base".equals( variantOut ) ) {
     		scriptOutMessage +=  " / " + variantOut ;
     	}
     	scriptOutText.setText( scriptOutMessage );
@@ -1223,8 +1232,8 @@ public final class Xliterator extends Application {
 			inScriptMenuLast = null;
 		}
 		if( outScriptMenuLast != null ) {
-				outScriptMenuLast.setGraphic( null );
-				outScriptMenuLast = null;
+			outScriptMenuLast.setGraphic( null );
+			outScriptMenuLast = null;
 		}
     	
     	for(MenuItem item: inScriptMenu.getItems() ) {

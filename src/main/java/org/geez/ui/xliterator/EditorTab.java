@@ -108,19 +108,19 @@ public class EditorTab extends XliteratorTab {
 
         Button unregister = new Button( "Unregister" );
         Button register = new Button( "Register" );
-        register.setTooltip( new Tooltip( "Register alias for current session" ) );
+        register.setTooltip( new Tooltip( "Register a name for current session" ) );
         register.setOnAction( evt -> {
         	TextInputDialog registerDialog = createRegisterDialog( primaryStage );
         	// Dialog<Pair<String,String>> registerDialog = createRegisterDialog();
         	// Optional<Pair<String,String>> result = registerDialog.showAndWait();
         	Optional<String> result =  registerDialog.showAndWait();
         	result.ifPresent( selections -> {
-        		alias = result.get();
+        		name = result.get();
         		// String alias = selections.getKey();
         		// String direction = selections.getKey();
         		try {
         			// String direction = directionBox.getSelectionModel().getSelectedItem().toLowerCase();
-        			config.registerTransliteration( alias, selectedDirection, editor.getText() );
+        			config.registerTransliteration( name, selectedDirection, editor.getText() );
         			// getProperties().put( "direction", direction );
         			// getProperties().put( "alias", alias );
         			unregister.setDisable( false );
@@ -139,11 +139,11 @@ public class EditorTab extends XliteratorTab {
         	Alert alert = new Alert(AlertType.CONFIRMATION);
         	alert.setTitle( "Confirm Unregistration" );
         	alert.setHeaderText( "Confirm Unregistratio" );
-        	alert.setContentText( "Are you sure that you want to unregister \"" + alias + "\"?" );
+        	alert.setContentText( "Are you sure that you want to unregister \"" + name + "\"?" );
 
         	Optional<ButtonType> result = alert.showAndWait();
         	if (result.get() == ButtonType.OK){
-        	   config.unregisterTransliteration( alias );
+        	   config.unregisterTransliteration( name );
         	   unregister.setDisable( true );
         	}
         }); 
@@ -288,11 +288,11 @@ public class EditorTab extends XliteratorTab {
     
     
     private TextInputDialog createRegisterDialog( Stage primaryStage ) {
-    	TextInputDialog dialog = new TextInputDialog( alias );
+    	TextInputDialog dialog = new TextInputDialog( name );
     	dialog.initOwner( primaryStage );
     	dialog.initStyle(StageStyle.UTILITY);
-    	dialog.setTitle(  "Enter an Transliteration Alias" );
-    	dialog.setContentText(  "Enter an alias:" );
+    	dialog.setTitle(  "Enter an Transliteration Name" );
+    	dialog.setContentText(  "Enter a name:" );
     	dialog.setHeaderText(null);
     	dialog.setGraphic(null);
     	dialog.setResizable(true);
@@ -301,8 +301,8 @@ public class EditorTab extends XliteratorTab {
     	Node okButton = dialog.getDialogPane().lookupButton(ButtonType.OK);
     	okButton.setDisable(true);
 
-    	TextField aliasField = dialog.getEditor();
-    	aliasField.textProperty().addListener((observable, oldValue, newValue) -> {
+    	TextField nameField = dialog.getEditor();
+    	nameField.textProperty().addListener((observable, oldValue, newValue) -> {
     		okButton.setDisable( newValue.trim().isEmpty() );
     	});
     	

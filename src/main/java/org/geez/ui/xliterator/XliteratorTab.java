@@ -19,7 +19,9 @@ public abstract class XliteratorTab extends DraggableTab {
 	protected String scriptIn   = null;
 	protected String scriptOut  = null;
 	protected String variantOut = null;
-	protected String alias = null;
+	protected String alias      = null;
+	protected String name       = null;
+	protected String backwardAlias = null;
 	protected String selectedTransliteration = null;
 	protected String transliterationDirection = null;
 	protected String caseOption = null;
@@ -151,11 +153,13 @@ public abstract class XliteratorTab extends DraggableTab {
     public void setTransliteration( JsonObject transliteration ) {
     	this.transliteration = transliteration;
     	
-    	this.variantOut               = transliteration.get( "name" ).getAsString();;
+    	this.variantOut               = transliteration.get( "name" ).getAsString();
     	this.selectedTransliteration  = transliteration.get( "path" ).getAsString();
     	this.transliterationDirection = transliteration.get( "direction" ).getAsString();
-    	this.alias = ( transliteration.has( "alias" ) ) ? transliteration.get( "alias" ).getAsString() : null ;
-    	
+    	this.alias         = ( transliteration.has( "alias" ) ) ? transliteration.get( "alias" ).getAsString() : null ;
+    	this.backwardAlias = ( transliteration.has( "backwardAlias" ) ) ? transliteration.get( "backwardAlias" ).getAsString() : null ;
+    	this.name = transliteration.get( "source" ).getAsString() + "-" + transliteration.get( "target" ).getAsString();
+    			
 		ArrayList<String> dependencies = new ArrayList<String>();
 		if( transliteration.has( "dependencies" ) ) {
 			JsonArray dependenciesJSON = transliteration.getAsJsonArray( "dependencies" );

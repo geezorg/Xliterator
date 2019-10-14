@@ -114,6 +114,7 @@ public class XliteratorConfig extends ICUHelper {
         return scriptsObject;
     }
     
+    
     public List<String> getInScriptsList() {
     	ArrayList<String> scriptList = new ArrayList<String>( config.getAsJsonObject("Scripts").keySet() );
     	Collections.sort(scriptList);
@@ -121,7 +122,26 @@ public class XliteratorConfig extends ICUHelper {
     }
     
     
-    public JsonObject getOutScripts( String inScript, String inVariant ) {
+    public List<String> getInVariantsOfInScriptList(String inScript) {
+    	ArrayList<String> inVaraiantsList = new ArrayList<String>( config.getAsJsonObject("Scripts").getAsJsonObject(inScript).keySet() );
+    	Collections.sort(inVaraiantsList);
+    	return inVaraiantsList;
+    }
+    
+    
+    public List<String> getOutScriptOfInScriptAndInVariantList(String inScript, String inVariant) {
+    	ArrayList<String> outScriptList = new ArrayList<String>( config.getAsJsonObject("Scripts").getAsJsonObject(inScript).getAsJsonObject( inVariant ).keySet() );
+    	Collections.sort(outScriptList);
+    	return outScriptList;
+    }
+    
+
+    public JsonArray getOutVariantsOfInScriptInVariantAndOutScriptArray(String inScript, String inVariant, String outScript) {
+    	return config.getAsJsonObject("Scripts").getAsJsonObject(inScript).getAsJsonObject( inVariant ).getAsJsonArray( outScript );
+    }
+    
+    
+    public JsonObject getOutScriptsOfInScriptAndInVariant( String inScript, String inVariant ) {
 		JsonObject scriptsObject = new JsonObject();
     	JsonObject inVariantObject = config.getAsJsonObject("Scripts").getAsJsonObject( inScript ).getAsJsonObject( inVariant );
     	
@@ -170,7 +190,7 @@ public class XliteratorConfig extends ICUHelper {
     }
     
     
-    public List<String> getOutScriptsList( String inScript ) {
+    public List<String> getOutScriptsOfInScriptList( String inScript ) {
 
     	HashSet<String> outScriptSet = new HashSet<String>();
     	
@@ -187,7 +207,7 @@ public class XliteratorConfig extends ICUHelper {
     public JsonArray getVariants(String inScript, String outScript) {
     	return config.getAsJsonObject("Scripts").getAsJsonObject( inScript ).getAsJsonArray( outScript );
     }
-    
+
     
     private void addVariantReverseEntry( JsonObject bothDirectionScripts, String inScript /* to */, String inVariant, String outScript /* from */, JsonObject outVariant ) {
     	// Reverse the path:
@@ -268,10 +288,61 @@ public class XliteratorConfig extends ICUHelper {
     }
     
     
+    
     public JsonObject getTransliterationByAlias( String alias ) {
     	List<String> inScripts = getInScriptsList();
     	for(String inScript: inScripts) {
-    		List<String> outScripts = getOutScriptsList( inScript );
+			List<String> inVariants = getInVariantsOfInScriptList(inScript);
+	    	for(String inVariant: inVariants) {
+	    		List<String> outScripts = getOutScriptOfInScriptAndInVariantList( inScript, inVariant );
+	    		for(String outScript: outScripts) {
+	    			JsonArray outVariants = getOutVariantsOfInScriptInVariantAndOutScriptArray(inScript, inVariant, outScript);
+	    	    	for (int i = 0; i < outVariants.size(); i++) {
+	    	    		JsonObject variant = outVariants.get(i).getAsJsonObject();
+    	    			if( variant.has( "alias" ) && ( alias.equals( variant.get("alias").getAsString() ) ) ) {
+    	    				return variant;
+    	    			}
+	    	    	}   		
+	    		}
+
+
+    	    }
+    	}
+    	
+    	return null;
+    }
+    
+    
+    
+    public JsonObject getTransliterationByName( String name ) {
+    	List<String> inScripts = getInScriptsList();
+    	for(String inScript: inScripts) {
+			List<String> inVariants = getInVariantsOfInScriptList(inScript);
+	    	for(String inVariant: inVariants) {
+	    		List<String> outScripts = getOutScriptOfInScriptAndInVariantList( inScript, inVariant );
+	    		for(String outScript: outScripts) {
+	    			JsonArray outVariants = getOutVariantsOfInScriptInVariantAndOutScriptArray(inScript, inVariant, outScript);
+	    	    	for (int i = 0; i < outVariants.size(); i++) {
+	    	    		JsonObject variant = outVariants.get(i).getAsJsonObject();
+	    	    		String variantName = variant.get( "source" ).getAsString() + "-" + variant.get( "target" ).getAsString();
+    	    			if( variantName.equals( name ) ) {
+    	    				return variant;
+    	    			}
+	    	    	}   		
+	    		}
+
+
+    	    }
+    	}
+    	
+    	return null;
+    }
+    
+    
+    public JsonObject getTransliterationByAliasOld( String alias ) {
+    	List<String> inScripts = getInScriptsList();
+    	for(String inScript: inScripts) {
+    		List<String> outScripts = getOutScriptsOfInScriptList( inScript );
     		for(String outScript: outScripts) {
     			JsonArray variants = getVariants(inScript, outScript);
     	    	for (int i = 0; i < variants.size(); i++) {
@@ -323,19 +394,19 @@ public class XliteratorConfig extends ICUHelper {
 	// clear where to place it
 	protected void registerDependencies(ArrayList<String> dependencies) throws IOException, SAXException  {
     	// ConvertDocxGenericUnicodeFont converter = new ConvertDocxGenericUnicodeFont();
-		for( String alias: dependencies ) {
-	  		if( registered.contains( alias ) ) {
+		for( String name: dependencies ) {
+	  		if( registered.contains( name ) ) {
 	  			continue;
 	  		}
 	  		// get source file and direction from alias
-	  		JsonObject object = getTransliterationByAlias( alias );
+	  		JsonObject object = getTransliterationByName( name );
 	  		
 	  		String path = object.get( "path" ).getAsString();
 	  		String rulesFilePath = (path.contains( "/" ) ) ? path : "common/transforms/" + path ; 
 	  		String direction = object.get( "direction" ).getAsString();
 	  		
-	  		registerTransliterationFile( alias, direction, rulesFilePath );
-	  		registered.add( alias );
+	  		registerTransliterationFile( name, direction, rulesFilePath );
+	  		registered.add( name );
 		}
 	}
     
