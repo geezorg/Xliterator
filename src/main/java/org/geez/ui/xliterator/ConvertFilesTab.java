@@ -386,7 +386,7 @@ public class ConvertFilesTab extends XliteratorTab {
 		convertButton.setDisable( true );
     }
     
-    
+    /*
     public void setVariantOut(String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies, String alias ) {
     	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection, dependencies, alias);
 
@@ -394,6 +394,7 @@ public class ConvertFilesTab extends XliteratorTab {
     		convertButton.setDisable( false );
     	}
     }
+    */
     
     
     public void setTransliteration( JsonObject transliteration ) {

@@ -129,7 +129,7 @@ public class ConvertTextTab extends XliteratorTab {
 	    		}
 	    	}
 	    	else {
-		    	String transliterationKeyForward = ((alias == null ) ? selectedTransliteration : alias) + "-" + transliterationDirection ;
+		    	String transliterationKeyForward = ((alias == null ) ? (selectedTransliteration+ "-" + transliterationDirection) : alias) ;
 		    	
 		    	if(! textStringConverts.containsKey( transliterationKeyForward ) ) {
 		    		textStringConverts.put( transliterationKeyForward, new ConvertTextString( selectedTransliteration, transliterationDirection ) );
@@ -137,7 +137,11 @@ public class ConvertTextTab extends XliteratorTab {
 		    	stringConverterDown = textStringConverts.get( transliterationKeyForward );
 		    	
 	    		if( "both".equals( transliterationDirection ) ) {
-	    	    	String transliterationKeyReverse = ((alias == null ) ? selectedTransliteration : alias) + "-reverse" ;
+	    			String reverseAlias = (backwardAlias == null ) ? null : backwardAlias ;
+	    			if( reverseAlias == null ) {
+	    				reverseAlias = (alias == null ) ? null : alias ;
+	    			}
+	    	    	String transliterationKeyReverse = (reverseAlias == null ) ? (selectedTransliteration + "-reverse") : reverseAlias ;
 	    	    	
 	    	    	if(! textStringConverts.containsKey( transliterationKeyReverse ) ) {
 	    	    		textStringConverts.put( transliterationKeyReverse, new ConvertTextString( selectedTransliteration, "reverse" ) );
