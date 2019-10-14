@@ -96,10 +96,12 @@ public class EditorTab extends XliteratorTab {
         
         // transliterationDirection = (String)getProperties().get( "direction" );
         if( "both".equals( transliterationDirection ) ) {
-        	directionBox.getSelectionModel().select(1);	
+        	directionBox.getSelectionModel().select(1);
+        	selectedDirection = "both";
         }
         else {
         	directionBox.getSelectionModel().select(0);
+        	selectedDirection = "forward";
         }
         directionBox.setOnAction( evt -> {
         	selectedDirection = directionBox.getSelectionModel().getSelectedItem().toLowerCase();
@@ -138,7 +140,7 @@ public class EditorTab extends XliteratorTab {
         unregister.setOnAction( evt -> {
         	Alert alert = new Alert(AlertType.CONFIRMATION);
         	alert.setTitle( "Confirm Unregistration" );
-        	alert.setHeaderText( "Confirm Unregistratio" );
+        	alert.setHeaderText( "Confirm Unregistration" );
         	alert.setContentText( "Are you sure that you want to unregister \"" + name + "\"?" );
 
         	Optional<ButtonType> result = alert.showAndWait();
@@ -299,7 +301,7 @@ public class EditorTab extends XliteratorTab {
     	
     	
     	Node okButton = dialog.getDialogPane().lookupButton(ButtonType.OK);
-    	okButton.setDisable(true);
+    	okButton.setDisable(false);
 
     	TextField nameField = dialog.getEditor();
     	nameField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -307,6 +309,29 @@ public class EditorTab extends XliteratorTab {
     	});
     	
     	return dialog;
+    }
+    
+    public String getInText() {
+    	if( scriptIn == null ) {
+    		return "Unknown";
+    	}
+    	String scriptInMessage = scriptIn;
+    	if(! "_base".equals( variantIn ) ) {
+    		scriptInMessage +=  " / " + variantIn ;
+    	}
+    	return scriptInMessage;
+    }
+    
+    public String getOutText() {
+    	if( scriptOut == null ) {
+    		return "Unknown";
+    	}
+    	String scriptOutMessage = scriptOut;
+    	if(! "_base".equals( variantOut ) ) {
+    		scriptOutMessage +=  " / " + variantOut ;
+    	}
+    	
+    	return scriptOutMessage;
     }
     
     

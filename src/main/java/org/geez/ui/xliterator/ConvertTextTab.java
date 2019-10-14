@@ -108,7 +108,7 @@ public class ConvertTextTab extends XliteratorTab {
 	private void initializeStringConverters() {
 		
 		try {	
-	    	if( selectedTransliteration.equals( Xliterator.useSelectedEdtior ) ) {
+	    	if( selectedTransliteration.equals( Xliterator.useSelectedEditor ) ) {
 	    		// do not save the converter because the text may change:
 	    		// The ConvertTextString constructor needs to be reworked here, see notes within its source file:
 	    		// stringConverter = new ConvertTextString( editor.getText(), direction, true );
@@ -313,14 +313,14 @@ public class ConvertTextTab extends XliteratorTab {
     	}    	
     }
     
-    public void setScriptIn(String scriptIn, String direction) {
-    	setScriptIn( scriptIn );
+    public void setScriptInAndDirection(String scriptIn, String direction) {
+    	setScriptIn( scriptIn, null );
     	enableConversionButtions( direction );
     }
     
-    public void setScriptIn(String scriptIn) {
-    	super.setScriptIn(scriptIn);
-    	if( scriptIn.equals( Xliterator.useSelectedEdtior ) ) {
+    public void setScriptIn(String scriptIn, String variantIn) {
+    	super.setScriptIn(scriptIn, variantIn);
+    	if( scriptIn.equals( Xliterator.useSelectedEditor ) ) {
     		this.selectedTransliteration = scriptIn;
 			convertButtonUp.setDisable( false );
 			convertButtonDown.setDisable( false );
@@ -485,7 +485,7 @@ public class ConvertTextTab extends XliteratorTab {
     }
     
     public void setEditorTransliterationDirection( String direction ) {
-    	if( selectedTransliteration.equals( Xliterator.useSelectedEdtior ) ) {
+    	if( selectedTransliteration.equals( Xliterator.useSelectedEditor ) ) {
         	enableConversionButtions( direction );
     	}
     }

@@ -17,6 +17,7 @@ public abstract class XliteratorTab extends DraggableTab {
 	
 	protected boolean converted = false;
 	protected String scriptIn   = null;
+	protected String variantIn  = null;
 	protected String scriptOut  = null;
 	protected String variantOut = null;
 	protected String alias      = null;
@@ -131,16 +132,22 @@ public abstract class XliteratorTab extends DraggableTab {
     }
     
     
-    public void setScriptIn( String scriptIn ) {
-    	this.scriptIn = scriptIn;
+    public void setScriptIn( String scriptIn, String variantIn ) {
+    	this.scriptIn  = scriptIn;
+    	this.variantIn = variantIn;
     }
     
     
     public void setScriptOut( String scriptOut ) {
     	this.scriptOut = scriptOut;
     }
+       
     
+    public void setVariantOut( String variantOut ) {
+    	this.variantOut = variantOut;
+    }
     
+    /*
     public void setVariantOut( String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies , String alias) {
     	this.variantOut = variantOut;
     	this.selectedTransliteration  = selectedTransliteration;
@@ -148,6 +155,7 @@ public abstract class XliteratorTab extends DraggableTab {
     	this.dependencies = dependencies;
     	this.alias = alias;
     }
+    */
     
     
     public void setTransliteration( JsonObject transliteration ) {
