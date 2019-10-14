@@ -795,7 +795,6 @@ public final class Xliterator extends Application {
             		}
             		currentEditorTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
             		currentEditorTab.getEditor().loadResourceFile( selectedTransliteration );
-            		
             		// tabpane.getSelectionModel().select( currentEditorTab );
                 }
                 catch(IOException ex) {
@@ -1246,6 +1245,15 @@ public final class Xliterator extends Application {
 	    		else {
 	    			rItem.setSelected( false );
 	    		}
+    		}
+    		else if( item.getClass() == Menu.class ) {
+    			Menu menu = (Menu)item;
+    			menu.setGraphic( null );
+    			for(MenuItem subItem: menu.getItems() ) {
+    				if( subItem.getClass() == RadioMenuItem.class ) {
+    					((RadioMenuItem)subItem).setSelected( false );
+    				}
+    			}
     		}
     	}
     }
