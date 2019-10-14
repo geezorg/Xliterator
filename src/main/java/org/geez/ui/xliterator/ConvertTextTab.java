@@ -1,6 +1,5 @@
 package org.geez.ui.xliterator;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.prefs.Preferences;
 
@@ -53,7 +52,9 @@ public class ConvertTextTab extends XliteratorTab {
     
 	private HashMap<String,String> registeredDependencies = new HashMap<String,String>();
 	// private String selectedTransliteration = null;
-    HashMap<String,ConvertTextString> textStringConverts = new HashMap<String,ConvertTextString>();    
+    HashMap<String,ConvertTextString> textStringConverts = new HashMap<String,ConvertTextString>();
+    
+    /*
     private void convertTextAreaOld(StyleClassedTextArea textAreaIn, StyleClassedTextArea textAreaOut, String direction) {
     	String textIn = textAreaIn.getText();
     	if( textIn == null ) {
@@ -100,7 +101,7 @@ public class ConvertTextTab extends XliteratorTab {
 			return;
 		}
     }
-
+     */
 
 	ConvertTextString stringConverterDown = null;
 	ConvertTextString stringConverterUp = null;
@@ -176,16 +177,6 @@ public class ConvertTextTab extends XliteratorTab {
     	if( textIn == null ) {
     		return;
     	}
-    	
-    	/*
-		if( stringConverter == null ) {
-			initializeStringConverters();
-		}
-		*/
-
-    	// stringConverter.setText( textIn );
-    	
-    	// textAreaOut.clear();
         
     	textAreaOut.replaceText( stringConverter.convertText( textIn ) );
 
@@ -305,8 +296,25 @@ public class ConvertTextTab extends XliteratorTab {
             }
         });
     }
-   
-    public void setScriptIn(String scriptIn ) {
+
+    private void enableConversionButtions( String direction ) {
+    	transliterationDirection = direction;
+    	if( "forward".equals( direction ) ) {
+			convertButtonUp.setDisable( true );
+			convertButtonDown.setDisable( false );    		
+    	}
+    	else {
+			convertButtonUp.setDisable( false );
+			convertButtonDown.setDisable( false );     		
+    	}    	
+    }
+    
+    public void setScriptIn(String scriptIn, String direction) {
+    	setScriptIn( scriptIn );
+    	enableConversionButtions( direction );
+    }
+    
+    public void setScriptIn(String scriptIn) {
     	super.setScriptIn(scriptIn);
     	if( scriptIn.equals( Xliterator.useSelectedEdtior ) ) {
     		this.selectedTransliteration = scriptIn;
@@ -332,7 +340,8 @@ public class ConvertTextTab extends XliteratorTab {
 		convertButtonDown.setTooltip( new Tooltip( "Convert from: " + scriptIn + " to " + scriptOut ) );
     }
     */
-      
+    
+    /*
     public void setVariantOut( String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies, String alias ) {
     	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection, dependencies, alias);
     	this.selectedTransliteration = selectedTransliteration;
@@ -346,6 +355,7 @@ public class ConvertTextTab extends XliteratorTab {
         	convertButtonUp.setDisable( true );        	
         }
     }
+    */
   
     public void setTransliteration( JsonObject transliteration ) {
     	if( this.transliteration == null ) {
@@ -468,5 +478,11 @@ public class ConvertTextTab extends XliteratorTab {
     	// set background 
     	textAreaIn.setBackground(background); 
     	textAreaOut.setBackground(background); 
+    }
+    
+    public void setEditorTransliterationDirection( String direction ) {
+    	if( selectedTransliteration.equals( Xliterator.useSelectedEdtior ) ) {
+        	enableConversionButtions( direction );
+    	}
     }
 }

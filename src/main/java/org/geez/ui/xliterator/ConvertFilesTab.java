@@ -421,4 +421,11 @@ public class ConvertFilesTab extends XliteratorTab {
         
         return ( this.fontFamily == null );
     }
+    
+    
+    public void setEditorTransliterationDirection( String direction ) {
+    	if( selectedTransliteration.equals( Xliterator.useSelectedEdtior ) ) {
+        	transliterationDirection = direction;
+    	}
+    }
 }
