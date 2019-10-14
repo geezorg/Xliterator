@@ -106,7 +106,7 @@ public class ConvertFilesTab extends XliteratorTab {
     		String editorRulesText = null;
     		String systemName      = null;
     		
-    		if( selectedTransliteration.equals( Xliterator.useSelectedEdtior ) ) {
+    		if( selectedTransliteration.equals( Xliterator.useSelectedEditor ) ) {
 	    		EditorTab editorTab = xlit.getSelectedEditorTab();
 	    		if( editorTab == null ) {
 	    			// TODO: add error alert
@@ -127,7 +127,7 @@ public class ConvertFilesTab extends XliteratorTab {
     		}
     		
     		
-    		DocumentProcessor processor = ( selectedTransliteration.equals( Xliterator.useSelectedEdtior )  )
+    		DocumentProcessor processor = ( selectedTransliteration.equals( Xliterator.useSelectedEditor )  )
     				? processorManager.getEditorTextProcessor( selectedTransliteration, transliterationDirection, extension, editorRulesText )
     				: processorManager.getFileProcessor( selectedTransliteration, transliterationDirection, extension )
     		;
@@ -368,9 +368,9 @@ public class ConvertFilesTab extends XliteratorTab {
     }
 
     
-    public void setScriptIn(String scriptIn ) {
-    	super.setScriptIn(scriptIn);
-    	if( scriptIn.equals( Xliterator.useSelectedEdtior ) ) {
+    public void setScriptIn( String scriptIn ) {
+    	super.setScriptIn(scriptIn, null);
+    	if( scriptIn.equals( Xliterator.useSelectedEditor ) ) {
     		this.selectedTransliteration = scriptIn;
 			convertButton.setDisable( false );
     	}
@@ -425,7 +425,7 @@ public class ConvertFilesTab extends XliteratorTab {
     
     
     public void setEditorTransliterationDirection( String direction ) {
-    	if( selectedTransliteration.equals( Xliterator.useSelectedEdtior ) ) {
+    	if( selectedTransliteration.equals( Xliterator.useSelectedEditor ) ) {
         	transliterationDirection = direction;
     	}
     }
