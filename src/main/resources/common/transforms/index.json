@@ -792,6 +792,17 @@
             "alias": "Amharic-Latin/BGN"
           }
         ]
+      },
+      "_base": {
+        "Latin": [
+          {
+            "path": "Ethiopic-Latin-Aethiopica.xml",
+            "name": "Aethiopica",
+            "direction": "both",
+            "alias": "Ethiopic-Latin/Aethiopica",
+            "backwardAlias": "Latin-EthiopicEthiopic-Latin-Aethiopica.xml/Aethiopica"
+          }
+        ]
       }
     },
     "Georgian": {
@@ -820,7 +831,7 @@
       }
     },
     "Greek": {
-      "Modern (1453-)": {
+      "Modern Greek (1453-)": {
         "Latin": [
           {
             "path": "Greek-Latin-BGN.xml",
@@ -828,9 +839,7 @@
             "direction": "forward",
             "alias": "Greek-Latin/BGN"
           }
-        ]
-      },
-      "Modern Greek (1453-)": {
+        ],
         "Greek": [
           {
             "path": "el-Lower.xml",

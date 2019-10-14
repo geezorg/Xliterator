@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.prefs.Preferences;
 
 import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.geez.ui.Xliterator;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -43,6 +44,7 @@ import javafx.util.Pair;
 public class EditorTab extends XliteratorTab {
 	
     private ICUEditor editor = new ICUEditor();
+    private Xliterator xlit = null;
 	private File externalIcuFile = null;
 	private boolean unsavedChanges = false;
         
@@ -77,7 +79,9 @@ public class EditorTab extends XliteratorTab {
 	}
 	
 	
-	public void setup(Stage primaryStage, XliteratorConfig config, MenuItem saveMenuItem, MenuItem saveAsMenuItem ) {
+	public void setup(Stage primaryStage, Xliterator xlit, MenuItem saveMenuItem, MenuItem saveAsMenuItem ) {
+		this.xlit = xlit;
+		XliteratorConfig config = xlit.getConfig();
         Menu editorFontMenu     = createFontMenu( editor );
         Menu editorFontSizeMenu = createFontSizeMenu( editor );
         
@@ -99,6 +103,7 @@ public class EditorTab extends XliteratorTab {
         }
         directionBox.setOnAction( evt -> {
         	selectedDirection = directionBox.getSelectionModel().getSelectedItem().toLowerCase();
+        	xlit.setEditorTransliterationDirection( selectedDirection );
         });
 
         Button unregister = new Button( "Unregister" );
@@ -303,8 +308,10 @@ public class EditorTab extends XliteratorTab {
     	
     	return dialog;
     }
-    private Dialog<Pair<String,String>> createRegisterDialogOld() {
-    	
+    
+    
+    /*
+    private Dialog<Pair<String,String>> createRegisterDialogOld() {   	
     	Dialog<Pair<String,String>> dialog = new Dialog<>();
     	dialog.initStyle(StageStyle.UTILITY);
     	dialog.setTitle( "Register Transliteration" );
@@ -352,15 +359,14 @@ public class EditorTab extends XliteratorTab {
     	});
     	 
     	dialog.setResultConverter( dialogButton -> {
-    	        if (dialogButton == buttonTypeOk) {
-    	            return new Pair<>( aliasField.getText(), ( forward.isSelected() ? "forward" : "both" ) );
-    	        }
+    		if (dialogButton == buttonTypeOk) {
+    			return new Pair<>( aliasField.getText(), ( forward.isSelected() ? "forward" : "both" ) );
+    		}
     	 
-    	        return null;
+    		return null;
     	});
     	
     	return dialog;
-
     }
-      
+    */ 
 }
