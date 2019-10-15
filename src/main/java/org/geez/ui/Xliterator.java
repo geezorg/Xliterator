@@ -1467,7 +1467,12 @@ public final class Xliterator extends Application {
     		// the syntax highlight editor is already loaded
     		return;
     	}
-    	syntaxHighlighterTab.load( stage, this );
+    	try {
+    		syntaxHighlighterTab.load( stage, this );
+    	}
+    	catch( IOException ex ) {
+    		errorAlert( ex, "An error occured reading stylesheet." );
+    	}
     	tabpane.getSelectionModel().select(syntaxHighlighterTab);
     }
     
