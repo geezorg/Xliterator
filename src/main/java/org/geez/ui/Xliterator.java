@@ -1186,31 +1186,27 @@ public final class Xliterator extends Application {
         
         String json = prefs.get( transliterationPreference, null);
         
-        if( json != null ) {
-        	transliteration = new JsonParser().parse(json).getAsJsonObject();
+        if( json == null ) {
+        	return;
         }
+        transliteration = new JsonParser().parse(json).getAsJsonObject();
         
         scriptIn = prefs.get( scriptInPreference, null );
         variantIn = prefs.get( variantInPreference, null );
-        if( scriptIn != null ) {
-        	setScriptIn( scriptIn, variantIn );
-        }
+
+        setScriptIn( scriptIn, variantIn );
         setMenuItemSelection( inScriptMenu, scriptIn, variantIn );
         
         scriptOut  = prefs.get( scriptOutPreference, null );
         variantOut = transliteration.get( "name" ).getAsString();
-        if( scriptOut != null ) {
-        	setScriptOut( scriptOut, variantOut, transliteration );
-        }
+
+        setScriptOut( scriptOut, variantOut, transliteration );
+        setMenuItemSelection( outScriptMenu, scriptOut, variantOut );
         
         
         selectedTransliteration  = prefs.get( transliterationIdPreference, null );
         transliterationDirection = prefs.get( transliterationDirectionPreference, null );
         
-        variantOut = prefs.get( variantOutPreference, null );
-        
-        setMenuItemSelection( outScriptMenu, scriptOut, variantOut );
-
     }
     
     Text scriptInText = new Text( "[None]" );
@@ -1402,7 +1398,7 @@ public final class Xliterator extends Application {
     	for(MenuItem item: menu.getItems() ) {
     		if( item.getClass() == RadioMenuItem.class ) {
 	    		RadioMenuItem rItem = (RadioMenuItem)item;
-	    		if ( script.equals( rItem.getText() ) ) {
+	    		if ( rItem.getText().equals( script ) ) {
 	    			rItem.setSelected( true );
 	    	    	// TODO: before converting, check if the title matches an editor tab
 	    		}
@@ -1413,12 +1409,12 @@ public final class Xliterator extends Application {
     		else if( item.getClass() == Menu.class ) {
     			Menu submenu = (Menu)item;
     			submenu.setGraphic( null );
-    			if( script.equals( submenu.getText() ) ) {
+    			if( submenu.getText().equals( script ) ) {
         			submenu.setGraphic( new ImageView( checkIcon ) );
-	    			for(MenuItem subItem: submenu.getItems() ) {
+	    			for( MenuItem subItem: submenu.getItems() ) {
 	    				if( subItem.getClass() == RadioMenuItem.class ) {
 	    					RadioMenuItem rsubItem = (RadioMenuItem)subItem;
-	    					if( variant.equals( rsubItem.getText() ) ) {
+	    					if( rsubItem.getText().equals( variant ) ) {
 	    						rsubItem.setSelected( true );
 	    					}
 	    					else {
