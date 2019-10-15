@@ -3,6 +3,7 @@ package org.geez.ui.xliterator;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -109,14 +110,15 @@ public class ICUEditor extends CodeArea {
     private String originalText = "";
     
 	public static final String defaultStylesheet = "styles/icu-highlighting.css";
-	public static final String userStylesheet    = "styles/user-highlighting.css";
+	public static final String userStylesheet    = "icu-highlighting.css";
 
     public ICUEditor() {
-    	String osName = System.getProperty("os.name");
-        if( osName.equals("Mac OS X") ) {
+    	String osName = System.getProperty("os.name").toLowerCase();
+        if( osName.startsWith( "mac" ) ) {
         	this.setStyle( "-fx-font-family: Kefa; -fx-font-size: 12;" );
             this.getProperties().put("font-family", "Kefa");
         }
+        
         this.getProperties().put("font-size", "12");
         this.setId( "icuEditor" );
         // this.setStyle( "-fx-text-fill: white;" );
@@ -178,13 +180,30 @@ public class ICUEditor extends CodeArea {
     
     
     public static void loadStylesheets(Scene scene) {
-		InputStream inputStream = ClassLoader.getSystemResourceAsStream( userStylesheet ); 
-		if( inputStream == null ) {
-			scene.getStylesheets().add( ClassLoader.getSystemResource( defaultStylesheet ).toExternalForm() );
-		}
-		else {
-			scene.getStylesheets().add( ClassLoader.getSystemResource( userStylesheet ).toExternalForm() );
-		}
+		String userHome = System.getProperty( "user.home" );
+        String osName = System.getProperty( "os.name" ).toLowerCase();
+        String userXlitPath = null;
+        if( osName.startsWith( "win" ) ) {
+        	userXlitPath   = userHome + "/AppData/Xliterator";
+        }
+        else { // assume OSX or Linux/Uhix
+        	userXlitPath   = userHome + "/.config/xlit";      	
+        }
+        try {
+			File userStylesFile = new File( userXlitPath + "/" + userStylesheet );
+			
+			InputStream inputStream = null;
+			if( userStylesFile.exists() ) {
+				inputStream = new FileInputStream( userStylesFile );
+				scene.getStylesheets().add( userStylesFile.toURI().toURL().toString() );
+			}
+			else {
+				scene.getStylesheets().add( ClassLoader.getSystemResource( defaultStylesheet ).toExternalForm() );
+			}
+        }
+        catch(IOException ex) {
+        	System.out.println( ex );
+        }
 		
     }
 
@@ -380,7 +399,7 @@ public class ICUEditor extends CodeArea {
 		}
 
 
-	return lastKwEnd;
+		return lastKwEnd;
     }
     
     public void loadResourceFile(String rulesFile) throws UnsupportedEncodingException, IOException {

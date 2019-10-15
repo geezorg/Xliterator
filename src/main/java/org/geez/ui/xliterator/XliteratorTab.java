@@ -28,8 +28,9 @@ public abstract class XliteratorTab extends DraggableTab {
 	protected String caseOption = null;
 	protected String defaultFontFamily = null;
 	protected String defaultFontSize = "12";
-	protected String fontFamily = null;
-	protected String fontSize = null;
+	protected String fontFamily   = null;
+	protected String fontSize     = null;
+	protected String userXlitPath = null;
 	protected ArrayList<String> dependencies = null;
 	
 	protected JsonObject transliteration = null;
@@ -37,6 +38,16 @@ public abstract class XliteratorTab extends DraggableTab {
     
 	public XliteratorTab( String title ) {
 		super(title);
+		
+		// this should be made static and done once:
+		String userHome = System.getProperty( "user.home" );
+        String osName = System.getProperty( "os.name" ).toLowerCase();
+        if( osName.startsWith( "win" ) ) {
+        	userXlitPath   = userHome + "/AppData/Xliterator";
+        }
+        else { // assume OSX or Linux/Uhix
+        	userXlitPath   = userHome + "/.config/xlit";      	
+        }
 	}
 
 	
