@@ -137,7 +137,7 @@ public final class Xliterator extends Application {
     private Image checkIcon         = new Image( ClassLoader.getSystemResourceAsStream( "images/check_black_16x16.png" ) );
     private ColorAdjust monochrome = new ColorAdjust();
 	
-	
+
 	public XliteratorConfig getConfig() {
 		return config;
 	}
