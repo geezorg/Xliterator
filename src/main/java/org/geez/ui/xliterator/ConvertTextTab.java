@@ -458,6 +458,9 @@ public class ConvertTextTab extends XliteratorTab {
     private boolean checkPreferences() {
         Preferences prefs = Preferences.userNodeForPackage( ConvertTextTab.class );
         
+		Preferences editorPrefs = Preferences.userNodeForPackage( EditorTab.class );
+		setBackgroundColor( editorPrefs.get( EditorTab.editorBackgroundColor, "white" ) );
+		
         String value = prefs.get( textAreaInFontFacePref, null );
         if( value == null ) {
         	return false;
@@ -480,9 +483,6 @@ public class ConvertTextTab extends XliteratorTab {
         else {
         	autoConversionCheckBox.setSelected( false );        	
         }
-        
-		Preferences editorPrefs = Preferences.userNodeForPackage( EditorTab.class );
-		setBackgroundColor( editorPrefs.get( EditorTab.editorBackgroundColor, "white" ) );
         
         return true;
     }

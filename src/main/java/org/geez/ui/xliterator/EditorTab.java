@@ -255,8 +255,11 @@ public class EditorTab extends XliteratorTab {
     
     
     private boolean checkPreferences() {
-		Preferences prefs = Preferences.userNodeForPackage( EditorTab.class );
+		Preferences prefs = Preferences.userNodeForPackage( EditorTab.class );		  
 		  
+		String bgcolor = prefs.get( editorBackgroundColor, "white" );
+		setBackgroundColor( bgcolor );
+		
 		fontFamily = prefs.get( editorFontFamilyPref, null );
 		  
 		if( fontFamily == null ) {
@@ -268,10 +271,7 @@ public class EditorTab extends XliteratorTab {
 		editor.getProperties().put( "font-family", fontFamily );
 		editor.getProperties().put( "font-size", fontSize );
 		setFontSize( editor, fontSize );
-		  
-		  
-		String bgcolor = prefs.get( editorBackgroundColor, "white" );
-		setBackgroundColor( bgcolor );
+
 		  
 		return true;
     }
