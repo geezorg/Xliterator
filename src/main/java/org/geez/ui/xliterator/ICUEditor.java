@@ -184,7 +184,7 @@ public class ICUEditor extends CodeArea {
         String osName = System.getProperty( "os.name" ).toLowerCase();
         String userXlitPath = null;
         if( osName.startsWith( "win" ) ) {
-        	userXlitPath   = userHome + "/AppData/Xliterator";
+        	userXlitPath   = userHome + "/AppData/Local/Xliterator";
         }
         else { // assume OSX or Linux/Uhix
         	userXlitPath   = userHome + "/.config/xlit";      	

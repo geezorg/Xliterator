@@ -43,7 +43,7 @@ public abstract class XliteratorTab extends DraggableTab {
 		String userHome = System.getProperty( "user.home" );
         String osName = System.getProperty( "os.name" ).toLowerCase();
         if( osName.startsWith( "win" ) ) {
-        	userXlitPath   = userHome + "/AppData/Xliterator";
+        	userXlitPath   = userHome + "/AppData/Local/Xliterator";
         }
         else { // assume OSX or Linux/Uhix
         	userXlitPath   = userHome + "/.config/xlit";      	
