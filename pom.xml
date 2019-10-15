@@ -74,9 +74,9 @@
     		<configuration>
         		<vendor>Ge'ez Frontier Foundation</vendor>
 				<mainClass>org.geez.ui.Xliterator</mainClass>
-				<bundler>DMG</bundler>
+				<!-- bundler>DMG</bundler -->
 				<!-- bundler>EXE</bundler -->
-				<!-- bundler>MSI</bundler -->
+				<bundler>MSI</bundler>
         		<nativeReleaseVersion>${project.version}</nativeReleaseVersion>  
         		<needShortcut>true</needShortcut>  
       		  	<needMenu>true</needMenu>  
@@ -95,7 +95,10 @@
                     <Implementation-Version>${project.version}</Implementation-Version>  
                     <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>  
                     <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>  
-      			</manifestAttributes> 
+      			</manifestAttributes>
+      			<jvmArgs>
+      				<argument>-Dfile.encoding=utf-8</argument>
+      			</jvmArgs>
     		</configuration>
     		<executions>
        			<execution>
