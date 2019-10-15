@@ -3,7 +3,7 @@
 <supplementalData>
 	<version number="$Revision$"/>
 	<transforms>
-		<transform source="Ethi" target="Ethi_Latn" variant="Aethiopica" direction="both" draft="contributed" alias="Ethopic-Latin/Aethiopica">
+		<transform source="Ethi" target="Braille_Latn" variant="Braille" direction="both" draft="contributed" alias="Ethopic-Latin/Braille">
 			<tRule><![CDATA[
 ########################################################################
 #

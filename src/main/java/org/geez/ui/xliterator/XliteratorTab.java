@@ -179,6 +179,11 @@ public abstract class XliteratorTab extends DraggableTab {
   	}
     
     
+    public JsonObject getTransliteration() {
+    	return this.transliteration;
+    }
+    
+    
     public void setCaseOption( String caseOption ) {
     	this.caseOption = caseOption;
     }
