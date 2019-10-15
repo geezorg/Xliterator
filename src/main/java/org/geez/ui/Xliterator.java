@@ -9,6 +9,8 @@ import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Optional;
@@ -31,6 +33,7 @@ import org.geez.ui.xliterator.XliteratorTab;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import de.endrullis.draggabletabs.DraggableTabPane;
 import javafx.application.Application;
@@ -117,6 +120,7 @@ public final class Xliterator extends Application {
 	private String xlitStylesheet = "styles/xliterator.css";
 	
     public static final String scriptInPreference   = "org.geez.ui.xliterator.scriptIn";
+    public static final String variantInPreference  = "org.geez.ui.xliterator.variantIn";
     public static final String scriptOutPreference  = "org.geez.ui.xliterator.scriptOut";
     public static final String variantOutPreference = "org.geez.ui.xliterator.variantOut";
     public static final String useSelectedEditor    = "org.geez.ui.xliterator.editor.selected";
@@ -441,6 +445,27 @@ public final class Xliterator extends Application {
     private static final Pattern backwardAliasPattern = Pattern.compile( "^(.*)backwardAlias\\h*=\\h*\"([^\"]+)\"(.*)$" );
     private static final Pattern directionPattern = Pattern.compile( "^(.*)direction\\h*=\\h*\"([^\"]+)\"(.*)$" );
     
+    private JsonObject createEmptyTransliteration( String path ) {	
+    	JsonObject emptyTransliteration = new JsonObject();    	
+    	
+    	DateTimeFormatter FOMATTER = DateTimeFormatter.ofPattern("yyy_MM_dd_HH_mm_ss_z");
+    	 
+    	//Zoned datetime instance
+    	ZonedDateTime zdt = ZonedDateTime.now();
+    	 
+    	//Get formatted String
+    	String zdtString = FOMATTER.format(zdt);
+    	
+    	emptyTransliteration.addProperty( "path", path );
+    	emptyTransliteration.addProperty( "name", "VARIANT_OUT_" + zdtString);
+    	emptyTransliteration.addProperty( "source", "SCRIPT_IN_" + zdtString);
+    	emptyTransliteration.addProperty( "target", "SCRIPT_OUT_" + zdtString);
+    	emptyTransliteration.addProperty( "direction", "forward" );
+
+    	return emptyTransliteration;
+    }
+    
+    
     private JsonObject createPseudoTransliteration( File externalIcuFile ) {
 
     	String fileName = externalIcuFile.getName(); 	
@@ -590,6 +615,7 @@ public final class Xliterator extends Application {
 	    	scriptInText.setText( "[Editor] " +  selectedEditorTab.getInText() );
 	    	scriptOutText.setText( "[Editor] " + selectedEditorTab.getOutText() );
 	    	resourceText.setText( "[Editor] " + title );
+	    	setTransliteration( editorTab.getTransliteration() );
     	});
     	editorTabItem.setMnemonicParsing( false );
     	// editorTabItem.getProperties().put( "selection", useSelectedEditor );
@@ -1056,7 +1082,7 @@ public final class Xliterator extends Application {
         scene.getWindow().addEventFilter( WindowEvent.WINDOW_CLOSE_REQUEST, this::closeWindowEvent );
         
         // Check for a saved user menu preference:
-        // checkPreferences();
+        checkPreferences();
         
         stage.setAlwaysOnTop(false);
         stage.show();
@@ -1144,24 +1170,37 @@ public final class Xliterator extends Application {
         Preferences prefs = Preferences.userNodeForPackage( Xliterator.class );
 
         prefs.put( scriptInPreference, scriptIn );
+        prefs.put( variantInPreference, variantIn );
         prefs.put( scriptOutPreference, scriptOut );
         prefs.put( variantOutPreference, variantOut );
         prefs.put( transliterationIdPreference, selectedTransliteration );
-        prefs.put( transliterationDirectionPreference, transliterationDirection );
+        prefs.put( transliterationDirectionPreference, transliterationDirection ); // not relevant
+        prefs.put( transliterationPreference, transliteration.toString() );
+        
+        textTab.savePreferences();
     }
 
     
     private void checkPreferences() {
         Preferences prefs = Preferences.userNodeForPackage( Xliterator.class );
-
-        scriptIn = prefs.get( scriptInPreference, null );
-        if( scriptIn != null) {
-        	setScriptIn( scriptIn, "FIXME" );
+        
+        String json = prefs.get( transliterationPreference, null);
+        
+        if( json != null ) {
+        	transliteration = new JsonParser().parse(json).getAsJsonObject();
         }
         
+        scriptIn = prefs.get( scriptInPreference, null );
+        variantIn = prefs.get( variantInPreference, null );
+        if( scriptIn != null ) {
+        	setScriptIn( scriptIn, variantIn );
+        }
+        setMenuItemSelection( inScriptMenu, scriptIn, variantIn );
+        
         scriptOut  = prefs.get( scriptOutPreference, null );
-        if( scriptOut != null) {
-        	setScriptOut( scriptOut, "FIXME", null );
+        variantOut = transliteration.get( "name" ).getAsString();
+        if( scriptOut != null ) {
+        	setScriptOut( scriptOut, variantOut, transliteration );
         }
         
         
@@ -1169,11 +1208,8 @@ public final class Xliterator extends Application {
         transliterationDirection = prefs.get( transliterationDirectionPreference, null );
         
         variantOut = prefs.get( variantOutPreference, null );
-        /*
-        if( variantOut != null) {
-        	setVariantOut( variantOut ); // TODO: store the alias as a preference
-        }
-        */
+        
+        setMenuItemSelection( outScriptMenu, scriptOut, variantOut );
 
     }
     
@@ -1232,6 +1268,7 @@ public final class Xliterator extends Application {
         statusBar.getLeftItems().add( hbox );
     }
     
+    
     private void setScriptIn(String scriptIn, String variantIn) {
     	this.scriptIn = scriptIn;
     	this.variantIn = variantIn;
@@ -1252,8 +1289,9 @@ public final class Xliterator extends Application {
         loadInternalMenuItem.setDisable( true );
     	filesTab.setScriptIn( scriptIn, variantIn );
     	textTab.setScriptIn( scriptIn, variantIn );
-    	setMenuItemSelection( inScriptMenu, scriptIn );
     }
+    
+    
     private void setScriptOut(String scriptOut, String variantOut, JsonObject transliteration) {
     	this.scriptOut = scriptOut;
     	this.variantOut = variantOut;
@@ -1332,6 +1370,7 @@ public final class Xliterator extends Application {
 			outScriptMenuLast.setGraphic( null );
 			outScriptMenuLast = null;
 		}
+		outScriptMenu.getItems().clear();
     	
     	for(MenuItem item: inScriptMenu.getItems() ) {
     		if( item.getClass() == RadioMenuItem.class ) {
@@ -1357,16 +1396,37 @@ public final class Xliterator extends Application {
     }
     
     
-    private void setMenuItemSelection(Menu menu, String selection) {    	
+    private void setMenuItemSelection( Menu menu, String script, String variant ) {
+    	variant = ( "_base".equals( variant) ) ? script : variant ;
+    	
     	for(MenuItem item: menu.getItems() ) {
     		if( item.getClass() == RadioMenuItem.class ) {
 	    		RadioMenuItem rItem = (RadioMenuItem)item;
-	    		if ( selection.equals( rItem.getText() ) ) {
+	    		if ( script.equals( rItem.getText() ) ) {
 	    			rItem.setSelected( true );
+	    	    	// TODO: before converting, check if the title matches an editor tab
 	    		}
 	    		else {
 	    			rItem.setSelected( false );
 	    		}
+    		}
+    		else if( item.getClass() == Menu.class ) {
+    			Menu submenu = (Menu)item;
+    			submenu.setGraphic( null );
+    			if( script.equals( submenu.getText() ) ) {
+        			submenu.setGraphic( new ImageView( checkIcon ) );
+	    			for(MenuItem subItem: submenu.getItems() ) {
+	    				if( subItem.getClass() == RadioMenuItem.class ) {
+	    					RadioMenuItem rsubItem = (RadioMenuItem)subItem;
+	    					if( variant.equals( rsubItem.getText() ) ) {
+	    						rsubItem.setSelected( true );
+	    					}
+	    					else {
+	    						rsubItem.setSelected( false );	    						
+	    					}
+	    				}
+	    			}
+    			}
     		}
     	}
     }
@@ -1375,24 +1435,29 @@ public final class Xliterator extends Application {
     private void saveDefaultFontSelections() {
     	filesTab.saveDefaultFontSelections();
     	textTab.saveDefaultFontSelections();
-    	currentEditorTab.saveDefaultFontSelections();
+    	if( currentEditorTab != null ) {
+    		currentEditorTab.saveDefaultFontSelections();
+    	}
     }
     
     
-    private void createNewFile(String title, String type ) {  	
+    int newCounter = 1;
+    private void createNewFile( String title, String type ) {  	
     	String template = ( "XML".equals(type) )
     			? "templates/icu-xml-template.xml"
     			: "templates/icu-text-template.txt" 
     	;
     	try {
     		// this should probably be changed to use createNewEditor 
-    		EditorTab newTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
+    		transliteration = createEmptyTransliteration( template );
+    		EditorTab newTab = createNewEditor( ("New " + newCounter), tabsMenu, visibleIcon, monochrome );
     		newTab.getEditor().loadResourceFile( template );
     	}
     	catch(Exception ex) {
         	errorAlert(ex, "Error opening: " + template );
     	}
     	
+    	newCounter++;
     }
     
     
@@ -1434,20 +1499,18 @@ public final class Xliterator extends Application {
     	textTab.setTextIn( "ሰላም ዓለም" );
     	
     	setScriptIn( "Ethiopic", "Amharic" );
-    	setScriptOut( "IPA",  "_base", null );
-    	// get the corresponding object from the index
-    	// setVariantOut( "Amharic");
-    	selectedTransliteration = "am-am_FONIPA.xml";
-    	transliterationDirection = "both";
-    	transliterationAlias = "am-fonipa-t-am";
-
-    	for(MenuItem item: outScriptMenu.getItems() ) {
-    		((RadioMenuItem)item).setSelected( false );
-    	}
+    	// setMenuItemSelection( inScriptMenu, "Ethiopic", "Amharic" );
+		JsonObject demoTransliteration = config.getTransliterationByName( "Ethi-Aethiopica_Latn" );
+    	setScriptOut( "Latin", "Aethiopica", demoTransliteration );
+    	// setMenuItemSelection( outScriptMenu, "Latin", "Aethiopica" );
+    	
+    	setTransliteration( demoTransliteration );
     	
     	try {
     		currentEditorTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
     		currentEditorTab.getEditor().loadResourceFile( selectedTransliteration );
+    		currentEditorTab.setScriptIn( scriptIn, variantIn );
+    		currentEditorTab.setScriptOut( scriptOut );
     		setUseEditor( selectedTransliteration );
         }
         catch(IOException ex) {

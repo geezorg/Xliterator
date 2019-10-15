@@ -42,6 +42,7 @@ public class ConvertTextTab extends XliteratorTab {
     private final String textAreaInFontSizePref  = "org.geez.ui.xliterator.convertTextTab.textAreaIn.font.size";
     private final String textAreaOutFontFacePref = "org.geez.ui.xliterator.convertTextTab.textAreaOut.font.face";
     private final String textAreaOutFontSizePref = "org.geez.ui.xliterator.convertTextTab.textAreaOut.font.size";
+    private final String convertTextAutoConvertPref = "org.geez.ui.xliterator.convertTextTab.autoconvert";
 
 	private Xliterator xlit = null; // used to get a handle on rules text
 	
@@ -448,6 +449,12 @@ public class ConvertTextTab extends XliteratorTab {
         }
     }
       
+    public void savePreferences() {
+        Preferences prefs = Preferences.userNodeForPackage( ConvertTextTab.class );
+        prefs.put( convertTextAutoConvertPref, (autoConversionCheckBox.isSelected() ? "true" : "false" ) );
+    }
+    
+    
     private boolean checkPreferences() {
         Preferences prefs = Preferences.userNodeForPackage( ConvertTextTab.class );
         
@@ -465,6 +472,14 @@ public class ConvertTextTab extends XliteratorTab {
         value = prefs.get( textAreaOutFontSizePref, null );
         textAreaOut.getProperties().put( "font-size", value );
         setFontSize( textAreaOut, value );
+        
+        value = prefs.get( convertTextAutoConvertPref, "true" );
+        if( convertTextAutoConvertPref.equals( "true" ) ) {
+        	autoConversionCheckBox.setSelected( true );
+        }
+        else {
+        	autoConversionCheckBox.setSelected( false );        	
+        }
         
 		Preferences editorPrefs = Preferences.userNodeForPackage( EditorTab.class );
 		setBackgroundColor( editorPrefs.get( EditorTab.editorBackgroundColor, "white" ) );

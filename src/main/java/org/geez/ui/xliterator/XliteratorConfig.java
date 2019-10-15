@@ -236,7 +236,7 @@ public class XliteratorConfig extends ICUHelper {
     	
     	// check if an element with the same "name" property already exists at this level, if so issue an error message and exit.
         for (int i = 0; i < inScripts.size(); i++) {
-        	if( inScripts.get(i).getAsJsonObject().get( "name" ) != null  ) {
+        	if( inScripts.get(i).getAsJsonObject().has( "name" )   ) {
         		System.err.println( "Duplicate entry found at this level: " + inScripts.get(i).getAsJsonObject().get( "name" ).getAsString() );
         	}
         }
@@ -427,64 +427,32 @@ public class XliteratorConfig extends ICUHelper {
 
         JsonObject scripts = config.getAsJsonObject( "Scripts" );
         JsonObject bothDirectionScripts = configClone.getAsJsonObject( "Scripts" );
+        // config = configClone; TODO: debug the reverse entries in JSON then uncomment
         
         for(String inScriptKey: scripts.keySet() ) {
-        	System.out.println( inScriptKey  );
+        	// System.out.println( inScriptKey  );
         	JsonObject inScript = scripts.getAsJsonObject( inScriptKey );
         	for(String inVariantKey: inScript.keySet()) {
-            	System.out.println( "\t" + inVariantKey  );
+            	// System.out.println( "\t" + inVariantKey  );
             	JsonObject inVariant = inScript.getAsJsonObject( inVariantKey );
             	for(String outScriptKey: inVariant.keySet()) {
-                	System.out.println( "\t\t" + outScriptKey  );
-                JsonArray outVariants = inVariant.getAsJsonArray( outScriptKey );
-                for (int i = 0; i < outVariants.size(); i++) {
+                	// System.out.println( "\t\t" + outScriptKey  );
+                	JsonArray outVariants = inVariant.getAsJsonArray( outScriptKey );
+                	for (int i = 0; i < outVariants.size(); i++) {
                 	
-                    JsonObject outVariant = outVariants.get(i).getAsJsonObject();
-                    String outVariantKey = outVariant.get( "name" ).getAsString();
+                		JsonObject outVariant = outVariants.get(i).getAsJsonObject();
+                		String outVariantKey = outVariant.get( "name" ).getAsString();
                     
-                    System.out.println( "\t\t\tname: " + outVariantKey );
+                		// System.out.println( "\t\t\tname: " + outVariantKey );
                     
-            		if( outVariant.get("direction").getAsString().equals( "both" ) ) {
-            			addVariantReverseEntry( bothDirectionScripts, inScriptKey, inVariantKey, outScriptKey, outVariant );
-            		}
-
-                    /*
-                	if( variant.has( "name" ) ) {
-                		// System.out.println( "\t\t" + variant.get("name").getAsString() );
-                		if( variant.get("direction").getAsString().equals( "both" ) ) {
-                			addVariantReverseEntry( targetScripts, outScript, inScriptKey, variant );
+                		if( outVariant.get("direction").getAsString().equals( "both" ) ) {
+                			addVariantReverseEntry( bothDirectionScripts, inScriptKey, inVariantKey, outScriptKey, outVariant );
                 		}
-                	}
-                	else {
-                		for(String subVariantKey: variant.keySet()) {
-                			// System.out.println( "\t\t\t" + subVariantKey );
-                			if(! variant.get( subVariantKey ).isJsonArray() ) {
-                				// unknown
-                        		System.err.println( "Unrecognized structure." );
-                        		System.exit(0);
-                			}
-                            JsonArray subvariants = variant.getAsJsonArray( subVariantKey );
-                            for (int j = 0; j < subvariants.size(); j++) {
-                                JsonObject subvariant = subvariants.get(j).getAsJsonObject();
-                            	if( subvariant.has( "name" ) ) {
-                            		// System.out.println( "\t\t\t\t" + subvariant.get("name").getAsString() );
-                            		if( subvariant.get("direction").getAsString().equals( "both" ) ) {
-                            			addSubVariantReverseEntry( targetScripts, outScript, inScriptKey, subvariant, subVariantKey );
-                            		}
-                            	}
-                            	else {
-                            		// unknown
-                            		System.err.println( "Unrecognized structure." );
-                            		System.exit(0);
-                            	}
-                            }
-                		}
-                	}
-                	*/
                 }
         	}
         }
         }
+        
         // Gson gson = new GsonBuilder().setPrettyPrinting().create();
         // System.out.println( gson.toJson( targetObject ) );
         

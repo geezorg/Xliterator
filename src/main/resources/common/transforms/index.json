@@ -946,7 +946,7 @@
           {
             "path": "Ethiopic-Latin-Aethiopica.xml",
             "source": "Ethi",
-            "target": "Ethi_Latn",
+            "target": "Aethiopica_Latn",
             "name": "Aethiopica",
             "direction": "both",
             "alias": "Ethiopic-Latin/Aethiopica",
@@ -4551,6 +4551,7 @@
             "target": "fa",
             "name": "Persian",
             "direction": "forward",
+            "visibility": "internal",
             "alias": "fa-t-und-fonipa"
           },
           {
@@ -4559,6 +4560,7 @@
             "target": "ar",
             "name": "_base",
             "direction": "forward",
+            "visibility": "internal",
             "alias": "ar-t-und-fonipa"
           }
         ],
@@ -4569,6 +4571,7 @@
             "target": "chr",
             "name": "_base",
             "direction": "forward",
+            "visibility": "internal",
             "alias": "chr-t-und-fonipa"
           }
         ]
