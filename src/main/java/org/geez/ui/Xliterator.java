@@ -986,7 +986,7 @@ public final class Xliterator extends Application {
         //=========================== BEGIN PREFERENCES MENU ====================================
         //
         final Menu preferencesMenu = new Menu( "Preferences" );
-        final MenuItem makeDefaultMappingMenuItem = new MenuItem( "Save Default Mapping" );
+        final MenuItem makeDefaultMappingMenuItem = new MenuItem( "Save Transliteration Selection" );
         final MenuItem makeDefaultFontsMenuItem   = new MenuItem( "Save Font Selections" );
 
         makeDefaultMappingMenuItem.setOnAction( evt -> saveDefaultMapping() );
