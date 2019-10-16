@@ -658,6 +658,7 @@ public final class Xliterator extends Application {
         editorTab.setOnClosed( evt -> {
         	// check to save file
         	editorTabs.remove( editorTab );
+        	tabsMenu.getItems().remove( editorTabViewMenuItem );
         	inScriptMenu.getItems().remove( editorTabItem );
             if( editorTabs.size() == 0 ) {
             	int lastIndex = inScriptMenu.getItems().size() - 1;  // this should be the separator index
