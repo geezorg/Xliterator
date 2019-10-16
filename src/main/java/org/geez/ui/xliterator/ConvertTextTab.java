@@ -205,7 +205,8 @@ public class ConvertTextTab extends XliteratorTab {
 	        textAreaOut.getProperties().put( "font-family", defaultFontFamily );
 	        textAreaOut.getProperties().put( "font-size", defaultFontSize );
 		}
-        
+        textAreaIn.setWrapText( true );
+        textAreaOut.setWrapText( true );
        //  Menu textAreaInFontMenu = createFontMenu( "textAreaIn" );
         
 
