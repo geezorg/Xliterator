@@ -86,26 +86,33 @@ public class JsonIndexGenerator {
 		List<Row> rows = data.getRow();
 		rows.remove(0); //shift
 		
-		for (Row r : rows ) {
-			System.out.println("row " + r.getR() );		
+		for (Row r : rows ) {	
 			
-			String file = null, scriptIn = null, variantIn = "_base", scriptOut = null,
-					variantOut = "_base", direction = null, alias = null, backwardAlias = null,
-					dependencies = null, visibility = null, tooltip = null;
+			String path = null, source = null, target = null, scriptIn = null, variantIn = "_base",
+					scriptOut = null, variantOut = "_base", direction = null, alias = null,
+					backwardAlias = null, dependencies = null, visibility = null, tooltip = null;
 			
 			
 			for( Cell c: r.getC() ) {
 
 				switch( c.getR().charAt(0) ) {
 					case 'A':
-						file      = formatter.formatCellValue( c );
+						path      = formatter.formatCellValue( c );
 						break;
 						
 					case 'B':
-						scriptIn  = formatter.formatCellValue( c );
+						source  = formatter.formatCellValue( c );
 						break;
 						
 					case 'C':
+						target  = formatter.formatCellValue( c );
+						break;
+						
+					case 'D':
+						scriptIn  = formatter.formatCellValue( c );
+						break;
+						
+					case 'E':
 						variantIn = formatter.formatCellValue( c );
 						if( variantIn == null ) {
 							variantIn = "_base";
@@ -118,11 +125,11 @@ public class JsonIndexGenerator {
 						}
 						break;
 						
-					case 'D':
+					case 'F':
 						scriptOut = formatter.formatCellValue( c );
 						break;
 						
-					case 'E':
+					case 'G':
 						variantOut = formatter.formatCellValue( c );
 						if( variantOut == null ) {
 							variantOut = "_base";
@@ -135,11 +142,11 @@ public class JsonIndexGenerator {
 						}
 						break;
 						
-					case 'F':
+					case 'H':
 						direction = formatter.formatCellValue( c );
 						break;
 						
-					case 'G':
+					case 'I':
 						alias = formatter.formatCellValue( c );
 						if( alias != null ) {
 							alias = alias.trim();
@@ -149,7 +156,7 @@ public class JsonIndexGenerator {
 						}
 						break;
 							
-					case 'H':
+					case 'J':
 						backwardAlias = formatter.formatCellValue( c );
 						if( backwardAlias != null ) {
 							backwardAlias = backwardAlias.trim();
@@ -159,7 +166,7 @@ public class JsonIndexGenerator {
 						}
 						break;
 						
-					case 'I':
+					case 'K':
 							visibility = formatter.formatCellValue( c );
 							if( visibility != null ) {
 								visibility = visibility.trim();
@@ -169,7 +176,7 @@ public class JsonIndexGenerator {
 							}
 							break;
 
-					case 'J':
+					case 'L':
 						dependencies = formatter.formatCellValue( c );
 						if( dependencies != null ) {
 							dependencies = dependencies.trim();
@@ -179,7 +186,7 @@ public class JsonIndexGenerator {
 						}
 						break;
 	
-					case 'K':
+					case 'M':
 						tooltip = formatter.formatCellValue( c );
 						if( tooltip != null ) {
 							tooltip = tooltip.trim();
@@ -204,7 +211,10 @@ public class JsonIndexGenerator {
 			}
 			JsonArray scriptOutArray = variantInObject.get( scriptOut ).getAsJsonArray();
 			JsonObject variantOutObject = new JsonObject();
-			variantOutObject.addProperty( "new", variantOut );
+			variantOutObject.addProperty( "path", path );
+			variantOutObject.addProperty( "source", source );
+			variantOutObject.addProperty( "target", target );
+			variantOutObject.addProperty( "name", variantOut );
 			variantOutObject.addProperty( "direction", direction );
 			if( (alias != null) ) {
 				variantOutObject.addProperty( "alias", alias );
@@ -222,7 +232,7 @@ public class JsonIndexGenerator {
 				JsonArray dependencyArray = new JsonArray();
 				String[] tempArray = dependencies.split( "," );
 				for(String dependency: tempArray) {
-					dependencyArray.add( dependency );
+					dependencyArray.add( dependency.trim() );
 				}
 				variantOutObject.add( "dependencies", dependencyArray );
 			}

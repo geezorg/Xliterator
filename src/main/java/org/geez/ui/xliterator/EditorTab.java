@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.prefs.Preferences;
 
 import org.fxmisc.flowless.VirtualizedScrollPane;
+import org.geez.ui.Xliterator;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -43,6 +44,7 @@ import javafx.util.Pair;
 public class EditorTab extends XliteratorTab {
 	
     private ICUEditor editor = new ICUEditor();
+    private Xliterator xlit = null;
 	private File externalIcuFile = null;
 	private boolean unsavedChanges = false;
         
@@ -71,11 +73,19 @@ public class EditorTab extends XliteratorTab {
 	}
     
     
-	public void setup(Stage primaryStage, XliteratorConfig config, MenuItem saveMenuItem, MenuItem saveAsMenuItem ) {
+	private String selectedDirection = null;
+	public String getSelectedDirection() {
+		return selectedDirection;
+	}
+	
+	
+	public void setup(Stage primaryStage, Xliterator xlit, MenuItem saveMenuItem, MenuItem saveAsMenuItem ) {
+		this.xlit = xlit;
+		XliteratorConfig config = xlit.getConfig();
         Menu editorFontMenu     = createFontMenu( editor );
         Menu editorFontSizeMenu = createFontSizeMenu( editor );
         
-        alias = (String)getProperties().get( "alias" );
+        // alias = (String)getProperties().get( "alias" );
         
         MenuBar editorMenutBar  = new MenuBar();
         editorMenutBar.getMenus().addAll( editorFontMenu, editorFontSizeMenu );
@@ -84,31 +94,37 @@ public class EditorTab extends XliteratorTab {
         ChoiceBox<String> directionBox = new ChoiceBox<String>();
         directionBox.getItems().addAll( "Forward", "Both" );
         
-        transliterationDirection = (String)getProperties().get( "direction" );
+        // transliterationDirection = (String)getProperties().get( "direction" );
         if( "both".equals( transliterationDirection ) ) {
-        	directionBox.getSelectionModel().select(1);	
+        	directionBox.getSelectionModel().select(1);
+        	selectedDirection = "both";
         }
         else {
         	directionBox.getSelectionModel().select(0);
+        	selectedDirection = "forward";
         }
+        directionBox.setOnAction( evt -> {
+        	selectedDirection = directionBox.getSelectionModel().getSelectedItem().toLowerCase();
+        	xlit.setEditorTransliterationDirection( selectedDirection );
+        });
 
         Button unregister = new Button( "Unregister" );
         Button register = new Button( "Register" );
-        register.setTooltip( new Tooltip( "Register alias for current session" ) );
+        register.setTooltip( new Tooltip( "Register a name for current session" ) );
         register.setOnAction( evt -> {
         	TextInputDialog registerDialog = createRegisterDialog( primaryStage );
         	// Dialog<Pair<String,String>> registerDialog = createRegisterDialog();
         	// Optional<Pair<String,String>> result = registerDialog.showAndWait();
         	Optional<String> result =  registerDialog.showAndWait();
         	result.ifPresent( selections -> {
-        		alias = result.get();
+        		name = result.get();
         		// String alias = selections.getKey();
         		// String direction = selections.getKey();
         		try {
-        			String direction = directionBox.getSelectionModel().getSelectedItem().toLowerCase();
-        			config.registerTransliteration( alias, direction, editor.getText() );
+        			// String direction = directionBox.getSelectionModel().getSelectedItem().toLowerCase();
+        			config.registerTransliteration( name, selectedDirection, editor.getText() );
         			// getProperties().put( "direction", direction );
-        			getProperties().put( "alias", alias );
+        			// getProperties().put( "alias", alias );
         			unregister.setDisable( false );
         		}
         		catch(Exception ex) {
@@ -124,12 +140,12 @@ public class EditorTab extends XliteratorTab {
         unregister.setOnAction( evt -> {
         	Alert alert = new Alert(AlertType.CONFIRMATION);
         	alert.setTitle( "Confirm Unregistration" );
-        	alert.setHeaderText( "Confirm Unregistratio" );
-        	alert.setContentText( "Are you sure that you want to unregister \"" + alias + "\"?" );
+        	alert.setHeaderText( "Confirm Unregistration" );
+        	alert.setContentText( "Are you sure that you want to unregister \"" + name + "\"?" );
 
         	Optional<ButtonType> result = alert.showAndWait();
         	if (result.get() == ButtonType.OK){
-        	   config.unregisterTransliteration( alias );
+        	   config.unregisterTransliteration( name );
         	   unregister.setDisable( true );
         	}
         }); 
@@ -239,8 +255,11 @@ public class EditorTab extends XliteratorTab {
     
     
     private boolean checkPreferences() {
-		Preferences prefs = Preferences.userNodeForPackage( EditorTab.class );
+		Preferences prefs = Preferences.userNodeForPackage( EditorTab.class );		  
 		  
+		String bgcolor = prefs.get( editorBackgroundColor, "white" );
+		setBackgroundColor( bgcolor );
+		
 		fontFamily = prefs.get( editorFontFamilyPref, null );
 		  
 		if( fontFamily == null ) {
@@ -252,10 +271,7 @@ public class EditorTab extends XliteratorTab {
 		editor.getProperties().put( "font-family", fontFamily );
 		editor.getProperties().put( "font-size", fontSize );
 		setFontSize( editor, fontSize );
-		  
-		  
-		String bgcolor = prefs.get( editorBackgroundColor, "white" );
-		setBackgroundColor( bgcolor );
+
 		  
 		return true;
     }
@@ -274,28 +290,53 @@ public class EditorTab extends XliteratorTab {
     
     
     private TextInputDialog createRegisterDialog( Stage primaryStage ) {
-    	TextInputDialog dialog = new TextInputDialog( alias );
+    	TextInputDialog dialog = new TextInputDialog( name );
     	dialog.initOwner( primaryStage );
     	dialog.initStyle(StageStyle.UTILITY);
-    	dialog.setTitle(  "Enter an Transliteration Alias" );
-    	dialog.setContentText(  "Enter an alias:" );
+    	dialog.setTitle(  "Enter an Transliteration Name" );
+    	dialog.setContentText(  "Enter a name:" );
     	dialog.setHeaderText(null);
     	dialog.setGraphic(null);
     	dialog.setResizable(true);
     	
     	
     	Node okButton = dialog.getDialogPane().lookupButton(ButtonType.OK);
-    	okButton.setDisable(true);
+    	okButton.setDisable(false);
 
-    	TextField aliasField = dialog.getEditor();
-    	aliasField.textProperty().addListener((observable, oldValue, newValue) -> {
+    	TextField nameField = dialog.getEditor();
+    	nameField.textProperty().addListener((observable, oldValue, newValue) -> {
     		okButton.setDisable( newValue.trim().isEmpty() );
     	});
     	
     	return dialog;
     }
-    private Dialog<Pair<String,String>> createRegisterDialogOld() {
+    
+    public String getInText() {
+    	if( scriptIn == null ) {
+    		return "Unknown";
+    	}
+    	String scriptInMessage = scriptIn;
+    	if(! "_base".equals( variantIn ) ) {
+    		scriptInMessage +=  " / " + variantIn ;
+    	}
+    	return scriptInMessage;
+    }
+    
+    public String getOutText() {
+    	if( scriptOut == null ) {
+    		return "Unknown";
+    	}
+    	String scriptOutMessage = scriptOut;
+    	if(! "_base".equals( variantOut ) ) {
+    		scriptOutMessage +=  " / " + variantOut ;
+    	}
     	
+    	return scriptOutMessage;
+    }
+    
+    
+    /*
+    private Dialog<Pair<String,String>> createRegisterDialogOld() {   	
     	Dialog<Pair<String,String>> dialog = new Dialog<>();
     	dialog.initStyle(StageStyle.UTILITY);
     	dialog.setTitle( "Register Transliteration" );
@@ -305,7 +346,7 @@ public class EditorTab extends XliteratorTab {
     	Label label1 = new Label("Alias: ");
     	Label label2 = new Label("Direction: ");
     	TextField aliasField = new TextField();
-    	String oldAlias = (String)getProperties().get( "alias" );
+    	String oldAlias = alias; // (String)getProperties().get( "alias" );
     	if( oldAlias != null ) {
     		aliasField.setText( oldAlias );
     	}
@@ -343,15 +384,14 @@ public class EditorTab extends XliteratorTab {
     	});
     	 
     	dialog.setResultConverter( dialogButton -> {
-    	        if (dialogButton == buttonTypeOk) {
-    	            return new Pair<>( aliasField.getText(), ( forward.isSelected() ? "forward" : "both" ) );
-    	        }
+    		if (dialogButton == buttonTypeOk) {
+    			return new Pair<>( aliasField.getText(), ( forward.isSelected() ? "forward" : "both" ) );
+    		}
     	 
-    	        return null;
+    		return null;
     	});
     	
     	return dialog;
-
     }
-      
+    */ 
 }

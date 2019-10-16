@@ -12,12 +12,15 @@ import java.io.OutputStream;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 
 import org.apache.commons.io.IOUtils;
 import org.geez.convert.helpers.ICUHelper;
 import org.xml.sax.SAXException;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -44,106 +47,211 @@ public class XliteratorConfig extends ICUHelper {
 	}
     
     
-    public List<String> getInScripts( boolean skipInternal ) {
-		ArrayList<String> scriptList = null;
+    public JsonObject getInScripts() {
+		JsonObject scriptsObject = new JsonObject();
+        JsonObject scripts = config.getAsJsonObject("Scripts");
 		
-    	if( skipInternal ) {
-    		scriptList = new ArrayList<String>();
-            JsonObject scripts = config.getAsJsonObject("Scripts");
-    		
-            for(String inScriptKey: scripts.keySet() ) {
-            	JsonObject inScript = scripts.getAsJsonObject( inScriptKey );
-            	int outScriptSize = inScript.keySet().size();
-            	int outScriptSkipCount = 0;
-            	for(String outScript: inScript.keySet()) {
-            		int variantSkipCount = 0;
-                    JsonArray variants = inScript.getAsJsonArray( outScript );
-                    for (int i = 0; i < variants.size(); i++) {
-                        JsonObject variant = variants.get(i).getAsJsonObject();
-                        if( variant.has( "visibility" ) && "internal".equals( variant.get( "visibility" ).getAsString() ) ) {
-                        	variantSkipCount++;
-                        }
-    				}
-                    if( variantSkipCount == variants.size() ) {
-                    	// all children are internal, so we hid the script in
-                    	outScriptSkipCount++;
-                    }
-    			}
-            	
-            	if(outScriptSkipCount <  outScriptSize) {
-            		scriptList.add( inScriptKey );
-            	}
-    		}
-    	}
-    	else {
-    		scriptList = new ArrayList<String>( config.getAsJsonObject("Scripts").keySet() );
-    	}
-    	
-        Collections.sort(scriptList);
-        return scriptList;
+        for(String inScriptKey: scripts.keySet() ) {  // in-scripts
+        	JsonObject inScript = scripts.getAsJsonObject( inScriptKey );
+        	
+        	int inVariantSize = inScript.keySet().size();
+        	int inVariantSkipCount = 0;
+			ArrayList<String> inVariantsList = new ArrayList<String>();
+			
+			boolean hasBase = false;
+        	
+        	for(String inVariantKey: inScript.keySet()) { // in-variants
+        		int outScriptSkipCount = 0;
+        		
+        		JsonObject inVariant = inScript.getAsJsonObject( inVariantKey );
+        		
+        		int outScriptSize = inVariant.keySet().size();
+        		
+        		
+        		for(String outScriptKey: inVariant.keySet()) { // out-scripts
+        		
+        			JsonArray outVariants = inVariant.getAsJsonArray( outScriptKey );
+        			
+        			int outVariantSkipCount = 0;
+        			for (int i = 0; i < outVariants.size(); i++) { // out-variants
+        				JsonObject outVariant = outVariants.get(i).getAsJsonObject();
+        				if( outVariant.has( "visibility" ) && "internal".equals( outVariant.get( "visibility" ).getAsString() ) ) {
+        					outVariantSkipCount++;
+        				}
+        			}
+        			if( outVariantSkipCount == outVariants.size() ) {
+        				// all children are internal, so we hid the script in
+        				outScriptSkipCount++;
+        			}
+        			else {
+        				if(! scriptsObject.has( inScriptKey ) ) {
+        					scriptsObject.add( inScriptKey, new JsonArray() );
+        				}
+        				if( "_base".equals( inVariantKey ) ) {
+        					hasBase = true;
+        				}
+        				else {
+	        				// JsonArray inVariantsOfInScript = scriptsObject.getAsJsonArray( inScriptKey );
+	        				if(! inVariantsList.contains( inVariantKey ) ) {
+	        					// inVariantsOfInScript.add( inVariantKey );
+	        					inVariantsList.add( inVariantKey );
+	        				}
+        				}
+        			}
+        		}
+        	}
+        	
+        	if( inVariantsList.size() > 0 ) {
+        		JsonArray inVariantsOfInScript = scriptsObject.getAsJsonArray( inScriptKey );
+        		if( hasBase ) {
+					inVariantsList.add( 0, "_base" );
+        		}
+        		for( String inVariantKey: inVariantsList ) {
+        			inVariantsOfInScript.add( inVariantKey );
+        		}
+        	}
+			hasBase = false;
+		}
+
+        return scriptsObject;
     }
     
     
-    public List<String> getOutScripts( String inScript, boolean skipInternal ) {
-		ArrayList<String> scriptList = null;
-    	if( skipInternal ) {
-    		scriptList = new ArrayList<String>();
+    public List<String> getInScriptsList() {
+    	ArrayList<String> scriptList = new ArrayList<String>( config.getAsJsonObject("Scripts").keySet() );
+    	Collections.sort(scriptList);
+    	return scriptList;
+    }
+    
+    
+    public List<String> getInVariantsOfInScriptList(String inScript) {
+    	ArrayList<String> inVaraiantsList = new ArrayList<String>( config.getAsJsonObject("Scripts").getAsJsonObject(inScript).keySet() );
+    	Collections.sort(inVaraiantsList);
+    	return inVaraiantsList;
+    }
+    
+    
+    public List<String> getOutScriptOfInScriptAndInVariantList(String inScript, String inVariant) {
+    	ArrayList<String> outScriptList = new ArrayList<String>( config.getAsJsonObject("Scripts").getAsJsonObject(inScript).getAsJsonObject( inVariant ).keySet() );
+    	Collections.sort(outScriptList);
+    	return outScriptList;
+    }
+    
 
-        	JsonObject inScriptObj = config.getAsJsonObject("Scripts").getAsJsonObject( inScript );
-        	for(String outScript: inScriptObj.keySet()) {
-        		int variantSkipCount = 0;
-                JsonArray variants = inScriptObj.getAsJsonArray( outScript );
-                for (int i = 0; i < variants.size(); i++) {
-                    JsonObject variant = variants.get(i).getAsJsonObject();
-                    if( variant.has( "visibility" ) && "internal".equals( variant.get( "visibility" ).getAsString() ) ) {
-                    	variantSkipCount++;
-                    }
-				}
-                if( variantSkipCount < variants.size() ) {
-                	// all children are internal, so we hid the script in
-                	scriptList.add( outScript );
-                }
-			}
+    public JsonArray getOutVariantsOfInScriptInVariantAndOutScriptArray(String inScript, String inVariant, String outScript) {
+    	return config.getAsJsonObject("Scripts").getAsJsonObject(inScript).getAsJsonObject( inVariant ).getAsJsonArray( outScript );
+    }
+    
+    
+    public JsonObject getOutScriptsOfInScriptAndInVariant( String inScript, String inVariant ) {
+		JsonObject scriptsObject = new JsonObject();
+    	JsonObject inVariantObject = config.getAsJsonObject("Scripts").getAsJsonObject( inScript ).getAsJsonObject( inVariant );
+    	
+    	JsonObject baseObject = null;
+    	int outScriptSkipCount = 0;
+    	for( String outScriptKey: inVariantObject.keySet() ) {
     		
+			JsonArray outVariants = inVariantObject.getAsJsonArray( outScriptKey );
+			ArrayList<JsonObject> outVariantsList = new ArrayList<JsonObject>();
+			int outVariantSkipCount = 0;
+			
+			for (int i = 0; i < outVariants.size(); i++) { // out-variants
+				JsonObject outVariant = outVariants.get(i).getAsJsonObject();
+				String outVariantKey = outVariant.get("name" ).getAsString();
+				if( outVariant.has( "visibility" ) && "internal".equals( outVariant.get( "visibility" ).getAsString() ) ) {
+					outVariantSkipCount++;
+				}
+				else {
+					if(! scriptsObject.has( outScriptKey ) ) {
+						scriptsObject.add( outScriptKey, new JsonArray() );
+					}
+					if( "_base".equals( outVariantKey ) ) {
+						baseObject = outVariant.deepCopy();
+					}
+					else {
+	    				outVariantsList.add( outVariant.deepCopy() );
+					}
+				}
+			}
+				
+				
+        	//if( outVariantsList.size() > 0 ) {
+        		JsonArray outVariantsOfInScript = scriptsObject.getAsJsonArray( outScriptKey );
+        		if( baseObject != null ) {
+        			outVariantsList.add( 0, baseObject);
+        		}
+        		for( JsonObject outVariant: outVariantsList ) {
+        			outVariantsOfInScript.add( outVariant );
+        		}
+        	//}
+        	baseObject = null;
+			
     	}
-    	else {
-    		scriptList = new ArrayList<String>( config.getAsJsonObject("Scripts").getAsJsonObject( inScript ).keySet() );
+        	
+        return scriptsObject;
+    }
+    
+    
+    public List<String> getOutScriptsOfInScriptList( String inScript ) {
+
+    	HashSet<String> outScriptSet = new HashSet<String>();
+    	
+    	for(String inVariant: config.getAsJsonObject("Scripts").getAsJsonObject( inScript ).keySet() ) {
+    		outScriptSet.addAll( config.getAsJsonObject("Scripts").getAsJsonObject( inScript ).getAsJsonObject( inVariant ).keySet() );
     	}
     	
-        Collections.sort(scriptList);
-        return scriptList;
+    	ArrayList<String> scriptList = new ArrayList<String>( outScriptSet );
+    	Collections.sort(scriptList);
+    	return scriptList;
     }
     
     
     public JsonArray getVariants(String inScript, String outScript) {
     	return config.getAsJsonObject("Scripts").getAsJsonObject( inScript ).getAsJsonArray( outScript );
     }
+
     
-    
-    private void addVariantReverseEntry( JsonObject object, String from, String to, JsonObject variant ) {
-    	if(! object.has( from ) ) {
-    		object.add(from, new JsonObject());
-    	}
+    private void addVariantReverseEntry( JsonObject bothDirectionScripts, String inScript /* to */, String inVariant, String outScript /* from */, JsonObject outVariant ) {
+    	// Reverse the path:
+    	//
+    	// outScript
+    	//   outVariant
+    	//     inScript
+    	//       inVariants
     	
-    	JsonObject inScript = object.getAsJsonObject( from );
-    	if(! inScript.has( to ) ) {
-    		inScript.add( to, new JsonArray() );
+    	if(! bothDirectionScripts.has( outScript ) ) {
+    		bothDirectionScripts.add( outScript, new JsonObject() );
     	}
+    	JsonObject outScriptObject = bothDirectionScripts.getAsJsonObject( outScript );
     	
-    	JsonArray variants = inScript.getAsJsonArray( to );
+    	String outVariantName = outVariant.get( "name" ).getAsString();
+    	if(! outScriptObject.has( outVariantName ) ) {
+    		outScriptObject.add( outVariantName, new JsonObject() );
+    	}
+    	JsonObject outVariantObject = outScriptObject.getAsJsonObject( outVariantName );
+    	
+    	if(! outVariantObject.has( inScript ) ) {
+    		outVariantObject.add( inScript, new JsonArray() );
+    	} 	
+    	JsonArray inScripts = outVariantObject.getAsJsonArray( inScript );
+    	
+    	
     	// check if an element with the same "name" property already exists at this level, if so issue an error message and exit.
-        for (int i = 0; i < variants.size(); i++) {
-        	if( variants.get(i).getAsJsonObject().get( "name" ) != null  ) {
-        		System.err.println( "Duplicate entry found at this level: " + variants.get(i).getAsJsonObject().get( "name" ).getAsString() );
+        for (int i = 0; i < inScripts.size(); i++) {
+        	if( inScripts.get(i).getAsJsonObject().get("name" ).getAsString().equals( inVariant ) ) {
+        		System.err.println( "Duplicate entry found at this level: " + inVariant );
         	}
         }
-        JsonObject reverseVariant = variant.deepCopy();
+        JsonObject reverseVariant = outVariant.deepCopy();
         reverseVariant.remove( "direction" );
         reverseVariant.addProperty( "direction", "reverse" );
-    	variants.add( reverseVariant );
+        reverseVariant.remove( "name" );
+        reverseVariant.addProperty( "name", inVariant );
+        inScripts.add( reverseVariant );
+    
     }
     
-    
+    /*
     private void addSubVariantReverseEntry( JsonObject object, String from, String to, JsonObject subvariant, String subVariantKey ) {
     	if(! object.has( from ) ) {
     		object.add(from, new JsonObject());
@@ -183,12 +291,63 @@ public class XliteratorConfig extends ICUHelper {
     		variants.add( oSubvariant );
     	}
     }
+    */
     
     
     public JsonObject getTransliterationByAlias( String alias ) {
-    	List<String> inScripts = getInScripts( false );
+    	List<String> inScripts = getInScriptsList();
     	for(String inScript: inScripts) {
-    		List<String> outScripts = getOutScripts( inScript, false );
+			List<String> inVariants = getInVariantsOfInScriptList(inScript);
+	    	for(String inVariant: inVariants) {
+	    		List<String> outScripts = getOutScriptOfInScriptAndInVariantList( inScript, inVariant );
+	    		for(String outScript: outScripts) {
+	    			JsonArray outVariants = getOutVariantsOfInScriptInVariantAndOutScriptArray(inScript, inVariant, outScript);
+	    	    	for (int i = 0; i < outVariants.size(); i++) {
+	    	    		JsonObject variant = outVariants.get(i).getAsJsonObject();
+    	    			if( variant.has( "alias" ) && ( alias.equals( variant.get("alias").getAsString() ) ) ) {
+    	    				return variant;
+    	    			}
+	    	    	}   		
+	    		}
+
+
+    	    }
+    	}
+    	
+    	return null;
+    }
+    
+    
+    
+    public JsonObject getTransliterationByName( String name ) {
+    	List<String> inScripts = getInScriptsList();
+    	for(String inScript: inScripts) {
+			List<String> inVariants = getInVariantsOfInScriptList(inScript);
+	    	for(String inVariant: inVariants) {
+	    		List<String> outScripts = getOutScriptOfInScriptAndInVariantList( inScript, inVariant );
+	    		for(String outScript: outScripts) {
+	    			JsonArray outVariants = getOutVariantsOfInScriptInVariantAndOutScriptArray(inScript, inVariant, outScript);
+	    	    	for (int i = 0; i < outVariants.size(); i++) {
+	    	    		JsonObject variant = outVariants.get(i).getAsJsonObject();
+	    	    		String variantName = variant.get( "source" ).getAsString() + "-" + variant.get( "target" ).getAsString();
+    	    			if( variantName.equals( name ) ) {
+    	    				return variant;
+    	    			}
+	    	    	}   		
+	    		}
+
+
+    	    }
+    	}
+    	
+    	return null;
+    }
+    
+    /*
+    public JsonObject getTransliterationByAliasOld( String alias ) {
+    	List<String> inScripts = getInScriptsList();
+    	for(String inScript: inScripts) {
+    		List<String> outScripts = getOutScriptsOfInScriptList( inScript );
     		for(String outScript: outScripts) {
     			JsonArray variants = getVariants(inScript, outScript);
     	    	for (int i = 0; i < variants.size(); i++) {
@@ -216,7 +375,7 @@ public class XliteratorConfig extends ICUHelper {
     	
     	return null;
     }
-    
+    */
     
 	protected ArrayList<String> registered = new ArrayList<String>();
 	
@@ -235,24 +394,25 @@ public class XliteratorConfig extends ICUHelper {
 		return sb.toString();
 	}
 	
+	
 	// Registering a transliteration instance in the XliteratorConfig seems to be going
 	// beyond its primary purpose (an interface to the index.json file , but not presently
 	// clear where to place it
 	protected void registerDependencies(ArrayList<String> dependencies) throws IOException, SAXException  {
     	// ConvertDocxGenericUnicodeFont converter = new ConvertDocxGenericUnicodeFont();
-		for( String alias: dependencies ) {
-	  		if( registered.contains( alias ) ) {
+		for( String name: dependencies ) {
+	  		if( registered.contains( name ) ) {
 	  			continue;
 	  		}
 	  		// get source file and direction from alias
-	  		JsonObject object = getTransliterationByAlias( alias );
+	  		JsonObject object = getTransliterationByName( name );
 	  		
 	  		String path = object.get( "path" ).getAsString();
 	  		String rulesFilePath = (path.contains( "/" ) ) ? path : "common/transforms/" + path ; 
 	  		String direction = object.get( "direction" ).getAsString();
 	  		
-	  		registerTransliterationFile( alias, direction, rulesFilePath );
-	  		registered.add( alias );
+	  		registerTransliterationFile( name, direction, rulesFilePath );
+	  		registered.add( name );
 		}
 	}
     
@@ -269,58 +429,36 @@ public class XliteratorConfig extends ICUHelper {
     	}
 		
         config = new JsonParser().parse(json).getAsJsonObject();
-        JsonObject targetObject = config.deepCopy();
+        JsonObject configClone = config.deepCopy();
 
-        JsonObject scripts = config.getAsJsonObject("Scripts");
-        JsonObject targetScripts = targetObject.getAsJsonObject("Scripts");
+        JsonObject scripts = config.getAsJsonObject( "Scripts" );
+        JsonObject bothDirectionScripts = configClone.getAsJsonObject( "Scripts" );
+        config = configClone; // TODO: debug the reverse entries in JSON then uncomment
         
         for(String inScriptKey: scripts.keySet() ) {
         	// System.out.println( inScriptKey  );
         	JsonObject inScript = scripts.getAsJsonObject( inScriptKey );
-        	for(String outScript: inScript.keySet()) {
-            	// System.out.println( "\t" + outScript  );
-                JsonArray variants = inScript.getAsJsonArray( outScript );
-                for (int i = 0; i < variants.size(); i++) {
+        	for(String inVariantKey: inScript.keySet()) {
+            	// System.out.println( "\t" + inVariantKey  );
+            	JsonObject inVariant = inScript.getAsJsonObject( inVariantKey );
+            	for(String outScriptKey: inVariant.keySet()) {
+                	// System.out.println( "\t\t" + outScriptKey  );
+                	JsonArray outVariants = inVariant.getAsJsonArray( outScriptKey );
+                	for (int i = 0; i < outVariants.size(); i++) {
                 	
-                    JsonObject variant = variants.get(i).getAsJsonObject();
-
-                	if( variant.has( "name" ) ) {
-                		// System.out.println( "\t\t" + variant.get("name").getAsString() );
-                		if( variant.get("direction").getAsString().equals( "both" ) ) {
-                			addVariantReverseEntry( targetScripts, outScript, inScriptKey, variant );
+                		JsonObject outVariant = outVariants.get(i).getAsJsonObject();
+                		// String outVariantKey = outVariant.get( "name" ).getAsString();
+                		// System.out.println( "\t\t\tname: " + outVariantKey );
+                		if( outVariant.get("direction").getAsString().equals( "both" ) ) {
+                			addVariantReverseEntry( bothDirectionScripts, inScriptKey, inVariantKey, outScriptKey, outVariant );
                 		}
                 	}
-                	else {
-                		for(String subVariantKey: variant.keySet()) {
-                			// System.out.println( "\t\t\t" + subVariantKey );
-                			if(! variant.get( subVariantKey ).isJsonArray() ) {
-                				// unknown
-                        		System.err.println( "Unrecognized structure." );
-                        		System.exit(0);
-                			}
-                            JsonArray subvariants = variant.getAsJsonArray( subVariantKey );
-                            for (int j = 0; j < subvariants.size(); j++) {
-                                JsonObject subvariant = subvariants.get(j).getAsJsonObject();
-                            	if( subvariant.has( "name" ) ) {
-                            		// System.out.println( "\t\t\t\t" + subvariant.get("name").getAsString() );
-                            		if( subvariant.get("direction").getAsString().equals( "both" ) ) {
-                            			addSubVariantReverseEntry( targetScripts, outScript, inScriptKey, subvariant, subVariantKey );
-                            		}
-                            	}
-                            	else {
-                            		// unknown
-                            		System.err.println( "Unrecognized structure." );
-                            		System.exit(0);
-                            	}
-                            }
-                		}
-                	}
-                }
+            	}
         	}
         }
         
         // Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        // System.out.println( gson.toJson( targetObject ) );
+        // System.out.println( gson.toJson( config ) );
         
     } 
     
@@ -357,7 +495,6 @@ public class XliteratorConfig extends ICUHelper {
 		return targetFile;
 	}
     
-	
     
 	protected void errorAlert( Exception ex, String header ) {
         Alert alert = new Alert(AlertType.ERROR);

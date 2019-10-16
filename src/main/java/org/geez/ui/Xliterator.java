@@ -6,11 +6,21 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.prefs.Preferences;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
+import org.apache.commons.io.FilenameUtils;
 import org.controlsfx.control.StatusBar;
 import org.geez.convert.ProcessorManager;
 import org.geez.ui.xliterator.ConvertFilesTab;
@@ -22,8 +32,10 @@ import org.geez.ui.xliterator.SyntaxHighlighterTab;
 import org.geez.ui.xliterator.XliteratorConfig;
 import org.geez.ui.xliterator.XliteratorTab;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import de.endrullis.draggabletabs.DraggableTabPane;
 import javafx.application.Application;
@@ -71,12 +83,18 @@ public final class Xliterator extends Application {
     private Desktop desktop = Desktop.getDesktop();
 
 	private String scriptIn   = null; // alphabetic based default
+	private String variantIn = null;
 	private String scriptOut  = null;
 	private String variantOut = null;
+	private JsonObject transliteration = null;
 	protected StatusBar statusBar = new StatusBar();
-	private Menu inScriptMenu   = null;
-	private Menu outVariantMenu = null;
+	private Menu inScriptMenu = null;
+	// private Menu outVariantMenu = null;
 	private Menu outScriptMenu  = null;
+	
+	private Menu  inScriptMenuLast = null;
+	private Menu outScriptMenuLast = null;
+	
 	final Menu tabsMenu = new Menu( "Tabs" );
 	// an object could be introduced to hold the various transliteration attributes:
 	private String selectedTransliteration  = null;
@@ -104,21 +122,24 @@ public final class Xliterator extends Application {
 	private String xlitStylesheet = "styles/xliterator.css";
 	
     public static final String scriptInPreference   = "org.geez.ui.xliterator.scriptIn";
+    public static final String variantInPreference  = "org.geez.ui.xliterator.variantIn";
     public static final String scriptOutPreference  = "org.geez.ui.xliterator.scriptOut";
     public static final String variantOutPreference = "org.geez.ui.xliterator.variantOut";
-    public static final String useSelectedEdtior    = "org.geez.ui.xliterator.editor.selected";
+    public static final String useSelectedEditor    = "org.geez.ui.xliterator.editor.selected";
+    public static final String transliterationPreference          = "org.geez.ui.xliterator.transliteration";
     public static final String transliterationIdPreference        = "org.geez.ui.xliterator.transliterationId";
     public static final String transliterationDirectionPreference = "org.geez.ui.xliterator.transliterationDirection";
     
-    private Stage primaryStage = null;
+    private Stage primaryStage      = null;
 	private XliteratorConfig config = null;
 	
-    private Image visibleIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
-    private Image arrowForwardIcon = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_right_grey_16x16.png" ) ); 
-    private Image arrowBothIcon    = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_double_grey_16x16.png" ) );
+    private Image visibleIcon       = new Image( ClassLoader.getSystemResourceAsStream( "images/icons/Color/12/gimp-visible.png" ) );
+    private Image arrowForwardIcon  = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_right_grey_16x16.png" ) ); 
+    private Image arrowBothIcon     = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_double_grey_16x16.png" ) );
+    private Image checkIcon         = new Image( ClassLoader.getSystemResourceAsStream( "images/check_black_16x16.png" ) );
     private ColorAdjust monochrome = new ColorAdjust();
 	
-	
+
 	public XliteratorConfig getConfig() {
 		return config;
 	}
@@ -158,12 +179,62 @@ public final class Xliterator extends Application {
         ToggleGroup groupInMenu = new ToggleGroup();
         
         // Create menu from the scripts in the configuration file:
-    	List<String> scripts = config.getInScripts( true );
-    	for(String script: scripts) {
-    		RadioMenuItem menuItem = new RadioMenuItem( script );
-    		menuItem.setToggleGroup( groupInMenu );
-    		menuItem.setOnAction( evt -> setScriptIn( script ) );
-    		menu.getItems().add( menuItem );
+    	JsonObject scripts = config.getInScripts();
+    	ArrayList<String> scriptInList = new ArrayList<String>( scripts.keySet() );
+    	Collections.sort( scriptInList );
+    	
+    	for(String scriptInKey : scriptInList) {
+			//JsonObject script = scripts.getAsJsonObject( scriptKey );
+    		JsonArray variantsIn = scripts.getAsJsonArray( scriptInKey );
+    		int size = variantsIn.size();
+    		if ( size == 0 ) {
+    			RadioMenuItem menuItem = new RadioMenuItem( scriptInKey );
+    			menuItem.setToggleGroup( groupInMenu );
+        		menuItem.setOnAction( evt -> {
+        			setScriptIn( scriptInKey, "_base" );
+        			if( inScriptMenuLast != null ) {
+        				inScriptMenuLast.setGraphic( null );
+        				inScriptMenuLast = null;
+        			}
+        		});
+        		menu.getItems().add( menuItem );
+    		}
+    		else {
+    			ArrayList<String> variantObjectList = new ArrayList<String>();
+    			for(int i=1; i<size; i++) {
+    				variantObjectList.add( variantsIn.get(i).getAsString() );
+    			}
+                
+    		    Collections.sort( variantObjectList );
+    		    variantObjectList.add(0, variantsIn.get(0).getAsString() ); // _base is always at index 0
+    		    
+    		    
+    			Menu scriptMenu = new Menu( scriptInKey );
+    			for(int i=0; i<size; i++) {
+    				// JsonObject vObject = (JsonObject)variantObjectList.get(i);
+    				String variantInKey = variantObjectList.get(i);
+    				RadioMenuItem menuItem = new RadioMenuItem( variantInKey );
+        			menuItem.setToggleGroup( groupInMenu );
+        			scriptMenu.getItems().add( menuItem );
+        			
+    				if( "_base".equals( variantInKey ) ) {
+    					menuItem.setText( scriptInKey );
+            			scriptMenu.getItems().add( new SeparatorMenuItem() );
+    				}
+
+            		menuItem.setOnAction( evt -> {
+            			if( inScriptMenuLast != null ) {
+            				inScriptMenuLast.setGraphic( null );
+            			}
+            			setScriptIn( scriptInKey, variantInKey );    		
+            			scriptMenu.setGraphic( new ImageView( checkIcon ) );
+            			inScriptMenuLast = scriptMenu;
+            		});
+
+    			}
+    			menu.getItems().add( scriptMenu );
+    		}
+    		
     	}
     		
     	return menu;
@@ -187,27 +258,111 @@ public final class Xliterator extends Application {
     }
     
     
-    private Menu createOutScriptsMenu(String outScript) {
+    private Menu createOutScriptsMenu(String scriptIn, String variantIn) {
    	 	outScriptMenu.getItems().clear();
    	 	scriptOut = null;
-		outVariantMenu.getItems().clear();
+		// outVariantMenu.getItems().clear();
 		variantOut = null;
     	scriptOutText.setText( "[None]" );
-    	variantOutText.setText( "[None]" );
+    	resourceText.setText( "[None]" );
     	
         ToggleGroup groupOutMenu = new ToggleGroup();
         
-    	List<String> scripts = config.getOutScripts(outScript, true);
-    	for(String script: scripts) {
-    		RadioMenuItem menuItem = new RadioMenuItem( script );
-    		menuItem.setToggleGroup( groupOutMenu );
-    		menuItem.setOnAction( evt -> setScriptOut( script ) );
-    		outScriptMenu.getItems().add( menuItem );
+    	JsonObject scriptsOut = config.getOutScriptsOfInScriptAndInVariant(scriptIn, variantIn);
+    	ArrayList<String> scriptOutList = new ArrayList<String>( scriptsOut.keySet() );
+    	Collections.sort( scriptOutList );
+    	
+    	for(String scriptOutKey : scriptOutList) {
+    		JsonArray variantsOut = scriptsOut.getAsJsonArray( scriptOutKey );
+    		int size = variantsOut.size();
+    		String variantOutZero = variantsOut.get(0).getAsJsonObject().get( "name" ).getAsString();
+    		if ( (size == 1) && ( "_base".equals(variantOutZero) || "IPA".equals(scriptOutKey) ) ) {
+    			// if the one element is "_base" , then 
+    			RadioMenuItem menuItem = new RadioMenuItem( scriptOutKey );
+    			menuItem.setToggleGroup( groupOutMenu );
+    			JsonObject variantOutObject = variantsOut.get(0).getAsJsonObject();
+        		menuItem.setOnAction( evt -> {
+        			setScriptOut( scriptOutKey, "_base", variantOutObject );
+            		
+        			if( outScriptMenuLast != null ) {
+        				outScriptMenuLast.setGraphic( null );
+        				outScriptMenuLast = null;
+        			}
+        		});
+
+        		outScriptMenu.getItems().add( menuItem );
+        		
+        		ImageView imageView = null;
+        		if( "both".equals( variantOutObject.get("direction").getAsString() ) ) {
+        			imageView = new ImageView( arrowBothIcon );
+        		}
+        		else {
+        			imageView = new ImageView( arrowForwardIcon );    	        			
+        		}
+                menuItem.setGraphic( imageView );
+    		}
+    		else {
+    			Menu scriptMenu = new Menu( scriptOutKey );
+    			
+    			ArrayList<JsonObject> variantObjectList = new ArrayList<JsonObject>();
+    			for(int i=1; i<size; i++) {
+    				variantObjectList.add( variantsOut.get(i).getAsJsonObject() );
+    			}
+                
+    		    Collections.sort( variantObjectList, getComparator() );
+    		    variantObjectList.add(0, variantsOut.get(0).getAsJsonObject() ); // _base is always at index 0
+    		    
+    			for(int i=0; i<size; i++) {
+    				JsonObject vObject = (JsonObject)variantObjectList.get(i);
+    				String variantOutKey = vObject.getAsJsonObject().get("name").getAsString();
+    				RadioMenuItem menuItem = new RadioMenuItem( variantOutKey );
+            		scriptMenu.getItems().add( menuItem );
+    				if( "_base".equals( variantOutKey ) ) {
+    					menuItem.setText( scriptOutKey );
+            			scriptMenu.getItems().add( new SeparatorMenuItem() );
+    				}
+
+        			menuItem.setToggleGroup( groupOutMenu );
+        			JsonObject variantOutObject = variantsOut.get(i).getAsJsonObject();
+            		menuItem.setOnAction( evt -> {
+            			if( outScriptMenuLast != null ) {
+            				outScriptMenuLast.setGraphic( null );
+            			}
+            			setScriptOut( scriptOutKey, variantOutKey, variantOutObject );
+            			scriptMenu.setGraphic( new ImageView( checkIcon ) );
+            			outScriptMenuLast = scriptMenu;
+            		});
+            		
+	        		ImageView imageView = null;
+	        		if( "both".equals( variantOutObject.get("direction").getAsString() ) ) {
+	        			imageView = new ImageView( arrowBothIcon );
+	        		}
+	        		else {
+	        			imageView = new ImageView( arrowForwardIcon );    	        			
+	        		}
+	                menuItem.setGraphic( imageView );
+    			}
+    			outScriptMenu.getItems().add( scriptMenu );
+    		}
     	}
+    	
     	return outScriptMenu;
     }
     
+    private static Comparator<JsonObject> getComparator() {
+        return new Comparator<JsonObject>() {
+           @Override
+           public int compare(JsonObject o1, JsonObject o2) {
+               String name1 = o1.get( "name" ).getAsString();
+               String name2 = o2.get( "name" ).getAsString();
 
+               // ordering is the natural String ordering in your example
+               return name1.compareTo(name2); 
+           }
+        };
+    }
+
+    /*
     private Menu createOutVaraintsMenu(String outVariant) {
     	outVariantMenu.getItems().clear();
         ToggleGroup groupVariantOutMenu = new ToggleGroup();
@@ -215,7 +370,7 @@ public final class Xliterator extends Application {
     	JsonArray variants = config.getVariants(scriptIn, scriptOut);
     	for (int i = 0; i < variants.size(); i++) {
     		JsonObject variant = variants.get(i).getAsJsonObject();
-    		if( variant.has( "visibility" ) && ("internal".equals( variant.get("vsibility").getAsString() ) ) ) {
+    		if( variant.has( "visibility" ) && ("internal".equals( variant.get("visibility").getAsString() ) ) ) {
     			continue;
     		}
     		if( variant.get("name") == null ) {
@@ -224,7 +379,7 @@ public final class Xliterator extends Application {
     				JsonArray subvariants = variant.getAsJsonArray( subVariantKey );
     		    	for (int j = 0; j < subvariants.size(); j++) {
     		    		JsonObject subvariant = subvariants.get(j).getAsJsonObject();
-        	    		if( subvariant.has( "visibility" ) && ("internal".equals( subvariant.get("vsibility").getAsString() ) ) ) {
+        	    		if( subvariant.has( "visibility" ) && ("internal".equals( subvariant.get("visibility").getAsString() ) ) ) {
         	    			continue;
         	    		}
     	    			String name = subvariant.get("name").getAsString();
@@ -315,6 +470,108 @@ public final class Xliterator extends Application {
     	
     	return outVariantMenu;
     }
+    */
+
+    private static final Pattern sourcePattern  = Pattern.compile( "^(.*)source\\h*=\\h*\"([^\"]+)\"(.*)$" );
+    private static final Pattern targetPattern  = Pattern.compile( "^(.*)target\\h*=\\h*\"([^\"]+)\"(.*)$" );
+    private static final Pattern variantPattern = Pattern.compile(  "^(.*)variant\\h*=\\h*\"([^\"]+)\"(.*)$" );
+    private static final Pattern aliasPattern   = Pattern.compile( "^(.*)alias\\h*=\\h*\"([^\"]+)\"(.*)$");
+    private static final Pattern backwardAliasPattern = Pattern.compile( "^(.*)backwardAlias\\h*=\\h*\"([^\"]+)\"(.*)$" );
+    private static final Pattern directionPattern = Pattern.compile( "^(.*)direction\\h*=\\h*\"([^\"]+)\"(.*)$" );
+    
+    private JsonObject createEmptyTransliteration( String path ) {	
+    	JsonObject emptyTransliteration = new JsonObject();    	
+    	
+    	DateTimeFormatter FOMATTER = DateTimeFormatter.ofPattern("yyy_MM_dd_HH_mm_ss_z");
+    	 
+    	//Zoned datetime instance
+    	ZonedDateTime zdt = ZonedDateTime.now();
+    	 
+    	//Get formatted String
+    	String zdtString = FOMATTER.format(zdt);
+    	
+    	emptyTransliteration.addProperty( "path", path );
+    	emptyTransliteration.addProperty( "name", "VARIANT_OUT_" + zdtString);
+    	emptyTransliteration.addProperty( "source", "SCRIPT_IN_" + zdtString);
+    	emptyTransliteration.addProperty( "target", "SCRIPT_OUT_" + zdtString);
+    	emptyTransliteration.addProperty( "direction", "forward" );
+
+    	return emptyTransliteration;
+    }
+    
+    
+    private JsonObject createPseudoTransliteration( File externalIcuFile ) {
+
+    	String fileName = externalIcuFile.getName(); 	
+    	String extension = FilenameUtils.getExtension( fileName );
+    	
+    	JsonObject pseudoTransliteration = new JsonObject();
+    	
+        StringBuilder contentBuilder = new StringBuilder();
+        try (Stream<String> stream = Files.lines( Paths.get(externalIcuFile.getPath()), StandardCharsets.UTF_8))
+        {
+            stream.forEach(s -> contentBuilder.append(s));
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        String fileData = contentBuilder.toString();
+        
+    	String exName = null, exDirection = null, exAlias = null, exBackwardAlias = null, exSource = null, exTarget = null;
+    	
+    	
+    	if( "txt".equals( extension ) ) {
+    		exName = FilenameUtils.getBaseName( fileName );	
+    		exDirection = fileData.contains( "↔" ) ? "both" : "forward" ;
+    	}
+    	else { // must be XML
+	
+    		Matcher matcher = sourcePattern.matcher( fileData );
+    		if( matcher.matches() ) {
+    			exSource = matcher.group( 2 );
+    		}
+    		else {
+    			exSource = "unknown";
+    		}
+			pseudoTransliteration.addProperty( "source", exSource );
+        	
+    		matcher = targetPattern.matcher( fileData );
+    		if( matcher.matches() ) {
+    			exTarget = matcher.group( 2 );        	
+    		}
+			pseudoTransliteration.addProperty( "target", exTarget );
+			
+    		matcher = directionPattern.matcher( fileData );
+    		if( matcher.matches() ) { 
+    			exDirection = matcher.group( 2 );
+    		}
+        	pseudoTransliteration.addProperty( "direction", exDirection );
+        	
+    		matcher = variantPattern.matcher( fileData );
+    		if( matcher.matches() ) {
+    			exName = matcher.group( 2 );       
+    		}
+
+    		matcher = aliasPattern.matcher( fileData );
+    		if( matcher.matches() ) {
+	    		exAlias = matcher.group( 2 ); 
+	        	pseudoTransliteration.addProperty( "alias", exAlias );
+    		}
+    		
+    		matcher = backwardAliasPattern.matcher( fileData );
+    		if( matcher.matches() ) {
+	    		exBackwardAlias = matcher.group( 2 ); 
+    			pseudoTransliteration.addProperty( "backwardAlias", exBackwardAlias );
+    		}
+    	}
+    	
+    	pseudoTransliteration.addProperty( "path", externalIcuFile.getPath() );
+    	pseudoTransliteration.addProperty( "name", exName );
+    	pseudoTransliteration.addProperty( "direction", exDirection );
+    	
+    	return pseudoTransliteration;
+    }
     
 
     private final MenuItem fileMenuItem = new MenuItem( "Select Files..." ); 
@@ -323,14 +580,16 @@ public final class Xliterator extends Application {
         editorTab.setDefaultFontFamily( defaultFontFamily );
         editorTab.setClosable( true );
     	
+        editorTab.setTransliteration(transliteration);
+        /*
     	editorTab.getProperties().put( "direction", transliterationDirection );
         if( transliterationAlias != null ) {
         	editorTab.getProperties().put( "alias", transliterationAlias );
         }
-        editorTab.setup(primaryStage, config, saveMenuItem, saveAsMenuItem);
+        */
+        editorTab.setup(primaryStage, this, saveMenuItem, saveAsMenuItem);
         
-        // editorTab.setStyle( primaryStage.getScene() );
-        editorTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().multiply(0.8) );
+        editorTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().subtract( 180 ) );
         editorTab.setOnSelectionChanged( evt -> {
         	if( editorTab.isSelected() ) {
         		fileMenuItem.setDisable( true );
@@ -369,27 +628,37 @@ public final class Xliterator extends Application {
         
     	RadioMenuItem editorTabItem = new RadioMenuItem( title );
     	editorTabItem.setOnAction( evt -> {
-    		setUseEditor( title ); 
+    		setUseEditor( title );
+    		if( selectedEditorTab != null ) {
+    			Label label = (Label)selectedEditorTab.getGraphic();
+    			selectedEditorTab.setGraphic( null );
+    			selectedEditorTab.setText( label.getText() );
+    		}
     		selectedEditorTab = editorTab;
-	    	selectedTransliteration = useSelectedEdtior; 
-	    	filesTab.setScriptIn( useSelectedEdtior );
-	    	textTab.setScriptIn( useSelectedEdtior );
+    		Label label = new Label( title );
+    		label.setGraphic(new ImageView( checkIcon ) );
+    		selectedEditorTab.setGraphic( label );
+	    	selectedTransliteration = useSelectedEditor; 
+	    	filesTab.setScriptIn( useSelectedEditor );
+	    	textTab.setScriptInAndDirection( useSelectedEditor, editorTab.getSelectedDirection() );
 	   	 	outScriptMenu.getItems().clear();
 	   	 	scriptOut = null;
-			outVariantMenu.getItems().clear();
+			// outVariantMenu.getItems().clear();
 			variantOut = null;
-	    	scriptInText.setText( "[Editor]" );
-	    	scriptOutText.setText( "[Editor]" );
-	    	variantOutText.setText( "[Editor]" );
+	    	scriptInText.setText( "[Editor] " +  selectedEditorTab.getInText() );
+	    	scriptOutText.setText( "[Editor] " + selectedEditorTab.getOutText() );
+	    	resourceText.setText( "[Editor] " + title );
+	    	setTransliteration( editorTab.getTransliteration() );
     	});
     	editorTabItem.setMnemonicParsing( false );
-    	// editorTabItem.getProperties().put( "selection", useSelectedEdtior );
+    	// editorTabItem.getProperties().put( "selection", useSelectedEditor );
     	inScriptMenu.getItems().add( editorTabItem );
 
         
         editorTab.setOnClosed( evt -> {
         	// check to save file
         	editorTabs.remove( editorTab );
+        	tabsMenu.getItems().remove( editorTabViewMenuItem );
         	inScriptMenu.getItems().remove( editorTabItem );
             if( editorTabs.size() == 0 ) {
             	int lastIndex = inScriptMenu.getItems().size() - 1;  // this should be the separator index
@@ -539,7 +808,7 @@ public final class Xliterator extends Application {
         // 
         inScriptMenu   = createInScriptsMenu( stage );
         outScriptMenu  = new Menu( "Script _Out" );
-        outVariantMenu = new Menu( "_Variant" );
+         //outVariantMenu = new Menu( "_Variant" );
         //
         //=========================== END SCRIPT MENUS =============================================
         //
@@ -667,12 +936,23 @@ public final class Xliterator extends Application {
         //
         loadInternalMenuItem.setOnAction( evt -> {
         		// load into a new editor tab
-	        	if( selectedTransliteration.equals( useSelectedEdtior) ) {
+	        	if( selectedTransliteration.equals( useSelectedEditor) ) {
 	        		return;
 	        	}
             	try {
+            		if( transliterationDependencies != null) { // load first so they apepar in the background
+            			for(String dependency: transliterationDependencies) {
+            				JsonObject dependencyObject = config.getTransliterationByName( dependency );
+            				String dependentTransliteration = dependencyObject.get( "path" ).getAsString();
+                    		EditorTab dependentEditorTab = createNewEditor( dependentTransliteration, tabsMenu, visibleIcon, monochrome );
+                    		dependentEditorTab.getEditor().loadResourceFile( dependentTransliteration );            				
+            			}
+            		}
             		currentEditorTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
             		currentEditorTab.getEditor().loadResourceFile( selectedTransliteration );
+            		currentEditorTab.setScriptIn( scriptIn, variantIn );
+            		currentEditorTab.setScriptOut( scriptOut );
+            		currentEditorTab.setVariantOut( variantOut );
                 }
                 catch(IOException ex) {
                 	errorAlert(ex, "Error opening: " + selectedTransliteration );
@@ -686,17 +966,12 @@ public final class Xliterator extends Application {
 		        	return;
 		        }
 		        try {
+		        	JsonObject pseudoTransliteration = createPseudoTransliteration( externalIcuFile );
+		        	setTransliteration( pseudoTransliteration );
 		        	currentEditorTab = createNewEditor( externalIcuFile.getName(), tabsMenu, visibleIcon, monochrome );
 		        	currentEditorTab.loadFile( externalIcuFile );
-		        	textTab.enableConvertForward( true );
-		        	textTab.enableConvertReverse( false );
-		        	// TODO: if an XML file, scan for ="both"
-		        	if( currentEditorTab.getEditor().getText().contains( "↔" ) ) {
-		        		transliterationDirection = "both";
-		                textTab.enableConvertBoth( true );
-		        	} else {
-		        		transliterationDirection = "forward"; // TODO: confirm this, it might be reverse only
-		        	}
+		        	currentEditorTab.setTransliteration( pseudoTransliteration );
+
 		        }
 		        catch(IOException ex) {
 		        	errorAlert(ex, "Error opening: " + externalIcuFile.getName() );
@@ -712,7 +987,7 @@ public final class Xliterator extends Application {
         //=========================== BEGIN PREFERENCES MENU ====================================
         //
         final Menu preferencesMenu = new Menu( "Preferences" );
-        final MenuItem makeDefaultMappingMenuItem = new MenuItem( "Save Default Mapping" );
+        final MenuItem makeDefaultMappingMenuItem = new MenuItem( "Save Transliteration Selection" );
         final MenuItem makeDefaultFontsMenuItem   = new MenuItem( "Save Font Selections" );
 
         makeDefaultMappingMenuItem.setOnAction( evt -> saveDefaultMapping() );
@@ -811,7 +1086,7 @@ public final class Xliterator extends Application {
         final MenuBar leftBar = new MenuBar();  
   
         // add menus to the left menubar 
-        leftBar.getMenus().addAll( fileMenu, editMenu, tabsMenu, inScriptMenu, outScriptMenu , outVariantMenu );
+        leftBar.getMenus().addAll( fileMenu, editMenu, tabsMenu, inScriptMenu, outScriptMenu /* , outVariantMenu */);
 
         
         statusBar.setText( "" );
@@ -929,49 +1204,57 @@ public final class Xliterator extends Application {
         Preferences prefs = Preferences.userNodeForPackage( Xliterator.class );
 
         prefs.put( scriptInPreference, scriptIn );
+        prefs.put( variantInPreference, variantIn );
         prefs.put( scriptOutPreference, scriptOut );
         prefs.put( variantOutPreference, variantOut );
         prefs.put( transliterationIdPreference, selectedTransliteration );
-        prefs.put( transliterationDirectionPreference, transliterationDirection );
+        prefs.put( transliterationDirectionPreference, transliterationDirection ); // not relevant
+        prefs.put( transliterationPreference, transliteration.toString() );
+        
+        textTab.savePreferences();
     }
 
     
     private void checkPreferences() {
         Preferences prefs = Preferences.userNodeForPackage( Xliterator.class );
-
-        scriptIn   = prefs.get( scriptInPreference, null );
-        if( scriptIn != null) {
-        	setScriptIn( scriptIn );
+        
+        String json = prefs.get( transliterationPreference, null);
+        
+        if( json == null ) {
+        	return;
         }
+        transliteration = new JsonParser().parse(json).getAsJsonObject();
+        
+        scriptIn = prefs.get( scriptInPreference, null );
+        variantIn = prefs.get( variantInPreference, null );
+
+        setScriptIn( scriptIn, variantIn );
+        setMenuItemSelection( inScriptMenu, scriptIn, variantIn, "in" );
         
         scriptOut  = prefs.get( scriptOutPreference, null );
-        if( scriptOut != null) {
-        	setScriptOut( scriptOut );
-        }
+        variantOut = transliteration.get( "name" ).getAsString();
+
+        setScriptOut( scriptOut, variantOut, transliteration );
+        setMenuItemSelection( outScriptMenu, scriptOut, variantOut, "out" );
         
         
         selectedTransliteration  = prefs.get( transliterationIdPreference, null );
         transliterationDirection = prefs.get( transliterationDirectionPreference, null );
         
-        variantOut = prefs.get( variantOutPreference, null );
-        if( variantOut != null) {
-        	setVariantOut( variantOut ); // TODO: store the alias as a preference
-        }
-
     }
     
     Text scriptInText = new Text( "[None]" );
     Text scriptOutText = new Text( "[None]" );
-    Text variantOutText = new Text( "[None]" );
+    Text resourceText = new Text( "[None]" );
     // status bar reference:
     // https://jar-download.com/artifacts/org.controlsfx/controlsfx-samples/8.40.14/source-code/org/controlsfx/samples/HelloStatusBar.java
     private void updateStatusMessage() {
     	scriptInText.setStyle( "-fx-font-weight: bold;" );
     	scriptOutText.setStyle( "-fx-font-weight: bold;" );
-    	variantOutText.setStyle( "-fx-font-weight: bold;" );
+    	resourceText.setStyle( "-fx-font-weight: bold;" );
     	scriptInText.setFill( Color.RED );
     	scriptOutText.setFill( Color.GREEN );
-    	variantOutText.setFill( Color.BLUE );
+    	resourceText.setFill( Color.BLUE );
         
     	TextFlow flowIn = new TextFlow();
         TextFlow flowOut = new TextFlow();
@@ -983,12 +1266,12 @@ public final class Xliterator extends Application {
         Text out = new Text("Out: ");
         out.setStyle("-fx-font-weight: bold;");
         
-        Text vout = new Text("Variant: ");
-        vout.setStyle("-fx-font-weight: bold;");
+        Text rout = new Text("Resource: ");
+        rout.setStyle("-fx-font-weight: bold;");
         
         flowIn.getChildren().addAll(in, scriptInText );
         flowOut.getChildren().addAll(out, scriptOutText );
-        flowVOut.getChildren().addAll(vout, variantOutText );
+        flowVOut.getChildren().addAll(rout, resourceText );
        
         Separator separator1 = new Separator();
         separator1.setOrientation(Orientation.VERTICAL);
@@ -1015,26 +1298,73 @@ public final class Xliterator extends Application {
         statusBar.getLeftItems().add( hbox );
     }
     
-    private void setScriptIn(String scriptIn) {
+    
+    private void setScriptIn(String scriptIn, String variantIn) {
     	this.scriptIn = scriptIn;
-    	scriptInText.setText( scriptIn );
-    	createOutScriptsMenu( scriptIn );
+    	this.variantIn = variantIn;
+    	
+		if( selectedEditorTab != null ) {
+			Label label = (Label)selectedEditorTab.getGraphic();
+			selectedEditorTab.setGraphic( null );
+			selectedEditorTab.setText( label.getText() );
+		}
+    	
+    	String scriptInMessage = scriptIn;
+    	if(! "_base".equals( variantIn ) ) {
+    		scriptInMessage +=  " / " + variantIn ;
+    	}
+    	scriptInText.setText( scriptInMessage );
+    	
+    	createOutScriptsMenu( scriptIn, variantIn );
         loadInternalMenuItem.setDisable( true );
-    	filesTab.setScriptIn( scriptIn );
-    	textTab.setScriptIn( scriptIn );
-    	setMenuItemSelection( inScriptMenu, scriptIn );
+    	filesTab.setScriptIn( scriptIn, variantIn );
+    	textTab.setScriptIn( scriptIn, variantIn );
     }
-    private void setScriptOut(String scriptOut) {
+    
+    
+    private void setScriptOut(String scriptOut, String variantOut, JsonObject transliteration) {
     	this.scriptOut = scriptOut;
-    	this.variantOut = null;
-    	scriptOutText.setText( scriptOut );
-    	variantOutText.setText( "[None]" );
-    	createOutVaraintsMenu( scriptOut );
+    	this.variantOut = variantOut;
+		
+    	String scriptOutMessage = scriptOut;
+    	if(! "_base".equals( variantOut ) ) {
+    		scriptOutMessage +=  " / " + variantOut ;
+    	}
+    	scriptOutText.setText( scriptOutMessage );
+    	
+    	filesTab.setScriptOut( scriptOut );
+    	textTab.setScriptOut( scriptOut );
+    	setTransliteration( transliteration );
+    	resourceText.setText( "Internal: " + selectedTransliteration );
         loadInternalMenuItem.setDisable( true );
-    	filesTab.setScriptOut( scriptIn );
-    	textTab.setScriptOut(scriptOut);
-    	setMenuItemSelection( outScriptMenu, scriptOut );
+
+    	// setMenuItemSelection( outScriptMenu, scriptOut );
+
+    	
+        loadInternalMenuItem.setDisable( false );
     }
+    
+    
+    
+    public void setTransliteration( JsonObject transliteration ) {
+    	this.transliteration = transliteration;
+    	this.selectedTransliteration  = transliteration.get( "path" ).getAsString();
+    	this.transliterationDirection = transliteration.get( "direction" ).getAsString();
+    	this.transliterationAlias = ( transliteration.has( "alias" ) ) ? transliteration.get( "alias" ).getAsString() : null ;
+    	
+		ArrayList<String> dependencies = new ArrayList<String>();
+		if( transliteration.has( "dependencies" ) ) {
+			JsonArray dependenciesJSON = transliteration.getAsJsonArray( "dependencies" );
+			for (int k = 0; k < dependenciesJSON.size(); k++) {
+				dependencies.add( dependenciesJSON.get(k).getAsString() );
+			}
+		}		
+		this.transliterationDependencies = (dependencies.isEmpty()) ? null: dependencies;
+		
+    	filesTab.setTransliteration( transliteration );
+    	textTab.setTransliteration( transliteration );
+  	}
+    /*
     private void setVariantOut(String variantOut) {
     	this.variantOut = variantOut;
     	variantOutText.setText( variantOut );
@@ -1044,6 +1374,7 @@ public final class Xliterator extends Application {
     	textTab.setVariantOut( variantOut, selectedTransliteration, transliterationDirection, transliterationDependencies, transliterationAlias );
     	setMenuItemSelection( outVariantMenu, variantOut );
     }
+    */
     private String caseOption = null;
     private void setCaseOption(RadioMenuItem menuItem) {
     	String label = menuItem.getText().toLowerCase();
@@ -1060,32 +1391,78 @@ public final class Xliterator extends Application {
     }
     
     
-    private void setUseEditor(String title) {    	
+    private void setUseEditor(String title) {
+		if( inScriptMenuLast != null ) {
+			inScriptMenuLast.setGraphic( null );
+			inScriptMenuLast = null;
+		}
+		if( outScriptMenuLast != null ) {
+			outScriptMenuLast.setGraphic( null );
+			outScriptMenuLast = null;
+		}
+		outScriptMenu.getItems().clear();
+    	
     	for(MenuItem item: inScriptMenu.getItems() ) {
     		if( item.getClass() == RadioMenuItem.class ) {
 	    		RadioMenuItem rItem = (RadioMenuItem)item;
 	    		if ( title.equals( rItem.getText() ) ) {
 	    			rItem.setSelected( true );
-	    	    	// TODO: before convertering, check if the title matches an editor tab
+	    	    	// TODO: before converting, check if the title matches an editor tab
 	    		}
 	    		else {
 	    			rItem.setSelected( false );
 	    		}
     		}
+    		else if( item.getClass() == Menu.class ) {
+    			Menu menu = (Menu)item;
+    			menu.setGraphic( null );
+    			for(MenuItem subItem: menu.getItems() ) {
+    				if( subItem.getClass() == RadioMenuItem.class ) {
+    					((RadioMenuItem)subItem).setSelected( false );
+    				}
+    			}
+    		}
     	}
     }
     
     
-    private void setMenuItemSelection(Menu menu, String selection) {    	
+    private void setMenuItemSelection( Menu menu, String script, String variant, String menuDirection ) {
+    	variant = ( "_base".equals( variant) ) ? script : variant ;
+    	
     	for(MenuItem item: menu.getItems() ) {
     		if( item.getClass() == RadioMenuItem.class ) {
 	    		RadioMenuItem rItem = (RadioMenuItem)item;
-	    		if ( selection.equals( rItem.getText() ) ) {
+	    		if ( rItem.getText().equals( script ) ) {
 	    			rItem.setSelected( true );
+	    	    	// TODO: before converting, check if the title matches an editor tab
 	    		}
 	    		else {
 	    			rItem.setSelected( false );
 	    		}
+    		}
+    		else if( item.getClass() == Menu.class ) {
+    			Menu submenu = (Menu)item;
+    			submenu.setGraphic( null );
+    			if( submenu.getText().equals( script ) ) {
+        			submenu.setGraphic( new ImageView( checkIcon ) );
+        			if( "in".equals( menuDirection ) ) {
+        				inScriptMenuLast = submenu;
+        			}
+        			else {
+        				outScriptMenuLast = submenu;       				
+        			}
+	    			for( MenuItem subItem: submenu.getItems() ) {
+	    				if( subItem.getClass() == RadioMenuItem.class ) {
+	    					RadioMenuItem rsubItem = (RadioMenuItem)subItem;
+	    					if( rsubItem.getText().equals( variant ) ) {
+	    						rsubItem.setSelected( true );
+	    					}
+	    					else {
+	    						rsubItem.setSelected( false );	    						
+	    					}
+	    				}
+	    			}
+    			}
     		}
     	}
     }
@@ -1094,25 +1471,29 @@ public final class Xliterator extends Application {
     private void saveDefaultFontSelections() {
     	filesTab.saveDefaultFontSelections();
     	textTab.saveDefaultFontSelections();
-    	currentEditorTab.saveDefaultFontSelections();
+    	if( currentEditorTab != null ) {
+    		currentEditorTab.saveDefaultFontSelections();
+    	}
     }
     
     
-    private void createNewFile(String title, String type ) {
-    	
+    int newCounter = 1;
+    private void createNewFile( String title, String type ) {  	
     	String template = ( "XML".equals(type) )
     			? "templates/icu-xml-template.xml"
     			: "templates/icu-text-template.txt" 
     	;
     	try {
     		// this should probably be changed to use createNewEditor 
-    		EditorTab newTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
+    		transliteration = createEmptyTransliteration( template );
+    		EditorTab newTab = createNewEditor( ("New " + newCounter), tabsMenu, visibleIcon, monochrome );
     		newTab.getEditor().loadResourceFile( template );
     	}
     	catch(Exception ex) {
         	errorAlert(ex, "Error opening: " + template );
     	}
     	
+    	newCounter++;
     }
     
     
@@ -1126,7 +1507,12 @@ public final class Xliterator extends Application {
     		// the syntax highlight editor is already loaded
     		return;
     	}
-    	syntaxHighlighterTab.load( stage, this );
+    	try {
+    		syntaxHighlighterTab.load( stage, this );
+    	}
+    	catch( IOException ex ) {
+    		errorAlert( ex, "An error occured reading stylesheet." );
+    	}
     	tabpane.getSelectionModel().select(syntaxHighlighterTab);
     }
     
@@ -1153,23 +1539,19 @@ public final class Xliterator extends Application {
     	textTab.clearAll();
     	textTab.setTextIn( "ሰላም ዓለም" );
     	
-    	setScriptIn( "Ethiopic" );
-    	setScriptOut( "IPA" );
-    	setVariantOut( "Amharic");
-    	selectedTransliteration = "am-am_FONIPA.xml";
-    	transliterationDirection = "both";
-    	transliterationAlias = "am-fonipa-t-am";
-
-    	for(MenuItem item: outScriptMenu.getItems() ) {
-    		((RadioMenuItem)item).setSelected( false );
-    	}
-    	for(MenuItem item: outVariantMenu.getItems() ) {
-    		((RadioMenuItem)item).setSelected( false );
-    	}
+    	setScriptIn( "Ethiopic", "Amharic" );
+    	// setMenuItemSelection( inScriptMenu, "Ethiopic", "Amharic" );
+		JsonObject demoTransliteration = config.getTransliterationByName( "Ethi-Aethiopica_Latn" );
+    	setScriptOut( "Latin", "Aethiopica", demoTransliteration );
+    	// setMenuItemSelection( outScriptMenu, "Latin", "Aethiopica" );
+    	
+    	setTransliteration( demoTransliteration );
     	
     	try {
     		currentEditorTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
     		currentEditorTab.getEditor().loadResourceFile( selectedTransliteration );
+    		currentEditorTab.setScriptIn( scriptIn, variantIn );
+    		currentEditorTab.setScriptOut( scriptOut );
     		setUseEditor( selectedTransliteration );
         }
         catch(IOException ex) {
@@ -1181,11 +1563,16 @@ public final class Xliterator extends Application {
     
     public File exportConvertedSpreadsheet( Stage stage, String jsonIndex ) {
     	File targetFile = null;
-		try {
-			
+		try {			
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setInitialFileName( "transliterations.json" );
 			fileChooser.setTitle( "Save Transliteratios Spreadsheet" );
+	        fileChooser.setInitialDirectory(
+	        		new File( System.getProperty( "user.home" ) )
+	        );                 
+	        fileChooser.getExtensionFilters().add(
+	        		new FileChooser.ExtensionFilter( "*.json", "*.json" )
+	        );
 			
 
 			targetFile = fileChooser.showSaveDialog( stage );
@@ -1205,6 +1592,11 @@ public final class Xliterator extends Application {
     	}
 		
 		return targetFile;
-	}   
+	}
+    
+    public void setEditorTransliterationDirection( String direction ) {
+    	textTab.setEditorTransliterationDirection( direction );
+    	filesTab.setEditorTransliterationDirection( direction );
+    }
 
 }

@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import org.fxmisc.richtext.StyleClassedTextArea;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import de.endrullis.draggabletabs.DraggableTab;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -14,21 +17,37 @@ public abstract class XliteratorTab extends DraggableTab {
 	
 	protected boolean converted = false;
 	protected String scriptIn   = null;
+	protected String variantIn  = null;
 	protected String scriptOut  = null;
 	protected String variantOut = null;
-	protected String alias = null;
+	protected String alias      = null;
+	protected String name       = null;
+	protected String backwardAlias = null;
 	protected String selectedTransliteration = null;
 	protected String transliterationDirection = null;
 	protected String caseOption = null;
 	protected String defaultFontFamily = null;
 	protected String defaultFontSize = "12";
-	protected String fontFamily = null;
-	protected String fontSize = null;
+	protected String fontFamily   = null;
+	protected String fontSize     = null;
+	protected String userXlitPath = null;
 	protected ArrayList<String> dependencies = null;
+	
+	protected JsonObject transliteration = null;
 	
     
 	public XliteratorTab( String title ) {
 		super(title);
+		
+		// this should be made static and done once:
+		String userHome = System.getProperty( "user.home" );
+        String osName = System.getProperty( "os.name" ).toLowerCase();
+        if( osName.startsWith( "win" ) ) {
+        	userXlitPath   = userHome + "/AppData/Local/Xliterator";
+        }
+        else { // assume OSX or Linux/Uhix
+        	userXlitPath   = userHome + "/.config/xlit";      	
+        }
 	}
 
 	
@@ -124,22 +143,55 @@ public abstract class XliteratorTab extends DraggableTab {
     }
     
     
-    public void setScriptIn( String scriptIn ) {
-    	this.scriptIn = scriptIn;
+    public void setScriptIn( String scriptIn, String variantIn ) {
+    	this.scriptIn  = scriptIn;
+    	this.variantIn = variantIn;
     }
     
     
     public void setScriptOut( String scriptOut ) {
     	this.scriptOut = scriptOut;
     }
+       
     
+    public void setVariantOut( String variantOut ) {
+    	this.variantOut = variantOut;
+    }
     
+    /*
     public void setVariantOut( String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies , String alias) {
     	this.variantOut = variantOut;
     	this.selectedTransliteration  = selectedTransliteration;
     	this.transliterationDirection = transliterationDirection;
     	this.dependencies = dependencies;
     	this.alias = alias;
+    }
+    */
+    
+    
+    public void setTransliteration( JsonObject transliteration ) {
+    	this.transliteration = transliteration;
+    	
+    	this.variantOut               = transliteration.get( "name" ).getAsString();
+    	this.selectedTransliteration  = transliteration.get( "path" ).getAsString();
+    	this.transliterationDirection = transliteration.get( "direction" ).getAsString();
+    	this.alias         = ( transliteration.has( "alias" ) ) ? transliteration.get( "alias" ).getAsString() : null ;
+    	this.backwardAlias = ( transliteration.has( "backwardAlias" ) ) ? transliteration.get( "backwardAlias" ).getAsString() : null ;
+    	this.name = transliteration.get( "source" ).getAsString() + "-" + transliteration.get( "target" ).getAsString();
+    			
+		ArrayList<String> dependencies = new ArrayList<String>();
+		if( transliteration.has( "dependencies" ) ) {
+			JsonArray dependenciesJSON = transliteration.getAsJsonArray( "dependencies" );
+			for (int k = 0; k < dependenciesJSON.size(); k++) {
+				dependencies.add( dependenciesJSON.get(k).getAsString() );
+			}
+		}		
+		this.dependencies = (dependencies.isEmpty()) ? null: dependencies;
+  	}
+    
+    
+    public JsonObject getTransliteration() {
+    	return this.transliteration;
     }
     
     

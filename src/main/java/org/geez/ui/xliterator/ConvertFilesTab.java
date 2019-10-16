@@ -23,6 +23,8 @@ import org.geez.convert.fontsystem.ConvertDocxGenericUnicodeFont;
 import org.geez.convert.fontsystem.ConvertFontSystem;
 import org.geez.ui.Xliterator;
 
+import com.google.gson.JsonObject;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -61,6 +63,7 @@ public class ConvertFilesTab extends XliteratorTab {
 	
     private final String fileOutFontPref = "org.geez.ui.xliterator.convertFilesTab.fontOut";
 	private Xliterator xlit = null; // used to get a handle on rules text
+
 
 	public ConvertFilesTab(String title, Xliterator xlit) {
 		super( title );
@@ -103,7 +106,7 @@ public class ConvertFilesTab extends XliteratorTab {
     		String editorRulesText = null;
     		String systemName      = null;
     		
-    		if( selectedTransliteration.equals( Xliterator.useSelectedEdtior ) ) {
+    		if( selectedTransliteration.equals( Xliterator.useSelectedEditor ) ) {
 	    		EditorTab editorTab = xlit.getSelectedEditorTab();
 	    		if( editorTab == null ) {
 	    			// TODO: add error alert
@@ -124,7 +127,7 @@ public class ConvertFilesTab extends XliteratorTab {
     		}
     		
     		
-    		DocumentProcessor processor = ( selectedTransliteration.equals( Xliterator.useSelectedEdtior )  )
+    		DocumentProcessor processor = ( selectedTransliteration.equals( Xliterator.useSelectedEditor )  )
     				? processorManager.getEditorTextProcessor( selectedTransliteration, transliterationDirection, extension, editorRulesText )
     				: processorManager.getFileProcessor( selectedTransliteration, transliterationDirection, extension )
     		;
@@ -264,12 +267,17 @@ public class ConvertFilesTab extends XliteratorTab {
         });
         
         CheckBox openFilesCheckbox = new CheckBox( "Open file(s) after conversion?");
+        openFilesCheckbox.setOnAction( evt -> {
+        	openOutput = openFilesCheckbox.isSelected();
+        });
+        /*
         openFilesCheckbox.selectedProperty().addListener(new ChangeListener<Boolean>() {
             public void changed(ObservableValue<? extends Boolean> ov,
                 Boolean old_val, Boolean new_val) {
                     openOutput = new_val.booleanValue();
             }
         });
+        */
         openFilesCheckbox.setSelected(true);
         
         
@@ -360,9 +368,9 @@ public class ConvertFilesTab extends XliteratorTab {
     }
 
     
-    public void setScriptIn(String scriptIn ) {
-    	super.setScriptIn(scriptIn);
-    	if( scriptIn.equals( Xliterator.useSelectedEdtior ) ) {
+    public void setScriptIn( String scriptIn ) {
+    	super.setScriptIn(scriptIn, null);
+    	if( scriptIn.equals( Xliterator.useSelectedEditor ) ) {
     		this.selectedTransliteration = scriptIn;
 			convertButton.setDisable( false );
     	}
@@ -378,9 +386,19 @@ public class ConvertFilesTab extends XliteratorTab {
 		convertButton.setDisable( true );
     }
     
-      
+    /*
     public void setVariantOut(String variantOut, String selectedTransliteration, String transliterationDirection, ArrayList<String> dependencies, String alias ) {
     	super.setVariantOut(variantOut, selectedTransliteration, transliterationDirection, dependencies, alias);
+
+    	if( inputFileList != null ) {
+    		convertButton.setDisable( false );
+    	}
+    }
+    */
+    
+    
+    public void setTransliteration( JsonObject transliteration ) {
+    	super.setTransliteration( transliteration);
 
     	if( inputFileList != null ) {
     		convertButton.setDisable( false );
@@ -403,5 +421,12 @@ public class ConvertFilesTab extends XliteratorTab {
         this.fontFamily = prefs.get( fileOutFontPref, null );
         
         return ( this.fontFamily == null );
+    }
+    
+    
+    public void setEditorTransliterationDirection( String direction ) {
+    	if( selectedTransliteration.equals( Xliterator.useSelectedEditor ) ) {
+        	transliterationDirection = direction;
+    	}
     }
 }
