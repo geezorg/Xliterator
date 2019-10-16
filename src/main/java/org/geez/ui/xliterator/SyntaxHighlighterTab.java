@@ -3,6 +3,7 @@ package org.geez.ui.xliterator;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,7 +11,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -20,6 +26,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.geez.ui.Xliterator;
 
 import javafx.geometry.Insets;
@@ -47,8 +54,8 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 	private boolean unsavedChanges = false;
 	private boolean loaded = false;
 	private String defaultStylesheet = "styles/icu-highlighting.css";
-	private String userStylesheet    = "styles/user-highlighting.css";
-	private String tempStylesheet    = "styles/temp-highlighting.css";
+	private String userStylesheet    = "icu-highlighting.css";
+	private String tempStylesheet    = "temp-highlighting.css";
 	private String xlitStylesheet    = "styles/xliterator.css";
 	private String exportStylesheet  = "xliterator-highlighting.css";
 	
@@ -185,15 +192,23 @@ public class SyntaxHighlighterTab extends XliteratorTab {
     	label.setStyle( style );
     }
     
-    public void load( final Stage stage, final Xliterator xlit ) {
+    public void load( final Stage stage, final Xliterator xlit ) throws IOException {
     	this.xlit = xlit;
 		if( styles.isEmpty() ) {
-			ClassLoader classLoader = this.getClass().getClassLoader();
-			InputStream inputStream = classLoader.getResourceAsStream( userStylesheet );
+			InputStream inputStream = null;
+			
+			File userStylesFile = new File( userXlitPath + "/" + userStylesheet );
+			// String base  = StringUtils.substringBefore(userStylesheet, ".css");
+			// Path userStylesheetPath = Files.createTempFile( Paths.get( userXlitPath ), base, ".css" );
+			if( userStylesFile.exists() ) {
+				inputStream = new FileInputStream( userStylesFile );
+			}
+			
 			if( inputStream == null ) {
+				ClassLoader classLoader = this.getClass().getClassLoader();
 				inputStream = classLoader.getResourceAsStream( defaultStylesheet );			
 			}
-			readStyleSheet(inputStream);
+			readStyleSheet( inputStream );
 		}
 		else {
 			// this is a reload
@@ -464,8 +479,12 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 
     public void saveStylesheet( Scene scene, String stylesheet, boolean apply ) {
     	try {
-	    	String dir = this.getClass().getResource("/").getFile();
-	        OutputStream os = new FileOutputStream( dir + stylesheet );
+            File xlitUserDir = new File( userXlitPath );
+            if (! xlitUserDir.exists()){
+            	xlitUserDir.mkdirs();
+            }
+            
+	        OutputStream os = new FileOutputStream( userXlitPath + "/" + stylesheet );
 	        final PrintStream printStream = new PrintStream(os);
 	    	
 
@@ -526,7 +545,14 @@ public class SyntaxHighlighterTab extends XliteratorTab {
         	saveStylesheet( scene, stylesheet, false );
         }
 
-		scene.getStylesheets().add( classLoader.getResource( stylesheet ).toExternalForm() );
+		File ustylesheetFile = new File( userXlitPath + "/" + stylesheet );
+		try {
+			scene.getStylesheets().add( ustylesheetFile.toURI().toURL().toString() );
+		}
+		catch(MalformedURLException ex)  {
+			System.err.println( ex );
+		}
+		
 		scene.getStylesheets().add( classLoader.getResource( xlitStylesheet ).toExternalForm() );
     }
     
@@ -589,6 +615,9 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 		
 
 		try {
+			File userStylesFile = new File( userXlitPath + "/" + userStylesheet );
+			Files.copy( importStylesheet.toPath(), userStylesFile.toPath(), StandardCopyOption.REPLACE_EXISTING );
+			/*
 	    	String styleSheetString = FileUtils.readFileToString(importStylesheet, StandardCharsets.UTF_8);
 			
 	    	String dir = this.getClass().getResource("/").getFile();
@@ -597,10 +626,7 @@ public class SyntaxHighlighterTab extends XliteratorTab {
 	        
 	        printStream.print(styleSheetString );
 	        printStream.close();
-	        
-			ClassLoader classLoader = this.getClass().getClassLoader();
-			InputStream inputStream = classLoader.getResourceAsStream( userStylesheet );			
-			readStyleSheet(inputStream);
+			*/
 			
 	        applyStylesheet( stage.getScene(), userStylesheet, false );
 			okAlert( "Import Successfully Saved", "Import Successfully Saved", "Syntax highlighting import saved successfully." );
