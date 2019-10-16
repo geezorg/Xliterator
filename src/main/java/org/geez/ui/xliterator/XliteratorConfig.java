@@ -33,13 +33,22 @@ import javafx.stage.Stage;
 
 public class XliteratorConfig extends ICUHelper {
 	
+	private String userXlitPath = null;
 	private String userConfigFilePath = "transliterations.json";
 	private String transformsIndex    = "common/transforms/index.json";
 	
 	private JsonObject config;
     
 	public XliteratorConfig()  throws URISyntaxException, IOException {
-		load( userConfigFilePath );
+		String userHome = System.getProperty( "user.home" );
+        String osName = System.getProperty( "os.name" ).toLowerCase();
+        if( osName.startsWith( "win" ) ) {
+        	userXlitPath   = userHome + "/AppData/Local/Xliterator";
+        }
+        else { // assume OSX or Linux/Uhix
+        	userXlitPath   = userHome + "/.config/xlit";      	
+        }
+		load( userXlitPath + "/" + userConfigFilePath );
 	}
 	
 	public XliteratorConfig( String configFilePath ) throws URISyntaxException, IOException {
