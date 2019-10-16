@@ -2381,12 +2381,12 @@
         ]
       },
       "German": {
-        "ASCII": [
+        "Latin": [
           {
             "path": "de-ASCII.xml",
             "source": "de",
             "target": "ASCII",
-            "name": "_base",
+            "name": "ASCII",
             "direction": "forward",
             "alias": "de-t-de-d0-ascii"
           }
@@ -3364,12 +3364,12 @@
             "backwardAlias": "Armenian-Latin"
           }
         ],
-        "ASCII": [
+        "Latin": [
           {
             "path": "Latin-ASCII.xml",
             "source": "Latin",
             "target": "ASCII",
-            "name": "_base",
+            "name": "ASCII",
             "direction": "both",
             "alias": "und-t-d0-ascii"
           }
@@ -4551,8 +4551,8 @@
             "target": "fa",
             "name": "Persian",
             "direction": "forward",
-            "visibility": "internal",
-            "alias": "fa-t-und-fonipa"
+            "alias": "fa-t-und-fonipa",
+            "visibility": "internal"
           },
           {
             "path": "und_FONIPA-ar.xml",
@@ -4560,8 +4560,8 @@
             "target": "ar",
             "name": "_base",
             "direction": "forward",
-            "visibility": "internal",
-            "alias": "ar-t-und-fonipa"
+            "alias": "ar-t-und-fonipa",
+            "visibility": "internal"
           }
         ],
         "Cherokee": [
@@ -4571,8 +4571,8 @@
             "target": "chr",
             "name": "_base",
             "direction": "forward",
-            "visibility": "internal",
-            "alias": "chr-t-und-fonipa"
+            "alias": "chr-t-und-fonipa",
+            "visibility": "internal"
           }
         ]
       }

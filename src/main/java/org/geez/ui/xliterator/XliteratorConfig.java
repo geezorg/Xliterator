@@ -19,6 +19,8 @@ import org.apache.commons.io.IOUtils;
 import org.geez.convert.helpers.ICUHelper;
 import org.xml.sax.SAXException;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -236,17 +238,20 @@ public class XliteratorConfig extends ICUHelper {
     	
     	// check if an element with the same "name" property already exists at this level, if so issue an error message and exit.
         for (int i = 0; i < inScripts.size(); i++) {
-        	if( inScripts.get(i).getAsJsonObject().has( "name" )   ) {
-        		System.err.println( "Duplicate entry found at this level: " + inScripts.get(i).getAsJsonObject().get( "name" ).getAsString() );
+        	if( inScripts.get(i).getAsJsonObject().get("name" ).getAsString().equals( inVariant ) ) {
+        		System.err.println( "Duplicate entry found at this level: " + inVariant );
         	}
         }
         JsonObject reverseVariant = outVariant.deepCopy();
         reverseVariant.remove( "direction" );
         reverseVariant.addProperty( "direction", "reverse" );
+        reverseVariant.remove( "name" );
+        reverseVariant.addProperty( "name", inVariant );
         inScripts.add( reverseVariant );
+    
     }
     
-    
+    /*
     private void addSubVariantReverseEntry( JsonObject object, String from, String to, JsonObject subvariant, String subVariantKey ) {
     	if(! object.has( from ) ) {
     		object.add(from, new JsonObject());
@@ -286,7 +291,7 @@ public class XliteratorConfig extends ICUHelper {
     		variants.add( oSubvariant );
     	}
     }
-    
+    */
     
     
     public JsonObject getTransliterationByAlias( String alias ) {
@@ -338,7 +343,7 @@ public class XliteratorConfig extends ICUHelper {
     	return null;
     }
     
-    
+    /*
     public JsonObject getTransliterationByAliasOld( String alias ) {
     	List<String> inScripts = getInScriptsList();
     	for(String inScript: inScripts) {
@@ -370,7 +375,7 @@ public class XliteratorConfig extends ICUHelper {
     	
     	return null;
     }
-    
+    */
     
 	protected ArrayList<String> registered = new ArrayList<String>();
 	
@@ -388,6 +393,7 @@ public class XliteratorConfig extends ICUHelper {
 		
 		return sb.toString();
 	}
+	
 	
 	// Registering a transliteration instance in the XliteratorConfig seems to be going
 	// beyond its primary purpose (an interface to the index.json file , but not presently
@@ -427,7 +433,7 @@ public class XliteratorConfig extends ICUHelper {
 
         JsonObject scripts = config.getAsJsonObject( "Scripts" );
         JsonObject bothDirectionScripts = configClone.getAsJsonObject( "Scripts" );
-        // config = configClone; TODO: debug the reverse entries in JSON then uncomment
+        config = configClone; // TODO: debug the reverse entries in JSON then uncomment
         
         for(String inScriptKey: scripts.keySet() ) {
         	// System.out.println( inScriptKey  );
@@ -441,20 +447,18 @@ public class XliteratorConfig extends ICUHelper {
                 	for (int i = 0; i < outVariants.size(); i++) {
                 	
                 		JsonObject outVariant = outVariants.get(i).getAsJsonObject();
-                		String outVariantKey = outVariant.get( "name" ).getAsString();
-                    
+                		// String outVariantKey = outVariant.get( "name" ).getAsString();
                 		// System.out.println( "\t\t\tname: " + outVariantKey );
-                    
                 		if( outVariant.get("direction").getAsString().equals( "both" ) ) {
                 			addVariantReverseEntry( bothDirectionScripts, inScriptKey, inVariantKey, outScriptKey, outVariant );
                 		}
-                }
+                	}
+            	}
         	}
-        }
         }
         
         // Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        // System.out.println( gson.toJson( targetObject ) );
+        // System.out.println( gson.toJson( config ) );
         
     } 
     
@@ -491,7 +495,6 @@ public class XliteratorConfig extends ICUHelper {
 		return targetFile;
 	}
     
-	
     
 	protected void errorAlert( Exception ex, String header ) {
         Alert alert = new Alert(AlertType.ERROR);
