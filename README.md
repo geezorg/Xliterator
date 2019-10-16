@@ -12,8 +12,10 @@ view and modify the bundled CLDR transliterations and makes it easy to compose e
 editor allows you to set syntax coloring anyway you desire.
 
 ## Download
-* [Direct download of the v0.6 beta here.](https://github.com/geezorg/Xliterator/releases/download/v0.6.0/Xliterator-0.6.0-beta-full-gui.jar)
-* [Read the notes on the latest updates.](https://github.com/geezorg/Xliterator/releases/tag/v0.6.0-beta)
+* [Read the notes on the latest updates.](https://github.com/geezorg/Xliterator/releases/tag/v0.6-beta)
+* [Windows MSI](https://github.com/geezorg/Xliterator/releases/download/v0.6-beta/Xliterator-0.6.0-beta.msi)
+* [Mac DMG](https://github.com/geezorg/Xliterator/releases/download/v0.6-beta/Xliterator-0.6.0-beta.dmg)
+* [Java Executable JAR](https://github.com/geezorg/Xliterator/releases/download/v0.6-beta/Xliterator-0.6.0-beta-full-gui.jar)
 
 
 ## Usage
