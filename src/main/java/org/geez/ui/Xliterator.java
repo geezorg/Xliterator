@@ -556,7 +556,8 @@ public final class Xliterator extends Application {
         editorTab.setup(primaryStage, this, saveMenuItem, saveAsMenuItem);
         
         // editorTab.setStyle( primaryStage.getScene() );
-        editorTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().multiply(0.8) );
+        // editorTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().multiply(0.8) );
+        editorTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().subtract( 180 ) );
         editorTab.setOnSelectionChanged( evt -> {
         	if( editorTab.isSelected() ) {
         		fileMenuItem.setDisable( true );
