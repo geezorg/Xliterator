@@ -13,6 +13,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Optional;
 import java.util.prefs.Preferences;
 import java.util.regex.Matcher;
@@ -31,6 +32,7 @@ import org.geez.ui.xliterator.SyntaxHighlighterTab;
 import org.geez.ui.xliterator.XliteratorConfig;
 import org.geez.ui.xliterator.XliteratorTab;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -198,9 +200,19 @@ public final class Xliterator extends Application {
         		menu.getItems().add( menuItem );
     		}
     		else {
+    			ArrayList<String> variantObjectList = new ArrayList<String>();
+    			for(int i=1; i<size; i++) {
+    				variantObjectList.add( variantsIn.get(i).getAsString() );
+    			}
+                
+    		    Collections.sort( variantObjectList );
+    		    variantObjectList.add(0, variantsIn.get(0).getAsString() ); // _base is always at index 0
+    		    
+    		    
     			Menu scriptMenu = new Menu( scriptInKey );
     			for(int i=0; i<size; i++) {
-    				String variantInKey = variantsIn.get(i).getAsString();
+    				// JsonObject vObject = (JsonObject)variantObjectList.get(i);
+    				String variantInKey = variantObjectList.get(i);
     				RadioMenuItem menuItem = new RadioMenuItem( variantInKey );
         			menuItem.setToggleGroup( groupInMenu );
         			scriptMenu.getItems().add( menuItem );
@@ -291,8 +303,18 @@ public final class Xliterator extends Application {
     		}
     		else {
     			Menu scriptMenu = new Menu( scriptOutKey );
+    			
+    			ArrayList<JsonObject> variantObjectList = new ArrayList<JsonObject>();
+    			for(int i=1; i<size; i++) {
+    				variantObjectList.add( variantsOut.get(i).getAsJsonObject() );
+    			}
+                
+    		    Collections.sort( variantObjectList, getComparator() );
+    		    variantObjectList.add(0, variantsOut.get(0).getAsJsonObject() ); // _base is always at index 0
+    		    
     			for(int i=0; i<size; i++) {
-    				String variantOutKey = variantsOut.get(i).getAsJsonObject().get("name").getAsString();
+    				JsonObject vObject = (JsonObject)variantObjectList.get(i);
+    				String variantOutKey = vObject.getAsJsonObject().get("name").getAsString();
     				RadioMenuItem menuItem = new RadioMenuItem( variantOutKey );
             		scriptMenu.getItems().add( menuItem );
     				if( "_base".equals( variantOutKey ) ) {
@@ -327,6 +349,18 @@ public final class Xliterator extends Application {
     	return outScriptMenu;
     }
     
+    private static Comparator<JsonObject> getComparator() {
+        return new Comparator<JsonObject>() {
+           @Override
+           public int compare(JsonObject o1, JsonObject o2) {
+               String name1 = o1.get( "name" ).getAsString();
+               String name2 = o2.get( "name" ).getAsString();
+
+               // ordering is the natural String ordering in your example
+               return name1.compareTo(name2); 
+           }
+        };
+    }
 
     /*
     private Menu createOutVaraintsMenu(String outVariant) {
@@ -555,8 +589,6 @@ public final class Xliterator extends Application {
         */
         editorTab.setup(primaryStage, this, saveMenuItem, saveAsMenuItem);
         
-        // editorTab.setStyle( primaryStage.getScene() );
-        // editorTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().multiply(0.8) );
         editorTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().subtract( 180 ) );
         editorTab.setOnSelectionChanged( evt -> {
         	if( editorTab.isSelected() ) {
@@ -1196,13 +1228,13 @@ public final class Xliterator extends Application {
         variantIn = prefs.get( variantInPreference, null );
 
         setScriptIn( scriptIn, variantIn );
-        setMenuItemSelection( inScriptMenu, scriptIn, variantIn );
+        setMenuItemSelection( inScriptMenu, scriptIn, variantIn, "in" );
         
         scriptOut  = prefs.get( scriptOutPreference, null );
         variantOut = transliteration.get( "name" ).getAsString();
 
         setScriptOut( scriptOut, variantOut, transliteration );
-        setMenuItemSelection( outScriptMenu, scriptOut, variantOut );
+        setMenuItemSelection( outScriptMenu, scriptOut, variantOut, "out" );
         
         
         selectedTransliteration  = prefs.get( transliterationIdPreference, null );
@@ -1393,7 +1425,7 @@ public final class Xliterator extends Application {
     }
     
     
-    private void setMenuItemSelection( Menu menu, String script, String variant ) {
+    private void setMenuItemSelection( Menu menu, String script, String variant, String menuDirection ) {
     	variant = ( "_base".equals( variant) ) ? script : variant ;
     	
     	for(MenuItem item: menu.getItems() ) {
@@ -1412,6 +1444,12 @@ public final class Xliterator extends Application {
     			submenu.setGraphic( null );
     			if( submenu.getText().equals( script ) ) {
         			submenu.setGraphic( new ImageView( checkIcon ) );
+        			if( "in".equals( menuDirection ) ) {
+        				inScriptMenuLast = submenu;
+        			}
+        			else {
+        				outScriptMenuLast = submenu;       				
+        			}
 	    			for( MenuItem subItem: submenu.getItems() ) {
 	    				if( subItem.getClass() == RadioMenuItem.class ) {
 	    					RadioMenuItem rsubItem = (RadioMenuItem)subItem;
