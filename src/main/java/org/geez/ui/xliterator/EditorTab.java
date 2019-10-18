@@ -168,6 +168,7 @@ public class EditorTab extends XliteratorTab {
         		if( label.charAt(0) != '*' ) {
         			// this.setText( "*" + this.getText() );
         			this.setTitle( "*" + this.getTitle() );
+        			this.setStyle( "-fx-background-color: #CD5C5C" );
         			saveMenuItem.setDisable( false );
         			unsavedChanges = true;
         		}
@@ -176,6 +177,7 @@ public class EditorTab extends XliteratorTab {
         		if( label.charAt(0) == '*' ) {
         			// this.setText( this.getText().substring(1) );
         			this.setTitle( this.getTitle().substring(1) );
+        			this.setStyle( null );
         			saveMenuItem.setDisable( true );
         			unsavedChanges = false;
         		}
@@ -196,7 +198,8 @@ public class EditorTab extends XliteratorTab {
 			if( saveToNewFile ) {
         		newFileName = editor.saveContentToNewFile( stage );
         		if( newFileName != null ) {
-        			setText( newFileName );
+        			setTitle( newFileName );
+        			setStyle( null );
         		}
 			}
 			else {
@@ -204,7 +207,9 @@ public class EditorTab extends XliteratorTab {
 				if( editor.isInitialSave() ) {
 	        		newFileName = editor.saveContentToNewFile( stage );
 	        		if( newFileName != null ) {
-	        			setText( newFileName );
+	        			setTitle( newFileName );
+	        			setStyle( null );
+	        			
 	        		}
 				}
 				else {
@@ -213,7 +218,8 @@ public class EditorTab extends XliteratorTab {
 			}
 			
     		if( newFileName != null ) {
-    			setText( newFileName );
+    			setTitle( newFileName );
+    			setStyle( null );
     		}
     		unsavedChanges = false;
 		}

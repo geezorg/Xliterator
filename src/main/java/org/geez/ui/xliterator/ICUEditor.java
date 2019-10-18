@@ -24,6 +24,7 @@ import org.fxmisc.wellbehaved.event.EventPattern;
 import org.fxmisc.wellbehaved.event.InputMap;
 import org.fxmisc.wellbehaved.event.Nodes;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -39,6 +40,8 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -507,12 +510,13 @@ public class ICUEditor extends CodeArea {
             grid.setHgap(10);
             grid.setVgap(10);
             grid.setPadding(new Insets(20, 10, 10, 10));
+            grid.setStyle( "-fx-font-family:" + this.getProperties().get("font-family") + ";" );
 
             TextField word = new TextField();
-            word.setStyle("-fx-pref-width: 250");
-            word.setPromptText("Find a word");
+            word.setStyle( "-fx-pref-width: 250; " + "-fx-font-family: '" + this.getProperties().get("font-family") + "';" );
+            word.setPromptText( "Find a word" );
             word.requestFocus();
-            word.setFocusTraversable(true);
+            // word.setFocusTraversable( true );
 
             grid.add(word, 0, 0);
 
@@ -541,6 +545,12 @@ public class ICUEditor extends CodeArea {
                     event.consume();
                 }
             });
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    word.requestFocus();
+                }
+            });
 
         }
         findDialog.showAndWait();
@@ -564,7 +574,7 @@ public class ICUEditor extends CodeArea {
             grid.setPadding(new Insets(20, 10, 10, 10));
 
             TextField word = new TextField();
-            word.setStyle("-fx-pref-width: 250");
+            word.setStyle( "-fx-pref-width: 250; " + "-fx-font-family: '" + this.getProperties().get("font-family") + "';" );
             word.setPromptText("Enter a word");
             word.requestFocus();
 
@@ -616,6 +626,13 @@ public class ICUEditor extends CodeArea {
                         pos += word.getText().length();
                     }
                     event.consume();
+                }
+            });
+            
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    word.requestFocus();
                 }
             });
 
