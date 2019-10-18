@@ -20,12 +20,12 @@
 
 $geez  = 'ä';
 $kaib  = 'u';
-$salis = 'i' ;
+$salis = 'i' ; 
 $rabi  = 'a';
-$hamis = 'e' ;
+$hamis = 'e' ; 
 $sadis = 'ǝ';
-$sabi  = 'o';
-$diqala_geez  = 'ʷä';
+$sabi  = 'o'; 
+$ዘመደ_ግዕዝ   = 'ʷä'; 
 $diqala_salis = 'ʷi'; ;
 $diqala_kaib  ='ʷǝ'; ;
 $diqala_rabi  = 'ʷa';;
@@ -141,7 +141,7 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 ቕ}$wordBoundary → q̲ ; # ETHIOPIC SYLLABLE QHE
 ቕ ↔ q̲ $sadis ; # ETHIOPIC SYLLABLE QHE
 ቖ ↔ q̲ $sabi ; # ETHIOPIC SYLLABLE QHO
-ቘ ↔ q̲ $diqala_geez ; # ETHIOPIC SYLLABLE QHWA
+ቘ ↔ q̲ $ዘመደ_ግዕዝ  ; # ETHIOPIC SYLLABLE QHWA
 ቚ ↔ q̲ $diqala_salis ; # ETHIOPIC SYLLABLE QHWI
 ቛ ↔ q̲ $diqala_rabi ; # ETHIOPIC SYLLABLE QHWAA
 ቜ ↔ q̲ $diqala_hamis ; # ETHIOPIC SYLLABLE QHWEE
@@ -156,7 +156,7 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 ቅ}$wordBoundary → q ; # ETHIOPIC SYLLABLE QE
 ቅ ↔ q $sadis ; # ETHIOPIC SYLLABLE QE
 ቆ ↔ q $sabi  ; # ETHIOPIC SYLLABLE QO
-ቈ ↔ q $diqala_geez  ; # ETHIOPIC SYLLABLE QWA
+ቈ ↔ q $ዘመደ_ግዕዝ   ; # ETHIOPIC SYLLABLE QWA
 ቍ ↔ q $diqala_salis ; # ETHIOPIC SYLLABLE QWE
 ቋ ↔ q $diqala_rabi  ; # ETHIOPIC SYLLABLE QWAA
 ቌ ↔ q $diqala_hamis ; # ETHIOPIC SYLLABLE QWEE
@@ -226,7 +226,7 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 ኅ}$wordBoundary → ḫ ; # ETHIOPIC SYLLABLE XE
 ኅ ↔ ḫ $sadis ; # ETHIOPIC SYLLABLE XE
 ኆ ↔ ḫ $sabi  ; # ETHIOPIC SYLLABLE XO
-ኈ ↔ ḫ $diqala_geez  ; # ETHIOPIC SYLLABLE XWA
+ኈ ↔ ḫ $ዘመደ_ግዕዝ   ; # ETHIOPIC SYLLABLE XWA
 ኊ ↔ ḫ $diqala_salis ; # ETHIOPIC SYLLABLE XWI
 ኋ ↔ ḫ $diqala_rabi  ; # ETHIOPIC SYLLABLE XWAA
 ኌ ↔ ḫ $diqala_hamis ; # ETHIOPIC SYLLABLE XWEE
@@ -281,7 +281,7 @@ $wordBoundary{ኧ ↔ $geez  ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ክ}$wordBoundary → k ; # ETHIOPIC SYLLABLE KE
 ክ ↔ k $sadis ; # ETHIOPIC SYLLABLE KE
 ኮ ↔ k $sabi ; # ETHIOPIC SYLLABLE KO
-ኰ ↔ k $diqala_geez ; # ETHIOPIC SYLLABLE KWA
+ኰ ↔ k $ዘመደ_ግዕዝ  ; # ETHIOPIC SYLLABLE KWA
 ኲ ↔ k $diqala_salis ; # ETHIOPIC SYLLABLE KWI
 ኳ ↔ k $diqala_rabi ; # ETHIOPIC SYLLABLE KWAA
 ኴ ↔ k $diqala_hamis ; # ETHIOPIC SYLLABLE KWEE
@@ -296,7 +296,7 @@ $wordBoundary{ኧ ↔ $geez  ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ኽ}$wordBoundary → ẖ ; # ETHIOPIC SYLLABLE KXE
 ኽ ↔ ẖ $sadis ; # ETHIOPIC SYLLABLE KXE
 ኾ ↔ ẖ $sabi ; # ETHIOPIC SYLLABLE KXO
-ዀ  ↔ ẖ $diqala_geez  ; # U+12C0 ETHIOPIC SYLLABLE KXWA
+ዀ  ↔ ẖ $diqala_geዘመደ_ግዕዝ 2C0 ETHIOPIC SYLLABLE KXWA
 ዂ  ↔ ẖ $diqala_salis ; # U+12C2 ETHIOPIC SYLLABLE KXWI
 ዃ  ↔ ẖ $diqala_rabi  ; # U+12C3 ETHIOPIC SYLLABLE KXWAA
 ዄ  ↔ ẖ $diqala_hamis ; # U+12C4 ETHIOPIC SYLLABLE KXWEE
@@ -383,7 +383,7 @@ $wordBoundary{ኧ ↔ $geez  ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ግ}$wordBoundary → g ; # ETHIOPIC SYLLABLE GE
 ግ ↔ g $sadis ; # ETHIOPIC SYLLABLE GE
 ጎ ↔ g $sabi ; # ETHIOPIC SYLLABLE GO
-ጐ ↔ g $diqala_geez ; # ETHIOPIC SYLLABLE GWA
+ጐ ↔ g $diqala_geez ; ዘመደ_ግዕዝ SYLLABLE GWA
 ጒ ↔ g $diqala_salis ; # ETHIOPIC SYLLABLE GWI
 ጓ ↔ g $diqala_rabi ; # ETHIOPIC SYLLABLE GWAA
 ጔ ↔ g $diqala_hamis ; # ETHIOPIC SYLLABLE GWEE
@@ -398,7 +398,7 @@ $wordBoundary{ኧ ↔ $geez  ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ጝ}$wordBoundary → g ; # ETHIOPIC SYLLABLE GGE
 ጝ ↔ ŋ $sadis ; # ETHIOPIC SYLLABLE GGE
 ጞ ↔ ŋ $sabi ; # ETHIOPIC SYLLABLE GGO
-ⶓ ↔ ŋ $diqala_geez ; # ETHIOPIC SYLLABLE GGWA
+ⶓ ↔ ŋ $diqala_geez ; ዘመደ_ግዕዝ SYLLABLE GGWA
 ⶔ ↔ ŋ $diqala_salis ; # ETHIOPIC SYLLABLE GGWI
 ጟ ↔ ŋ $diqala_rabi ; # ETHIOPIC SYLLABLE GGWAA
 ⶕ ↔ ŋ $diqala_hamis ; # ETHIOPIC SYLLABLE GGWEE
