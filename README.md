@@ -1,5 +1,5 @@
 <!-- img src="src/main/resources/images/Xliterator.png" width="200"/ -->
-<img src="doc/images/v0.6/Xliterator-Logo-v0.6-2.png" width="200"/>
+<img src="doc/images/v0.6/Xliterator-Logo-v0.6-3.png" width="200"/>
 
 # Xliterator
 
