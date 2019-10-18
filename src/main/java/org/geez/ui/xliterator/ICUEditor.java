@@ -495,51 +495,55 @@ public class ICUEditor extends CodeArea {
     int pos;
     Dialog<Pair<String, String>> replaceDialog;
     Dialog<String> findDialog;
+    TextField findWord = new TextField();
     
-    public void findWord(Stage stage) {
+    public void findWord( Stage stage ) {
         if (findDialog.getDialogPane().getButtonTypes().isEmpty()) {
-            findDialog.initOwner(stage);
-            findDialog.setTitle("Find");
-            findDialog.setHeaderText(null);
+            findDialog.initOwner( stage );
+            findDialog.setTitle( "Find" );
+            findDialog.setHeaderText( null );
 
-            ButtonType findNext = new ButtonType("Find Next", ButtonBar.ButtonData.OK_DONE);
-            findDialog.getDialogPane().getButtonTypes().addAll(findNext, ButtonType.CANCEL);
+            ButtonType findNext = new ButtonType( "Find Next", ButtonBar.ButtonData.OK_DONE );
+            findDialog.getDialogPane().getButtonTypes().addAll( findNext, ButtonType.CANCEL );
 
             GridPane grid = new GridPane();
 
-            grid.setHgap(10);
-            grid.setVgap(10);
-            grid.setPadding(new Insets(20, 10, 10, 10));
+            grid.setHgap( 10 );
+            grid.setVgap( 10 );
+            grid.setPadding( new Insets(20, 10, 10, 10) );
             grid.setStyle( "-fx-font-family:" + this.getProperties().get("font-family") + ";" );
 
-            TextField word = new TextField();
-            word.setStyle( "-fx-pref-width: 250; " + "-fx-font-family: '" + this.getProperties().get("font-family") + "';" );
-            word.setPromptText( "Find a word" );
-            word.requestFocus();
+            findWord.setStyle( "-fx-pref-width: 250; " + "-fx-font-family: '" + this.getProperties().get("font-family") + "';" );
+            findWord.setPromptText( "Find a word" );
+            findWord.requestFocus();
             // word.setFocusTraversable( true );
 
-            grid.add(word, 0, 0);
+            grid.add( findWord, 0, 0 );
 
-            Button findNextBTN = (Button) findDialog.getDialogPane().lookupButton(findNext);
-            findNextBTN.setDisable(true);
+            Button findNextBTN = (Button) findDialog.getDialogPane().lookupButton( findNext );
+            findNextBTN.setDisable( true );
 
-            word.textProperty().addListener(new ChangeListener<String>() {
+            findWord.textProperty().addListener( new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                    findNextBTN.setDisable(newValue.trim().isEmpty());
+                    findNextBTN.setDisable( newValue.trim().isEmpty() );
                 }
             });
 
-            findDialog.getDialogPane().setContent(grid);
+            findDialog.getDialogPane().setContent( grid );
+            findDialog.initModality( Modality.WINDOW_MODAL );
+            
 
-            findDialog.initModality(Modality.WINDOW_MODAL);
-
-            findNextBTN.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            findNextBTN.addEventFilter( ActionEvent.ACTION, new EventHandler<ActionEvent>() {
                 @Override
-                public void handle(ActionEvent event) {
-                    while ((pos = getText().toUpperCase().indexOf(word.getText().toUpperCase(), pos)) >= 0) {
-                        selectRange(pos, (pos + word.getText().length()));
-                        pos += word.getText().length();
+                public void handle( ActionEvent event ) {
+                    while ( (pos = getText().toUpperCase().indexOf( findWord.getText().toUpperCase(), pos) ) >= 0 ) {
+                        selectRange( pos, (pos + findWord.getText().length() ) );
+                        displaceCaret( pos );                     
+                        pos += findWord.getText().length();
+                        displaceCaret( pos );
+                        requestFollowCaret();
+                        
                         break;
                     }
                     event.consume();
@@ -548,55 +552,63 @@ public class ICUEditor extends CodeArea {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    word.requestFocus();
+                	findWord.requestFocus();
                 }
             });
 
         }
+        
+
+        String selectedText = getSelectedText();
+        if( selectedText != null ) {
+        	findWord.setText( selectedText );
+        }
+
         findDialog.showAndWait();
     }
 
 
-    public void replace(Stage stage) {
-        if (replaceDialog.getDialogPane().getButtonTypes().isEmpty()) {
-            replaceDialog.initOwner(stage);
-            replaceDialog.setTitle("Replace");
-            replaceDialog.setHeaderText(null);
+    TextField findAndReplaceWord = new TextField();
+    public void replace( Stage stage ) {
+        if (replaceDialog.getDialogPane().getButtonTypes().isEmpty() ) {
+            replaceDialog.initOwner( stage  );
+            replaceDialog.setTitle( "Replace" );
+            replaceDialog.setHeaderText( null );
 
-            ButtonType replaceNext = new ButtonType("Replace Next", ButtonBar.ButtonData.OK_DONE);
-            ButtonType replaceAll = new ButtonType("Replace All", ButtonBar.ButtonData.OK_DONE);
-            replaceDialog.getDialogPane().getButtonTypes().addAll(replaceNext, replaceAll, ButtonType.CANCEL);
+            ButtonType replaceNext = new ButtonType( "Replace Next", ButtonBar.ButtonData.OK_DONE );
+            ButtonType replaceAll = new ButtonType( "Replace All", ButtonBar.ButtonData.OK_DONE );
+            replaceDialog.getDialogPane().getButtonTypes().addAll(  replaceNext, replaceAll, ButtonType.CANCEL );
 
             GridPane grid = new GridPane();
 
             grid.setHgap(10);
             grid.setVgap(10);
-            grid.setPadding(new Insets(20, 10, 10, 10));
+            grid.setPadding(new Insets( 20, 10, 10, 10) );
 
-            TextField word = new TextField();
-            word.setStyle( "-fx-pref-width: 250; " + "-fx-font-family: '" + this.getProperties().get("font-family") + "';" );
-            word.setPromptText("Enter a word");
-            word.requestFocus();
+
+            findAndReplaceWord.setStyle( "-fx-pref-width: 250; " + "-fx-font-family: '" + this.getProperties().get("font-family") + "';" );
+            findAndReplaceWord.setPromptText("Enter a word");
+            findAndReplaceWord.requestFocus();
 
             TextField replaceWord = new TextField();
-            replaceWord.setStyle("-fx-pref-width: 250");
-            replaceWord.setPromptText("Enter a replacement");
+            replaceWord.setStyle( "-fx-pref-width: 250" );
+            replaceWord.setPromptText( "Enter a replacement" );
 
-            grid.add(word, 0, 0);
-            grid.add(replaceWord, 0, 1);
+            grid.add( findAndReplaceWord, 0, 0 );
+            grid.add( replaceWord, 0, 1 );
 
 
-            Button replaceAllBTN = (Button) replaceDialog.getDialogPane().lookupButton(replaceAll);
-            replaceAllBTN.setDisable(true);
+            Button replaceAllBTN = (Button) replaceDialog.getDialogPane().lookupButton( replaceAll );
+            replaceAllBTN.setDisable( true );
 
-            Button replaceNextBTN = (Button) replaceDialog.getDialogPane().lookupButton(replaceNext);
-            replaceNextBTN.setDisable(true);
+            Button replaceNextBTN = (Button) replaceDialog.getDialogPane().lookupButton(  replaceNext );
+            replaceNextBTN.setDisable( true );
 
-            word.textProperty().addListener(new ChangeListener<String>() {
+            findAndReplaceWord.textProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                    replaceNextBTN.setDisable(newValue.trim().isEmpty());
-                    replaceAllBTN.setDisable(newValue.trim().isEmpty());
+                    replaceNextBTN.setDisable( newValue.trim().isEmpty() );
+                    replaceAllBTN.setDisable( newValue.trim().isEmpty()  );
                 }
             });
 
@@ -606,11 +618,13 @@ public class ICUEditor extends CodeArea {
 
             replaceNextBTN.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
                 @Override
-                public void handle(ActionEvent event) {
-                    while ((pos = getText().toUpperCase().indexOf(word.getText().toUpperCase(), pos)) >= 0) {
-                        selectRange(pos, (pos + word.getText().length()));
-                        replaceSelection(replaceWord.getText());
-                        pos += word.getText().length();
+                public void handle( ActionEvent event ) {
+                    while ( (pos = getText().toUpperCase().indexOf(findAndReplaceWord.getText().toUpperCase(), pos)) >= 0 ) {
+                        selectRange( pos, (pos + findAndReplaceWord.getText().length()) );
+                        replaceSelection(replaceWord.getText() );
+                        pos += findAndReplaceWord.getText().length( );
+                        displaceCaret( pos );
+                        requestFollowCaret();
                         break;
                     }
                     event.consume();
@@ -619,11 +633,11 @@ public class ICUEditor extends CodeArea {
 
             replaceAllBTN.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
                 @Override
-                public void handle(ActionEvent event) {
-                    while ((pos = getText().toUpperCase().indexOf(word.getText().toUpperCase(), pos)) >= 0) {
-                        selectRange(pos, (pos + word.getText().length()));
-                        replaceSelection(replaceWord.getText());
-                        pos += word.getText().length();
+                public void handle( ActionEvent event ) {
+                    while ( (pos = getText().toUpperCase().indexOf(findAndReplaceWord.getText().toUpperCase(), pos)) >= 0 ) {
+                        selectRange( pos, (pos + findAndReplaceWord.getText().length()) );
+                        replaceSelection( replaceWord.getText() );
+                        pos += findAndReplaceWord.getText().length();
                     }
                     event.consume();
                 }
@@ -632,11 +646,18 @@ public class ICUEditor extends CodeArea {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    word.requestFocus();
+                	findAndReplaceWord.requestFocus();
                 }
             });
 
         }
+        
+
+        String selectedText = getSelectedText();
+        if( selectedText != null ) {
+        	findAndReplaceWord.setText( selectedText );
+        }
+        
         replaceDialog.showAndWait();
     }
 }
