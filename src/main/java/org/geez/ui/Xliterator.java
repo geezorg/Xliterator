@@ -703,8 +703,8 @@ public final class Xliterator extends Application {
         stage.setTitle( "Xliterator - An ICU Based Transliterator" );
         Image logoImage = new Image( ClassLoader.getSystemResourceAsStream( "images/Xliterator.png" ) );
         stage.getIcons().add( logoImage );
-        String osName = System.getProperty("os.name");
-        if( osName.equals("Mac OS X") ) {
+        String osName = System.getProperty("os.name").toLowerCase();
+        if( osName.startsWith( "mac" ) ) {
             com.apple.eawt.Application.getApplication().setDockIconImage( SwingFXUtils.fromFXImage(logoImage, null) );  
             defaultFontFamily = "Kefa";
         }
