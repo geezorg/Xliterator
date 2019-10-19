@@ -1395,7 +1395,7 @@
             "direction": "forward",
             "alias": "und-Latn-t-und-hani-m0-prprname",
             "dependencies": [
-              "Han-Latin",
+              "Hani-Latn",
               "Han-Spacedhan"
             ]
           }
