@@ -40,6 +40,8 @@ import com.google.gson.JsonParser;
 import de.endrullis.draggabletabs.DraggableTabPane;
 import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -56,6 +58,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
@@ -598,6 +601,8 @@ public final class Xliterator extends Application {
         		else
         			loadInternalMenuItem.setDisable( false );
         		if(! "".equals( editorTab.getEditor().getText() ) ) {
+            		closeMenuItem.setDisable( false );
+            		closeAllMenuItem.setDisable( false );
         			saveMenuItem.setDisable( false );
         			saveAsMenuItem.setDisable( false );
         		}
@@ -654,7 +659,7 @@ public final class Xliterator extends Application {
     	// editorTabItem.getProperties().put( "selection", useSelectedEditor );
     	inScriptMenu.getItems().add( editorTabItem );
 
-        
+
         editorTab.setOnClosed( evt -> {
         	// check to save file
         	editorTabs.remove( editorTab );
@@ -666,6 +671,8 @@ public final class Xliterator extends Application {
             }
         });
         
+		closeMenuItem.setDisable( false );
+		closeAllMenuItem.setDisable( false );
         saveMenuItem.setDisable(false); // because the new editor will appear in the foreground
         saveAsMenuItem.setDisable(false); 
     	
@@ -689,6 +696,8 @@ public final class Xliterator extends Application {
     
     final MenuItem saveMenuItem = new MenuItem( "_Save" );
     final MenuItem saveAsMenuItem = new MenuItem( "Save As..." );
+    final MenuItem closeMenuItem = new MenuItem( "_Close" );
+    final MenuItem closeAllMenuItem = new MenuItem( "Close All" );
     @Override
     public void start(final Stage stage) {
     	try {
@@ -723,7 +732,7 @@ public final class Xliterator extends Application {
 		final Menu newMenu = new Menu( "New File" );
 		final MenuItem xmlMenuItem = new MenuItem( "XML" );
 		xmlMenuItem.setOnAction( evt -> createNewFile( "Untitled", "XML" ) );
-		xmlMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN));
+		xmlMenuItem.setAccelerator(new KeyCodeCombination(KeyCode.N, KeyCombination.SHORTCUT_DOWN) );
 		final MenuItem txtMenuItem = new MenuItem( "TXT" );
 		txtMenuItem.setOnAction( evt -> createNewFile( "Untitled", "TXT" ) );
 		newMenu.getItems().addAll( xmlMenuItem, txtMenuItem );
@@ -748,14 +757,44 @@ public final class Xliterator extends Application {
         loadInternalMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.L, KeyCombination.SHORTCUT_DOWN) );
         
         MenuItem quitMenuItem = new MenuItem( "_Quit Xliterator" );
-        quitMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN)) ;
+        quitMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.Q, KeyCombination.SHORTCUT_DOWN) ) ;
         quitMenuItem.setOnAction( evt -> {
     			Window window = primaryStage.getScene().getWindow();
     			window.fireEvent( new WindowEvent(window, WindowEvent.WINDOW_CLOSE_REQUEST) );
         });
         
         
-        fileMenu.getItems().addAll( newMenu, fileMenuItem, openMenuItem, loadInternalMenuItem, saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), quitMenuItem ); 
+        closeMenuItem.setAccelerator( new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN) );
+        closeMenuItem.setOnAction( evt -> {
+            EventHandler<Event> handler = currentEditorTab.getOnClosed();
+            if (null != handler) {
+                handler.handle(null);
+            }
+            tabpane.getTabs().remove( currentEditorTab );
+
+        });
+        closeMenuItem.setDisable( true );
+        
+        closeAllMenuItem.setAccelerator( KeyCodeCombination.keyCombination( "Shortcut+Shift+W" ) );
+        closeAllMenuItem.setOnAction( evt -> {
+        	int size = tabpane.getTabs().size();
+        	for(int i=0; i<size; i++) {
+        		Tab tab = tabpane.getTabs().get(i);
+        		if( tab instanceof EditorTab ) {
+                    EventHandler<Event> handler = tab.getOnClosed();
+                    if (null != handler) {
+                        handler.handle(null);
+                    }
+        			tabpane.getTabs().remove( tab );
+        			size--;
+        			i--;
+        		}
+        	}
+        	
+        });
+        closeAllMenuItem.setDisable( true );
+        
+        fileMenu.getItems().addAll( newMenu, openMenuItem, loadInternalMenuItem, fileMenuItem, new SeparatorMenuItem(), closeMenuItem, closeAllMenuItem, new SeparatorMenuItem(), saveMenuItem, saveAsMenuItem, new SeparatorMenuItem(), quitMenuItem ); 
         
         //
         //=========================== END FILE MENU =============================================
@@ -789,6 +828,8 @@ public final class Xliterator extends Application {
         		// fileMenuItem.setDisable( true );
         		// loadInternalMenuItem.setDisable( true );
         		saveMenuItem.setDisable( true );
+        		closeMenuItem.setDisable( true );
+        		closeAllMenuItem.setDisable( true );
         		saveAsMenuItem.setDisable( true );
         		currentEditorTab = null;
         		toggleEditMenu( true );

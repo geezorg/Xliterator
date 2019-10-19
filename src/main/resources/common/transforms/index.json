@@ -1422,7 +1422,10 @@
             "target": "Latn",
             "name": "_base",
             "direction": "forward",
-            "alias": "Han-Latin"
+            "alias": "Han-Latin",
+            "dependencies": [
+              "Han-Spacedhan"
+            ]
           }
         ],
         "Spacedhan": [

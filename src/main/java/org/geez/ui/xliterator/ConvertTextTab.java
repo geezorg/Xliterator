@@ -183,6 +183,10 @@ public class ConvertTextTab extends XliteratorTab {
     		return;
     	}
         
+    	if( stringConverter == null ) {
+    		errorAlert( "Transliterator is not Set", "The ICU transliterator has not been set.  This may be from an earlier error." );
+    		return;
+    	}
     	textAreaOut.replaceText( stringConverter.convertText( textIn ) );
 
     }
@@ -291,7 +295,7 @@ public class ConvertTextTab extends XliteratorTab {
        
         textVbox.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+            public void changed( ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight ) {
             	int newHeight = Integer.parseInt(newSceneHeight.toString().split("\\.")[0] );
             	int taHeight = 312 + (newHeight-692)/2;
                 textAreaIn.setPrefHeight( taHeight );
@@ -320,8 +324,8 @@ public class ConvertTextTab extends XliteratorTab {
     	enableConversionButtions( direction );
     }
     
-    public void setScriptIn(String scriptIn, String variantIn) {
-    	super.setScriptIn(scriptIn, variantIn);
+    public void setScriptIn( String scriptIn, String variantIn ) {
+    	super.setScriptIn( scriptIn, variantIn );
     	if( scriptIn.equals( Xliterator.useSelectedEditor ) ) {
     		this.selectedTransliteration = scriptIn;
 			convertButtonUp.setDisable( false );
@@ -370,6 +374,9 @@ public class ConvertTextTab extends XliteratorTab {
             	if( autoConvertDown ) {
                 	if( stringConverterDown == null ) {
                 		initializeStringConverters();
+                		if( stringConverterDown == null ) {
+                			return;
+                		}
                 	}
             		autoConvertUp = false;
             		convertTextArea( textAreaIn, textAreaOut, stringConverterDown );
@@ -396,6 +403,9 @@ public class ConvertTextTab extends XliteratorTab {
             	if( autoConvertUp ) {
                 	if( stringConverterUp == null ) {
                 		initializeStringConverters();
+                		if( stringConverterUp == null ) {
+                			return;
+                		}
                 	}
             		autoConvertDown = false;
             		convertTextArea( textAreaOut, textAreaIn, stringConverterUp );

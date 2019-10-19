@@ -570,14 +570,14 @@ public class ICUEditor extends CodeArea {
 
     TextField findAndReplaceWord = new TextField();
     public void replace( Stage stage ) {
-        if (replaceDialog.getDialogPane().getButtonTypes().isEmpty() ) {
+        if ( replaceDialog.getDialogPane().getButtonTypes().isEmpty() ) {
             replaceDialog.initOwner( stage  );
             replaceDialog.setTitle( "Replace" );
             replaceDialog.setHeaderText( null );
 
             ButtonType replaceNext = new ButtonType( "Replace Next", ButtonBar.ButtonData.OK_DONE );
             ButtonType replaceAll = new ButtonType( "Replace All", ButtonBar.ButtonData.OK_DONE );
-            replaceDialog.getDialogPane().getButtonTypes().addAll(  replaceNext, replaceAll, ButtonType.CANCEL );
+            replaceDialog.getDialogPane().getButtonTypes().addAll( replaceNext, replaceAll, ButtonType.CANCEL );
 
             GridPane grid = new GridPane();
 
@@ -591,8 +591,9 @@ public class ICUEditor extends CodeArea {
             findAndReplaceWord.requestFocus();
 
             TextField replaceWord = new TextField();
-            replaceWord.setStyle( "-fx-pref-width: 250" );
+            replaceWord.setStyle( "-fx-pref-width: 250; " + "-fx-font-family: '" + this.getProperties().get("font-family") + "';" );
             replaceWord.setPromptText( "Enter a replacement" );
+            
 
             grid.add( findAndReplaceWord, 0, 0 );
             grid.add( replaceWord, 0, 1 );
@@ -613,13 +614,12 @@ public class ICUEditor extends CodeArea {
             });
 
             replaceDialog.getDialogPane().setContent(grid);
-
             replaceDialog.initModality(Modality.WINDOW_MODAL);
 
             replaceNextBTN.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
                 @Override
                 public void handle( ActionEvent event ) {
-                    while ( (pos = getText().toUpperCase().indexOf(findAndReplaceWord.getText().toUpperCase(), pos)) >= 0 ) {
+                    while ( (pos = getText().toUpperCase().indexOf( findAndReplaceWord.getText().toUpperCase(), pos) ) >= 0 ) {
                         selectRange( pos, (pos + findAndReplaceWord.getText().length()) );
                         replaceSelection(replaceWord.getText() );
                         pos += findAndReplaceWord.getText().length( );
@@ -634,7 +634,7 @@ public class ICUEditor extends CodeArea {
             replaceAllBTN.addEventFilter(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
                 @Override
                 public void handle( ActionEvent event ) {
-                    while ( (pos = getText().toUpperCase().indexOf(findAndReplaceWord.getText().toUpperCase(), pos)) >= 0 ) {
+                    while ( (pos = getText().toUpperCase().indexOf( findAndReplaceWord.getText().toUpperCase(), pos) ) >= 0 ) {
                         selectRange( pos, (pos + findAndReplaceWord.getText().length()) );
                         replaceSelection( replaceWord.getText() );
                         pos += findAndReplaceWord.getText().length();
