@@ -252,6 +252,12 @@ public class XliteratorConfig extends ICUHelper {
         	}
         }
         JsonObject reverseVariant = outVariant.deepCopy();
+        String source = reverseVariant.get( "source" ).getAsString();
+        String target = reverseVariant.get( "target" ).getAsString();
+        reverseVariant.remove( "source" );
+        reverseVariant.addProperty( "source", target );
+        reverseVariant.remove( "target" );
+        reverseVariant.addProperty( "target", source );        
         reverseVariant.remove( "direction" );
         reverseVariant.addProperty( "direction", "reverse" );
         reverseVariant.remove( "name" );

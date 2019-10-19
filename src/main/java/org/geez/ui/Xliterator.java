@@ -86,7 +86,7 @@ public final class Xliterator extends Application {
     private Desktop desktop = Desktop.getDesktop();
 
 	private String scriptIn   = null; // alphabetic based default
-	private String variantIn = null;
+	private String variantIn  = null;
 	private String scriptOut  = null;
 	private String variantOut = null;
 	private JsonObject transliteration = null;
@@ -140,7 +140,7 @@ public final class Xliterator extends Application {
     private Image arrowForwardIcon  = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_right_grey_16x16.png" ) ); 
     private Image arrowBothIcon     = new Image( ClassLoader.getSystemResourceAsStream( "images/chevron_double_grey_16x16.png" ) );
     private Image checkIcon         = new Image( ClassLoader.getSystemResourceAsStream( "images/check_black_16x16.png" ) );
-    private ColorAdjust monochrome = new ColorAdjust();
+    private ColorAdjust monochrome  = new ColorAdjust();
 	
 
 	public XliteratorConfig getConfig() {
@@ -169,10 +169,10 @@ public final class Xliterator extends Application {
     private static void configureFileChooserICU( final FileChooser fileChooser ) {      
     	fileChooser.setTitle( "View ICU Files" );
         fileChooser.setInitialDirectory(
-        		new File( System.getProperty( "user.home" ) )
+        	new File( System.getProperty( "user.home" ) )
         );                 
         fileChooser.getExtensionFilters().add(
-        		new FileChooser.ExtensionFilter( "*.xml", "*.xml" )
+        	new FileChooser.ExtensionFilter( "*.xml", "*.xml" )
         );
     }
     
@@ -694,9 +694,9 @@ public final class Xliterator extends Application {
     	}
     }
     
-    final MenuItem saveMenuItem = new MenuItem( "_Save" );
-    final MenuItem saveAsMenuItem = new MenuItem( "Save As..." );
-    final MenuItem closeMenuItem = new MenuItem( "_Close" );
+    final MenuItem saveMenuItem     = new MenuItem( "_Save" );
+    final MenuItem saveAsMenuItem   = new MenuItem( "Save As..." );
+    final MenuItem closeMenuItem    = new MenuItem( "_Close" );
     final MenuItem closeAllMenuItem = new MenuItem( "Close All" );
     @Override
     public void start(final Stage stage) {
@@ -1284,9 +1284,9 @@ public final class Xliterator extends Application {
         
     }
     
-    Text scriptInText = new Text( "[None]" );
+    Text scriptInText  = new Text( "[None]" );
     Text scriptOutText = new Text( "[None]" );
-    Text resourceText = new Text( "[None]" );
+    Text resourceText  = new Text( "[None]" );
     // status bar reference:
     // https://jar-download.com/artifacts/org.controlsfx/controlsfx-samples/8.40.14/source-code/org/controlsfx/samples/HelloStatusBar.java
     private void updateStatusMessage() {
