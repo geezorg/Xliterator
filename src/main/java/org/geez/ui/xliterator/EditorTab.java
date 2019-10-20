@@ -10,6 +10,7 @@ import org.geez.convert.text.ConvertTextString;
 import org.geez.ui.Xliterator;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -17,21 +18,14 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioButton;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
-import javafx.scene.control.ToggleGroup;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
@@ -40,7 +34,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javafx.util.Pair;
 
 public class EditorTab extends XliteratorTab {
 	
@@ -84,14 +77,8 @@ public class EditorTab extends XliteratorTab {
 	public void setup(Stage primaryStage, Xliterator xlit, MenuItem saveMenuItem, MenuItem saveAsMenuItem ) {
 		this.xlit = xlit;
 		XliteratorConfig config = xlit.getConfig();
-        Menu editorFontMenu     = createFontMenu( editor );
-        Menu editorFontSizeMenu = createFontSizeMenu( editor );
-        
-        // alias = (String)getProperties().get( "alias" );
-        
-        MenuBar editorMenutBar  = new MenuBar();
-        editorMenutBar.getMenus().addAll( editorFontMenu, editorFontSizeMenu );
-        
+		ChoiceBox<String> editorFontBox     = createFontChoiceBox( editor );
+        ChoiceBox<String> editorFontSizeBox = createFontSizeChoiceBox( editor );     
         
         ChoiceBox<String> directionBox = new ChoiceBox<String>();
         directionBox.getItems().addAll( "Forward", "Both" );
@@ -163,57 +150,16 @@ public class EditorTab extends XliteratorTab {
             	}        		
         	}
         });
-        
-        /*
-        Button unregister = new Button( "Unregister" );
-        Button register = new Button( "Register" );
-        register.setTooltip( new Tooltip( "Register a name for current session" ) );
-        register.setOnAction( evt -> {
-        	TextInputDialog registerDialog = createRegisterDialog( primaryStage );
-        	// Dialog<Pair<String,String>> registerDialog = createRegisterDialog();
-        	// Optional<Pair<String,String>> result = registerDialog.showAndWait();
-        	Optional<String> result =  registerDialog.showAndWait();
-        	result.ifPresent( selections -> {
-        		name = result.get();
-        		// String alias = selections.getKey();
-        		// String direction = selections.getKey();
-        		try {
-        			// String direction = directionBox.getSelectionModel().getSelectedItem().toLowerCase();
-        			config.registerTransliteration( name, selectedDirection, editor.getText() );
-        			// getProperties().put( "direction", direction );
-        			// getProperties().put( "alias", alias );
-        			unregister.setDisable( false );
-        		}
-        		catch(Exception ex) {
-        			errorAlert(ex, "A registration problem has occured:" );
-        		}
-        	});
-        	
-        });
 
-        
-        unregister.setDisable( true );
-        unregister.setTooltip( new Tooltip( "Unegister with ICU Transliterator Library" ) );
-        unregister.setOnAction( evt -> {
-        	Alert alert = new Alert(AlertType.CONFIRMATION);
-        	alert.setTitle( "Confirm Unregistration" );
-        	alert.setHeaderText( "Confirm Unregistration" );
-        	alert.setContentText( "Are you sure that you want to unregister \"" + name + "\"?" );
-
-        	Optional<ButtonType> result = alert.showAndWait();
-        	if (result.get() == ButtonType.OK){
-        	   config.unregisterTransliteration( name );
-        	   unregister.setDisable( true );
-        	}
-        }); 
-        */
-        
+        Separator separator = new Separator();
+        separator.setOrientation( Orientation.VERTICAL );
         HBox controls = new HBox( 5 );
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.SOMETIMES);
         controls.setAlignment( Pos.CENTER_LEFT);
-        controls.getChildren().addAll( editorMenutBar, spacer, new Label( "Direction: " ), directionBox, actionButton, actionBox );
-        
+        controls.getChildren().addAll( editorFontBox, editorFontSizeBox, spacer, actionButton, actionBox, separator, new Label( "Direction: " ), directionBox );
+        controls.setPadding(new Insets(2, 2, 2, 2));
+        controls.setSpacing( 4 );
         
         VBox editorVBox = new VBox( controls, new StackPane( new VirtualizedScrollPane<>( editor ) ) );
         this.setContent( editorVBox );

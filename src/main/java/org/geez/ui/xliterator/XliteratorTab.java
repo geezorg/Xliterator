@@ -11,7 +11,6 @@ import de.endrullis.draggabletabs.DraggableTab;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Menu;
 
 public abstract class XliteratorTab extends DraggableTab {
 	
@@ -98,17 +97,19 @@ public abstract class XliteratorTab extends DraggableTab {
     }
     
     
+    /* Unused
     protected Menu createFontMenu( StyleClassedTextArea component ) {
     	Menu menu = new Menu();
     	menu.setId( "transparent" );
     	menu.setGraphic( createFontChoiceBox( component ) );
         return menu;
     }
+    */
     
     
-    protected Menu createFontSizeMenu( StyleClassedTextArea component ) {
-    	Menu menu = new Menu();
-    	menu.setId( "transparent" );
+    protected ChoiceBox<String>  createFontSizeChoiceBox( StyleClassedTextArea component ) {
+    	// Menu menu = new Menu();
+    	// menu.setId( "transparent" );
     	ChoiceBox<String> choiceBox = new ChoiceBox<>();
     	for(int i = 10 ; i <= 24; i++ ) {
     		String size = String.valueOf(i);
@@ -116,9 +117,9 @@ public abstract class XliteratorTab extends DraggableTab {
     	}
     	choiceBox.getSelectionModel().select( (fontSize==null) ? defaultFontSize : fontSize );
         choiceBox.setOnAction( evt -> setFontSize( component, choiceBox.getSelectionModel().getSelectedItem() ) );
-    	menu.setGraphic( choiceBox );
+    	// menu.setGraphic( choiceBox );
         
-        return menu;
+        return choiceBox;
     }
     
     
