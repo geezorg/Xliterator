@@ -183,6 +183,10 @@ public class ConvertTextTab extends XliteratorTab {
     		return;
     	}
         
+    	if( stringConverter == null ) {
+    		errorAlert( "Transliterator is not Set", "The ICU transliterator has not been set.  This may be from an earlier error." );
+    		return;
+    	}
     	textAreaOut.replaceText( stringConverter.convertText( textIn ) );
 
     }
@@ -198,10 +202,10 @@ public class ConvertTextTab extends XliteratorTab {
     	*/
         // textAreaIn.setFont( Font.font( defaultFont, FontWeight.NORMAL, 12) );
 		if(! checkPreferences() ) {
-	        textAreaIn.setStyle("-fx-font-family: '" + defaultFontFamily + "'; -fx-font-size: " + defaultFontSize + ";"  );
+	        textAreaIn.setStyle("-fx-font-family: '" + defaultFontFamily + "'; -fx-font-size: " + defaultFontSize + "; -fx-border-color: #d5d5d5;"  );
 	        textAreaIn.getProperties().put( "font-family", defaultFontFamily );
 	        textAreaIn.getProperties().put( "font-size", defaultFontSize );
-	        textAreaOut.setStyle("-fx-font-family: '" + defaultFontFamily + "'; -fx-font-size:" + defaultFontSize + ";"  );
+	        textAreaOut.setStyle("-fx-font-family: '" + defaultFontFamily + "'; -fx-font-size:" + defaultFontSize + "; -fx-border-color: #d5d5d5;"  );
 	        textAreaOut.getProperties().put( "font-family", defaultFontFamily );
 	        textAreaOut.getProperties().put( "font-size", defaultFontSize );
 		}
@@ -291,7 +295,7 @@ public class ConvertTextTab extends XliteratorTab {
        
         textVbox.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight) {
+            public void changed( ObservableValue<? extends Number> observableValue, Number oldSceneHeight, Number newSceneHeight ) {
             	int newHeight = Integer.parseInt(newSceneHeight.toString().split("\\.")[0] );
             	int taHeight = 312 + (newHeight-692)/2;
                 textAreaIn.setPrefHeight( taHeight );
@@ -320,8 +324,8 @@ public class ConvertTextTab extends XliteratorTab {
     	enableConversionButtions( direction );
     }
     
-    public void setScriptIn(String scriptIn, String variantIn) {
-    	super.setScriptIn(scriptIn, variantIn);
+    public void setScriptIn( String scriptIn, String variantIn ) {
+    	super.setScriptIn( scriptIn, variantIn );
     	if( scriptIn.equals( Xliterator.useSelectedEditor ) ) {
     		this.selectedTransliteration = scriptIn;
 			convertButtonUp.setDisable( false );
@@ -370,6 +374,9 @@ public class ConvertTextTab extends XliteratorTab {
             	if( autoConvertDown ) {
                 	if( stringConverterDown == null ) {
                 		initializeStringConverters();
+                		if( stringConverterDown == null ) {
+                			return;
+                		}
                 	}
             		autoConvertUp = false;
             		convertTextArea( textAreaIn, textAreaOut, stringConverterDown );
@@ -396,6 +403,9 @@ public class ConvertTextTab extends XliteratorTab {
             	if( autoConvertUp ) {
                 	if( stringConverterUp == null ) {
                 		initializeStringConverters();
+                		if( stringConverterUp == null ) {
+                			return;
+                		}
                 	}
             		autoConvertDown = false;
             		convertTextArea( textAreaOut, textAreaIn, stringConverterUp );
@@ -471,11 +481,13 @@ public class ConvertTextTab extends XliteratorTab {
         value = prefs.get( textAreaInFontSizePref, null );
         textAreaIn.getProperties().put( "font-size", value );
         setFontSize( textAreaIn, value );
+        textAreaIn.setStyle( textAreaIn.getStyle() + "; -fx-border-color: #d5d5d5;" );
     	value = prefs.get( textAreaOutFontFacePref, null );
         textAreaOut.getProperties().put( "font-family", value );
         value = prefs.get( textAreaOutFontSizePref, null );
         textAreaOut.getProperties().put( "font-size", value );
         setFontSize( textAreaOut, value );
+        textAreaOut.setStyle( textAreaOut.getStyle() + "; -fx-border-color: #d5d5d5;" );
         
         value = prefs.get( convertTextAutoConvertPref, "true" );
         if( convertTextAutoConvertPref.equals( "true" ) ) {
@@ -490,10 +502,10 @@ public class ConvertTextTab extends XliteratorTab {
     
     public void setBackgroundColor(String color) {
     	// create a background fill 
-    	BackgroundFill background_fill = new BackgroundFill( Color.valueOf( color ), CornerRadii.EMPTY, Insets.EMPTY ); 
+    	BackgroundFill backgroundFill = new BackgroundFill( Color.valueOf( color ), CornerRadii.EMPTY, Insets.EMPTY ); 
 
     	// create Background 
-    	Background background = new Background(background_fill); 
+    	Background background = new Background(backgroundFill);
 
     	// set background 
     	textAreaIn.setBackground(background); 

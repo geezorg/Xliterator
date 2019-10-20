@@ -1,10 +1,8 @@
 package org.geez.ui.xliterator;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,8 +17,8 @@ import org.apache.commons.io.IOUtils;
 import org.geez.convert.helpers.ICUHelper;
 import org.xml.sax.SAXException;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+// import com.google.gson.Gson;
+// import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -252,6 +250,12 @@ public class XliteratorConfig extends ICUHelper {
         	}
         }
         JsonObject reverseVariant = outVariant.deepCopy();
+        String source = reverseVariant.get( "source" ).getAsString();
+        String target = reverseVariant.get( "target" ).getAsString();
+        reverseVariant.remove( "source" );
+        reverseVariant.addProperty( "source", target );
+        reverseVariant.remove( "target" );
+        reverseVariant.addProperty( "target", source );        
         reverseVariant.remove( "direction" );
         reverseVariant.addProperty( "direction", "reverse" );
         reverseVariant.remove( "name" );
