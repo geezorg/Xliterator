@@ -10,7 +10,7 @@
 #
 # https://journals.sub.uni-hamburg.de/toc-aethiopica/Miscellaneous/Aethiopica_Transliteration.pdf
 #
-# Initial Editor: Daniel Yacob <yacob@ግዕዝ.org>
+# Initial Editor: Daniel Yacob <yacob@geez.org>
 #
 ########################################################################
 
@@ -18,20 +18,20 @@
 :: [ሀ-፼ⶓ-ⶖ] ;
 :: NFD (NFC) ;
 
-$ግዕዝ  = 'ä';
-$ካዕብ  = 'u';
+$ግዕዝ = 'ä';
+$ካዕብ = 'u';
 $ሣልስ = 'i' ;
-$ራዕብ  = 'a';
+$ራዕብ = 'a';
 $ኃምስ = 'e' ;
 $ሳድስ = 'ǝ';
-$ሳብዕ  = 'o';
+$ሳብዕ = 'o';
 $ዘመደ_ግዕዝ = 'ʷä';
-$ዘመደ_ሣልስ = 'ʷi'; ;
-$ዘመደ_ካዕብ ='ʷǝ'; ;
-$ዘመደ_ራዕብ = 'ʷa';;
+$ዘመደ_ሣልስ = 'ʷi';
+$ዘመደ_ካዕብ = 'ʷǝ';
+$ዘመደ_ራዕብ = 'ʷa';
 $ዘመደ_ኃምስ = 'ʷe';
 
-$አለፍ    = ʾ;
+$አለፍ = ʾ;
 $ዐይን = ʿ;
 
 
