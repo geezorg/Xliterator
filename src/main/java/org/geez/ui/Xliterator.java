@@ -576,6 +576,15 @@ public final class Xliterator extends Application {
     	return pseudoTransliteration;
     }
     
+    private EditorTab checkIfLoaded( String title ) {
+    	for( EditorTab editorTab: editorTabs ) {
+    		if( title.equals( editorTab.getTitle() ) ) {
+    			return editorTab;
+    		}
+    	}
+    	
+    	return null;
+    }
 
     private final MenuItem fileMenuItem = new MenuItem( "Select Files..." ); 
     private EditorTab createNewEditor( String title, Menu tabsMenu, Image visibleIcon, ColorAdjust monochrome ) {
@@ -985,15 +994,24 @@ public final class Xliterator extends Application {
             			for(String dependency: transliterationDependencies) {
             				JsonObject dependencyObject = config.getTransliterationByName( dependency );
             				String dependentTransliteration = dependencyObject.get( "path" ).getAsString();
-                    		EditorTab dependentEditorTab = createNewEditor( dependentTransliteration, tabsMenu, visibleIcon, monochrome );
-                    		dependentEditorTab.getEditor().loadResourceFile( dependentTransliteration );            				
+            				if( checkIfLoaded( dependentTransliteration ) == null ) {
+            					EditorTab dependentEditorTab = createNewEditor( dependentTransliteration, tabsMenu, visibleIcon, monochrome );
+            					dependentEditorTab.getEditor().loadResourceFile( dependentTransliteration );
+            				}
             			}
             		}
-            		currentEditorTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
-            		currentEditorTab.getEditor().loadResourceFile( selectedTransliteration );
-            		currentEditorTab.setScriptIn( scriptIn, variantIn );
-            		currentEditorTab.setScriptOut( scriptOut );
-            		currentEditorTab.setVariantOut( variantOut );
+            		EditorTab editorToLoad = checkIfLoaded( selectedTransliteration ) ;
+    				if( editorToLoad == null ) {
+    					currentEditorTab = createNewEditor( selectedTransliteration, tabsMenu, visibleIcon, monochrome );
+    					currentEditorTab.getEditor().loadResourceFile( selectedTransliteration );
+    					currentEditorTab.setScriptIn( scriptIn, variantIn );
+    					currentEditorTab.setScriptOut( scriptOut );
+    					currentEditorTab.setVariantOut( variantOut );
+    				}
+    				else {
+    					currentEditorTab = editorToLoad;
+    					tabpane.getSelectionModel().select( currentEditorTab );
+    				}
                 }
                 catch(IOException ex) {
                 	errorAlert(ex, "Error opening: " + selectedTransliteration );
