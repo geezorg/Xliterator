@@ -32,7 +32,6 @@ import org.geez.ui.xliterator.SyntaxHighlighterTab;
 import org.geez.ui.xliterator.XliteratorConfig;
 import org.geez.ui.xliterator.XliteratorTab;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -601,7 +600,7 @@ public final class Xliterator extends Application {
         */
         editorTab.setup(primaryStage, this, saveMenuItem, saveAsMenuItem);
         
-        editorTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().subtract( 180 ) );
+        editorTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().subtract( 160 ) );
         editorTab.setOnSelectionChanged( evt -> {
         	if( editorTab.isSelected() ) {
         		fileMenuItem.setDisable( true );
