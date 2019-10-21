@@ -171,7 +171,7 @@ public class EditorTab extends XliteratorTab {
         		if( label.charAt(0) != '*' ) {
         			// this.setText( "*" + this.getText() );
         			this.setTitle( "*" + this.getTitle() );
-        			this.setStyle( "-fx-background-color: #CD5C5C" );
+        			this.setStyle( "-fx-background-color: #CD5C5C;" );
         			saveMenuItem.setDisable( false );
         			unsavedChanges = true;
         		}
