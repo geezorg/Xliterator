@@ -23,6 +23,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -96,11 +97,16 @@ public class EditorTab extends XliteratorTab {
         	selectedDirection = directionBox.getSelectionModel().getSelectedItem().toLowerCase();
         	xlit.setEditorTransliterationDirection( selectedDirection );
         });
+        directionBox.setTooltip( new Tooltip( "Select the transliteration mapping direction.") );
+        Label directionLabel = new Label( "Direction: " );
+        directionLabel.setTooltip( new Tooltip( "The direction of the transliteration mappings.") );
 
         Button actionButton = new Button( "Action:" );
+        actionButton.setTooltip( new Tooltip( "Execute the selected action." ) );
         ChoiceBox<String> actionBox = new ChoiceBox<String>();
         actionBox.getItems().addAll( "Validate", "Register", "Unregister" );
         actionBox.getSelectionModel().select(0);
+        actionBox.setTooltip( new Tooltip( "Select the action to take with the ICU transliteration engine." ) );
         
         actionButton.setOnAction( evt -> {
         	String action =  actionBox.getSelectionModel().getSelectedItem();
@@ -153,12 +159,13 @@ public class EditorTab extends XliteratorTab {
 
         Separator separator = new Separator();
         separator.setOrientation( Orientation.VERTICAL );
+        separator.setPadding(  new Insets(0, 0, 0, 4)  );
         HBox controls = new HBox( 5 );
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.SOMETIMES);
         controls.setAlignment( Pos.CENTER_LEFT);
-        controls.getChildren().addAll( editorFontBox, editorFontSizeBox, spacer, actionButton, actionBox, separator, new Label( "Direction: " ), directionBox );
-        controls.setPadding(new Insets(2, 2, 2, 2));
+        controls.getChildren().addAll( editorFontBox, editorFontSizeBox, spacer, actionButton, actionBox, separator, directionLabel, directionBox );
+        controls.setPadding( new Insets(2, 2, 2, 2) );
         controls.setSpacing( 4 );
         
         VBox editorVBox = new VBox( controls, new StackPane( new VirtualizedScrollPane<>( editor ) ) );
