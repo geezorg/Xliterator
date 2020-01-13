@@ -261,6 +261,7 @@ public final class Xliterator extends Application {
     
     
     private Menu createOutScriptsMenu(String scriptIn, String variantIn) {
+    	outScriptMenu.setDisable( false );
    	 	outScriptMenu.getItems().clear();
    	 	scriptOut = null;
 		// outVariantMenu.getItems().clear();
@@ -283,6 +284,7 @@ public final class Xliterator extends Application {
     			RadioMenuItem menuItem = new RadioMenuItem( scriptOutKey );
     			menuItem.setToggleGroup( groupOutMenu );
     			JsonObject variantOutObject = variantsOut.get(0).getAsJsonObject();
+    			variantOutObject.addProperty( "isEditor", false );
         		menuItem.setOnAction( evt -> {
         			setScriptOut( scriptOutKey, "_base", variantOutObject );
             		
@@ -302,6 +304,11 @@ public final class Xliterator extends Application {
         			imageView = new ImageView( arrowForwardIcon );    	        			
         		}
                 menuItem.setGraphic( imageView );
+                if( (size == 1) && (scriptOutList.size() == 1) ) {
+                	setScriptOut( scriptOutKey, "_base", variantOutObject );
+                	menuItem.setSelected( true );
+                	
+                }
     		}
     		else {
     			Menu scriptMenu = new Menu( scriptOutKey );
@@ -326,6 +333,7 @@ public final class Xliterator extends Application {
 
         			menuItem.setToggleGroup( groupOutMenu );
         			JsonObject variantOutObject = variantsOut.get(i).getAsJsonObject();
+        			variantOutObject.addProperty( "isEditor", false );
             		menuItem.setOnAction( evt -> {
             			if( outScriptMenuLast != null ) {
             				outScriptMenuLast.setGraphic( null );
@@ -497,6 +505,7 @@ public final class Xliterator extends Application {
     	emptyTransliteration.addProperty( "source", "SCRIPT_IN_" + zdtString);
     	emptyTransliteration.addProperty( "target", "SCRIPT_OUT_" + zdtString);
     	emptyTransliteration.addProperty( "direction", "forward" );
+    	emptyTransliteration.addProperty( "isEditor", true );
 
     	return emptyTransliteration;
     }
@@ -504,13 +513,13 @@ public final class Xliterator extends Application {
     
     private JsonObject createPseudoTransliteration( File externalIcuFile ) {
 
-    	String fileName = externalIcuFile.getName(); 	
+    	String fileName  = externalIcuFile.getName(); 	
     	String extension = FilenameUtils.getExtension( fileName );
     	
     	JsonObject pseudoTransliteration = new JsonObject();
     	
         StringBuilder contentBuilder = new StringBuilder();
-        try (Stream<String> stream = Files.lines( Paths.get(externalIcuFile.getPath()), StandardCharsets.UTF_8))
+        try (Stream<String> stream   = Files.lines( Paths.get(externalIcuFile.getPath()), StandardCharsets.UTF_8))
         {
             stream.forEach(s -> contentBuilder.append(s));
         }
@@ -571,6 +580,7 @@ public final class Xliterator extends Application {
     	pseudoTransliteration.addProperty( "path", externalIcuFile.getPath() );
     	pseudoTransliteration.addProperty( "name", exName );
     	pseudoTransliteration.addProperty( "direction", exDirection );
+    	pseudoTransliteration.addProperty( "isEditor", true );
     	
     	return pseudoTransliteration;
     }
@@ -591,14 +601,14 @@ public final class Xliterator extends Application {
         editorTab.setDefaultFontFamily( defaultFontFamily );
         editorTab.setClosable( true );
     	
-        editorTab.setTransliteration(transliteration);
+        editorTab.setTransliteration( transliteration );
         /*
     	editorTab.getProperties().put( "direction", transliterationDirection );
         if( transliterationAlias != null ) {
         	editorTab.getProperties().put( "alias", transliterationAlias );
         }
         */
-        editorTab.setup(primaryStage, this, saveMenuItem, saveAsMenuItem);
+        editorTab.setup( primaryStage, this, saveMenuItem, saveAsMenuItem );
         
         editorTab.getEditor().prefHeightProperty().bind( primaryStage.heightProperty().subtract( 160 ) );
         editorTab.setOnSelectionChanged( evt -> {
@@ -651,17 +661,18 @@ public final class Xliterator extends Application {
     		Label label = new Label( title );
     		label.setGraphic(new ImageView( checkIcon ) );
     		selectedEditorTab.setGraphic( label );
-	    	selectedTransliteration = useSelectedEditor; 
 	    	filesTab.setScriptIn( useSelectedEditor );
 	    	textTab.setScriptInAndDirection( useSelectedEditor, editorTab.getSelectedDirection() );
 	   	 	outScriptMenu.getItems().clear();
 	   	 	scriptOut = null;
 			// outVariantMenu.getItems().clear();
 			variantOut = null;
-	    	scriptInText.setText( "[Editor] " +  selectedEditorTab.getInText() );
+	    	scriptInText .setText( "[Editor] " +  selectedEditorTab.getInText() );
 	    	scriptOutText.setText( "[Editor] " + selectedEditorTab.getOutText() );
-	    	resourceText.setText( "[Editor] " + title );
+	    	resourceText .setText( "[Editor] " + title );
 	    	setTransliteration( editorTab.getTransliteration() );
+	    	selectedTransliteration = useSelectedEditor;
+	    	outScriptMenu.setDisable( true );
     	});
     	editorTabItem.setMnemonicParsing( false );
     	// editorTabItem.getProperties().put( "selection", useSelectedEditor );
@@ -985,7 +996,7 @@ public final class Xliterator extends Application {
         //
         loadInternalMenuItem.setOnAction( evt -> {
         		// load into a new editor tab
-	        	if( selectedTransliteration.equals( useSelectedEditor) ) {
+	        	if( selectedTransliteration.equals( useSelectedEditor ) ) {
 	        		return;
 	        	}
             	try {
@@ -1018,7 +1029,7 @@ public final class Xliterator extends Application {
         });
         openMenuItem.setOnAction( evt -> {
 		        final FileChooser fileChooser = new FileChooser();
-		    	configureFileChooserICU(fileChooser);
+		    	configureFileChooserICU( fileChooser );
 		    	File externalIcuFile = fileChooser.showOpenDialog( stage );
 		        if( externalIcuFile == null ) {
 		        	return;
@@ -1029,7 +1040,9 @@ public final class Xliterator extends Application {
 		        	currentEditorTab = createNewEditor( externalIcuFile.getName(), tabsMenu, visibleIcon, monochrome );
 		        	currentEditorTab.loadFile( externalIcuFile );
 		        	currentEditorTab.setTransliteration( pseudoTransliteration );
-
+		        	setUseEditor( externalIcuFile.getName() );
+		        	selectedEditorTab = currentEditorTab;
+			    	outScriptMenu.setDisable( true );
 		        }
 		        catch(IOException ex) {
 		        	errorAlert(ex, "Error opening: " + externalIcuFile.getName() );
@@ -1282,8 +1295,10 @@ public final class Xliterator extends Application {
         	return;
         }
         transliteration = new JsonParser().parse(json).getAsJsonObject();
+        // TBD: work around for old preferences, remove later:
+        transliteration.addProperty( "isEditor", false);
         
-        scriptIn = prefs.get( scriptInPreference, null );
+        scriptIn  = prefs.get( scriptInPreference, null );
         variantIn = prefs.get( variantInPreference, null );
 
         setScriptIn( scriptIn, variantIn );
@@ -1298,7 +1313,6 @@ public final class Xliterator extends Application {
         
         selectedTransliteration  = prefs.get( transliterationIdPreference, null );
         transliterationDirection = prefs.get( transliterationDirectionPreference, null );
-        
     }
     
     Text scriptInText  = new Text( "[None]" );
@@ -1361,11 +1375,14 @@ public final class Xliterator extends Application {
     	this.scriptIn = scriptIn;
     	this.variantIn = variantIn;
     	
+    	// why is any of this next section necessary??
+    	
 		if( selectedEditorTab != null ) {
 			Label label = (Label)selectedEditorTab.getGraphic();
 			selectedEditorTab.setGraphic( null );
 			selectedEditorTab.setText( label.getText() );
 		}
+		
     	
     	String scriptInMessage = scriptIn;
     	if(! "_base".equals( variantIn ) ) {
@@ -1406,7 +1423,11 @@ public final class Xliterator extends Application {
     
     public void setTransliteration( JsonObject transliteration ) {
     	this.transliteration = transliteration;
-    	this.selectedTransliteration  = transliteration.get( "path" ).getAsString();
+    	this.selectedTransliteration  
+			= ( transliteration.get( "isEditor" ).getAsBoolean() ) 
+			? Xliterator.useSelectedEditor
+			: transliteration.get( "path" ).getAsString()
+		;
     	this.transliterationDirection = transliteration.get( "direction" ).getAsString();
     	this.transliterationAlias = ( transliteration.has( "alias" ) ) ? transliteration.get( "alias" ).getAsString() : null ;
     	
@@ -1481,6 +1502,9 @@ public final class Xliterator extends Application {
     			}
     		}
     	}
+    	
+    	filesTab.setScriptIn( Xliterator.useSelectedEditor, null );
+    	textTab.setScriptIn( Xliterator.useSelectedEditor, null );
     }
     
     

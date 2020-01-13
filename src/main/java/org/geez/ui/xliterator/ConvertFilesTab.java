@@ -398,7 +398,7 @@ public class ConvertFilesTab extends XliteratorTab {
     
     
     public void setTransliteration( JsonObject transliteration ) {
-    	super.setTransliteration( transliteration);
+    	super.setTransliteration( transliteration );
 
     	if( inputFileList != null ) {
     		convertButton.setDisable( false );

@@ -130,7 +130,7 @@ public class ConvertTextTab extends XliteratorTab {
 	    		}
 	    	}
 	    	else {
-		    	String transliterationKeyForward = ((alias == null ) ? (selectedTransliteration+ "-" + transliterationDirection) : alias) ;
+		    	String transliterationKeyForward = ((alias == null ) ? (selectedTransliteration + "-" + transliterationDirection) : alias) ;
 		    	
 		    	if(! textStringConverts.containsKey( transliterationKeyForward ) ) {
 		    		textStringConverts.put( transliterationKeyForward, new ConvertTextString( selectedTransliteration, transliterationDirection ) );

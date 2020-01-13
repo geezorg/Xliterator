@@ -117,6 +117,7 @@ public class EditorTab extends XliteratorTab {
     		        Alert alert = new Alert(AlertType.INFORMATION);
     		        alert.setTitle( "Validatition Success" );
     		        alert.setHeaderText( "The transliteration rules are valid." );
+    		        alert.showAndWait();
         		}
         		catch(Exception ex) {
         			errorAlert(ex, "Compilation Failed:" );

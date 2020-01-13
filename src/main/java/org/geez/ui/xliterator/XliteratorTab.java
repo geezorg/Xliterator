@@ -3,6 +3,7 @@ package org.geez.ui.xliterator;
 import java.util.ArrayList;
 
 import org.fxmisc.richtext.StyleClassedTextArea;
+import org.geez.ui.Xliterator;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -173,8 +174,12 @@ public abstract class XliteratorTab extends DraggableTab {
     public void setTransliteration( JsonObject transliteration ) {
     	this.transliteration = transliteration;
     	
-    	this.variantOut               = transliteration.get( "name" ).getAsString();
-    	this.selectedTransliteration  = transliteration.get( "path" ).getAsString();
+    	this.variantOut = transliteration.get( "name" ).getAsString();
+    	this.selectedTransliteration  
+    		= ( transliteration.get( "isEditor" ).getAsBoolean() ) 
+    		? Xliterator.useSelectedEditor
+    		: transliteration.get( "path" ).getAsString()
+    	;
     	this.transliterationDirection = transliteration.get( "direction" ).getAsString();
     	this.alias         = ( transliteration.has( "alias" ) ) ? transliteration.get( "alias" ).getAsString() : null ;
     	this.backwardAlias = ( transliteration.has( "backwardAlias" ) ) ? transliteration.get( "backwardAlias" ).getAsString() : null ;
