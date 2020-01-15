@@ -1641,6 +1641,7 @@ public final class Xliterator extends Application {
     	setScriptIn( "Ethiopic", "Amharic" );
     	// setMenuItemSelection( inScriptMenu, "Ethiopic", "Amharic" );
 		JsonObject demoTransliteration = config.getTransliterationByName( "Ethi-Aethiopica_Latn" );
+		demoTransliteration.addProperty( "isEditor", false );
     	setScriptOut( "Latin", "Aethiopica", demoTransliteration );
     	// setMenuItemSelection( outScriptMenu, "Latin", "Aethiopica" );
     	
@@ -1652,6 +1653,10 @@ public final class Xliterator extends Application {
     		currentEditorTab.setScriptIn( scriptIn, variantIn );
     		currentEditorTab.setScriptOut( scriptOut );
     		setUseEditor( selectedTransliteration );
+    		Label label = new Label( selectedTransliteration );
+    		label.setGraphic( new ImageView( checkIcon ) );
+    		currentEditorTab.setGraphic( label );
+    		selectedEditorTab = currentEditorTab;
         }
         catch(IOException ex) {
         	errorAlert(ex, "Error opening: " + selectedTransliteration );
