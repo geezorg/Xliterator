@@ -1657,6 +1657,7 @@ public final class Xliterator extends Application {
     		label.setGraphic( new ImageView( checkIcon ) );
     		currentEditorTab.setGraphic( label );
     		selectedEditorTab = currentEditorTab;
+	    	outScriptMenu.setDisable( true );
         }
         catch(IOException ex) {
         	errorAlert(ex, "Error opening: " + selectedTransliteration );
