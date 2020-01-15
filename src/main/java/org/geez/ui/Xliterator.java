@@ -1411,8 +1411,8 @@ public final class Xliterator extends Application {
     	}
     	scriptInText.setText( scriptInMessage );
     	
-    	createOutScriptsMenu( scriptIn, variantIn );
         loadInternalMenuItem.setDisable( true );
+    	createOutScriptsMenu( scriptIn, variantIn );
     	filesTab.setScriptIn( scriptIn, variantIn );
     	textTab.setScriptIn( scriptIn, variantIn );
     }
@@ -1432,10 +1432,6 @@ public final class Xliterator extends Application {
     	textTab.setScriptOut( scriptOut );
     	setTransliteration( transliteration );
     	resourceText.setText( "Internal: " + selectedTransliteration );
-        loadInternalMenuItem.setDisable( true );
-
-    	// setMenuItemSelection( outScriptMenu, scriptOut );
-
     	
         loadInternalMenuItem.setDisable( false );
     }
