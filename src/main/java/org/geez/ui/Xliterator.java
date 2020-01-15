@@ -922,11 +922,57 @@ public final class Xliterator extends Application {
         final MenuItem demoMenuItem = new MenuItem( "Load Demo" );
         helpMenu.getItems().add( demoMenuItem );
         
+        
+        final MenuItem reportIssueMenuItem = new MenuItem( "Report an Issue" );
+        helpMenu.getItems().add( reportIssueMenuItem );
+
+        
+        reportIssueMenuItem.setOnAction( evt -> {
+		        Alert alert = new Alert(AlertType.INFORMATION);
+		        alert.setTitle( "Report an Issue" );
+		        alert.setHeaderText( "Report an Issue");
+		        
+		        FlowPane fp = new FlowPane();
+		        Label xlitLabel = new Label( "Click here to report an issue with the" );
+		        Hyperlink xlitLink = new Hyperlink( "Xliterator interface." );
+		        fp.getChildren().addAll( xlitLabel, xlitLink );
+		
+		        xlitLink.setOnAction( (event) -> {
+		            alert.close();
+		            try {
+		                URI uri = new URI( "https://github.com/geezorg/Xliterator/issues/" );
+		                desktop.browse( uri );
+		            }
+		            catch(Exception ex) {
+		            	
+		            }
+		        });
+		        
+		        Label cldrLabel = new Label( "Click here to report an issue with" );
+		        Hyperlink cldrLink = new Hyperlink( "transliteration quality." );
+		        fp.getChildren().addAll( cldrLabel, cldrLink );
+		
+		        cldrLink.setOnAction( (event) -> {
+		            alert.close();
+		            try {
+		                URI uri = new URI( "https://unicode-org.atlassian.net/projects/CLDR/issues/" );
+		                desktop.browse( uri );
+		            }
+		            catch(Exception ex) {
+		            	
+		            }
+		        });
+		
+		        alert.getDialogPane().contentProperty().set( fp );
+		        alert.showAndWait();
+        });
+        
+        
         final Menu developerMenu = new Menu( "Developer" );
         final MenuItem referenceSpreadsheetMenuItem = new MenuItem( "Get Reference Spreadshet" );
         final MenuItem makeJsonMenuItem = new MenuItem( "Create JSON Index" );
         developerMenu.getItems().addAll( referenceSpreadsheetMenuItem, makeJsonMenuItem );
-        helpMenu.getItems().add( developerMenu );
+        helpMenu.getItems().addAll( new SeparatorMenuItem(), developerMenu );
         
         referenceSpreadsheetMenuItem.setOnAction( evt -> {
         	File spreadsheet = config.exportReferenceSpreadsheet( stage );
@@ -960,6 +1006,7 @@ public final class Xliterator extends Application {
 	        
 	        exportConvertedSpreadsheet( stage, jsonIndex );
         });
+
         
         //
         //=========================== END HELP MENU =============================================
