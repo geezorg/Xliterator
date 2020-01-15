@@ -324,6 +324,7 @@ public class ConvertTextTab extends XliteratorTab {
     	enableConversionButtions( direction );
     }
     
+    /*
     public void setScriptIn( String scriptIn, String variantIn ) {
     	super.setScriptIn( scriptIn, variantIn );
     	if( scriptIn.equals( Xliterator.useSelectedEditor ) ) {
@@ -340,6 +341,7 @@ public class ConvertTextTab extends XliteratorTab {
 			convertButtonDown.setDisable( true );
     	}
     }
+    */
     
     /*
     public void setScriptOut(String scriptOut ) {

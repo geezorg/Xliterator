@@ -653,14 +653,17 @@ public final class Xliterator extends Application {
     	editorTabItem.setOnAction( evt -> {
     		setUseEditor( title );
     		if( selectedEditorTab != null ) {
-    			Label label = (Label)selectedEditorTab.getGraphic();
+    			Label oldLabel = (Label)selectedEditorTab.getGraphic();
     			selectedEditorTab.setGraphic( null );
-    			selectedEditorTab.setText( label.getText() );
+    			selectedEditorTab.setText( oldLabel.getText() );
     		}
+
     		selectedEditorTab = editorTab;
+    		selectedEditorTab.setText( null );
     		Label label = new Label( title );
-    		label.setGraphic(new ImageView( checkIcon ) );
+    		label.setGraphic( new ImageView( checkIcon ) );
     		selectedEditorTab.setGraphic( label );
+
 	    	filesTab.setScriptIn( useSelectedEditor );
 	    	textTab.setScriptInAndDirection( useSelectedEditor, editorTab.getSelectedDirection() );
 	   	 	outScriptMenu.getItems().clear();
@@ -676,6 +679,15 @@ public final class Xliterator extends Application {
     	});
     	editorTabItem.setMnemonicParsing( false );
     	// editorTabItem.getProperties().put( "selection", useSelectedEditor );
+    	MenuItem mItem = inScriptMenu.getItems().get(0); 
+    	RadioMenuItem rItem = null;
+    	if( mItem instanceof Menu ) {
+    		rItem = (RadioMenuItem) ((Menu)mItem).getItems().get(0);
+    	}
+    	else {
+    		rItem = (RadioMenuItem)mItem;
+    	}
+    	editorTabItem.setToggleGroup( rItem.getToggleGroup() );
     	inScriptMenu.getItems().add( editorTabItem );
 
 
@@ -1037,15 +1049,24 @@ public final class Xliterator extends Application {
 		        try {
 		        	JsonObject pseudoTransliteration = createPseudoTransliteration( externalIcuFile );
 		        	setTransliteration( pseudoTransliteration );
-		        	currentEditorTab = createNewEditor( externalIcuFile.getName(), tabsMenu, visibleIcon, monochrome );
+		        	String title = externalIcuFile.getName();
+		        	currentEditorTab = createNewEditor( title, tabsMenu, visibleIcon, monochrome );
 		        	currentEditorTab.loadFile( externalIcuFile );
 		        	currentEditorTab.setTransliteration( pseudoTransliteration );
 		        	setUseEditor( externalIcuFile.getName() );
+		    		Label label = new Label( title );
+		    		label.setGraphic( new ImageView( checkIcon ) );
+		    		currentEditorTab.setGraphic( label );
+		    		if( selectedEditorTab != null ) {
+		    			Label oldLabel = (Label)selectedEditorTab.getGraphic();
+		    			selectedEditorTab.setGraphic( null );
+		    			selectedEditorTab.setText( oldLabel.getText() );
+		    		}
 		        	selectedEditorTab = currentEditorTab;
 			    	outScriptMenu.setDisable( true );
 		        }
 		        catch(IOException ex) {
-		        	errorAlert(ex, "Error opening: " + externalIcuFile.getName() );
+		        	errorAlert( ex, "Error opening: " + externalIcuFile.getName() );
 		        }
         });
         
@@ -1375,12 +1396,12 @@ public final class Xliterator extends Application {
     	this.scriptIn = scriptIn;
     	this.variantIn = variantIn;
     	
-    	// why is any of this next section necessary??
     	
 		if( selectedEditorTab != null ) {
 			Label label = (Label)selectedEditorTab.getGraphic();
 			selectedEditorTab.setGraphic( null );
 			selectedEditorTab.setText( label.getText() );
+			selectedEditorTab = null;
 		}
 		
     	
