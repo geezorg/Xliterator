@@ -14,10 +14,10 @@ editor allows you to set syntax coloring anyway you desire.
 
 ## Download
 * [Read the notes on the latest updates.](https://github.com/geezorg/Xliterator/releases/tag/v0.6-beta2)
-* [Windows MSI](https://github.com/geezorg/Xliterator/releases/download/v0.6-beta/Xliterator-0.6.0-beta2.msi)
-* [Windows EXE](https://github.com/geezorg/Xliterator/releases/download/v0.6-beta/Xliterator-0.6.0-beta2.exe)
-* [Mac DMG](https://github.com/geezorg/Xliterator/releases/download/v0.6-beta/Xliterator-0.6.0-beta2.dmg)
-* [Java Executable JAR](https://github.com/geezorg/Xliterator/releases/download/v0.6-beta/Xliterator-0.6.0-beta2-full-gui.jar)
+* [Windows MSI](https://github.com/geezorg/Xliterator/releases/download/v0.6-beta2/Xliterator-0.6.0-beta2.msi)
+* [Windows EXE](https://github.com/geezorg/Xliterator/releases/download/v0.6-beta2/Xliterator-0.6.0-beta2.exe)
+* [Mac DMG](https://github.com/geezorg/Xliterator/releases/download/v0.6-beta2/Xliterator-0.6.0-beta2.dmg)
+* [Java Executable JAR](https://github.com/geezorg/Xliterator/releases/download/v0.6-beta2/Xliterator-0.6.0-beta2-full-gui.jar)
 
 
 ## Usage
