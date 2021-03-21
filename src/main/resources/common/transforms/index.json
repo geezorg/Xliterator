@@ -950,7 +950,83 @@
             "name": "Aethiopica",
             "direction": "both",
             "alias": "Ethiopic-Latin/Aethiopica",
-            "backwardAlias": "Latin-EthiopicEthiopic-Latin-Aethiopica.xml/Aethiopica"
+            "backwardAlias": "Latin-Ethiopic/Aethiopica"
+          },
+          {
+            "path": "Ethiopic-Latin-ALA.xml",
+            "source": "Ethi",
+            "target": "ALA_Ethi_Latn",
+            "name": "ALA",
+            "direction": "both",
+            "alias": "Ethiopic-Latin/ALA",
+            "backwardAlias": "Latin-Ethiopic/ALA"
+          },
+          {
+            "path": "Ethiopic-Latin-BetaMetsehaf.xml",
+            "source": "Ethi",
+            "target": "BetaMetsehaf_Latn",
+            "name": "BetaMetsehaf",
+            "direction": "both",
+            "alias": "Ethiopic-Latin/BetaMetsehaf",
+            "backwardAlias": "Latin-Ethiopic/BetaMetsehaf"
+          },
+          {
+            "path": "Ethiopic-Latin-Braille.xml",
+            "source": "Ethi",
+            "target": "Braile_Ethi_Latn",
+            "name": "Braille",
+            "direction": "both",
+            "alias": "Ethiopic-Latin/Braille",
+            "backwardAlias": "Latin-Ethiopic/Braille"
+          },
+          {
+            "path": "Ethiopic-Latin-ES3842.xml",
+            "source": "Ethi",
+            "target": "ES3842_Latn",
+            "name": "ES3842",
+            "direction": "both",
+            "alias": "Ethiopic-Latin/ES3842",
+            "backwardAlias": "Latin-Ethiopic/ES3842"
+          },
+          {
+            "path": "Ethiopic-Latin-SERA.xml",
+            "source": "Ethi",
+            "target": "SERA_Latn",
+            "name": "SERA",
+            "direction": "both",
+            "alias": "Ethiopic-Latin/SERA",
+            "backwardAlias": "Latin-Ethiopic/SERA"
+          },
+          {
+            "path": "Ethiopic-Latin-Xaleget.xml",
+            "source": "Ethi",
+            "target": "Xaleget_Latn",
+            "name": "Xaleget",
+            "direction": "both",
+            "alias": "Ethiopic-Latin/Xaleget",
+            "backwardAlias": "Latin-Ethiopic/Xaleget"
+          }
+        ],
+        "Cyrillic": [
+          {
+            "path": "Ethiopic-Cyrillic-Gutgarts.xml",
+            "source": "Ethi",
+            "target": "Gutgarts_Latn",
+            "name": "Gutgarts",
+            "direction": "both",
+            "alias": "Ethiopic-Cyrillic/Gutgarts",
+            "backwardAlias": "Cyrillic-Ethiopic/Gutgarts"
+          }
+        ],
+        "Ethiopic": [
+          {
+            "path": "Ethiopic-Ethiopic-Gurage.xml",
+            "source": "Ethi",
+            "target": "Gurage_Ethi",
+            "name": "Gurage",
+            "direction": "both",
+            "alias": "Ethiopic-Ethiopic/Gurage",
+            "backwardAlias": "Gurage-Ethiopic"
           }
         ]
       }
@@ -1395,7 +1471,7 @@
             "direction": "forward",
             "alias": "und-Latn-t-und-hani-m0-prprname",
             "dependencies": [
-              "Hani-Latn",
+              "Han-Latin",
               "Han-Spacedhan"
             ]
           }
@@ -4597,3 +4673,4 @@
     }
   }
 }
+

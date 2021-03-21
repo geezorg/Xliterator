@@ -19,6 +19,11 @@
     		<version>0.1.15</version>
 		</dependency>
 		<dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
+		<dependency>
 		    <groupId>org.controlsfx</groupId>
  		    <artifactId>controlsfx</artifactId>
 			<version>11.1.0</version>
@@ -56,7 +61,6 @@
        		 <version>0.0.5</version>
        		 <configuration>
        		     <mainClass>org.geez.ui.Xliterator</mainClass>
-       		     <executable>/Users/dmekonnen/.p2/pool/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.macosx.x86_64_15.0.2.v20210201-0955/jre/bin/java</executable>
       		  </configuration>
   		 	</plugin>
 		</plugins>
