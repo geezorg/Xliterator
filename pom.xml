@@ -2,31 +2,26 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-    	<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>11</maven.compiler.release>
+        <javafx.version>15</javafx.version>
 	</properties>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.geez</groupId>
 	<artifactId>Xliterator</artifactId>
-	<version>0.6.0</version>
+	<version>0.6.0-beta2</version>
 	<name>ICU Xliterator Front End</name>
 	<dependencies>
 		<dependency>
     		<groupId>org.geez</groupId>
     		<artifactId>gff-geez-lib</artifactId>
-    		<version>0.1.0</version>
+    		<version>0.1.15</version>
 		</dependency>
 		<dependency>
 		    <groupId>org.controlsfx</groupId>
- 		   <artifactId>controlsfx</artifactId>
-  		  <version>8.40.14</version>
-		</dependency>
-		<dependency>
-			<groupId>com.apple</groupId>
-    		<artifactId>AppleJavaExtensions</artifactId>
-    		<version>1.4</version>
+ 		    <artifactId>controlsfx</artifactId>
+			<version>11.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
@@ -38,11 +33,6 @@
 			<artifactId>richtextfx</artifactId>
 			<version>0.10.1</version>
 		</dependency>
-		<!-- dependency>
-    		<groupId>org.glassfish.jaxb</groupId>
-    		<artifactId>jaxb-runtime</artifactId>
-    		<version>2.3.1</version>
-		</dependency -->
 		<dependency>
 			<groupId>de.endrullis.draggabletabs</groupId>
 			<artifactId>draggabletabs</artifactId>
@@ -53,71 +43,22 @@
 	<build>
 		<plugins>
 			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<configuration>
-					<archive>
-						<manifest>
-							<mainClass>org.geez.ui.Xliterator</mainClass>
-						</manifest>
-					</archive>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<finalName>${project.artifactId}-${project.version}-full-gui</finalName>
-					<appendAssemblyId>false</appendAssemblyId>
-				</configuration>
-			</plugin>
-			<plugin>
-    		<groupId>com.zenjava</groupId>
-    		<artifactId>javafx-maven-plugin</artifactId>
-    		<version>8.8.3</version>
-    		<configuration>
-        		<vendor>Ge'ez Frontier Foundation</vendor>
-				<mainClass>org.geez.ui.Xliterator</mainClass>
-				<!-- bundler>DMG</bundler -->
-				<!-- bundler>EXE</bundler -->
-				<bundler>MSI</bundler>
-        		<nativeReleaseVersion>${project.version}</nativeReleaseVersion>  
-        		<needShortcut>true</needShortcut>  
-      		  	<needMenu>true</needMenu>  
-     		   	<appName>${project.artifactId}</appName>
-     		   	<verbose>true</verbose>
-     		   	<!-- deployDir>${project.basedir}/src/main/deploy/package/macosx</deployDir -->
-                <bundleArguments>
-                    <!-- icon>${project.basedir}/src/main/resources/${project.artifactId}.icns</icon -->
-                    <!-- icon>${project.basedir}/src/main/resources/geez-org.ico</icon -->
-                </bundleArguments>
-             	<manifestAttributes>  
-                    <Specification-Title>${project.name}</Specification-Title>  
-                    <Specification-Version>${project.version}</Specification-Version>  
-                    <Specification-Vendor>${project.organization.name}</Specification-Vendor>  
-                    <Implementation-Title>${project.name}</Implementation-Title>  
-                    <Implementation-Version>${project.version}</Implementation-Version>  
-                    <Implementation-Vendor-Id>${project.groupId}</Implementation-Vendor-Id>  
-                    <Implementation-Vendor>${project.organization.name}</Implementation-Vendor>  
-      			</manifestAttributes>
-      			<jvmArgs>
-      				<argument>-Dfile.encoding=utf-8</argument>
-      			</jvmArgs>
-    		</configuration>
-    		<executions>
-       			<execution>
-            		<!-- required before build-native -->
-            		<id>create-jfxjar</id>
-            		<phase>package</phase>
-            		<goals>
-               			<goal>build-jar</goal>
-            		</goals>
-       			</execution>
-        		<execution>
-            		<id>create-native</id>
-            		<phase>package</phase>
-            		<goals>
-                		<goal>build-native</goal>
-            		</goals>
-        		</execution>
-   			</executions>
-		</plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>${maven.compiler.release}</release>
+      		  </configuration>
+            </plugin>
+    		<plugin>
+     		   <groupId>org.openjfx</groupId>
+      		  <artifactId>javafx-maven-plugin</artifactId>
+       		 <version>0.0.5</version>
+       		 <configuration>
+       		     <mainClass>org.geez.ui.Xliterator</mainClass>
+       		     <executable>/Users/dmekonnen/.p2/pool/plugins/org.eclipse.justj.openjdk.hotspot.jre.full.macosx.x86_64_15.0.2.v20210201-0955/jre/bin/java</executable>
+      		  </configuration>
+  		 	</plugin>
 		</plugins>
 	</build>
 

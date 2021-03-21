@@ -1,11 +1,14 @@
 package org.geez.ui;
 
 import java.awt.Desktop;
+//import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -36,9 +39,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+
 import de.endrullis.draggabletabs.DraggableTabPane;
 import javafx.application.Application;
-import javafx.embed.swing.SwingFXUtils;
+// import javafx.embed.swing.SwingFXUtils;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -740,12 +744,21 @@ public final class Xliterator extends Application {
     	}
     	primaryStage = stage;
     	
+        final Toolkit defaultToolkit = Toolkit.getDefaultToolkit();
+        final URL imageResource = ClassLoader.getSystemResource( "images/Xliterator.png" );
+        final java.awt.Image stageImage = defaultToolkit.getImage(imageResource);
+        /*
+         * Setting an icon is crashing the application, fix this later:
+         *
+        final javafx.scene.image.Image stageImage = SwingFXUtils.toFXImage( (BufferedImage)logoImage, null);
+        stage.getIcons().add( stageImage );
+       */
+    	
         stage.setTitle( "Xliterator - An ICU Based Transliterator" );
-        Image logoImage = new Image( ClassLoader.getSystemResourceAsStream( "images/Xliterator.png" ) );
-        stage.getIcons().add( logoImage );
+        // Image logoImage = new Image( ClassLoader.getSystemResourceAsStream( "images/Xliterator.png" ) );
         String osName = System.getProperty("os.name").toLowerCase();
         if( osName.startsWith( "mac" ) ) {
-            com.apple.eawt.Application.getApplication().setDockIconImage( SwingFXUtils.fromFXImage(logoImage, null) );  
+            // com.apple.eawt.Application.getApplication().setDockIconImage( SwingFXUtils.fromFXImage(logoImage, null) );  
             defaultFontFamily = "Kefa";
         }
         textTab.setDefaultFontFamily( defaultFontFamily );
