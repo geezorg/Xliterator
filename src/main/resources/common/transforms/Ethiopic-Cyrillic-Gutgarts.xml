@@ -122,7 +122,7 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 ########################################################################
 #
 ሐ ↔ $ሐ $ግዕዝ ; # ETHIOPIC SYLLABLE HHA
-ሗ ↔ $ሐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE HWO
+ሗ ↔ $ሐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE HWA
 ሑ ↔ $ሐ $ካዕብ ; # ETHIOPIC SYLLABLE HHU
 ሓ ↔ $ሐ $ራዕብ ; # ETHIOPIC SYLLABLE HHAA
 ሔ ↔ $ሐ $ኃምስ ; # ETHIOPIC SYLLABLE HHEE
