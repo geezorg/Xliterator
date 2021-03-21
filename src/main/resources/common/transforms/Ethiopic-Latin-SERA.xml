@@ -3,7 +3,7 @@
 <supplementalData>
 	<version number="$Revision$"/>
 	<transforms>
-		<transform source="Ethi" target="SERA_Latn" variant="SERA" direction="both" draft="contributed" alias="Ethopic-Latin/SERA">
+		<transform source="Ethi" target="SERA_Latn" variant="SERA" direction="both" draft="contributed" alias="Ethiopic-Latin/SERA" backwardAlias="Latin-Ethiopic/SERA">
 			<tRule><![CDATA[
 ########################################################################
 # SERA 1997 System

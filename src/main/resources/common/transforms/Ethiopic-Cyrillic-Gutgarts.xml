@@ -3,7 +3,7 @@
 <supplementalData>
 	<version number="$Revision$"/>
 	<transforms>
-		<transform source="Ethi" target="Cyri_Gutgarts" variant="Gutgarts" direction="both" draft="contributed" alias="Ethopic-Cyrillic/Gutgarts">
+		<transform source="Ethi" target="Gutgarts_Cyri" variant="Gutgarts" direction="both" draft="contributed" alias="Ethiopic-Cyrillic/Gutgarts" backwardAlias="Cyrillic-Ethiopic/Gutgarts">
 			<tRule><![CDATA[
 ########################################################################
 # SERA 1997 System

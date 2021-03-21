@@ -3,7 +3,7 @@
 <supplementalData>
 	<version number="$Revision$"/>
 	<transforms>
-		<transform source="Ethi" target="ES3842_Latn" variant="ES3842" direction="forward" draft="contributed" alias="Ethopic-Latin/ES3842">
+		<transform source="Ethi" target="Xalaget_Latn" variant="Xalaget" direction="both" draft="contributed" alias="Ethiopic-Latin/Xalaget" backwardAlias="Latin-Ethiopic/Xalaget">
 			<tRule><![CDATA[
 ########################################################################
 # Blina Xaleget

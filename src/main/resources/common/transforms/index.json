@@ -971,15 +971,6 @@
             "backwardAlias": "Latin-Ethiopic/BetaMetsehaf"
           },
           {
-            "path": "Ethiopic-Latin-Braille.xml",
-            "source": "Ethi",
-            "target": "Braile_Ethi_Latn",
-            "name": "Braille",
-            "direction": "both",
-            "alias": "Ethiopic-Latin/Braille",
-            "backwardAlias": "Latin-Ethiopic/Braille"
-          },
-          {
             "path": "Ethiopic-Latin-ES3842.xml",
             "source": "Ethi",
             "target": "ES3842_Latn",
@@ -1007,11 +998,22 @@
             "backwardAlias": "Latin-Ethiopic/Xaleget"
           }
         ],
+        "Braille": [
+          {
+            "path": "Ethiopic-Latin-Braille.xml",
+            "source": "Ethi",
+            "target": "Amharic_Ethi_Brai",
+            "name": "Amharic",
+            "direction": "both",
+            "alias": "Ethiopic-Braille/Amharic",
+            "backwardAlias": "Braille-Ethiopic/Amharic"
+          }
+        ],
         "Cyrillic": [
           {
             "path": "Ethiopic-Cyrillic-Gutgarts.xml",
             "source": "Ethi",
-            "target": "Gutgarts_Latn",
+            "target": "Gutgarts_Cyri",
             "name": "Gutgarts",
             "direction": "both",
             "alias": "Ethiopic-Cyrillic/Gutgarts",
@@ -4673,4 +4675,3 @@
     }
   }
 }
-

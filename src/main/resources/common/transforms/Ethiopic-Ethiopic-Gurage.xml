@@ -3,7 +3,7 @@
 <supplementalData>
 	<version number="Revision$"/>
 	<transforms>
-		<transform source="Ethi" target="Gurage_Ethi" variant="Gurage" direction="both" draft="contributed" alias="Ethopic-Ethiopic/Gurage">
+		<transform source="Ethi" target="Gurage_Ethi" variant="Gurage" direction="both" draft="contributed" alias="Ethiopic-Ethiopic/Gurage" backwardAlias="Gurage-Ethiopic">
 			<tRule><![CDATA[
 ########################################################################
 # SERA 1997 System

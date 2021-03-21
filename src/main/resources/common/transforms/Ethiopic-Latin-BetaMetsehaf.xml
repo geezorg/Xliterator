@@ -3,7 +3,7 @@
 <supplementalData>
 	<version number="$Revision$"/>
 	<transforms>
-		<transform source="Ethi" target="BetaMetsehaf_Latn" variant="BetaMetsehaf" direction="both" draft="contributed" alias="Ethopic-Latin/BetaMetsehaf">
+		<transform source="Ethi" target="BetaMetsehaf_Latn" variant="BetaMetsehaf" direction="both" draft="contributed" alias="Ethiopic-Latin/BetaMetsehaf" backwardAlias="Latin-Ethiopic/BetaMetsehaf">
 			<tRule><![CDATA[
 ########################################################################
 # Beta Maṣāḥǝft Transliteration

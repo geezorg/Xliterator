@@ -3,7 +3,7 @@
 <supplementalData>
 	<version number="$Revision$"/>
 	<transforms>
-		<transform source="Ethi" target="Aethiopica_Latn" variant="Aethiopica" direction="both" draft="contributed" alias="Ethopic-Latin/Aethiopica">
+		<transform source="Ethi" target="Aethiopica_Latn" variant="Aethiopica" direction="both" draft="contributed" alias="Ethiopic-Latin/Aethiopica" backwardAlias="Latin-Ethiopic/Aethiopica">
 			<tRule><![CDATA[
 ########################################################################
 # Encylopedia Aethiopica Transliteration
