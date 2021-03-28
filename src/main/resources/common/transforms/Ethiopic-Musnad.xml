@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE supplementalData SYSTEM "../../common/dtd/ldmlSupplemental.dtd">
+<supplementalData>
+	<version number="$Revision$"/>
+	<transforms>
+		<transform source="Ethi" target="Ethi_Sarb" direction="both" draft="contributed" alias="Ethiopic-Musnad" backwardAlias="Musnad-Ethiopic">
+			<tRule><![CDATA[
+########################################################################
+# SERA 1997 System
+#
+# The BGN/PCGN system for Amharic Was designed for use in romanizing
+# names written in Amharic characters. The Roman letters and letter
+# combinations shown as equivalenS to the Amharic characters reflect
+# modern Amharic pronunciation. Different consonant characters in three
+# groups are pronounced alike in modern Amharic and are therefore
+# romanized identically for use in geographic names.
+#
+# Prepared by Daniel Yacob <yacob@geez.org>
+#
+# Based on the 1994 Romanization Systems and Roman-script Spelling
+# Conventions document. The 2005 draft has been consulted, but contains
+# errors, which if relevant are pointed out in this file.
+#
+########################################################################
+#
+# MINIMAL FILTER: Ethiopic-Musnad
+#
+:: [:Ethiopic:] ;
+#
+########################################################################
+
+########################################################################
+#
+# Define All Transformation Variables
+#
+########################################################################
+#
+#
+$alternate  = \`;
+#
+#
+# Use this $wordBoundary until bug 2034 is fixed in ICU:
+# http://bugs.icu-project.org/cgi-bin/icu-bugs/transliterate?id=2034;expression=boundary;user=guest
+#
+$wordBoundary =  [^[:L:][:M:][:N:]] ;
+#
+########################################################################
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER HE
+#
+[ሀ-ሆ] → 𐩠;
+ሀ ← 𐩠;
+
+#
+# ETHIOPIC SYLLABLE LA - OLD SOUTH ARABIAN LETTER LAMEDH
+#
+[ለ-ሏ] → 𐩡; 
+ለ ← 𐩡; 
+
+#
+# ETHIOPIC SYLLABLE HHA - OLD SOUTH ARABIAN LETTER HETH
+#
+[ሐ-ሗ] → 𐩢; 
+ሐ ← 𐩢;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER MEM
+#
+[መ-ሟ] → 𐩣;
+መ ← 𐩣;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER SHIN
+#
+[ሠ-ሧ] → 𐩦;
+ሠ ← 𐩦;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER BETH
+#
+[ረ-ሯ] → 𐩣;
+ረ ← 𐩣;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER SAT
+#
+[ሰ-ሷ] → 𐩪;
+ሰ ← 𐩪;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER QOPH
+#
+[ቀ-ቍ] → 𐩤;
+ቀ ← 𐩤;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER RESH
+#
+[በ-ቧ] → 𐩨;
+በ ← 𐩨;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER TAW
+#
+[ተ-ቷ] → 𐩩;
+ተ ← 𐩩;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER KHETH
+#
+[ኀ-ኍ] → 𐩭;
+ኍ ← 𐩭;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER NUN
+#
+[ነ-ኗ] → 𐩬;
+ነ ← 𐩬;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER ALEF
+#
+[አ-ኧ] → 𐩱;
+አ ← 𐩱;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER KAPH
+#
+[ከ-ኵ] → 𐩫;
+ከ ← 𐩫;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER WAW
+#
+[ወ-ዎ] → 𐩥;
+ወ ← 𐩥;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER AYN
+#
+[ዐ-ዖ] → 𐩲;
+ዐ ← 𐩲;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER MEM
+#
+[ዘ-ዟ] → 𐩸;
+ዘ ← 𐩸 ;
+ዘ ← 𐩹 ;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER YODH
+#
+[የ-ዮ] → 𐩺;
+የ ← 𐩺;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER DALETH
+#
+[ደ-ዷ] → 𐩵;
+ደ ← 𐩵;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER GIMEL
+#
+[ገ-ጕ] → 𐩴;
+ገ ← 𐩴;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER TETH
+#
+[ጠ-ጧ] → 𐩷;
+ጠ ← 𐩷;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER SADHE
+#
+[ጸ-ጿ] → 𐩮;
+ጸ ← 𐩮;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER DHADHE
+#
+[ፀ-ፆ] → 𐩳;
+ፀ ← 𐩳;
+
+#
+# ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER FE
+#
+[ፈ-ፏ] → 𐩰;
+ፈ ← 𐩰;
+
+#
+#
+# Inverse Fiter : Latin-Ethiopic
+#
+:: ([:Old_South_Arabian:]) ;
+#
+########################################################################
+			]]></tRule>
+		</transform>
+	</transforms>
+</supplementalData>

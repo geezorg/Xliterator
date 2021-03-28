@@ -1030,6 +1030,17 @@
             "alias": "Ethiopic-Ethiopic/Gurage",
             "backwardAlias": "Gurage-Ethiopic"
           }
+        ],
+        "Musnad": [
+          {
+            "path": "Ethiopic-Musnad.xml",
+            "source": "Ethi",
+            "target": "Ethi_Sarb",
+            "name": "_base",
+            "direction": "both",
+            "alias": "Ethiopic-Musnad",
+            "backwardAlias": "Ethiopic-Musnad"
+          }
         ]
       }
     },
