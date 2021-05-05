@@ -6,18 +6,17 @@
 		<transform source="Ethi" target="ALA_Latn" variant="ALA" direction="both" draft="contributed" alias="Ethiopic-Latin/ALA" backwardAlias="Latin-Ethiopic/ALA">
 			<tRule><![CDATA[
 ########################################################################
-# SERA 1997 System
+# American Library Association Transliteration for Amharic
 #
-# The BGN/PCGN system for Amharic Was designed for use in romanizing
-# names written in Amharic characters. The Roman letters and letter
-# combinations shown as equivalenS to the Amharic characters reflect
-# modern Amharic pronunciation. Different consonant characters in three
-# groups are pronounced alike in modern Amharic and are therefore
-# romanized identically for use in geographic names.
+# https://www.loc.gov/catdir/cpso/roman.html
+# https://www.loc.gov/catdir/cpso/romanization/amharic.pdf
+# https://en.wikipedia.org/wiki/ALA-LC_romanization
+#
+# The ALA-LC Romanization Tables: Transliteration Schemes for Non-Roman Scripts, is approved by the Library of Congress and the American Library Association.
 #
 # Prepared by Daniel Yacob <yacob@geez.org>
 #
-# Based on the 1994 Romanization Systems and Roman-script Spelling
+# Based on the 2011 Romanization Systems and Roman-script Spelling
 # Conventions document. The 2005 draft has been consulted, but contains
 # errors, which if relevant are pointed out in this file.
 #
@@ -35,83 +34,61 @@
 #
 ########################################################################
 #
-$ግዕዝ = e ;
+$ግዕዝ = a ;
 $ካዕብ = u ;
 $ሣልስ = i ;
-$ራዕብ = a ;
-$ኃምስ = E ;
-$ሳድስ =   ;
+$ራዕብ = ā ;
+$ኃምስ = é ;
+$ሳድስ =   ; # sometimes 'e'
 $ሳብዕ = o ;
-$ሳምን = oa ;
-$ዘመደ_ግዕዝ = We ; 
-$ዘመደ_ካዕብ = Wu ;
-$ዘመደ_ኃምስ = WE ;
-$ዘመደ_ሣልስ = Wi ;
-$ዘመደ_ራዕብ = Wa ;
+# $ሳምን = oa ;
+$ዘመደ_ግዕዝ = wa ; 
+$ዘመደ_ካዕብ = we ;
+$ዘመደ_ሣልስ = wi ;
+$ዘመደ_ራዕብ_12 = wā;
+$ዘመደ_ራዕብ = wa ;
+$ዘመደ_ኃምስ = wé ;
 #
-$alternate  = \`;
+# $alternate  = \`;
 #
-$ሀ = h  ;
-$ለ = l  ;
-$ሐ = H ;
-$መ = m  ;
-$ሠ = $alternate s ;
-$ረ = r  ;
-$ሰ = s  ;
-$ሸ = x  ;
-
-#
-# The following for Gamo-
-#
-$ꬁ = ~s;
-$ꬑ = ~z;
-$ꬉ = ~d ;
-$ꬠ = ~C;
-$ꬨ = ~S;
-
-
-$ⶠ = $alternate x ;
-$ቀ = q  ;
-$ⷀ = qY ;
-$ቐ = Q;
-$በ = b  ;
-$ቨ = v  ;
-$ተ = t  ;
-$ቸ = c  ;
-$ⶨ = $alternate c ;
-$ኀ = $alternate h ;
-$ነ = n  ;
-$ኘ = N ;
-$ከ = k  ;
-$ⷈ = kY ;
-$ኸ = K  ;
-$ⷐ = KY  ;
-$ወ = w  ;
-$ዘ = z  ;
-$ዠ = Z ;
-$ⶰ = $alternate Z ;
-$የ = y  ;
-$ደ = d  ;
-$ዸ = D ;
-$ጀ = j  ;
-$ገ = g  ;
-$ⷘ = gY ;
-$ጘ = G ;
-$ጠ = T  ;
-$ጨ = C ;
-$ⶸ = $alternate C ;
-$ጰ = P ;
-$ጸ = S ;
-$ፀ = $alternate S ;
-$ፈ = f  ;
-$ፐ = p  ;
+$ሀ = h ;
+$ለ = l ;
+$ሐ = ḥ ;
+$መ = m ;
+$ሠ = ś ;
+$ረ = r ;
+$ሰ = s ;
+$ሸ = š ;
+$ቀ = q ;
+$በ = b ;
+$ቨ = v ;
+$ተ = t ;
+$ቸ = c ;
+$ኀ = ẖ ;
+$ነ = n ;
+$ኘ = ñ ;
+$ከ = k ;
+$ኸ = x ;
+$ወ = w ;
+$ዘ = z ;
+$ዠ = ž ;
+$የ = y ;
+$ደ = d ;
+$ጀ = ǧ ;
+$ገ = g ;
+$ጠ = ṭ ;
+$ጨ = ċ ;
+$ጰ = p̣ ;
+$ጸ = ṣ ;
+$ፀ = ṡ ;
+$ፈ = f ;
+$ፐ = p ;
 #
 # vowels are special:
 #
-$glottal    = \' ;
-$pharyngeal = \`;
-# $አ =    a ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =   aa ; $ኤ = $ኃምስ ; $እ =    e ; $ኦ = $ሳብዕ ; $ⶊ = $ሳምን ; $ኧ = ä ;
-$አ =    a ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =   A ; $ኤ = $ኃምስ ; $እ = I ; $ኦ = $ሳብዕ ; $ኦa = $ሳምን ; $ኧ = ea ;
+$glottal    = \ʼ ;
+$pharyngeal = \ʻ;
+$አ =    a ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =   A ; $ኤ = $ኃምስ ; $እ = I ; $ኦ = $ሳብዕ ;  $ኧ = ă ;
 $ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; $ዔ = $ኃምስ ; $ዕ = I ; $ዖ = $ሳብዕ ; 
 #
 # Use this $wordBoundary until bug 2034 is fixed in ICU:
@@ -611,63 +588,46 @@ $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 ፑ ↔ $ፐ $ካዕብ ; # ETHIOPIC SYLLABLE PU
 ፕ ↔ $ፐ $ሳድስ ; # ETHIOPIC SYLLABLE PE
 #
-። ↔ \:\:  ; # ETHIOPIC FULLSTOP
-፣ ↔ \,    ; # Fill in the rest
-፤ ↔ \;    ;
-፥ ↔ \-\:  ;
-፦ ↔ \:\-  ;
-፨ ↔ \:\|\: ;
-፠ ↔ \:\+  ;
-፧ ↔ $alternate \?  ;
-፡ ↔ \:    ;
-« ↔ \<\<  ;
-» ↔ \>\>  ;
-‹ ↔ \<  ;
-› ↔ \>  ;
-¡ ↔ $alternate \! ;
+# Review what do do for undefined mappings.
 #
-፼ ↔ $alternate 10000 ; # ETHIOPIC NUMBER TEN THOUSAND
-፲፻ ↔ $alternate 1000 ; # One Thousand
-፻ ↔ $alternate   100 ; # ETHIOPIC NUMBER HUNDRED
-፲ ↔ $alternate    10 ; # ETHIOPIC NUMBER TEN
-፳ ↔ $alternate    20 ; # ETHIOPIC NUMBER TWENTY
-፴ ↔ $alternate    30 ; # ETHIOPIC NUMBER THIRTY
-፵ ↔ $alternate    40 ; # ETHIOPIC NUMBER FORTY
-፶ ↔ $alternate    50 ; # ETHIOPIC NUMBER FIFTY
-፷ ↔ $alternate    60 ; # ETHIOPIC NUMBER SIXTY
-፸ ↔ $alternate    70 ; # ETHIOPIC NUMBER SEVENTY
-፹ ↔ $alternate    80 ; # ETHIOPIC NUMBER EIGHTY
-፺ ↔ $alternate    90 ; # ETHIOPIC NUMBER NINETY
-፩ ↔ $alternate     1 ; # ETHIOPIC DIGIT ONE
-፪ ↔ $alternate     2 ; # ETHIOPIC DIGIT TWO
-፫ ↔ $alternate     3 ; # ETHIOPIC DIGIT THREE
-፬ ↔ $alternate     4 ; # ETHIOPIC DIGIT FOUR
-፭ ↔ $alternate     5 ; # ETHIOPIC DIGIT FIVE
-፮ ↔ $alternate     6 ; # ETHIOPIC DIGIT SIX
-፯ ↔ $alternate     7 ; # ETHIOPIC DIGIT SEVEN
-፰ ↔ $alternate     8 ; # ETHIOPIC DIGIT EIGHT
-፱ ↔ $alternate     9 ; # ETHIOPIC DIGIT NINE
+# ። ↔ \:\:  ; # ETHIOPIC FULLSTOP
+# ፣ ↔ \,    ; # Fill in the rest
+# ፤ ↔ \;    ;
+# ፥ ↔ \-\:  ;
+# ፦ ↔ \:\-  ;
+# ፨ ↔ \:\|\: ;
+# ፠ ↔ \:\+  ;
+# ፧ ↔ \?  ;
+# ፡ ↔ \:    ;
+# « ↔ \<\<  ;
+# » ↔ \>\>  ;
+# ‹ ↔ \<  ;
+# › ↔ \>  ;
 #
-\u135f ↔ \_ ; # ETHIOPIC COMBINING GEMINATION MARK
-#
-᎐ ↔ \|y  ; # ETHIOPIC TONAL MARK YIZET
-᎑ ↔ \|de ; # ETHIOPIC TONAL MARK DERET
-᎒ ↔ \|hr ; # ETHIOPIC TONAL MARK RIKRIK
-᎓ ↔ \|r  ; # ETHIOPIC TONAL MARK SHORT RIKRIK
-᎖ ↔ \|c  ; # ETHIOPIC TONAL MARK CHIRET
-᎗ ↔ \|h  ; # ETHIOPIC TONAL MARK HIDET
-᎘ ↔ \|dh ; # ETHIOPIC TONAL MARK DERET-HIDET
-᎙ ↔ \|qu ; # ETHIOPIC TONAL MARK KURT
-᎔ ↔ \|d  ; # ETHIOPIC TONAL MARK DIFAT 
-᎕ ↔ \|q  ; # ETHIOPIC TONAL MARK KENAT
-#
-$alternate ← $alternate $alternate;
- ← $alternate ;
-#
+፼  ↔ 10000 ; # ETHIOPIC NUMBER TEN THOUSAND
+፲፻ ↔ 1000 ; # One Thousand
+፻  ↔ 100 ; # ETHIOPIC NUMBER HUNDRED
+፲  ↔ 10 ; # ETHIOPIC NUMBER TEN
+፳  ↔ 20 ; # ETHIOPIC NUMBER TWENTY
+፴  ↔ 30 ; # ETHIOPIC NUMBER THIRTY
+፵  ↔ 40 ; # ETHIOPIC NUMBER FORTY
+፶  ↔ 50 ; # ETHIOPIC NUMBER FIFTY
+፷  ↔ 60 ; # ETHIOPIC NUMBER SIXTY
+፸  ↔ 70 ; # ETHIOPIC NUMBER SEVENTY
+፹  ↔ 80 ; # ETHIOPIC NUMBER EIGHTY
+፺  ↔ 90 ; # ETHIOPIC NUMBER NINETY
+፩  ↔ 1 ; # ETHIOPIC DIGIT ONE
+፪  ↔ 2 ; # ETHIOPIC DIGIT TWO
+፫  ↔ 3 ; # ETHIOPIC DIGIT THREE
+፬  ↔ 4 ; # ETHIOPIC DIGIT FOUR
+፭  ↔ 5 ; # ETHIOPIC DIGIT FIVE
+፮  ↔ 6 ; # ETHIOPIC DIGIT SIX
+፯  ↔ 7 ; # ETHIOPIC DIGIT SEVEN
+፰  ↔ 8 ; # ETHIOPIC DIGIT EIGHT
+፱  ↔ 9 ; # ETHIOPIC DIGIT NINE
 #
 | &lower($1) ← ([BFJLMRV]) ;
 | $glottal &lower($1) ← ([OU]) ;
-| y ← [^Kkgq]{Y ;
 #
 # Inverse Fiter : Latin-Ethiopic
 #

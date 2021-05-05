@@ -6,7 +6,7 @@
 		<transform source="Ethi" target="Ethi_Sarb" direction="both" draft="contributed" alias="Ethiopic-Musnad" backwardAlias="Musnad-Ethiopic">
 			<tRule><![CDATA[
 ########################################################################
-# SERA 1997 System
+# Ethiopic to/from Musnad (Old South Arabian) Transliteration
 #
 # The BGN/PCGN system for Amharic Was designed for use in romanizing
 # names written in Amharic characters. The Roman letters and letter

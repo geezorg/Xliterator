@@ -6,7 +6,7 @@
 		<transform source="Ethi" target="Gutgarts_Cyri" variant="Gutgarts" direction="both" draft="contributed" alias="Ethiopic-Cyrillic/Gutgarts" backwardAlias="Cyrillic-Ethiopic/Gutgarts">
 			<tRule><![CDATA[
 ########################################################################
-# SERA 1997 System
+# Gutgarts Cyrillic Transliteration
 #
 # The BGN/PCGN system for Amharic Was designed for use in romanizing
 # names written in Amharic characters. The Roman letters and letter
@@ -23,7 +23,7 @@
 #
 ########################################################################
 #
-# MINIMAL FILTER: Ethiopic-Latin
+# MINIMAL FILTER: Ethiopic-Cyrillic
 #
 :: [:Ethiopic:] ;
 #
@@ -35,84 +35,85 @@
 #
 ########################################################################
 #
-$ግዕዝ = e ;
-$ካዕብ = u ;
-$ሣልስ = i ;
-$ራዕብ = a ;
-$ኃምስ = E ;
-$ሳድስ =   ;
-$ሳብዕ = o ;
-$ሳምን = oa ;
-$ዘመደ_ግዕዝ = We ; 
-$ዘመደ_ካዕብ = Wu ;
-$ዘመደ_ኃምስ = WE ;
-$ዘመደ_ሣልስ = Wi ;
-$ዘመደ_ራዕብ = Wa ;
+$ግዕዝ = э ;
+$ካዕብ = у ;
+$ሣልስ = и ;
+$ራዕብ = а ;
+$ኃምስ = е ;
+$ሳድስ = ы ;
+$ሳብዕ = о ;
+$ሳምን = оо ;   # TBD: Fix for Cyrillic
+$ዘመደ_ግዕዝ = ўэ ; 
+$ዘመደ_ካዕብ = ўы ;
+$ዘመደ_ኃምስ = ўе ;
+$ዘመደ_ሣልስ = ўи ;
+$ዘመደ_ራዕብ = ўа ;
 #
 $alternate  = \`;
 #
-$ሀ = h  ;
-$ለ = l  ;
-$ሐ = H ;
-$መ = m  ;
-$ሠ = $alternate s ;
-$ረ = r  ;
-$ሰ = s  ;
-$ሸ = x  ;
+$ሀ = х  ;
+$ለ = л  ;
+$ሐ = х̣ ;
+$መ = м  ;
+$ሠ = ć ;
+$ረ = р  ;
+$ሰ = с  ;
+$ሸ = ш  ;
 
 #
 # The following for Gamo-
 #
-$ꬁ = ~s;
-$ꬑ = ~z;
-$ꬉ = ~d ;
-$ꬠ = ~C;
-$ꬨ = ~S;
+
+# TBD: Fix for Cyrillic
+$ꬁ = \+с;
+$ꬑ = \+з;
+$ꬉ = \+д;
+$ꬠ = \+ч̣;
+$ꬨ = \+ц̣;
 
 
-$ⶠ = $alternate x ;
-$ቀ = q  ;
-$ⷀ = qY ;
-$ቐ = Q;
-$በ = b  ;
-$ቨ = v  ;
-$ተ = t  ;
-$ቸ = c  ;
-$ⶨ = $alternate c ;
-$ኀ = $alternate h ;
-$ነ = n  ;
-$ኘ = N ;
-$ከ = k  ;
-$ⷈ = kY ;
-$ኸ = K  ;
-$ⷐ = KY  ;
-$ወ = w  ;
-$ዘ = z  ;
-$ዠ = Z ;
-$ⶰ = $alternate Z ;
-$የ = y  ;
-$ደ = d  ;
+$ⶠ = $alternate ш ;  # TBD: Fix for Cyrillic
+$ቀ = к̣  ;
+$ⷀ = к̣Y ;  # TBD: Fix for Cyrillic
+$ቐ = к̣̄;
+$በ = б  ;
+$ቨ = в  ;
+$ተ = т  ;
+$ቸ = ч  ;
+$ⶨ = $alternate ч ;  # TBD: Fix for Cyrillic
+$ኀ = х̮ ;
+$ነ = н  ;
+$ኘ = нь ;
+$ከ = к  ;
+$ⷈ = кY ;   # TBD: Fix for Cyrillic
+$ኸ = к̱  ;
+$ⷐ = к̱Y  ;  # TBD: Fix for Cyrillic
+$ወ = ў  ;
+$ዘ = з  ;
+$ዠ = ж ;
+$ⶰ = $alternate ж ;  # TBD: Fix for Cyrillic
+$የ = й  ;
+$ደ = д  ;
 $ዸ = D ;
-$ጀ = j  ;
-$ገ = g  ;
-$ⷘ = gY ;
-$ጘ = G ;
-$ጠ = T  ;
-$ጨ = C ;
-$ⶸ = $alternate C ;
-$ጰ = P ;
-$ጸ = S ;
-$ፀ = $alternate S ;
-$ፈ = f  ;
-$ፐ = p  ;
+$ጀ = дж  ;
+$ገ = г  ;
+$ⷘ = гY ;  # TBD: Fix for Cyrillic
+$ጘ = нг ;
+$ጠ = т̣  ;
+$ጨ = ч̣ ;
+$ⶸ = $alternate ч̣ ;  # TBD: Fix for Cyrillic
+$ጰ = п̣ ;
+$ጸ = ц̣ ;
+$ፀ = $alternate ц̣ ;
+$ፈ = ф  ;
+$ፐ = п  ;
 #
 # vowels are special:
 #
-$glottal    = \' ;
-$pharyngeal = \`;
-# $አ =    a ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =   aa ; $ኤ = $ኃምስ ; $እ =    e ; $ኦ = $ሳብዕ ; $ⶊ = $ሳምን ; $ኧ = ä ;
-$አ =    a ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =   A ; $ኤ = $ኃምስ ; $እ = I ; $ኦ = $ሳብዕ ; $ኦa = $ሳምን ; $ኧ = ea ;
-$ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; $ዔ = $ኃምስ ; $ዕ = I ; $ዖ = $ሳብዕ ; 
+$glottal    = ͵ ;
+$pharyngeal = ʹ;
+$አ = $ግዕዝ ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ = $ራዕብ ; $ኤ = и$ኃምስ ; $እ = $ሳድስ ; $ኦ = $ሳብዕ ; $ኦa = $ሳምን ; $ኧ = ea ;
+$ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; $ዔ = $ኃምስ ; $ዕ = $ሳድስ ; $ዖ = $ሳብዕ ; 
 #
 # Use this $wordBoundary until bug 2034 is fixed in ICU:
 # http://bugs.icu-project.org/cgi-bin/icu-bugs/transliterate?id=2034;expression=boundary;user=guest
@@ -492,13 +493,13 @@ $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 ዞ ↔ $ዘ $ሳብዕ ; # ETHIOPIC SYLLABLE ZO
 ዝ ↔ $ዘ $ሳድስ ; # ETHIOPIC SYLLABLE ZE
 #
-የ ↔ $የ $ግዕዝ ; # ETHIOPIC SYLLABLE YA
-ዩ ↔ $የ $ካዕብ ; # ETHIOPIC SYLLABLE YU
-ዬ ↔ $የ $ኃምስ ; # ETHIOPIC SYLLABLE YEE
+የ ↔ е ; # ETHIOPIC SYLLABLE YA
+ዩ ↔ ю ; # ETHIOPIC SYLLABLE YU
+ዬ ↔ йиэ ; # ETHIOPIC SYLLABLE YEE
 ዪ ↔ $የ $ሣልስ ; # ETHIOPIC SYLLABLE YI
-ያ ↔ $የ $ራዕብ ; # ETHIOPIC SYLLABLE YAA
+ያ ↔ я ; # ETHIOPIC SYLLABLE YAA
 ዯ ↔ $የ $ሳምን ; # ETHIOPIC SYLLABLE YOA
-ዮ ↔ $የ $ሳብዕ ; # ETHIOPIC SYLLABLE YO
+ዮ ↔ ё ; # ETHIOPIC SYLLABLE YO
 ይ ↔ $የ $ሳድስ ; # ETHIOPIC SYLLABLE YE
 #
 ዸ ↔ $ዸ $ግዕዝ ; # ETHIOPIC SYLLABLE DDA
@@ -620,11 +621,6 @@ $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 ፠ ↔ \:\+  ;
 ፧ ↔ $alternate \?  ;
 ፡ ↔ \:    ;
-« ↔ \<\<  ;
-» ↔ \>\>  ;
-‹ ↔ \<  ;
-› ↔ \>  ;
-¡ ↔ $alternate \! ;
 #
 ፼ ↔ $alternate 10000 ; # ETHIOPIC NUMBER TEN THOUSAND
 ፲፻ ↔ $alternate 1000 ; # One Thousand
@@ -650,24 +646,9 @@ $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 #
 \u135f ↔ \_ ; # ETHIOPIC COMBINING GEMINATION MARK
 #
-᎐ ↔ \|y  ; # ETHIOPIC TONAL MARK YIZET
-᎑ ↔ \|de ; # ETHIOPIC TONAL MARK DERET
-᎒ ↔ \|hr ; # ETHIOPIC TONAL MARK RIKRIK
-᎓ ↔ \|r  ; # ETHIOPIC TONAL MARK SHORT RIKRIK
-᎖ ↔ \|c  ; # ETHIOPIC TONAL MARK CHIRET
-᎗ ↔ \|h  ; # ETHIOPIC TONAL MARK HIDET
-᎘ ↔ \|dh ; # ETHIOPIC TONAL MARK DERET-HIDET
-᎙ ↔ \|qu ; # ETHIOPIC TONAL MARK KURT
-᎔ ↔ \|d  ; # ETHIOPIC TONAL MARK DIFAT 
-᎕ ↔ \|q  ; # ETHIOPIC TONAL MARK KENAT
-#
 $alternate ← $alternate $alternate;
  ← $alternate ;
 #
-#
-| &lower($1) ← ([BFJLMRV]) ;
-| $glottal &lower($1) ← ([OU]) ;
-| y ← [^Kkgq]{Y ;
 #
 # Inverse Fiter : Latin-Ethiopic
 #

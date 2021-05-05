@@ -7,7 +7,7 @@
 			<tRule><![CDATA[
 ########################################################################
 #
-# MINIMAL FILTER: Ethiopic-Latin
+# MINIMAL FILTER: Ethiopic-Braille
 #
 # :: [ሀ-፼] ;
 :: [:Ethiopic:] ;
@@ -639,10 +639,10 @@ $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 $alternate ← $alternate $alternate;
  ← $alternate ;
 #
-# Inverse Fiter : Latin-Ethiopic
+# Inverse Fiter : Braille-Ethiopic
 #
 ## fix this:
-:: ([-!\u0023',.:<>?`0-9A-Za-z]) ;
+:: [:Braille:] ;
 #
 ########################################################################
 			]]></tRule>

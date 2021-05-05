@@ -6,7 +6,7 @@
 		<transform source="Ethi" target="Gurage_Ethi" variant="Gurage" direction="both" draft="contributed" alias="Ethiopic-Ethiopic/Gurage" backwardAlias="Gurage-Ethiopic">
 			<tRule><![CDATA[
 ########################################################################
-# SERA 1997 System
+# Gurage Fider (2015, Unicode Ethiopic Extended-B 2021)
 #
 # The BGN/PCGN system for Amharic Was designed for use in romanizing
 # names written in Amharic characters. The Roman letters and letter

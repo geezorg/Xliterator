@@ -876,7 +876,7 @@ public final class Xliterator extends Application {
         		closeAllMenuItem.setDisable( true );
         		saveAsMenuItem.setDisable( true );
         		currentEditorTab = null;
-        		toggleEditMenu( true );
+        		// toggleEditMenu( true );
         	}
         });
         //=========================== END TEXT TAB =============================================

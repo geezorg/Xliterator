@@ -188,8 +188,8 @@ public class ConvertTextTab extends XliteratorTab {
     		return;
     	}
     	textAreaOut.replaceText( stringConverter.convertText( textIn ) );
-
     }
+    
     public void setup(Xliterator xlit) {
     	this.xlit = xlit;
         textAreaIn.setPrefHeight( 313 );
