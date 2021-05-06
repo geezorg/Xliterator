@@ -326,8 +326,9 @@ public final class Xliterator extends Application {
     		    variantObjectList.add(0, variantsOut.get(0).getAsJsonObject() ); // _base is always at index 0
     		    
     			for(int i=0; i<size; i++) {
-    				JsonObject vObject = (JsonObject)variantObjectList.get(i);
-    				String variantOutKey = vObject.getAsJsonObject().get("name").getAsString();
+    				//JsonObject vObject = (JsonObject)variantObjectList.get(i);
+    				JsonObject variantOutObject = (JsonObject)variantObjectList.get(i);
+    				String variantOutKey = variantOutObject.getAsJsonObject().get("name").getAsString();
     				RadioMenuItem menuItem = new RadioMenuItem( variantOutKey );
             		scriptMenu.getItems().add( menuItem );
     				if( "_base".equals( variantOutKey ) ) {
@@ -336,7 +337,7 @@ public final class Xliterator extends Application {
     				}
 
         			menuItem.setToggleGroup( groupOutMenu );
-        			JsonObject variantOutObject = variantsOut.get(i).getAsJsonObject();
+        			//JsonObject variantOutObject = variantsOut.get(i).getAsJsonObject();
         			variantOutObject.addProperty( "isEditor", false );
             		menuItem.setOnAction( evt -> {
             			if( outScriptMenuLast != null ) {
