@@ -45,7 +45,7 @@ $ቐ = q ;
 $በ = b ;
 $ቨ = v ;
 $ተ = t ;
-$ቸ = c ;
+$ቸ = ch ;
 $ኀ = h ;
 $ነ = n ;
 $ኘ = ñ ;
@@ -77,16 +77,6 @@ $wordBoundary = [^[:L:][:M:][:N:]] ;
 # Start of Syllabic Transformations
 ########################################################################
 #
-ሀ → $ሀ $ራዕብ ; # ETHIOPIC SYLLABLE HA
-ሁ ↔ $ሀ $ካዕብ ; # ETHIOPIC SYLLABLE HU
-ሂ ↔ $ሀ $ሣልስ ; # ETHIOPIC SYLLABLE HI
-ሃ → $ሀ $ራዕብ ; # ETHIOPIC SYLLABLE HAA
-ሄ ↔ $ሀ $ኃምስ ; # ETHIOPIC SYLLABLE HEE
-ህ}$wordBoundary → $ሀ ; # ETHIOPIC SYLLABLE HE
-ህ ↔ $ሀ $ሳድስ ; # ETHIOPIC SYLLABLE HE
-ሆ ↔ $ሀ $ሳብዕ ; # ETHIOPIC SYLLABLE HO
-ህ ← $ሀ ; # ETHIOPIC SYLLABLE HE
-#
 ለ ↔ $ለ $ግዕዝ ; # ETHIOPIC SYLLABLE LA
 ሉ ↔ $ለ $ካዕብ ; # ETHIOPIC SYLLABLE LU
 ሊ ↔ $ለ $ሣልስ ; # ETHIOPIC SYLLABLE LI
@@ -98,17 +88,6 @@ $wordBoundary = [^[:L:][:M:][:N:]] ;
 ሏ ↔ $ለ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE LWA
 ል ← $ለ ; # ETHIOPIC SYLLABLE LE
 #
-ሐ ↔ $ሐ $ራዕብ ; # ETHIOPIC SYLLABLE HHA
-ሑ ↔ $ሐ $ካዕብ ; # ETHIOPIC SYLLABLE HHU
-ሒ ↔ $ሐ $ሣልስ ; # ETHIOPIC SYLLABLE HHI
-ሓ → $ሐ $ራዕብ ; # ETHIOPIC SYLLABLE HHAA
-ሔ ↔ $ሐ $ኃምስ ; # ETHIOPIC SYLLABLE HHEE
-ሕ}$wordBoundary → $ሐ ; # ETHIOPIC SYLLABLE HHE
-ሕ ↔ $ሐ $ሳድስ ; # ETHIOPIC SYLLABLE HHE
-ሖ ↔ $ሐ $ሳብዕ ; # ETHIOPIC SYLLABLE HHO
-ሗ ↔ $ሐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE HHWA
-ሕ ← $ሐ ; # ETHIOPIC SYLLABLE HHE
-#
 መ ↔ $መ $ግዕዝ ; # ETHIOPIC SYLLABLE MA
 ሙ ↔ $መ $ካዕብ ; # ETHIOPIC SYLLABLE MU
 ሚ ↔ $መ $ሣልስ ; # ETHIOPIC SYLLABLE MI
@@ -118,7 +97,7 @@ $wordBoundary = [^[:L:][:M:][:N:]] ;
 ም ↔ $መ $ሳድስ ; # ETHIOPIC SYLLABLE ME
 ሞ ↔ $መ $ሳብዕ ; # ETHIOPIC SYLLABLE MO
 ሟ ↔ $መ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE MWA
-ፙ ↔ my $ራዕብ ; # ETHIOPIC SYLLABLE MYA
+ፙ ↔ $መ $የ $ራዕብ ; # ETHIOPIC SYLLABLE MYA
 ም ← $መ ; # ETHIOPIC SYLLABLE ME
 #
 ሠ  → $ሠ $ግዕዝ ; # ETHIOPIC SYLLABLE SZA
@@ -154,17 +133,6 @@ $wordBoundary = [^[:L:][:M:][:N:]] ;
 ሾ ↔ $ሸ $ሳብዕ ; # ETHIOPIC SYLLABLE SHO
 ሿ ↔ $ሸ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE SHWA
 ሽ ← $ሸ ; # ETHIOPIC SYLLABLE SHE
-#
-ሰ ↔ $ሰ $ግዕዝ ; # ETHIOPIC SYLLABLE SA
-ሱ ↔ $ሰ $ካዕብ ; # ETHIOPIC SYLLABLE SU
-ሲ ↔ $ሰ $ሣልስ ; # ETHIOPIC SYLLABLE SI
-ሳ ↔ $ሰ $ራዕብ ; # ETHIOPIC SYLLABLE SAA
-ሴ ↔ $ሰ $ኃምስ ; # ETHIOPIC SYLLABLE SEE
-ስ}$wordBoundary → $ሰ ; # ETHIOPIC SYLLABLE SE
-ስ ↔ $ሰ $ሳድስ ; # ETHIOPIC SYLLABLE SE
-ሶ ↔ $ሰ $ሳብዕ ; # ETHIOPIC SYLLABLE SO
-ሷ ↔ $ሰ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE SWA
-ስ ← $ሰ ; # ETHIOPIC SYLLABLE SE
 #
 ቐ ↔ $ቐ $ግዕዝ ; # ETHIOPIC SYLLABLE QHA
 ቑ ↔ $ቐ $ካዕብ ; # ETHIOPIC SYLLABLE QHU
@@ -218,17 +186,6 @@ $wordBoundary = [^[:L:][:M:][:N:]] ;
 ቯ ↔ $ቨ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE VWA
 ቭ ← $ቨ ; # ETHIOPIC SYLLABLE VE
 #
-ተ ↔ $ተ $ግዕዝ ; # ETHIOPIC SYLLABLE TA
-ቱ ↔ $ተ $ካዕብ ; # ETHIOPIC SYLLABLE TU
-ቲ ↔ $ተ $ሣልስ ; # ETHIOPIC SYLLABLE TI
-ታ ↔ $ተ $ራዕብ ; # ETHIOPIC SYLLABLE TAA
-ቴ ↔ $ተ $ኃምስ ; # ETHIOPIC SYLLABLE TEE
-ት}$wordBoundary → $ተ ; # ETHIOPIC SYLLABLE TE
-ት ↔ $ተ $ሳድስ ; # ETHIOPIC SYLLABLE 
-ቶ ↔ $ተ $ሳብዕ ; # ETHIOPIC SYLLABLE TO
-ቷ ↔ $ተ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE TWA
-ት ← $ተ ; # ETHIOPIC SYLLABLE
-#
 ጨ ↔ $ጨ $ግዕዝ ; # ETHIOPIC SYLLABLE CHA
 ጩ ↔ $ጨ $ካዕብ ; # ETHIOPIC SYLLABLE CHU
 ጪ ↔ $ጨ $ሣልስ ; # ETHIOPIC SYLLABLE CHI
@@ -250,21 +207,6 @@ $wordBoundary = [^[:L:][:M:][:N:]] ;
 ቾ ↔ $ቸ $ሳብዕ ; # ETHIOPIC SYLLABLE CO
 ቿ ↔ $ቸ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE CWA
 ች ← $ቸ ; # ETHIOPIC SYLLABLE CE
-#
-ኀ → $ኀ $ራዕብ ; # ETHIOPIC SYLLABLE XA
-ኁ → $ኀ $ካዕብ ; # ETHIOPIC SYLLABLE XU
-ኂ → $ኀ $ሣልስ ; # ETHIOPIC SYLLABLE XI
-ኃ → $ኀ $ራዕብ ; # ETHIOPIC SYLLABLE XAA
-ኄ → $ኀ $ኃምስ ; # ETHIOPIC SYLLABLE XEE
-ኅ}$wordBoundary → $ኀ ; # ETHIOPIC SYLLABLE XE
-ኅ → $ኀ $ሳድስ ; # ETHIOPIC SYLLABLE XE
-ኆ → $ኀ $ሳብዕ ; # ETHIOPIC SYLLABLE XO
-ኈ ↔ $ኀ $ዘመደ_ግዕዝ ; # ETHIOPIC SYLLABLE XWA
-ኊ ↔ $ኀ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE XWI
-ኋ ↔ $ኀ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE XWAA
-ኌ ↔ $ኀ $ዘመደ_ኃምስ ; # ETHIOPIC SYLLABLE XWEE
-ኍ ↔ $ኀ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE XWE
-ኅ ← $ኀ ; # ETHIOPIC SYLLABLE XE
 #
 ነ ↔ $ነ $ግዕዝ ; # ETHIOPIC SYLLABLE NA
 ኑ ↔ $ነ $ካዕብ ; # ETHIOPIC SYLLABLE NU
@@ -354,17 +296,6 @@ $wordBoundary{ኧ ↔ $ግዕዝ ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ዕ ↔ $ዐይን $ሳድስ ; # ETHIOPIC SYLLABLE PHARYNGEAL E
 ዖ ↔ $ዐይን $ሳብዕ ; # ETHIOPIC SYLLABLE PHARYNGEAL O
 #
-ዘ ↔ $ዘ $ግዕዝ ; # ETHIOPIC SYLLABLE ZA
-ዙ ↔ $ዘ $ካዕብ ; # ETHIOPIC SYLLABLE ZU
-ዚ ↔ $ዘ $ሣልስ ; # ETHIOPIC SYLLABLE ZI
-ዛ ↔ $ዘ $ራዕብ ; # ETHIOPIC SYLLABLE ZAA
-ዜ ↔ $ዘ $ኃምስ ; # ETHIOPIC SYLLABLE ZEE
-ዝ}$wordBoundary → $ዘ ; # ETHIOPIC SYLLABLE ZE
-ዝ ↔ $ዘ $ሳድስ ; # ETHIOPIC SYLLABLE ZE
-ዞ ↔ $ዘ $ሳብዕ ; # ETHIOPIC SYLLABLE ZO
-ዟ ↔ $ዘ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE ZWA
-ዝ ← $ዘ ; # ETHIOPIC SYLLABLE ZE
-#
 ዠ ↔ $ዠ $ግዕዝ ; # ETHIOPIC SYLLABLE ZHA
 ዡ ↔ $ዠ $ካዕብ ; # ETHIOPIC SYLLABLE ZHU
 ዢ ↔ $ዠ $ሣልስ ; # ETHIOPIC SYLLABLE ZHI
@@ -375,6 +306,17 @@ $wordBoundary{ኧ ↔ $ግዕዝ ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ዦ ↔ $ዠ $ሳብዕ ; # ETHIOPIC SYLLABLE ZHO
 ዧ ↔ $ዠ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE ZHWA
 ዥ ← $ዠ ; # ETHIOPIC SYLLABLE ZHE
+#
+ዘ ↔ $ዘ $ግዕዝ ; # ETHIOPIC SYLLABLE ZA
+ዙ ↔ $ዘ $ካዕብ ; # ETHIOPIC SYLLABLE ZU
+ዚ ↔ $ዘ $ሣልስ ; # ETHIOPIC SYLLABLE ZI
+ዛ ↔ $ዘ $ራዕብ ; # ETHIOPIC SYLLABLE ZAA
+ዜ ↔ $ዘ $ኃምስ ; # ETHIOPIC SYLLABLE ZEE
+ዝ}$wordBoundary → $ዘ ; # ETHIOPIC SYLLABLE ZE
+ዝ ↔ $ዘ $ሳድስ ; # ETHIOPIC SYLLABLE ZE
+ዞ ↔ $ዘ $ሳብዕ ; # ETHIOPIC SYLLABLE ZO
+ዟ ↔ $ዘ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE ZWA
+ዝ ← $ዘ ; # ETHIOPIC SYLLABLE ZE
 #
 የ ↔ $የ $ግዕዝ ; # ETHIOPIC SYLLABLE YA
 ዩ ↔ $የ $ካዕብ ; # ETHIOPIC SYLLABLE YU
@@ -449,6 +391,17 @@ $wordBoundary{ኧ ↔ $ግዕዝ ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ጧ ↔ $ጠ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE THWA
 ጥ ← $ጠ ; # ETHIOPIC SYLLABLE THE
 #
+ተ ↔ $ተ $ግዕዝ ; # ETHIOPIC SYLLABLE TA
+ቱ ↔ $ተ $ካዕብ ; # ETHIOPIC SYLLABLE TU
+ቲ ↔ $ተ $ሣልስ ; # ETHIOPIC SYLLABLE TI
+ታ ↔ $ተ $ራዕብ ; # ETHIOPIC SYLLABLE TAA
+ቴ ↔ $ተ $ኃምስ ; # ETHIOPIC SYLLABLE TEE
+ት}$wordBoundary → $ተ ; # ETHIOPIC SYLLABLE TE
+ት ↔ $ተ $ሳድስ ; # ETHIOPIC SYLLABLE
+ቶ ↔ $ተ $ሳብዕ ; # ETHIOPIC SYLLABLE TO
+ቷ ↔ $ተ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE TWA
+ት ← $ተ ; # ETHIOPIC SYLLABLE
+#
 ጰ ↔ $ጰ $ግዕዝ ; # ETHIOPIC SYLLABLE PHA
 ጱ ↔ $ጰ $ካዕብ ; # ETHIOPIC SYLLABLE PHU
 ጲ ↔ $ጰ $ሣልስ ; # ETHIOPIC SYLLABLE PHI
@@ -481,6 +434,17 @@ $wordBoundary{ኧ ↔ $ግዕዝ ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ጿ ↔ $ጸ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE TSWA
 ጽ ← $ጸ ; # ETHIOPIC SYLLABLE TSE
 #
+ሰ ↔ $ሰ $ግዕዝ ; # ETHIOPIC SYLLABLE SA
+ሱ ↔ $ሰ $ካዕብ ; # ETHIOPIC SYLLABLE SU
+ሲ ↔ $ሰ $ሣልስ ; # ETHIOPIC SYLLABLE SI
+ሳ ↔ $ሰ $ራዕብ ; # ETHIOPIC SYLLABLE SAA
+ሴ ↔ $ሰ $ኃምስ ; # ETHIOPIC SYLLABLE SEE
+ስ}$wordBoundary → $ሰ ; # ETHIOPIC SYLLABLE SE
+ስ ↔ $ሰ $ሳድስ ; # ETHIOPIC SYLLABLE SE
+ሶ ↔ $ሰ $ሳብዕ ; # ETHIOPIC SYLLABLE SO
+ሷ ↔ $ሰ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE SWA
+ስ ← $ሰ ; # ETHIOPIC SYLLABLE SE
+#
 ፈ ↔ $ፈ $ግዕዝ ; # ETHIOPIC SYLLABLE FA
 ፉ ↔ $ፈ $ካዕብ ; # ETHIOPIC SYLLABLE FU
 ፊ ↔ $ፈ $ሣልስ ; # ETHIOPIC SYLLABLE FI
@@ -490,7 +454,7 @@ $wordBoundary{ኧ ↔ $ግዕዝ ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ፍ ↔ $ፈ $ሳድስ ; # ETHIOPIC SYLLABLE FE
 ፎ ↔ $ፈ $ሳብዕ ; # ETHIOPIC SYLLABLE FO
 ፏ ↔ $ፈ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE FWA
-ፚ ↔ fy $ራዕብ ; # ETHIOPIC SYLLABLE FYA
+ፚ ↔ $ፈ $የ $ራዕብ ; # ETHIOPIC SYLLABLE FYA
 ፍ ← $ፈ ; # ETHIOPIC SYLLABLE FE
 #
 ፐ ↔ $ፐ $ግዕዝ ; # ETHIOPIC SYLLABLE PA
@@ -503,9 +467,43 @@ $wordBoundary{ኧ ↔ $ግዕዝ ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ፖ ↔ $ፐ $ሳብዕ ; # ETHIOPIC SYLLABLE PO
 ፗ ↔ $ፐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE PWA
 ፕ ← $ፐ ; # ETHIOPIC SYLLABLE PE
-
-
-
+#
+# All "h" based mappings go to the end to avoid masking sh, ch, kh
+#
+ሐ ↔ $ሐ $ራዕብ ; # ETHIOPIC SYLLABLE HHA
+ሑ ↔ $ሐ $ካዕብ ; # ETHIOPIC SYLLABLE HHU
+ሒ ↔ $ሐ $ሣልስ ; # ETHIOPIC SYLLABLE HHI
+ሓ → $ሐ $ራዕብ ; # ETHIOPIC SYLLABLE HHAA
+ሔ ↔ $ሐ $ኃምስ ; # ETHIOPIC SYLLABLE HHEE
+ሕ}$wordBoundary → $ሐ ; # ETHIOPIC SYLLABLE HHE
+ሕ ↔ $ሐ $ሳድስ ; # ETHIOPIC SYLLABLE HHE
+ሖ ↔ $ሐ $ሳብዕ ; # ETHIOPIC SYLLABLE HHO
+ሗ ↔ $ሐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE HHWA
+ሕ ← $ሐ ; # ETHIOPIC SYLLABLE HHE
+#
+ኀ → $ኀ $ራዕብ ; # ETHIOPIC SYLLABLE XA
+ኁ → $ኀ $ካዕብ ; # ETHIOPIC SYLLABLE XU
+ኂ → $ኀ $ሣልስ ; # ETHIOPIC SYLLABLE XI
+ኃ → $ኀ $ራዕብ ; # ETHIOPIC SYLLABLE XAA
+ኄ → $ኀ $ኃምስ ; # ETHIOPIC SYLLABLE XEE
+ኆ → $ኀ $ሳብዕ ; # ETHIOPIC SYLLABLE XO
+ኈ ↔ $ኀ $ዘመደ_ግዕዝ ; # ETHIOPIC SYLLABLE XWA
+ኊ ↔ $ኀ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE XWI
+ኋ ↔ $ኀ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE XWAA
+ኌ ↔ $ኀ $ዘመደ_ኃምስ ; # ETHIOPIC SYLLABLE XWEE
+ኍ ↔ $ኀ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE XWE
+ኅ}$wordBoundary → $ኀ ; # ETHIOPIC SYLLABLE XE
+ኅ → $ኀ $ሳድስ ; # ETHIOPIC SYLLABLE XE
+# ኅ ← $ኀ ; # ETHIOPIC SYLLABLE XE
+#
+ሀ ↔  $ሀ $ራዕብ ; # ETHIOPIC SYLLABLE HA
+ሁ ↔ $ሀ $ካዕብ ; # ETHIOPIC SYLLABLE HU
+ሂ ↔ $ሀ $ሣልስ ; # ETHIOPIC SYLLABLE HI
+ሃ → $ሀ $ራዕብ ; # ETHIOPIC SYLLABLE HAA
+ሄ ↔ $ሀ $ኃምስ ; # ETHIOPIC SYLLABLE HEE
+ህ ↔ $ሀ $ሳድስ ; # ETHIOPIC SYLLABLE HE
+ሆ ↔ $ሀ $ሳብዕ ; # ETHIOPIC SYLLABLE HO
+ህ ← $ሀ ; # ETHIOPIC SYLLABLE HE
 
 ########################################################################
 # Start of Numeric Transformations
