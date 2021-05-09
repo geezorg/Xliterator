@@ -6,9 +6,11 @@
 		<transform source="Ethi" target="TekieAlibekit_Latn" variant="TekieAlibekit" direction="both" draft="contributed" alias="Ethiopic-Latin/TekieAlibekit" backwardAlias="Latin-Ethiopic/TekieAlibekit">
 			<tRule><![CDATA[
 ########################################################################
-# Tekie Alibekit Transliteration for Blin
+# Tekie Alibekit Transliteration for Blin.
+# This transliteration system has been devised by Tekie Alibekit for the
+# republishing of the Leo Reinisch dictionary of Blin, Die Bilin-Sprache.
 #
-# Initial Editor: Daniel Yacob <yacob@geez.org>
+# Prepared by Daniel Yacob <yacob@geez.org>
 #
 ########################################################################
 
@@ -470,7 +472,7 @@ $wordBoundary{ኧ ↔ $ግዕዝ ; # ETHIOPIC SYLLABLE GLOTTAL WA
 #
 # All "h" based mappings go to the end to avoid masking sh, ch, kh
 #
-ሐ ↔ $ሐ $ራዕብ ; # ETHIOPIC SYLLABLE HHA
+ሐ ↔ $ሐ $ግዕዝ ; # ETHIOPIC SYLLABLE HHA
 ሑ ↔ $ሐ $ካዕብ ; # ETHIOPIC SYLLABLE HHU
 ሒ ↔ $ሐ $ሣልስ ; # ETHIOPIC SYLLABLE HHI
 ሓ → $ሐ $ራዕብ ; # ETHIOPIC SYLLABLE HHAA
@@ -481,7 +483,7 @@ $wordBoundary{ኧ ↔ $ግዕዝ ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ሗ ↔ $ሐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE HHWA
 ሕ ← $ሐ ; # ETHIOPIC SYLLABLE HHE
 #
-ኀ → $ኀ $ራዕብ ; # ETHIOPIC SYLLABLE XA
+ኀ → $ኀ $ግዕዝ ; # ETHIOPIC SYLLABLE XA
 ኁ → $ኀ $ካዕብ ; # ETHIOPIC SYLLABLE XU
 ኂ → $ኀ $ሣልስ ; # ETHIOPIC SYLLABLE XI
 ኃ → $ኀ $ራዕብ ; # ETHIOPIC SYLLABLE XAA
@@ -496,7 +498,7 @@ $wordBoundary{ኧ ↔ $ግዕዝ ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ኅ → $ኀ $ሳድስ ; # ETHIOPIC SYLLABLE XE
 # ኅ ← $ኀ ; # ETHIOPIC SYLLABLE XE
 #
-ሀ ↔  $ሀ $ራዕብ ; # ETHIOPIC SYLLABLE HA
+ሀ ↔ $ሀ $ግዕዝ ; # ETHIOPIC SYLLABLE HA
 ሁ ↔ $ሀ $ካዕብ ; # ETHIOPIC SYLLABLE HU
 ሂ ↔ $ሀ $ሣልስ ; # ETHIOPIC SYLLABLE HI
 ሃ → $ሀ $ራዕብ ; # ETHIOPIC SYLLABLE HAA
@@ -530,7 +532,6 @@ $wordBoundary{ኧ ↔ $ግዕዝ ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ፻ ↔ 100 ; # ETHIOPIC NUMBER HUNDRED 
 ፲ ↔ 10 ; # ETHIOPIC NUMBER TEN
 ፩ ↔ 1 ; # ETHIOPIC DIGIT ONE
-
 
 ########################################################################
 # Start of Punctuation Transformations

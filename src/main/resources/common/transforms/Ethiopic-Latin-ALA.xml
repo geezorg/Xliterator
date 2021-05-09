@@ -25,6 +25,7 @@
 # MINIMAL FILTER: Ethiopic-Latin
 #
 :: [:Ethiopic:] ;
+:: NFD (NFC) ;
 #
 ########################################################################
 
@@ -96,6 +97,8 @@ $ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; 
 #
 $wordBoundary =  [^[:L:][:M:][:N:]] ;
 #
+########################################################################
+# Start of Syllabic Transformations
 ########################################################################
 #
 ሐ ↔ $ሐ $ግዕዝ ; # ETHIOPIC SYLLABLE HHA
@@ -588,22 +591,14 @@ $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 ፑ ↔ $ፐ $ካዕብ ; # ETHIOPIC SYLLABLE PU
 ፕ ↔ $ፐ $ሳድስ ; # ETHIOPIC SYLLABLE PE
 #
-# Review what do do for undefined mappings.
-#
-# ። ↔ \:\:  ; # ETHIOPIC FULLSTOP
-# ፣ ↔ \,    ; # Fill in the rest
-# ፤ ↔ \;    ;
-# ፥ ↔ \-\:  ;
-# ፦ ↔ \:\-  ;
-# ፨ ↔ \:\|\: ;
-# ፠ ↔ \:\+  ;
-# ፧ ↔ \?  ;
-# ፡ ↔ \:    ;
-# « ↔ \<\<  ;
-# » ↔ \>\>  ;
-# ‹ ↔ \<  ;
-# › ↔ \>  ;
-#
+
+| &lower($1) ← ([BFJLMRV]) ;
+| $glottal &lower($1) ← ([OU]) ;
+
+########################################################################
+# Start of Numeric Transformations
+########################################################################
+
 ፼  ↔ 10000 ; # ETHIOPIC NUMBER TEN THOUSAND
 ፲፻ ↔ 1000 ; # One Thousand
 ፻  ↔ 100 ; # ETHIOPIC NUMBER HUNDRED
@@ -625,11 +620,31 @@ $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 ፯  ↔ 7 ; # ETHIOPIC DIGIT SEVEN
 ፰  ↔ 8 ; # ETHIOPIC DIGIT EIGHT
 ፱  ↔ 9 ; # ETHIOPIC DIGIT NINE
+
+########################################################################
+# Start of Punctuation Transformations
+########################################################################
+
+# Review what do for undefined mappings.
 #
-| &lower($1) ← ([BFJLMRV]) ;
-| $glottal &lower($1) ← ([OU]) ;
+# ። ↔ \:\:  ; # ETHIOPIC FULLSTOP
+# ፣ ↔ \,    ; # Fill in the rest
+# ፤ ↔ \;    ;
+# ፥ ↔ \-\:  ;
+# ፦ ↔ \:\-  ;
+# ፨ ↔ \:\|\: ;
+# ፠ ↔ \:\+  ;
+# ፧ ↔ \?  ;
+# ፡ ↔ \:    ;
+# « ↔ \<\<  ;
+# » ↔ \>\>  ;
+# ‹ ↔ \<  ;
+# › ↔ \>  ;
 #
+
+########################################################################
 # Inverse Fiter : Latin-Ethiopic
+########################################################################
 #
 :: ([-!\u0023',.:<>?`0-9A-Za-z]) ;
 #

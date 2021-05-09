@@ -8,13 +8,6 @@
 ########################################################################
 # Blina Xaleget
 #
-# The BGN/PCGN system for Amharic Was designed for use in romanizing
-# names written in Amharic characters. The Roman letters and letter
-# combinations shown as equivalenS to the Amharic characters reflect
-# modern Amharic pronunciation. Different consonant characters in three
-# groups are pronounced alike in modern Amharic and are therefore
-# romanized identically for use in geographic names.
-#
 # Prepared by Daniel Yacob <yacob@geez.org>
 #
 ########################################################################
@@ -588,16 +581,11 @@ $wordBoundary{ኦ → $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 ፑ → $ፐ $ካዕብ ; # ETHIOPIC SYLLABLE PU
 ፕ → $ፐ $ሳድስ ; # ETHIOPIC SYLLABLE PE
 #
-። → \.  ; # ETHIOPIC FULLSTOP
-፣ → \,    ; # Fill in the rest
-፤ → \;    ;
-፥ → \:  ;
-፦ → \:\-  ;
-፨ → \# ;
-፠ → \+  ;
-፧ → ?  ;
-፡ → \x20    ;
-#
+
+########################################################################
+# Start of Numeric Transformations
+########################################################################
+
 ፼ → 10000 ; # ETHIOPIC NUMBER TEN THOUSAND
 ፲፻ → 1000 ; # One Thousand
 ፻ → 100 ; # ETHIOPIC NUMBER HUNDRED
@@ -619,9 +607,24 @@ $wordBoundary{ኦ → $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 ፯ → 7 ; # ETHIOPIC DIGIT SEVEN
 ፰ → 8 ; # ETHIOPIC DIGIT EIGHT
 ፱ → 9 ; # ETHIOPIC DIGIT NINE
-#
-#
+
+########################################################################
+# Start of Punctuation Transformations
+########################################################################
+
+። → \.  ; # ETHIOPIC FULLSTOP
+፣ → \,    ; # Fill in the rest
+፤ → \;    ;
+፥ → \:  ;
+፦ → \:\-  ;
+፨ → \# ;
+፠ → \+  ;
+፧ → ?  ;
+፡ → \x20    ;
+
+########################################################################
 # Inverse Fiter : Latin-Ethiopic
+########################################################################
 #
 :: ([-!\u0023',.:<>?`0-9A-Za-z]) ;
 #

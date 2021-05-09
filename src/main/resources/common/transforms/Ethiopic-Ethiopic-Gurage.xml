@@ -8,18 +8,11 @@
 ########################################################################
 # Gurage Fider (2015, Unicode Ethiopic Extended-B 2021)
 #
-# The BGN/PCGN system for Amharic Was designed for use in romanizing
-# names written in Amharic characters. The Roman letters and letter
-# combinations shown as equivalenS to the Amharic characters reflect
-# modern Amharic pronunciation. Different consonant characters in three
-# groups are pronounced alike in modern Amharic and are therefore
-# romanized identically for use in geographic names.
+# This transliteration system converts between the old and new writing
+# conventions for the Gurage language.  Conversions are between the
+# pre- and post-2015 system as supported in Unicode 4.1 and Unicode 14.
 #
 # Prepared by Daniel Yacob <yacob@geez.org>
-#
-# Based on the 1994 Romanization Systems and Roman-script Spelling
-# Conventions document. The 2005 draft has been consulted, but contains
-# errors, which if relevant are pointed out in this file.
 #
 ########################################################################
 #
@@ -146,10 +139,6 @@
 #
 ᎍ ↔ 𞟽 ; # ETHIOPIC SYLLABLE PWI
 ᎎ ↔ 𞟾 ; # ETHIOPIC SYLLABLE PWEE 
-#
-# Inverse Fiter : Latin-Ethiopic
-#
-:: ([-!\u0023',.:<>?`0-9A-Za-z]) ;
 #
 ########################################################################
 			]]></tRule>

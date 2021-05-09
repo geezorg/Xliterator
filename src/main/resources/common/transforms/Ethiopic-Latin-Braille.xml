@@ -99,8 +99,12 @@ $ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; 
 # http://bugs.icu-project.org/cgi-bin/icu-bugs/transliterate?id=2034;expression=boundary;user=guest
 #
 $wordBoundary =  [^[:L:][:M:][:N:]] ;
-#
+
+
 ########################################################################
+# Start of Syllabic Transformations
+########################################################################
+
 #
 ሐ ↔ $ሐ $ግዕዝ ; # ETHIOPIC SYLLABLE HHA
 ሗ ↔ $ሐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE HWA
@@ -586,6 +590,11 @@ $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 ፑ ↔ $ፐ $ካዕብ ; # ETHIOPIC SYLLABLE PU
 ፕ ↔ $ፐ $ሳድስ ; # ETHIOPIC SYLLABLE PE
 #
+
+########################################################################
+# Start of Punctuation Transformations
+########################################################################
+
 ። ↔ \:\:  ;
 ፣ ↔ \,    ;
 ፤ ↔ \;    ;
@@ -601,6 +610,11 @@ $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 › ↔ \>  ;
 ¡ ↔ $alternate \! ;
 #
+
+########################################################################
+# Start of Numeric Transformations
+########################################################################
+
 ፼ ↔ $alternate 10000 ; # ETHIOPIC NUMBER TEN THOUSAND
 ፲፻ ↔ $alternate 1000 ; # One Thousand
 ፻ ↔ $alternate   100 ; # ETHIOPIC NUMBER HUNDRED
