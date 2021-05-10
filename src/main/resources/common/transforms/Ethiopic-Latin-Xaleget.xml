@@ -6,7 +6,10 @@
 		<transform source="Ethi" target="Xalaget_Latn" variant="Xalaget" direction="both" draft="contributed" alias="Ethiopic-Latin/Xalaget" backwardAlias="Latin-Ethiopic/Xalaget">
 			<tRule><![CDATA[
 ########################################################################
-# Blina Xaleget
+# Blina Xaleget (ብሊና ሓለገት)
+#
+# https://debanu.org/yena-gab/
+# https://www.modaina.com/PDF/blin_orthography.pdf
 #
 # Prepared by Daniel Yacob <yacob@geez.org>
 #
@@ -62,7 +65,7 @@ $ነ = n  ;
 $ኘ = gn ;
 $ከ = k  ;
 $ⷈ = ky ;
-ኸ = kh  ;
+$ኸ = kh  ;
 $ⷐ = khy ;
 $ወ = w  ;
 $ዘ = z  ;

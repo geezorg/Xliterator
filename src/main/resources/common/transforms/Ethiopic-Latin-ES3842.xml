@@ -3,10 +3,14 @@
 <supplementalData>
 	<version number="$Revision$"/>
 	<transforms>
-		<transform source="Ethi" target="ES3842_Latn" variant="ES3842" direction="both" draft="contributed" alias="Ethiopic-Latin/ES3842" backwardAlias="Latin-Ethiopic/ES3842>
+		<transform source="Ethi" target="ES3842_Latn" variant="ES3842" direction="both" draft="contributed" alias="Ethiopic-Latin/ES3842" backwardAlias="Latin-Ethiopic/ES3842">
 			<tRule><![CDATA[
 ########################################################################
 # ES 3842:2014 System
+#
+# "Ethiopic to Latin Transliteration Standard"
+# First edition, 10-07-2014
+# Ethiopian Standards Agency
 #
 # Prepared by Daniel Yacob <yacob@geez.org>
 #
