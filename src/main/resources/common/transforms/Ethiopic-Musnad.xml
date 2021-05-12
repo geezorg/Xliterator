@@ -67,8 +67,8 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 #
 # ETHIOPIC SYLLABLE MA - OLD SOUTH ARABIAN LETTER BETH
 #
-[ረ-ሯ] → 𐩣;
-ረ ← 𐩣;
+[ረ-ሯ] → 𐩧;
+ረ ← 𐩧;
 
 #
 # ETHIOPIC SYLLABLE SA - OLD SOUTH ARABIAN LETTER SAT

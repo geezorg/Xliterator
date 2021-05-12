@@ -98,7 +98,7 @@ public class ConvertTextTab extends XliteratorTab {
 	    	textAreaOut.replaceText( stringConverter.convertText( textIn ) );
 		}
 		catch(Exception ex) {
-        	errorAlert(ex, "Translteration Definition Error. Correct to Proceed." );
+        	errorAlert(ex, "Transliteration Definition Error. Correct to Proceed." );
 			return;
 		}
     }
@@ -160,7 +160,7 @@ public class ConvertTextTab extends XliteratorTab {
     	
 		}
 		catch(Exception ex) {
-	    	errorAlert(ex, "Translteration Definition Error. Correct to Proceed." );
+	    	errorAlert(ex, "Transliteration Definition Error. Correct to Proceed." );
 			return;
 		}
     	
