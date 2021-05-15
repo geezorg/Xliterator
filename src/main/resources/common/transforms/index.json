@@ -967,15 +967,15 @@
             "target": "BetaMetsehaf_Latn",
             "name": "BetaMetsehaf",
             "direction": "both",
-            "alias": "Ethiopic-Latin/BetaMetsehaf",
-            "backwardAlias": "Latin-Ethiopic/BetaMetsehaf"
+            "alias": "Ethiopic-Latin/Beta Metsehaf",
+            "backwardAlias": "Latin-Ethiopic/Beta Metsehaf"
           },
           {
             "path": "Ethiopic-Latin-ES3842.xml",
             "source": "Ethi",
             "target": "ES3842_Latn",
             "name": "ES3842",
-            "direction": "both",
+            "direction": "forward",
             "alias": "Ethiopic-Latin/ES3842",
             "backwardAlias": "Latin-Ethiopic/ES3842"
           },
@@ -987,24 +987,6 @@
             "direction": "both",
             "alias": "Ethiopic-Latin/SERA",
             "backwardAlias": "Latin-Ethiopic/SERA"
-          },
-          {
-            "path": "Ethiopic-Latin-Xaleget.xml",
-            "source": "Ethi",
-            "target": "Xaleget_Latn",
-            "name": "Xaleget",
-            "direction": "both",
-            "alias": "Ethiopic-Latin/Xaleget",
-            "backwardAlias": "Latin-Ethiopic/Xaleget"
-          },
-          {
-            "path": "Ethiopic-Latin-TekieAlibekit.xml",
-            "source": "Ethi",
-            "target": "TekieAlibekit_Ethi",
-            "name": "TekieAlibekit",
-            "direction": "both",
-            "alias": "Ethiopic-Ethiopic/TekieAlibekit",
-            "backwardAlias": "Latin-Ethiopic/TekieAlibekit"
           }
         ],
         "Braille": [
@@ -1016,17 +998,6 @@
             "direction": "both",
             "alias": "Ethiopic-Braille/Amharic",
             "backwardAlias": "Braille-Ethiopic/Amharic"
-          }
-        ],
-        "Cyrillic": [
-          {
-            "path": "Ethiopic-Cyrillic-Gutgarts.xml",
-            "source": "Ethi",
-            "target": "Gutgarts_Cyri",
-            "name": "Gutgarts",
-            "direction": "both",
-            "alias": "Ethiopic-Cyrillic/Gutgarts",
-            "backwardAlias": "Cyrillic-Ethiopic/Gutgarts"
           }
         ],
         "Ethiopic": [
@@ -1049,6 +1020,41 @@
             "direction": "both",
             "alias": "Ethiopic-Musnad",
             "backwardAlias": "Musnad-Ethiopic"
+          }
+        ]
+      },
+      "Blin": {
+        "Latin": [
+          {
+            "path": "Ethiopic-Latin-Xaleget.xml",
+            "source": "Ethi",
+            "target": "Xaleget_Latn",
+            "name": "Xaleget",
+            "direction": "both",
+            "alias": "Ethiopic-Latin/Xaleget",
+            "backwardAlias": "Latin-Ethiopic/Xaleget"
+          },
+          {
+            "path": "Ethiopic-Latin-TekieAlibekit.xml",
+            "source": "Ethi",
+            "target": "TekieAlibekit_Ethi",
+            "name": "TekieAlibekit",
+            "direction": "both",
+            "alias": "Ethiopic-Ethiopic/TekieAlibekit",
+            "backwardAlias": "Latin-Ethiopic/Tekie_Alibekit"
+          }
+        ]
+      },
+      "Tigrinya.ER": {
+        "Cyrillic": [
+          {
+            "path": "Ethiopic-Cyrillic-Gutgarts.xml",
+            "source": "Ethi",
+            "target": "Gutgarts_Cyri",
+            "name": "Gutgarts",
+            "direction": "both",
+            "alias": "Ethiopic-Cyrillic/Gutgarts",
+            "backwardAlias": "Cyrillic-Ethiopic/Gutgarts"
           }
         ]
       }
