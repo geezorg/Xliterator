@@ -939,6 +939,17 @@
             "direction": "forward",
             "alias": "Amharic-Latin/BGN"
           }
+        ],
+        "Braille": [
+          {
+            "path": "Ethiopic-Braille-Amharic.xml",
+            "source": "Ethi",
+            "target": "Amharic_Ethi_Brai",
+            "name": "Amharic",
+            "direction": "both",
+            "alias": "Ethiopic-Braille/Amharic",
+            "backwardAlias": "Braille-Ethiopic/Amharic"
+          }
         ]
       },
       "_base": {
@@ -967,8 +978,8 @@
             "target": "BetaMetsehaf_Latn",
             "name": "BetaMetsehaf",
             "direction": "both",
-            "alias": "Ethiopic-Latin/Beta Metsehaf",
-            "backwardAlias": "Latin-Ethiopic/Beta Metsehaf"
+            "alias": "Ethiopic-Latin/BetaMetsehaf",
+            "backwardAlias": "Latin-Ethiopic/Beta_Metsehaf"
           },
           {
             "path": "Ethiopic-Latin-ES3842.xml",
@@ -987,17 +998,6 @@
             "direction": "both",
             "alias": "Ethiopic-Latin/SERA",
             "backwardAlias": "Latin-Ethiopic/SERA"
-          }
-        ],
-        "Braille": [
-          {
-            "path": "Ethiopic-Latin-Braille.xml",
-            "source": "Ethi",
-            "target": "Amharic_Ethi_Brai",
-            "name": "Amharic",
-            "direction": "both",
-            "alias": "Ethiopic-Braille/Amharic",
-            "backwardAlias": "Braille-Ethiopic/Amharic"
           }
         ],
         "Ethiopic": [
