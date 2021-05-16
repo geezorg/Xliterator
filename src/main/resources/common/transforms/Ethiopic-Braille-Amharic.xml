@@ -6,6 +6,17 @@
 		<transform source="Ethi" target="Brai"  variant="Amharic" direction="both" draft="contributed" alias="Ethiopic-Braille/Amharic" backwardAlias="Braille-Ethiopic/Amharic">
 			<tRule><![CDATA[
 ########################################################################
+# Encylopedia Aethiopica Transliteration
+#
+# (1) World Braille Usage, Thirst Edition (v2), UNESCO,
+#     https://www.perkins.org/assets/downloads/worldbrailleusage/world-braille-usage-third-edition.pdf
+# (2) Recognition of Double Sided Amharic Braille Documents, Hassen Seid Ali, http://etd.aau.edu.et/handle/123456789/2155
+#
+# (3) Wikipedia, Ge'ez Braille, https://en.wikipedia.org/wiki/Ge%27ez_Braille
+#
+# Initial Editor: Daniel Yacob <yacob@geez.org>
+#
+########################################################################
 #
 # MINIMAL FILTER: Ethiopic-Braille
 #
