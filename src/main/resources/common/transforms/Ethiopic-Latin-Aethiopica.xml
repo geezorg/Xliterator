@@ -92,6 +92,19 @@ $ፀ = ṣ́ ;
 $ፈ = f ;
 $ፐ = p ;
 
+
+# Us $ግዕዝ this $wordBoundary until bug 2034 is fixed in ICU:
+# http://bugs.icu-project.org/trac/ticket/2034
+$wordBoundary = [^[:L:][:M:][:N:]] ;
+
+#
+########################################################################
+#
+# Gemination Handling Rules
+#
+########################################################################
+#
+
 $ጥበቅ = \u135f ;
 
 ([ሀ-ሇ]) $ጥበቅ → $ሀ | $1 ;
@@ -143,9 +156,7 @@ $ጥበቅ = \u135f ;
 ([ፈ-ፏፚᎈ-ᎋ]) $ጥበቅ → $ፈ | $1 ;
 ([ፐ-ፗᎌ-ᎏ]) $ጥበቅ → $ፐ | $1 ;
 
-# Us $ግዕዝ this $wordBoundary until bug 2034 is fixed in ICU:
-# http://bugs.icu-project.org/trac/ticket/2034
-$wordBoundary = [^[:L:][:M:][:N:]] ;
+$ጥበቅ → ; # remove any spurious gemination marks
 
 
 ########################################################################
@@ -579,8 +590,6 @@ $wordBoundary{ኧ ↔ $ግዕዝ ; # ETHIOPIC SYLLABLE GLOTTAL WA
 ፗ ↔ $ፐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE PWA
 ፕ ← $ፐ ; # ETHIOPIC SYLLABLE PE
 #
-
-$ጥበቅ → ; # remove any spurious gemination marks
 
 ########################################################################
 # Start of Numeric Transformations

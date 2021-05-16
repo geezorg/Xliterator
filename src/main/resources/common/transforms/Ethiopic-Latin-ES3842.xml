@@ -91,7 +91,7 @@ $ፐ = p ;
 # vowels are special:
 #
 # $አ =    a ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =   aa ; $ኤ = $ኃምስ ; $እ =    e ; $ኦ = $ሳብዕ ; $ⶊ = $ሳምን ; $ኧ = ä ;
-$አ =    a ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =   A ; $ኤ = $ኃምስ ; $እ = I ; $ኦ = $ሳብዕ ; $ኦa = $ሳምን ; $ኧ = ea ;
+$አ =    a ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =   A ; $ኤ = $ኃምስ ; $እ = I ; $ኦ = $ሳብዕ ; $ⶊ = $ሳምን ; $ኧ = ea ;
 $ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; $ዔ = $ኃምስ ; $ዕ = I ; $ዖ = $ሳብዕ ; 
 #
 # Use this $wordBoundary until bug 2034 is fixed in ICU:
@@ -434,13 +434,13 @@ $wordBoundary{ኦ → $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 ዎ → $ወ $ሳብዕ ; # ETHIOPIC SYLLABLE WO
 ው → $ወ $ሳድስ ; # ETHIOPIC SYLLABLE WE
 #
-ዐ → $pharyngeal $ዐ ; # ETHIOPIC SYLLABLE PHARYNGEAL A
-ዑ → $pharyngeal $ዑ ; # ETHIOPIC SYLLABLE PHARYNGEAL U
-ዓ → $pharyngeal $ዓ ; # ETHIOPIC SYLLABLE PHARYNGEAL AA
-ዔ → $pharyngeal $ዔ ; # ETHIOPIC SYLLABLE PHARYNGEAL EE
-ዒ → $pharyngeal $ዒ ; # ETHIOPIC SYLLABLE PHARYNGEAL I
-ዖ → $pharyngeal $ዖ ; # ETHIOPIC SYLLABLE PHARYNGEAL O
-ዕ → $pharyngeal $ዕ ; # ETHIOPIC SYLLABLE PHARYNGEAL E
+ዐ → $ዐ ; # ETHIOPIC SYLLABLE PHARYNGEAL A
+ዑ → $ዑ ; # ETHIOPIC SYLLABLE PHARYNGEAL U
+ዓ → $ዓ ; # ETHIOPIC SYLLABLE PHARYNGEAL AA
+ዔ → $ዔ ; # ETHIOPIC SYLLABLE PHARYNGEAL EE
+ዒ → $ዒ ; # ETHIOPIC SYLLABLE PHARYNGEAL I
+ዖ → $ዖ ; # ETHIOPIC SYLLABLE PHARYNGEAL O
+ዕ → $ዕ ; # ETHIOPIC SYLLABLE PHARYNGEAL E
 #
 ⶰ → $ⶰ $ግዕዝ ; # ETHIOPIC SYLLABLE ZZA
 ⶱ → $ⶰ $ካዕብ ; # ETHIOPIC SYLLABLE ZZU
@@ -619,15 +619,15 @@ $wordBoundary{ኦ → $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 # Start of Punctuation Transformations
 ########################################################################
 
-። → \.  ; # ETHIOPIC FULLSTOP
-፣ → \,    ; # Fill in the rest
-፤ → \;    ;
+። → \. ; # ETHIOPIC FULLSTOP
+፣ → \, ; # Fill in the rest
+፤ → \; ;
 ፥ → \:  ;
 ፦ → \:\-  ;
-፨ → \# ;
-፠ → \+  ;
-፧ → ?  ;
-፡ → \x20    ;
+፨ → \x23 ;
+፠ → \+ ;
+፧ → \?  ;
+፡ → \x20 ;
 
 ########################################################################
 # Inverse Fiter : Latin-Ethiopic
