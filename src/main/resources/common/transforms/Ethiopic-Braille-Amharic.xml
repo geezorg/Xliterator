@@ -102,15 +102,17 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 # Start of Syllabic Transformations
 ########################################################################
 
+› ↔ ⠴⠄ ;  # placing up front to avoid masking ዠ mappings
+
 #
-ሐ ↔ $ሐ $ግዕዝ ; # ETHIOPIC SYLLABLE HHA
-ሗ ↔ $ሐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE HWA
-ሑ ↔ $ሐ $ካዕብ ; # ETHIOPIC SYLLABLE HHU
-ሓ ↔ $ሐ $ራዕብ ; # ETHIOPIC SYLLABLE HHAA
-ሔ ↔ $ሐ $ኃምስ ; # ETHIOPIC SYLLABLE HHEE
-ሒ ↔ $ሐ $ሣልስ ; # ETHIOPIC SYLLABLE HHI
-ሖ ↔ $ሐ $ሳብዕ ; # ETHIOPIC SYLLABLE HHO
-ሕ ↔ $ሐ $ሳድስ ; # ETHIOPIC SYLLABLE HHE
+ሐ → $ሐ $ግዕዝ ; # ETHIOPIC SYLLABLE HHA
+ሗ → $ሐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE HWA
+ሑ → $ሐ $ካዕብ ; # ETHIOPIC SYLLABLE HHU
+ሓ → $ሐ $ራዕብ ; # ETHIOPIC SYLLABLE HHAA
+ሔ → $ሐ $ኃምስ ; # ETHIOPIC SYLLABLE HHEE
+ሒ → $ሐ $ሣልስ ; # ETHIOPIC SYLLABLE HHI
+ሖ → $ሐ $ሳብዕ ; # ETHIOPIC SYLLABLE HHO
+ሕ → $ሐ $ሳድስ ; # ETHIOPIC SYLLABLE HHE
 #
 ለ ↔ $ለ $ግዕዝ ; # ETHIOPIC SYLLABLE LA
 ሏ ↔ $ለ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE LWA
@@ -137,14 +139,14 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 ሙ ↔ $መ $ካዕብ ; # ETHIOPIC SYLLABLE MU
 ም ↔ $መ $ሳድስ ; # ETHIOPIC SYLLABLE ME
 #
-ሠ ↔ $ሠ $ግዕዝ ; # ETHIOPIC SYLLABLE SZA
-ሧ ↔ $ሠ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE SZWA
-ሡ ↔ $ሠ $ካዕብ ; # ETHIOPIC SYLLABLE SZU
-ሣ ↔ $ሠ $ራዕብ ; # ETHIOPIC SYLLABLE SZAA
-ሤ ↔ $ሠ $ኃምስ ; # ETHIOPIC SYLLABLE SZEE
-ሢ ↔ $ሠ $ሣልስ ; # ETHIOPIC SYLLABLE SZI
-ሦ ↔ $ሠ $ሳብዕ ; # ETHIOPIC SYLLABLE SZO
-ሥ ↔ $ሠ $ሳድስ ; # ETHIOPIC SYLLABLE SZE
+ሠ → $ሠ $ግዕዝ ; # ETHIOPIC SYLLABLE SZA
+ሧ → $ሠ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE SZWA
+ሡ → $ሠ $ካዕብ ; # ETHIOPIC SYLLABLE SZU
+ሣ → $ሠ $ራዕብ ; # ETHIOPIC SYLLABLE SZAA
+ሤ → $ሠ $ኃምስ ; # ETHIOPIC SYLLABLE SZEE
+ሢ → $ሠ $ሣልስ ; # ETHIOPIC SYLLABLE SZI
+ሦ → $ሠ $ሳብዕ ; # ETHIOPIC SYLLABLE SZO
+ሥ → $ሠ $ሳድስ ; # ETHIOPIC SYLLABLE SZE
 #
 ረ ↔ $ረ $ግዕዝ ; # ETHIOPIC SYLLABLE RA
 ሯ ↔ $ረ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE RWA
@@ -301,20 +303,20 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 ቾ ↔ $ቸ $ሳብዕ ; # ETHIOPIC SYLLABLE CO
 ች ↔ $ቸ $ሳድስ ; # ETHIOPIC SYLLABLE CE
 #
-ኀ ↔ $ኀ $ግዕዝ ; # ETHIOPIC SYLLABLE XA
-ኄ ↔ $ኀ $ኃምስ ; # ETHIOPIC SYLLABLE XEE
-ኂ ↔ $ኀ $ሣልስ ; # ETHIOPIC SYLLABLE XI
-ኃ ↔ $ኀ $ራዕብ ; # ETHIOPIC SYLLABLE XAA
+ኀ → $ኀ $ግዕዝ ; # ETHIOPIC SYLLABLE XA
+ኄ → $ኀ $ኃምስ ; # ETHIOPIC SYLLABLE XEE
+ኂ → $ኀ $ሣልስ ; # ETHIOPIC SYLLABLE XI
+ኃ → $ኀ $ራዕብ ; # ETHIOPIC SYLLABLE XAA
 # ኇ ↔ $ኀ $ሳምን ; # ETHIOPIC SYLLABLE XOA
-ኆ ↔ $ኀ $ሳብዕ ; # ETHIOPIC SYLLABLE XO
+ኆ → $ኀ $ሳብዕ ; # ETHIOPIC SYLLABLE XO
 #
 ኈ ↔ $ኀ $ዘመደ_ግዕዝ ; # ETHIOPIC SYLLABLE XWA
 ኍ ↔ $ኀ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE XWE
 ኌ ↔ $ኀ $ዘመደ_ኃምስ ; # ETHIOPIC SYLLABLE XWEE
 ኊ ↔ $ኀ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE XWI
 ኋ ↔ $ኀ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE XWAA
-ኁ ↔ $ኀ $ካዕብ ; # ETHIOPIC SYLLABLE XU
-ኅ ↔ $ኀ $ሳድስ ; # ETHIOPIC SYLLABLE XE
+ኁ → $ኀ $ካዕብ ; # ETHIOPIC SYLLABLE XU
+ኅ →$ኀ $ሳድስ ; # ETHIOPIC SYLLABLE XE
 #
 ሀ ↔ $ሀ $ግዕዝ ; # ETHIOPIC SYLLABLE HA
 ሁ ↔ $ሀ $ካዕብ ; # ETHIOPIC SYLLABLE HU
@@ -375,9 +377,9 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 ኢ ↔ $እ $ሣልስ ; # ETHIOPIC SYLLABLE GLOTTAL I
 ኣ ↔ $እ $ራዕብ ; # ETHIOPIC SYLLABLE GLOTTAL AA
 ኤ ↔ $እ $ኃምስ ; # ETHIOPIC SYLLABLE GLOTTAL EE
-እ ↔ $እ  ; # ETHIOPIC SYLLABLE GLOTTAL E
 # ⶊ ↔ $glottal $ኦa ; # ETHIOPIC SYLLABLE GLOTTAL OA
 ኦ ↔ $እ $ሳብዕ ; # ETHIOPIC SYLLABLE GLOTTAL O
+እ ↔ $እ  ; # ETHIOPIC SYLLABLE GLOTTAL E
 #
 # ⷐ ← $ⷐ $ግዕዝ ; # ETHIOPIC SYLLABLE XYA
 # ⷑ ← $ⷐ $ካዕብ ; # ETHIOPIC SYLLABLE XYU
@@ -387,7 +389,7 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 # ⷖ ← $ⷐ $ሳብዕ ; # ETHIOPIC SYLLABLE XYO
 # ⷕ ← $ⷐ $ሳድስ ; # ETHIOPIC SYLLABLE XYE
 #
-ኸ ↔ $ኸ $ግዕዝ ; # ETHIOPIC SYLLABLE KXA
+ኸ ↔ $ኸ $ግዕዝ ; # ETHIOPIC SYLLABLE KXA             Note the conflict with « and ?
 ኼ ↔ $ኸ $ኃምስ ; # ETHIOPIC SYLLABLE KXEE
 ኺ ↔ $ኸ $ሣልስ ; # ETHIOPIC SYLLABLE KXI
 ኻ ↔ $ኸ $ራዕብ ; # ETHIOPIC SYLLABLE KXAA
@@ -538,7 +540,7 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 ጳ ↔ $ጰ $ራዕብ ; # ETHIOPIC SYLLABLE PHAA
 # ⶑ ↔ $ጰ $ሳምን ; # ETHIOPIC SYLLABLE PHOA
 ጶ ↔ $ጰ $ሳብዕ ; # ETHIOPIC SYLLABLE PHO
-ጵ ↔ $ጰ $ሳድስ ; # ETHIOPIC SYLLABLE PHE
+ጵ ↔ $ጰ $ሳድስ ; # ETHIOPIC SYLLABLE PHE  - Note the conflict with !
 #
 ፀ ↔ $ፀ $ግዕዝ ; # ETHIOPIC SYLLABLE TZA
 ፁ ↔ $ፀ $ካዕብ ; # ETHIOPIC SYLLABLE TZU
@@ -593,31 +595,30 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 ########################################################################
 
 … ↔ ⠄ ⠄ ⠄ ;
-\. ↔ ⠄ ;
 ። ↔ ⠲ ;
 ፣ ↔ ⠂ ;
 ፤ ↔ ⠆ ;
-፥ ↔   ;
-፦ ↔ ⠒ ;
+፥ → ⠂ ;
 # ፨ ↔  ;
 # ፠ ↔   ;
-፧ ↔ ⠦ ;
+፧ → ⠦ ;
 ፡ ↔ ⠄⠠ ;
-« ↔  ⠦ ;
-» ↔  ⠴ ;
 ‹ ↔ ⠠⠦ ;
-› ↔ ⠴⠄ ;
-\? ↔ ⠦ ;
-! ↔ ⠖ ;
-"$" ↔ ⠘ ;
-"[" ↔ ⠠⠶ ;
-"]" ↔ ⠶⠄ ;
-"(" ↔ ⠶ ;
-")" → ⠶ ;
-"/" ↔ ⠐⠂ ;
-"-"  ↔ ⠒⠒ ;
-"—" ↔ ⠤⠤ ;
-"*"  ↔ ⠔⠔ ;
+« →  ⠦ ;  # Note the conflict with ? and ኸ
+» →  ⠴ ;  # Note the conflict with ዠ
+\? → ⠦ ;  # Note the conflict with ? and «
+\! → ⠖ ;  # Note the conflict with ጰ
+\$ ↔ ⠘ ;
+\[ ↔ ⠠⠶ ;
+\] ↔ ⠶⠄ ;
+\( ↔ ⠶ ;
+\) → ⠶ ;
+\/ ↔ ⠐⠂ ;
+\-  ↔ ⠒⠒ ;
+፦ ↔ ⠒ ;
+\— ↔ ⠤⠤ ;
+\* ↔ ⠔⠔ ;
+\. ↔ ⠄ ;
 
 #
 
