@@ -945,7 +945,7 @@
             "path": "Ethiopic-Braille-Amharic.xml",
             "source": "Ethi",
             "target": "Amharic_Ethi_Brai",
-            "name": "Amharic",
+            "name": "_base",
             "direction": "both",
             "alias": "Ethiopic-Braille/Amharic",
             "backwardAlias": "Braille-Ethiopic/Amharic"

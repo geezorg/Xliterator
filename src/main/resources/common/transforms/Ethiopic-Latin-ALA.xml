@@ -92,8 +92,8 @@ $ፐ = p ;
 #
 $glottal    = \ʼ ;
 $pharyngeal = \ʻ;
-$አ =    a ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =   A ; $ኤ = $ኃምስ ; $እ = I ; $ኦ = $ሳብዕ ;  $ኧ = ă ;
-$ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; $ዔ = $ኃምስ ; $ዕ = I ; $ዖ = $ሳብዕ ; 
+$አ =    a ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =  ራዕብ  ; $ኤ = $ኃምስ ; $እ = $ሳድስ ; $ኦ = $ሳብዕ ;  $ኧ = ă ;
+$ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; $ዔ = $ኃምስ ; $ዕ = $ሳድስ  ; $ዖ = $ሳብዕ ; 
 #
 # Use this $wordBoundary until bug 2034 is fixed in ICU:
 # http://bugs.icu-project.org/cgi-bin/icu-bugs/transliterate?id=2034;expression=boundary;user=guest

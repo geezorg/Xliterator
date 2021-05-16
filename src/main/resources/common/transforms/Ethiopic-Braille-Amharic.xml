@@ -592,22 +592,33 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 # Start of Punctuation Transformations
 ########################################################################
 
+… ↔ ⠄ ⠄ ⠄ ;
 \. ↔ ⠄ ;
-\$ ↔ ;
-። ↔   ;
+። ↔ ⠲ ;
 ፣ ↔ ⠂ ;
-፤ ↔    ;
+፤ ↔ ⠆ ;
 ፥ ↔   ;
 ፦ ↔ ⠒ ;
 # ፨ ↔  ;
 # ፠ ↔   ;
-# ፧ ↔   ;
-፡ → ' ' ;
-« ↔  ;
-» ↔   ;
-‹ ↔   ;
-› ↔  ;
+፧ ↔ ⠦ ;
+፡ ↔ ⠄⠠ ;
+« ↔  ⠦ ;
+» ↔  ⠴ ;
+‹ ↔ ⠠⠦ ;
+› ↔ ⠴⠄ ;
 \? ↔ ⠦ ;
+! ↔ ⠖ ;
+"$" ↔ ⠘ ;
+"[" ↔ ⠠⠶ ;
+"]" ↔ ⠶⠄ ;
+"(" ↔ ⠶ ;
+")" → ⠶ ;
+"/" ↔ ⠐⠂ ;
+"-"  ↔ ⠒⠒ ;
+"—" ↔ ⠤⠤ ;
+"*"  ↔ ⠔⠔ ;
+
 #
 
 ########################################################################
@@ -617,25 +628,25 @@ $ethiopicNumber = ⠿ ;
 $arabicNumber   = ⠼ ;
 ፼ ↔ $ethiopicNumber 10000 $ethiopicNumber ; # ETHIOPIC NUMBER TEN THOUSAND
 ፲፻ ↔ $ethiopicNumber 1000 $ethiopicNumber ; # One Thousand
-፻ ↔ $ethiopicNumber   100 $ethiopicNumber ; # ETHIOPIC NUMBER HUNDRED
-፲ ↔ $ethiopicNumber   10 $ethiopicNumber ; # ETHIOPIC NUMBER TEN
-፳ ↔ $ethiopicNumber    20 $ethiopicNumber ; # ETHIOPIC NUMBER TWENTY
-፴ ↔ $ethiopicNumber   30 $ethiopicNumber ; # ETHIOPIC NUMBER THIRTY
-፵ ↔ $ethiopicNumber   40 $ethiopicNumber ; # ETHIOPIC NUMBER FORTY
-፶ ↔ $ethiopicNumber    50 $ethiopicNumber ; # ETHIOPIC NUMBER FIFTY
-፷ ↔ $ethiopicNumber    60 $ethiopicNumber ; # ETHIOPIC NUMBER SIXTY
-፸ ↔ $ethiopicNumber    70 $ethiopicNumber ; # ETHIOPIC NUMBER SEVENTY
-፹ ↔ $ethiopicNumber    80 $ethiopicNumber ; # ETHIOPIC NUMBER EIGHTY
-፺ ↔ $ethiopicNumber    90 $ethiopicNumber ; # ETHIOPIC NUMBER NINETY
-፩ ↔ $ethiopicNumber     1 $ethiopicNumber ; # ETHIOPIC DIGIT ONE
-፪ ↔ $ethiopicNumber     2 $ethiopicNumber ; # ETHIOPIC DIGIT TWO
-፫ ↔ $ethiopicNumber     3 $ethiopicNumber ; # ETHIOPIC DIGIT THREE
-፬ ↔ $ethiopicNumber     4 $ethiopicNumber ; # ETHIOPIC DIGIT FOUR
-፭ ↔ $ethiopicNumber     5 $ethiopicNumber ; # ETHIOPIC DIGIT FIVE
-፮ ↔ $ethiopicNumber     6 $ethiopicNumber ; # ETHIOPIC DIGIT SIX
-፯ ↔ $ethiopicNumber     7 $ethiopicNumber ; # ETHIOPIC DIGIT SEVEN
-፰ ↔ $ethiopicNumber     8 $ethiopicNumber ; # ETHIOPIC DIGIT EIGHT
-፱ ↔ $ethiopicNumber     9 $ethiopicNumber ; # ETHIOPIC DIGIT NINE
+፻ ↔ $ethiopicNumber   ⠁⠍⠁⠅ $ethiopicNumber ; # ETHIOPIC NUMBER HUNDRED
+፲ ↔ $ethiopicNumber    ⠁⠅⠆ $ethiopicNumber ; # ETHIOPIC NUMBER TEN
+፳ ↔ $ethiopicNumber  ⠁⠅⠉⠆ $ethiopicNumber ; # ETHIOPIC NUMBER TWENTY
+፴ ↔ $ethiopicNumber  ⠁⠅⠒⠆ $ethiopicNumber ; # ETHIOPIC NUMBER THIRTY
+፵ ↔ $ethiopicNumber  ⠁⠅⠤⠆ $ethiopicNumber ; # ETHIOPIC NUMBER FORTY
+፶ ↔ $ethiopicNumber  ⠁⠅⠑⠆ $ethiopicNumber ; # ETHIOPIC NUMBER FIFTY
+፷ ↔ $ethiopicNumber ⠁⠅⠢⠆  $ethiopicNumber ; # ETHIOPIC NUMBER SIXTY
+፸ ↔ $ethiopicNumber  ⠁⠅⠊⠆ $ethiopicNumber ; # ETHIOPIC NUMBER SEVENTY
+፹ ↔ $ethiopicNumber ⠁⠅⠔⠆ $ethiopicNumber ; # ETHIOPIC NUMBER EIGHTY
+፺ ↔ $ethiopicNumber  ⠁⠅⠃⠆$ethiopicNumber ; # ETHIOPIC NUMBER NINETY
+፩ ↔ $ethiopicNumber   ⠁⠁⠆$ethiopicNumber ; # ETHIOPIC DIGIT ONE
+፪ ↔ $ethiopicNumber   ⠁⠉⠆$ethiopicNumber ; # ETHIOPIC DIGIT TWO
+፫ ↔ $ethiopicNumber   ⠁⠒⠆$ethiopicNumber ; # ETHIOPIC DIGIT THREE
+፬ ↔ $ethiopicNumber   ⠁⠤⠆$ethiopicNumber ; # ETHIOPIC DIGIT FOUR
+፭ ↔ $ethiopicNumber  ⠁⠑⠆$ethiopicNumber ; # ETHIOPIC DIGIT FIVE
+፮ ↔ $ethiopicNumber  ⠁⠢  $ethiopicNumber ; # ETHIOPIC DIGIT SIX
+፯ ↔ $ethiopicNumber  ⠁⠊⠆$ethiopicNumber ; # ETHIOPIC DIGIT SEVEN
+፰ ↔ $ethiopicNumber  ⠁⠔⠆$ethiopicNumber ; # ETHIOPIC DIGIT EIGHT
+፱ ↔ $ethiopicNumber  ⠁⠃⠆$ethiopicNumber ; # ETHIOPIC DIGIT NINE
 
 # Inverse Fiter : Braille-Ethiopic
 #

@@ -113,7 +113,7 @@ $ፐ = п  ;
 #
 $glottal    = ͵ ;
 $pharyngeal = ʹ;
-$አ = $ግዕዝ ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ = $ራዕብ ; $ኤ = и$ኃምስ ; $እ = $ሳድስ ; $ኦ = $ሳብዕ ; $ኦa = $ሳምን ; $ኧ = ea ;
+$አ = $ግዕዝ ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ = $ራዕብ ; $ኤ = и$ኃምስ ; $እ = $ሳድስ ; $ኦ = $ሳብዕ ; $ⶊ = $ሳምን ; $ኧ = ea ;
 $ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; $ዔ = $ኃምስ ; $ዕ = $ሳድስ ; $ዖ = $ሳብዕ ; 
 #
 # Use this $wordBoundary until bug 2034 is fixed in ICU:
@@ -360,23 +360,23 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 ን ← $ነ ; # ETHIOPIC SYLLABLE NE
 #
 [^:Letter:]{ኣ ↔ $ኣ ; # ETHIOPIC SYLLABLE GLOTTAL AA
-$wordBoundary{ኧ ↔ $ኧ ; # ETHIOPIC SYLLABLE GLOTTAL WA
+# $wordBoundary{ኧ ↔ $ኧ ; # ETHIOPIC SYLLABLE GLOTTAL WA
 [^:Letter:]{አ ↔ $አ ; # ETHIOPIC SYLLABLE GLOTTAL A
 $wordBoundary{ኡ ↔ $ኡ ; # ETHIOPIC SYLLABLE GLOTTAL U
 $wordBoundary{ኤ ↔ $ኤ ; # ETHIOPIC SYLLABLE GLOTTAL EE
 $wordBoundary{ኢ ↔ $ኢ ; # ETHIOPIC SYLLABLE GLOTTAL I
 $wordBoundary{እ ↔ $እ ; # ETHIOPIC SYLLABLE GLOTTAL E
-$wordBoundary{ⶊ ↔ $ኦa ; # ETHIOPIC SYLLABLE GLOTTAL OA
+# $wordBoundary{ⶊ ↔ $ⶊ ; # ETHIOPIC SYLLABLE GLOTTAL OA
 $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 #
 ኣ ↔ $glottal $ኣ ; # ETHIOPIC SYLLABLE GLOTTAL AA
-ኧ ↔ $glottal $ኧ ; # ETHIOPIC SYLLABLE GLOTTAL WA
+# ኧ ↔ $glottal $ኧ ; # ETHIOPIC SYLLABLE GLOTTAL WA
 አ ↔ $glottal $አ ; # ETHIOPIC SYLLABLE GLOTTAL A
 ኡ ↔ $glottal $ኡ ; # ETHIOPIC SYLLABLE GLOTTAL U
 ኤ ↔ $glottal $ኤ ; # ETHIOPIC SYLLABLE GLOTTAL EE
 ኢ ↔ $glottal $ኢ ; # ETHIOPIC SYLLABLE GLOTTAL I
 እ ↔ $glottal $እ ; # ETHIOPIC SYLLABLE GLOTTAL E
-ⶊ ↔ $glottal $ኦa ; # ETHIOPIC SYLLABLE GLOTTAL OA
+# ⶊ ↔ $glottal $ኦa ; # ETHIOPIC SYLLABLE GLOTTAL OA
 ኦ ↔ $glottal $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 #
 ⷈ ← $ⷈ $ግዕዝ ; # ETHIOPIC SYLLABLE KYA
