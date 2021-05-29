@@ -456,6 +456,18 @@
             "alias": "my-t-my-d0-zawgyi"
           }
         ]
+      },
+      "Myanmar": {
+        "Latin": [
+          {
+            "path": "Myanmar-Latin.xml",
+            "source": "my",
+            "target": "Latn",
+            "name": "_base",
+            "direction": "forward",
+            "alias": "Myanmar-Latin"
+          }
+        ]
       }
     },
     "Cherokee": {

@@ -208,20 +208,17 @@ public class EditorTab extends XliteratorTab {
 			String newFileName = null;
 			if( saveToNewFile ) {
         		newFileName = editor.saveContentToNewFile( stage );
-        		if( newFileName != null ) {
-        			setTitle( newFileName );
-        			setStyle( null );
-        		}
 			}
 			else {
 				// this may or may not be the initial save
 				if( editor.isInitialSave() ) {
-	        		newFileName = editor.saveContentToNewFile( stage );
-	        		if( newFileName != null ) {
-	        			setTitle( newFileName );
-	        			setStyle( null );
-	        			
-	        		}
+					if( editor.isTemplate() ) {
+						String initialName = this.getTitle().replaceAll( " ", "-" ).substring( 1 ).concat( ".xml" );
+						newFileName = editor.saveContentToNewFile( stage, initialName );
+					}
+					else {
+						newFileName = editor.saveContentToNewFile( stage );
+					}
 				}
 				else {
 					newFileName = editor.saveContentToFile();

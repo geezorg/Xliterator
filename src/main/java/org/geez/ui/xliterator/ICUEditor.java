@@ -110,6 +110,8 @@ public class ICUEditor extends CodeArea {
 
     private String originalText = "";
     
+    private boolean isTemplate = false;
+    
 	public static final String defaultStylesheet = "styles/icu-highlighting.css";
 	public static final String userStylesheet    = "icu-highlighting.css";
 
@@ -450,13 +452,17 @@ public class ICUEditor extends CodeArea {
 		  
 		  return icuFile.getName();
 	}
-		
+
 	public String saveContentToNewFile(Stage stage) throws IOException {
+			return saveContentToNewFile( stage, null );
+	}
+	public String saveContentToNewFile(Stage stage, String suggestFileName) throws IOException {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle( "Save ICU File" );
-		
 		if( icuFile != null ) {
 			fileChooser.setInitialFileName( icuFile.getName() );
+		} else if( suggestFileName != null ) {
+			fileChooser.setInitialFileName( suggestFileName );
 		} else if( internalFileName != null ) {
 			fileChooser.setInitialFileName( internalFileName );
 		}
@@ -657,5 +663,13 @@ public class ICUEditor extends CodeArea {
         }
         
         replaceDialog.showAndWait();
+    }
+    
+    public boolean isTemplate() {
+    	return isTemplate;
+    }
+    
+    public void setIsTemplate( boolean isTemplate ) {
+    	this.isTemplate = isTemplate;
     }
 }

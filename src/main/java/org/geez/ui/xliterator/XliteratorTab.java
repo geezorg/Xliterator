@@ -172,7 +172,7 @@ public abstract class XliteratorTab extends DraggableTab {
     
     
     public void setTransliteration( JsonObject transliteration ) {
-    	this.transliteration = transliteration;
+    	this.transliteration = transliteration; // is this a reference or copy?   we need to set isEditor to true in the case this method is called by the EditorTab
     	
     	this.variantOut = transliteration.get( "name" ).getAsString();
     	this.selectedTransliteration  

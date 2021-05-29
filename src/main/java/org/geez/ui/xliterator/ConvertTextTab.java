@@ -392,8 +392,10 @@ public class ConvertTextTab extends XliteratorTab {
     	stringConverterUp = null;
     	
 		registeredDependencies.put( selectedTransliteration , "false" );
-		convertButtonUp.setTooltip( new Tooltip( "Convert from: " + scriptOut + " to " + scriptIn )  );
-		convertButtonDown.setTooltip( new Tooltip( "Convert from: " + scriptIn + " to " + scriptOut ) );
+		String textIn  = ( scriptIn.equals( Xliterator.useSelectedEditor ) ) ? "Editor In" : scriptIn ;
+		String textOut = ( scriptIn.equals( Xliterator.useSelectedEditor ) ) ? "Editor Out" : scriptOut ;
+		convertButtonUp.setTooltip( new Tooltip( "Convert from: " + textOut + " to " + textIn )  );
+		convertButtonDown.setTooltip( new Tooltip( "Convert from: " + textIn + " to " + textOut ) );
 		convertButtonUp.setDisable( false );
 		convertButtonDown.setDisable( false );
         autoConversionCheckBox.setDisable( false );

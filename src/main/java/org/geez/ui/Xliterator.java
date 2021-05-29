@@ -512,6 +512,7 @@ public final class Xliterator extends Application {
     	emptyTransliteration.addProperty( "direction", "forward" );
     	emptyTransliteration.addProperty( "isEditor", true );
 
+
     	return emptyTransliteration;
     }
     
@@ -635,7 +636,7 @@ public final class Xliterator extends Application {
     		// System.out.println( "Selected: " + editorTab.getTitle() + " isSelected: " + editorTab.isSelected() );
         });
         
-        MenuItem editorTabViewMenuItem = new MenuItem( title );
+        MenuItem  editorTabViewMenuItem = new MenuItem( title );
         ImageView editorOnView  = new ImageView( visibleIcon );
         ImageView editorOffView = new ImageView( visibleIcon );
         editorOffView.setEffect( monochrome );
@@ -675,7 +676,7 @@ public final class Xliterator extends Application {
 	   	 	scriptOut = null;
 			// outVariantMenu.getItems().clear();
 			variantOut = null;
-	    	scriptInText .setText( "[Editor] " +  selectedEditorTab.getInText() );
+	    	scriptInText .setText( "[Editor] " + selectedEditorTab.getInText() );
 	    	scriptOutText.setText( "[Editor] " + selectedEditorTab.getOutText() );
 	    	resourceText .setText( "[Editor] " + title );
 	    	setTransliteration( editorTab.getTransliteration() );
@@ -1648,6 +1649,7 @@ public final class Xliterator extends Application {
     		transliteration = createEmptyTransliteration( template );
     		EditorTab newTab = createNewEditor( ("New " + newCounter), tabsMenu, visibleIcon, monochrome );
     		newTab.getEditor().loadResourceFile( template );
+    		newTab.getEditor().setIsTemplate( true );
     	}
     	catch(Exception ex) {
         	errorAlert(ex, "Error opening: " + template );
