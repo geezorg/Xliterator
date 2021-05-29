@@ -3,10 +3,10 @@
 <supplementalData>
 	<version number="$Revision$"/>
 	<transforms>
-		<transform source="Ethi" target="Aethiopica_Latn" variant="Aethiopica" direction="both" draft="contributed" alias="Ethiopic-Latin/Aethiopica" backwardAlias="Latin-Ethiopic/Aethiopica">
+		<transform source="Ethi" target="JES_IES_1964_Latn" variant="JES-IES-1964" direction="both" draft="contributed" alias="Ethiopic-Latin/JES-IES-1964" backwardAlias="Latin-Ethiopic/JES-IES-1964">
 			<tRule><![CDATA[
 ########################################################################
-# Encylopedia Aethiopica Transliteration
+# JES/IES 1964 Amharic Transliteration
 #
 # WRIGHT, STEPHEN. “The Transliteration of Amharic.” Journal of Ethiopian Studies, vol. 2, no. 1, 
 # 1964, pp. 1–10. JSTOR, www.jstor.org/stable/41965703. Accessed 17 May 2021.
@@ -53,43 +53,43 @@ $መ = m ;
 $ሠ = ś ;
 $ረ = r ;
 $ሰ = s ;
-# $ꬁ = ;  not supported in Aethiopica
+# $ꬁ = ;  not supported in JES/IES 1964
 $ሸ = š ;
-# $ⶠ  = ; not supported in Aethiopica
+# $ⶠ = ;  not supported in JES/IES 1964
 $ቀ = q ;
 $ቐ = q̌ ;
 $በ = b ;
 $ቨ = v ;
 $ተ = t ;
 $ቸ = č ;
-# $ⶨ = ;  not supported in Aethiopica
+# $ⶨ = ;  not supported in JES/IES 1964
 $ኀ = ḫ ;
 $ነ = n ;
 $ኘ = ñ ;
 $ከ = k ;
-# $ⷈ = ;  not supported in Aethiopica
+# $ⷈ = ;  not supported in JES/IES 1964
 $ኸ = x ;
-# $ⷐ = ;  not supported in Aethiopica
+# $ⷐ = ;  not supported in JES/IES 1964
 $ወ = w ;
 $ዘ = z ;
 $ዠ = ž ;
-# $ⶰ = ;  not supported in Aethiopica
-# $ꬑ = ;  not supported in Aethiopica
+# $ⶰ = ;  not supported in JES/IES 1964
+# $ꬑ = ;  not supported in JES/IES 1964
 $የ = y ;
 $ደ = d ;
-$ዸ = ḋ;  not supported in Aethiopica
-# $ꬉ = ;  not supported in Aethiopica
+# $ዸ = ;  not supported in JES/IES 1964
+# $ꬉ = ;  not supported in JES/IES 1964
 $ጀ = j ;
 $ገ = g ;
-# $ⷘ = ;  not supported in Aethiopica
+# $ⷘ = ;  not supported in JES/IES 1964
 $ጘ = ŋ ;
 $ጠ = ṭ ;
 $ጨ = č̣ ;
-# $ⶸ = ;  not supported in Aethiopica
-# $ꬠ = ;  not supported in Aethiopica
+# $ⶸ = ;  not supported in JES/IES 1964
+# $ꬠ = ;  not supported in JES/IES 1964
 $ጰ = p̣ ;
 $ጸ = ṣ ;
-# $ꬨ = ;  not supported in Aethiopica
+# $ꬨ = ;  not supported in JES/IES 1964
 $ፀ = ẓ ;
 $ፈ = f ;
 $ፐ = p ;
@@ -116,44 +116,44 @@ $ጥበቅ = \u135f ;
 ([ሠ-ሧ]) $ጥበቅ → $ሠ | $1 ;
 ([ረ-ሯⶂፘ]) $ጥበቅ → $ረ | $1 ;
 ([ሰ-ሷⶃ]) $ጥበቅ → $ሰ | $1 ;
-# ([ꬁ-ꬆ]) $ጥበቅ → $ꬁ | $1 ;  not supported in Aethiopica
+# ([ꬁ-ꬆ]) $ጥበቅ → $ꬁ | $1 ;  not supported in JES/IES 1964
 ([ሸ-ሿⶄ]) $ጥበቅ → $ሸ | $1 ;
-# ([ⶠ-ⶦ]) $ጥበቅ → $ⶠ | $1 ;  not supported in Aethiopica
+# ([ⶠ-ⶦ]) $ጥበቅ → $ⶠ | $1 ;  not supported in JES/IES 1964
 ([ቀ-ቍ]) $ጥበቅ → $ቀ | $1 ;
-# ([ⷀ-ⷆ]) $ጥበቅ → $ⷀ | $1 ;  not supported in Aethiopica
+# ([ⷀ-ⷆ]) $ጥበቅ → $ⷀ | $1 ;  not supported in JES/IES 1964
 ([ቐ-ቝ]) $ጥበቅ → $ቐ | $1 ;
 ([በ-ቧⶅᎄ-ᎇ]) $ጥበቅ → $በ | $1 ;
 ([ቨ-ቯ]) $ጥበቅ → $ቨ | $1 ;
 ([ተ-ቷ]) $ጥበቅ → $ተ | $1 ;
 ([ቸ-ቿ]) $ጥበቅ → $ቸ | $1 ;
-# ([ⶨ-ⶮ]) $ጥበቅ → $ⶨ | $1 ;  not supported in Aethiopica
+# ([ⶨ-ⶮ]) $ጥበቅ → $ⶨ | $1 ;  not supported in JES/IES 1964
 ([ኀ-ኍ]) $ጥበቅ → $ኀ | $1 ;
 ([ነ-ኗ]) $ጥበቅ → $ነ | $1 ;
 ([ኘ-ኟ]) $ጥበቅ → $ኘ | $1 ;
 ([ከ-ኵ]) $ጥበቅ → $ከ | $1 ;
-# ([ⷈ-ⷎ]) $ጥበቅ → $ⷈ | $1 ;  not supported in Aethiopica
+# ([ⷈ-ⷎ]) $ጥበቅ → $ⷈ | $1 ;  not supported in JES/IES 1964
 ([ኸ-ዅ]) $ጥበቅ → $ኸ | $1 ;
-# ([ⷐ-ⷖ]) $ጥበቅ → $ⷐ | $1 ;  not supported in Aethiopica
+# ([ⷐ-ⷖ]) $ጥበቅ → $ⷐ | $1 ;  not supported in JES/IES 1964
 ([ወ-ዏ]) $ጥበቅ → $ወ | $1 ;
 ([ዘ-ዟⶋ]) $ጥበቅ → $ዘ | $1 ;
-# ([ꬑ-ꬖ]) $ጥበቅ → $ꬑ | $1 ;  not supported in Aethiopica
+# ([ꬑ-ꬖ]) $ጥበቅ → $ꬑ | $1 ;  not supported in JES/IES 1964
 ([ዠ-ዧ]) $ጥበቅ → $ዠ | $1 ;
-# ([ⶰ-ⶶ]) $ጥበቅ → $ዠ | $1 ;  not supported in Aethiopica
+# ([ⶰ-ⶶ]) $ጥበቅ → $ዠ | $1 ;  not supported in JES/IES 1964
 ([የ-ዯ]) $ጥበቅ → $የ | $1 ;
 ([ደ-ዷⶌ]) $ጥበቅ → $ደ | $1 ;
-# ([ዸ-ዿⶍ]) $ጥበቅ → $ዸ | $1 ;  not supported in Aethiopica
-# ([ꬉ-ꬎ]) $ጥበቅ → $ꬉ | $1 ;   not supported in Aethiopica
+# ([ዸ-ዿⶍ]) $ጥበቅ → $ዸ | $1 ;  not supported in JES/IES 1964
+# ([ꬉ-ꬎ]) $ጥበቅ → $ꬉ | $1 ;   not supported in JES/IES 1964
 ([ጀ-ጇⶎ]) $ጥበቅ → $ጀ | $1 ;
 ([ገ-ጕጏ]) $ጥበቅ → $ገ | $1 ;
-# ([ⷘ-ⷞ]) $ጥበቅ → $ገ | $1 ;  not supported in Aethiopica
+# ([ⷘ-ⷞ]) $ጥበቅ → $ገ | $1 ;  not supported in JES/IES 1964
 ([ጘ-ጟⶓ-ⶖ]) $ጥበቅ → $ጘ | $1 ;
 ([ጠ-ጧⶏ]) $ጥበቅ → $ጠ | $1 ;
 ([ጨ-ጯⶐ]) $ጥበቅ → $ጨ | $1 ;
-# ([ⶸ-ⶾ]) $ጥበቅ → $ⶸ | $1 ;  not supported in Aethiopica
-# ([ꬠ-ꬦ]) $ጥበቅ → $ꬠ | $1 ;  not supported in Aethiopica
+# ([ⶸ-ⶾ]) $ጥበቅ → $ⶸ | $1 ;  not supported in JES/IES 1964
+# ([ꬠ-ꬦ]) $ጥበቅ → $ꬠ | $1 ;  not supported in JES/IES 1964
 ([ጰ-ጷⶑ]) $ጥበቅ → $ጰ | $1 ;
 ([ጸ-ጿ]) $ጥበቅ → $ጸ | $1 ;
-# ([ꬨ-ꬮ]) $ጥበቅ → $ꬨ | $1 ;  not supported in Aethiopica
+# ([ꬨ-ꬮ]) $ጥበቅ → $ꬨ | $1 ;  not supported in JES/IES 1964
 ([ፀ-ፇ]) $ጥበቅ → $ፀ | $1 ;
 ([ፈ-ፏፚᎈ-ᎋ]) $ጥበቅ → $ፈ | $1 ;
 ([ፐ-ፗᎌ-ᎏ]) $ጥበቅ → $ፐ | $1 ;

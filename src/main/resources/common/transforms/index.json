@@ -988,7 +988,7 @@
             "path": "Ethiopic-Latin-BetaMetsehaf.xml",
             "source": "Ethi",
             "target": "BetaMetsehaf_Latn",
-            "name": "BetaMetsehaf",
+            "name": "Beta Metsehaf",
             "direction": "both",
             "alias": "Ethiopic-Latin/BetaMetsehaf",
             "backwardAlias": "Latin-Ethiopic/Beta_Metsehaf"
@@ -1001,6 +1001,15 @@
             "direction": "forward",
             "alias": "Ethiopic-Latin/ES3842",
             "backwardAlias": "Latin-Ethiopic/ES3842"
+          },
+          {
+            "path": "Ethiopic-Latin-JES_IES_1964.xml",
+            "source": "Ethi",
+            "target": "JES_IES_1964_Latn",
+            "name": "IES/JES 1964",
+            "direction": "both",
+            "alias": "Ethiopic-Latin/JES-IES-1964",
+            "backwardAlias": "Latin-Ethiopic/JES-IES-1964"
           },
           {
             "path": "Ethiopic-Latin-SERA.xml",
@@ -1050,7 +1059,7 @@
             "path": "Ethiopic-Latin-TekieAlibekit.xml",
             "source": "Ethi",
             "target": "TekieAlibekit_Ethi",
-            "name": "TekieAlibekit",
+            "name": "Tekie Alibekit",
             "direction": "both",
             "alias": "Ethiopic-Ethiopic/TekieAlibekit",
             "backwardAlias": "Latin-Ethiopic/Tekie_Alibekit"
