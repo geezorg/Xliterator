@@ -3,18 +3,17 @@
 <supplementalData>
 	<version number="$Revision$"/>
 	<transforms>
-		<transform source="Ethi" target="Aethiopica_Latn" variant="Aethiopica" direction="both" draft="contributed" alias="Ethiopic-Latin/Aethiopica" backwardAlias="Latin-Ethiopic/Aethiopica">
+		<transform source="Ethi" target="Lambdin_Latn" variant="Lambdin" direction="both" draft="contributed" alias="Ethiopic-Latin/Lambdin" backwardAlias="Latin-Ethiopic/Lambdin">
 			<tRule><![CDATA[
 ########################################################################
-# Encylopedia Aethiopica Transliteration
+# Lambdin Ge'ez Transliteration
 #
-# https://journals.sub.uni-hamburg.de/toc-aethiopica/Miscellaneous/Aethiopica_Transliteration.pdf
+# Lambdin, Thomas Oden. Introduction to Classical Ethiopic (Ge'ez).
+# United States, Scholars Press, 1978.
 #
-# Full citation:
-#
-#    “Transcription/Transliteration Tables.” Aethiopica International Journal of Ethiopian and Eritrean Studies,
-#    Hiob Ludolf Centre for Ethiopian and Eritrean Studies, 4 Feb. 2015,
-#    journals.sub.uni-hamburg.de/toc-aethiopica/Miscellaneous/Aethiopica_Transliteration.pdf
+# Note: Though while the subject of Lambdin's text is on the Ge'ez language
+#       he provides a table of the syllabary additions made for Amharic
+#       along with their Latin associations.
 #
 # Initial Editor: Daniel Yacob <yacob@geez.org>
 #
@@ -33,19 +32,19 @@
 #
 ########################################################################
 #
-$ግዕዝ = 'ä';
+$ግዕዝ = 'a';
 $ካዕብ = 'u';
 $ሣልስ = 'i' ;
-$ራዕብ = 'a';
-$ኃምስ = 'e' ;
-$ሳድስ = 'ǝ';
+$ራዕብ = 'ā';
+$ኃምስ = 'ē' ;
+$ሳድስ = 'e';
 $ሳብዕ = 'o';
 # $ሳምን = oa ;  Me'en not supported
-$ዘመደ_ግዕዝ = 'ʷä';
+$ዘመደ_ግዕዝ = 'ʷa';
 $ዘመደ_ሣልስ = 'ʷi';
-$ዘመደ_ካዕብ = 'ʷǝ';
-$ዘመደ_ራዕብ = 'ʷa';
-$ዘመደ_ኃምስ = 'ʷe';
+$ዘመደ_ካዕብ = 'ʷe';
+$ዘመደ_ራዕብ = 'ʷā';
+$ዘመደ_ኃምስ = 'ʷē';
 
 $አለፍ = ʾ;  # glottal
 $ዐይን = ʿ;  # pharyngeal
@@ -54,47 +53,47 @@ $ሀ = h ;
 $ለ = l ;
 $ሐ = ḥ ;
 $መ = m ;
-$ሠ = ś ;
+$ሠ = š ;
 $ረ = r ;
 $ሰ = s ;
-# $ꬁ = ;  not supported in Aethiopica
-$ሸ = š ;
-# $ⶠ  = ; not supported in Aethiopica
+# $ꬁ = ;  not supported in Lambdin transliteration
+$ሸ = ś ;
+# $ⶠ = ;  not supported in Lambdin transliteration
 $ቀ = q ;
-$ቐ = q̲ ;
+# $ቐ = q̌ ; not supported in Lambdin
 $በ = b ;
-$ቨ = v ;
+# $ቨ = v ;
 $ተ = t ;
 $ቸ = č ;
-# $ⶨ = ;  not supported in Aethiopica
-$ኀ = ḫ ;
+# $ⶨ = ;  not supported in Lambdin transliteration
+$ኀ = x ;
 $ነ = n ;
 $ኘ = ñ ;
 $ከ = k ;
-# $ⷈ = ;  not supported in Aethiopica
-$ኸ = ẖ ;
-# $ⷐ = ;  not supported in Aethiopica
+# $ⷈ = ;  not supported in Lambdin transliteration
+$ኸ = ḵ ;
+# $ⷐ = ;  not supported in Lambdin transliteration
 $ወ = w ;
 $ዘ = z ;
 $ዠ = ž ;
-# $ⶰ = ;  not supported in Aethiopica
-# $ꬑ = ;  not supported in Aethiopica
+# $ⶰ = ;  not supported in Lambdin transliteration
+# $ꬑ = ;  not supported in Lambdin transliteration
 $የ = y ;
 $ደ = d ;
-# $ዸ = ;  not supported in Aethiopica
-# $ꬉ = ;  not supported in Aethiopica
-$ጀ = ǧ ;
+# $ዸ = ;  not supported in Lambdin transliteration
+# $ꬉ = ;  not supported in Lambdin transliteration
+$ጀ = j ;
 $ገ = g ;
-# $ⷘ = ;  not supported in Aethiopica
+# $ⷘ = ;  not supported in Lambdin transliteration
 $ጘ = ŋ ;
 $ጠ = ṭ ;
 $ጨ = č̣ ;
-# $ⶸ = ;  not supported in Aethiopica
-# $ꬠ = ;  not supported in Aethiopica
+# $ⶸ = ;  not supported in Lambdin transliteration
+# $ꬠ = ;  not supported in Lambdin transliteration
 $ጰ = p̣ ;
 $ጸ = ṣ ;
-# $ꬨ = ;  not supported in Aethiopica
-$ፀ = ṣ́ ;
+# $ꬨ = ;  not supported in Lambdin transliteration
+$ፀ = ḍ ;
 $ፈ = f ;
 $ፐ = p ;
 
@@ -112,26 +111,6 @@ $wordBoundary = [^[:L:][:M:][:N:]] ;
 #
 
 $ጥበቅ = \u135f ;
-$ላላ = \u135e ;
-$ጥበቅ_በላላ = \u135d ;
-
-
-
-([ሀለሐመሠረሸቀቐበቨተቸኀነኘከኽወዘዠየደጀገጘጠጨጰጸፀፈፐ]) $ጥበቅ_በላላ → | $1 $ጥበቅ $ግዕዝ ;
-([ሁሉሑሙሡሩሱሹቁቑቡቩቱቹኁኑኙኩኹዉዙዡዩዱጁጉጙጡጩጱጹፁፉፑ]) $ጥበቅ_በላላ → | $1 $ጥበቅ $ካዕብ ;
-([ሂሊሒሚሢሪሲሺቂቒቢቪቲቺኂኒኚኪኺዊዚዢዪዲጂጊጚጢጪጲጺፂፊፒ]) $ጥበቅ_በላላ → | $1 $ጥበቅ $ሣልስ ;
-([ሃላሓማሣራሳሻቃቓባቫታቻኃናኛካኻዋዛዣያዳጃጋጛጣጫጳጻፃፋፓ]) $ጥበቅ_በላላ → | $1 $ጥበቅ $ራዕብ ;
-([ሄሌሔሜሤሬሴሼቄቔቤቬቴቼኄኔኜኬኼዌዜዤዬዴጄጌጌጤጬጴጼፄፌፔ]) $ጥበቅ_በላላ → | $1 $ጥበቅ $ኃምስ ;
-([ህልሕምሥርስሽቅቕብቭትችኅንኝክኸውዝዥይድጅግጝጥጭጵጽፅፍፕ]) $ጥበቅ_በላላ → | $1 $ጥበቅ $ሳድስ ;
-([ሆሎሖሞሦሮሶሾቆቖቦቮቶቾኆኖኞኮኾዎዞዦዮዶጆጎጎጦጮጶጾፆፎፖ]) $ጥበቅ_በላላ → | $1 $ጥበቅ $ሳብዕ ;
-
-([ሀለሐመሠረሸቀቐበቨተቸኀነኘከኽወዘዠየደጀገጘጠጨጰጸፀፈፐ]) $ላላ → | $1 $ግዕዝ ;
-([ሁሉሑሙሡሩሱሹቁቑቡቩቱቹኁኑኙኩኹዉዙዡዩዱጁጉጙጡጩጱጹፁፉፑ]) $ላላ → | $1 $ጥበቅ $ካዕብ ;
-([ሂሊሒሚሢሪሲሺቂቒቢቪቲቺኂኒኚኪኺዊዚዢዪዲጂጊጚጢጪጲጺፂፊፒ]) $ላላ → | $1 $ጥበቅ $ሣልስ ;
-([ሃላሓማሣራሳሻቃቓባቫታቻኃናኛካኻዋዛዣያዳጃጋጛጣጫጳጻፃፋፓ]) $ላላ → | $1 $ጥበቅ $ራዕብ ;
-([ሄሌሔሜሤሬሴሼቄቔቤቬቴቼኄኔኜኬኼዌዜዤዬዴጄጌጌጤጬጴጼፄፌፔ]) $ላላ → | $1 $ጥበቅ $ኃምስ ;
-([ህልሕምሥርስሽቅቕብቭትችኅንኝክኸውዝዥይድጅግጝጥጭጵጽፅፍፕ]) $ላላ → | $1 $ሳድስ ;
-([ሆሎሖሞሦሮሶሾቆቖቦቮቶቾኆኖኞኮኾዎዞዦዮዶጆጎጎጦጮጶጾፆፎፖ]) $ላላ → | $1 $ጥበቅ $ሳብዕ ;
 
 ([ሀ-ሇ]) $ጥበቅ → $ሀ | $1 ;
 ([ለ-ሏⶀ]) $ጥበቅ → $ለ | $1 ;
@@ -140,44 +119,44 @@ $ጥበቅ_በላላ = \u135d ;
 ([ሠ-ሧ]) $ጥበቅ → $ሠ | $1 ;
 ([ረ-ሯⶂፘ]) $ጥበቅ → $ረ | $1 ;
 ([ሰ-ሷⶃ]) $ጥበቅ → $ሰ | $1 ;
-# ([ꬁ-ꬆ]) $ጥበቅ → $ꬁ | $1 ;  not supported in Aethiopica
+# ([ꬁ-ꬆ]) $ጥበቅ → $ꬁ | $1 ;  not supported in Lambdin transliteration
 ([ሸ-ሿⶄ]) $ጥበቅ → $ሸ | $1 ;
-# ([ⶠ-ⶦ]) $ጥበቅ → $ⶠ | $1 ;  not supported in Aethiopica
+# ([ⶠ-ⶦ]) $ጥበቅ → $ⶠ | $1 ;  not supported in Lambdin transliteration
 ([ቀ-ቍ]) $ጥበቅ → $ቀ | $1 ;
-# ([ⷀ-ⷆ]) $ጥበቅ → $ⷀ | $1 ;  not supported in Aethiopica
-([ቐ-ቝ]) $ጥበቅ → $ቐ | $1 ;
+# ([ⷀ-ⷆ]) $ጥበቅ → $ⷀ | $1 ;  not supported in Lambdin transliteration
+# ([ቐ-ቝ]) $ጥበቅ → $ቐ | $1 ;  not supported in Lambdin transliteration
 ([በ-ቧⶅᎄ-ᎇ]) $ጥበቅ → $በ | $1 ;
-([ቨ-ቯ]) $ጥበቅ → $ቨ | $1 ;
+# ([ቨ-ቯ]) $ጥበቅ → $ቨ | $1 ;
 ([ተ-ቷ]) $ጥበቅ → $ተ | $1 ;
 ([ቸ-ቿ]) $ጥበቅ → $ቸ | $1 ;
-# ([ⶨ-ⶮ]) $ጥበቅ → $ⶨ | $1 ;  not supported in Aethiopica
+# ([ⶨ-ⶮ]) $ጥበቅ → $ⶨ | $1 ;  not supported in Lambdin transliteration
 ([ኀ-ኍ]) $ጥበቅ → $ኀ | $1 ;
 ([ነ-ኗ]) $ጥበቅ → $ነ | $1 ;
 ([ኘ-ኟ]) $ጥበቅ → $ኘ | $1 ;
 ([ከ-ኵ]) $ጥበቅ → $ከ | $1 ;
-# ([ⷈ-ⷎ]) $ጥበቅ → $ⷈ | $1 ;  not supported in Aethiopica
+# ([ⷈ-ⷎ]) $ጥበቅ → $ⷈ | $1 ;  not supported in Lambdin transliteration
 ([ኸ-ዅ]) $ጥበቅ → $ኸ | $1 ;
-# ([ⷐ-ⷖ]) $ጥበቅ → $ⷐ | $1 ;  not supported in Aethiopica
+# ([ⷐ-ⷖ]) $ጥበቅ → $ⷐ | $1 ;  not supported in Lambdin transliteration
 ([ወ-ዏ]) $ጥበቅ → $ወ | $1 ;
 ([ዘ-ዟⶋ]) $ጥበቅ → $ዘ | $1 ;
-# ([ꬑ-ꬖ]) $ጥበቅ → $ꬑ | $1 ;  not supported in Aethiopica
+# ([ꬑ-ꬖ]) $ጥበቅ → $ꬑ | $1 ;  not supported in Lambdin transliteration
 ([ዠ-ዧ]) $ጥበቅ → $ዠ | $1 ;
-# ([ⶰ-ⶶ]) $ጥበቅ → $ዠ | $1 ;  not supported in Aethiopica
+# ([ⶰ-ⶶ]) $ጥበቅ → $ዠ | $1 ;  not supported in Lambdin transliteration
 ([የ-ዯ]) $ጥበቅ → $የ | $1 ;
 ([ደ-ዷⶌ]) $ጥበቅ → $ደ | $1 ;
-# ([ዸ-ዿⶍ]) $ጥበቅ → $ዸ | $1 ;  not supported in Aethiopica
-# ([ꬉ-ꬎ]) $ጥበቅ → $ꬉ | $1 ;   not supported in Aethiopica
+# ([ዸ-ዿⶍ]) $ጥበቅ → $ዸ | $1 ;  not supported in Lambdin transliteration
+# ([ꬉ-ꬎ]) $ጥበቅ → $ꬉ | $1 ;   not supported in Lambdin transliteration
 ([ጀ-ጇⶎ]) $ጥበቅ → $ጀ | $1 ;
 ([ገ-ጕጏ]) $ጥበቅ → $ገ | $1 ;
-# ([ⷘ-ⷞ]) $ጥበቅ → $ገ | $1 ;  not supported in Aethiopica
+# ([ⷘ-ⷞ]) $ጥበቅ → $ገ | $1 ;  not supported in Lambdin transliteration
 ([ጘ-ጟⶓ-ⶖ]) $ጥበቅ → $ጘ | $1 ;
 ([ጠ-ጧⶏ]) $ጥበቅ → $ጠ | $1 ;
 ([ጨ-ጯⶐ]) $ጥበቅ → $ጨ | $1 ;
-# ([ⶸ-ⶾ]) $ጥበቅ → $ⶸ | $1 ;  not supported in Aethiopica
-# ([ꬠ-ꬦ]) $ጥበቅ → $ꬠ | $1 ;  not supported in Aethiopica
+# ([ⶸ-ⶾ]) $ጥበቅ → $ⶸ | $1 ;  not supported in Lambdin transliteration
+# ([ꬠ-ꬦ]) $ጥበቅ → $ꬠ | $1 ;  not supported in Lambdin transliteration
 ([ጰ-ጷⶑ]) $ጥበቅ → $ጰ | $1 ;
 ([ጸ-ጿ]) $ጥበቅ → $ጸ | $1 ;
-# ([ꬨ-ꬮ]) $ጥበቅ → $ꬨ | $1 ;  not supported in Aethiopica
+# ([ꬨ-ꬮ]) $ጥበቅ → $ꬨ | $1 ;  not supported in Lambdin transliteration
 ([ፀ-ፇ]) $ጥበቅ → $ፀ | $1 ;
 ([ፈ-ፏፚᎈ-ᎋ]) $ጥበቅ → $ፈ | $1 ;
 ([ፐ-ፗᎌ-ᎏ]) $ጥበቅ → $ፐ | $1 ;
@@ -278,20 +257,20 @@ $ጥበቅ → ; # remove any spurious gemination marks
 ሿ ↔ $ሸ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE SHWA
 ሽ ← $ሸ ; # ETHIOPIC SYLLABLE SHE
 #
-ቐ ↔ $ቐ $ግዕዝ ; # ETHIOPIC SYLLABLE QHA
-ቑ ↔ $ቐ $ካዕብ ; # ETHIOPIC SYLLABLE QHU
-ቒ ↔ $ቐ $ሣልስ ; # ETHIOPIC SYLLABLE QHI
-ቓ ↔ $ቐ $ራዕብ ; # ETHIOPIC SYLLABLE QHAA
-ቔ ↔ $ቐ $ኃምስ ; # ETHIOPIC SYLLABLE QHEE
-ቕ}$wordBoundary → $ቐ ; # ETHIOPIC SYLLABLE QHE
-ቕ ↔ $ቐ $ሳድስ ; # ETHIOPIC SYLLABLE QHE
-ቖ ↔ $ቐ $ሳብዕ ; # ETHIOPIC SYLLABLE QHO
-ቘ ↔ $ቐ $ዘመደ_ግዕዝ ; # ETHIOPIC SYLLABLE QHWA
-ቚ ↔ $ቐ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE QHWI
-ቛ ↔ $ቐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE QHWAA
-ቜ ↔ $ቐ $ዘመደ_ኃምስ ; # ETHIOPIC SYLLABLE QHWEE
-ቝ ↔ $ቐ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE QHWE
-ቕ ← $ቐ ; # ETHIOPIC SYLLABLE QHE
+# ቐ ↔ $ቐ $ግዕዝ ; # ETHIOPIC SYLLABLE QHA
+# ቑ ↔ $ቐ $ካዕብ ; # ETHIOPIC SYLLABLE QHU
+# ቒ ↔ $ቐ $ሣልስ ; # ETHIOPIC SYLLABLE QHI
+# ቓ ↔ $ቐ $ራዕብ ; # ETHIOPIC SYLLABLE QHAA
+# ቔ ↔ $ቐ $ኃምስ ; # ETHIOPIC SYLLABLE QHEE
+# ቕ}$wordBoundary → $ቐ ; # ETHIOPIC SYLLABLE QHE
+# ቕ ↔ $ቐ $ሳድስ ; # ETHIOPIC SYLLABLE QHE
+# ቖ ↔ $ቐ $ሳብዕ ; # ETHIOPIC SYLLABLE QHO
+# ቘ ↔ $ቐ $ዘመደ_ግዕዝ ; # ETHIOPIC SYLLABLE QHWA
+# ቚ ↔ $ቐ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE QHWI
+# ቛ ↔ $ቐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE QHWAA
+# ቜ ↔ $ቐ $ዘመደ_ኃምስ ; # ETHIOPIC SYLLABLE QHWEE
+# ቝ ↔ $ቐ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE QHWE
+# ቕ ← $ቐ ; # ETHIOPIC SYLLABLE QHE
 #
 ቀ ↔ $ቀ $ግዕዝ ; # ETHIOPIC SYLLABLE QA
 ቁ ↔ $ቀ $ካዕብ ; # ETHIOPIC SYLLABLE QU
@@ -319,16 +298,16 @@ $ጥበቅ → ; # remove any spurious gemination marks
 ቧ ↔ $በ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE BWA
 ብ ← $በ ; # ETHIOPIC SYLLABLE BE
 #
-ቨ ↔ $ቨ $ግዕዝ ; # ETHIOPIC SYLLABLE VA
-ቩ ↔ $ቨ $ካዕብ ; # ETHIOPIC SYLLABLE VU
-ቪ ↔ $ቨ $ሣልስ ; # ETHIOPIC SYLLABLE VI
-ቫ ↔ $ቨ $ራዕብ ; # ETHIOPIC SYLLABLE VAA
-ቬ ↔ $ቨ $ኃምስ ; # ETHIOPIC SYLLABLE VEE
-ቭ}$wordBoundary → $ቨ ; # ETHIOPIC SYLLABLE VE
-ቭ ↔ $ቨ $ሳድስ ; # ETHIOPIC SYLLABLE VE
-ቮ ↔ $ቨ $ሳብዕ ; # ETHIOPIC SYLLABLE VO
-ቯ ↔ $ቨ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE VWA
-ቭ ← $ቨ ; # ETHIOPIC SYLLABLE VE
+# ቨ ↔ $ቨ $ግዕዝ ; # ETHIOPIC SYLLABLE VA
+# ቩ ↔ $ቨ $ካዕብ ; # ETHIOPIC SYLLABLE VU
+# ቪ ↔ $ቨ $ሣልስ ; # ETHIOPIC SYLLABLE VI
+# ቫ ↔ $ቨ $ራዕብ ; # ETHIOPIC SYLLABLE VAA
+# ቬ ↔ $ቨ $ኃምስ ; # ETHIOPIC SYLLABLE VEE
+# ቭ}$wordBoundary → $ቨ ; # ETHIOPIC SYLLABLE VE
+# ቭ ↔ $ቨ $ሳድስ ; # ETHIOPIC SYLLABLE VE
+# ቮ ↔ $ቨ $ሳብዕ ; # ETHIOPIC SYLLABLE VO
+# ቯ ↔ $ቨ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE VWA
+# ቭ ← $ቨ ; # ETHIOPIC SYLLABLE VE
 #
 ተ ↔ $ተ $ግዕዝ ; # ETHIOPIC SYLLABLE TA
 ቱ ↔ $ተ $ካዕብ ; # ETHIOPIC SYLLABLE TU

@@ -1012,6 +1012,15 @@
             "backwardAlias": "Latin-Ethiopic/JES-IES-1964"
           },
           {
+            "path": "Ethiopic-Latin-Lambdin.xml",
+            "source": "Ethi",
+            "target": "Lambdin_Latn",
+            "name": "Lambdin",
+            "direction": "both",
+            "alias": "Ethiopic-Latin/Lambdin",
+            "backwardAlias": "Latin-Ethiopic/Lambdin"
+          },
+          {
             "path": "Ethiopic-Latin-SERA.xml",
             "source": "Ethi",
             "target": "SERA_Latn",
