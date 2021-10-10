@@ -3,7 +3,7 @@
 <supplementalData>
 	<version number="$Revision$"/>
 	<transforms>
-		<transform source="Ethi" target="Brai"  variant="Amharic" direction="both" draft="contributed" alias="Ethiopic-Braille/Amharic" backwardAlias="Braille-Ethiopic/Amharic">
+		<transform source="Ethi" target="Amharic_Brai"  variant="Amharic" direction="both" draft="contributed" alias="Ethiopic-Braille/Amharic" backwardAlias="Braille-Ethiopic/Amharic">
 			<tRule><![CDATA[
 ########################################################################
 # Encylopedia Aethiopica Transliteration
@@ -23,7 +23,8 @@
 # MINIMAL FILTER: Ethiopic-Braille
 #
 # :: [ሀ-፼] ;
-:: [:Ethiopic:] ;
+:: […‹›«»\?!\$\[\]\(\)/\-—\*\.[:Ethiopic:]] ;
+
 #
 ########################################################################
 
@@ -95,28 +96,30 @@ $ጸ = ⠮ ; # 2346
 $ፀ = ⠯ ; #12356
 $ፈ = ⠋  ; # 124
 $ፐ = ⠏  ; #1234
+
 #
 # vowels are special:
 #
-$alternate  = \';
-$glottal    = \' ;
-$pharyngeal = \`;
 # $አ =    a ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =   aa ; $ኤ = $ኃምስ ; $እ =    e ; $ኦ = $ሳብዕ ; $ⶊ = $ሳምን ; $ኧ = ae ;
 $አ = $ግዕዝ ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ = $ራዕብ ; $ኤ = $ኃምስ ; $እ = ⠷ ; $ኦ = $ሳብዕ ; $ኧ = ⠨ ; # $ⶊ = $ሳምን ;
 $ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; $ዔ = $ኃምስ ; $ዕ = ⠳ ; $ዖ = $ሳብዕ ; 
-#
-# Use this $wordBoundary until bug 2034 is fixed in ICU:
-# http://bugs.icu-project.org/cgi-bin/icu-bugs/transliterate?id=2034;expression=boundary;user=guest
-#
-$wordBoundary =  [^[:L:][:M:][:N:]] ;
 
+#
+# Archaic Letters:
+#
+ፙ → | ምያ ;
+ፘ → | ርያ ;
+ፚ → | ፍያ ;
+
+#
+# Placed upfront to avoid masking conflicts with ዠ 
+#
+‹ ↔ ⠠⠦ ;
+› ↔ ⠴⠄ ;
 
 ########################################################################
 # Start of Syllabic Transformations
 ########################################################################
-
-› ↔ ⠴⠄ ;  # placing up front to avoid masking ዠ mappings
-
 #
 ሐ → $ሐ $ግዕዝ ; # ETHIOPIC SYLLABLE HHA
 ሗ → $ሐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE HWA
@@ -601,7 +604,7 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 ፗ ↔ $ፐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE PWA
 ፑ ↔ $ፐ $ካዕብ ; # ETHIOPIC SYLLABLE PU
 ፕ ↔ $ፐ $ሳድስ ; # ETHIOPIC SYLLABLE PE
-#
+
 
 ########################################################################
 # Start of Punctuation Transformations
@@ -609,14 +612,13 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 
 … ↔ ⠄ ⠄ ⠄ ;
 ። ↔ ⠲ ;
-፣ ↔ ⠂ ;
+፨ → ⠲ ;
+፠ → ⠲  ;
 ፤ ↔ ⠆ ;
+፣ ↔ ⠂ ;
 ፥ → ⠂ ;
-# ፨ ↔  ;
-# ፠ ↔   ;
 ፧ → ⠦ ;
 ፡ ↔ ⠄⠠ ;
-‹ ↔ ⠠⠦ ;
 « →  ⠦ ;  # Note the conflict with ? and ኸ
 » →  ⠴ ;  # Note the conflict with ዠ
 \? → ⠦ ;  # Note the conflict with ? and «
@@ -633,7 +635,6 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 \* ↔ ⠔⠔ ;
 \. ↔ ⠄ ;
 
-#
 
 ########################################################################
 # Start of Numeric Transformations
@@ -641,25 +642,26 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 $ethiopicNumber = ⠿ ;
 $arabicNumber   = ⠼ ;
 ፼  → | ፻፻ ; # ETHIOPIC NUMBER TEN THOUSAND
-፻ ↔ $ethiopicNumber   ⠁⠍⠁⠅ $ethiopicNumber ; # ETHIOPIC NUMBER HUNDRED
-፲ ↔ $ethiopicNumber    ⠁⠅⠆ $ethiopicNumber ; # ETHIOPIC NUMBER TEN
+፻ ↔ $ethiopicNumber  ⠁⠍⠁⠅ $ethiopicNumber ; # ETHIOPIC NUMBER HUNDRED
+፲ ↔ $ethiopicNumber   ⠁⠅⠆ $ethiopicNumber ; # ETHIOPIC NUMBER TEN
 ፳ ↔ $ethiopicNumber  ⠁⠅⠉⠆ $ethiopicNumber ; # ETHIOPIC NUMBER TWENTY
 ፴ ↔ $ethiopicNumber  ⠁⠅⠒⠆ $ethiopicNumber ; # ETHIOPIC NUMBER THIRTY
 ፵ ↔ $ethiopicNumber  ⠁⠅⠤⠆ $ethiopicNumber ; # ETHIOPIC NUMBER FORTY
 ፶ ↔ $ethiopicNumber  ⠁⠅⠑⠆ $ethiopicNumber ; # ETHIOPIC NUMBER FIFTY
-፷ ↔ $ethiopicNumber ⠁⠅⠢⠆ $ethiopicNumber ; # ETHIOPIC NUMBER SIXTY
+፷ ↔ $ethiopicNumber  ⠁⠅⠢⠆ $ethiopicNumber ; # ETHIOPIC NUMBER SIXTY
 ፸ ↔ $ethiopicNumber  ⠁⠅⠊⠆ $ethiopicNumber ; # ETHIOPIC NUMBER SEVENTY
-፹ ↔ $ethiopicNumber ⠁⠅⠔⠆ $ethiopicNumber ; # ETHIOPIC NUMBER EIGHTY
+፹ ↔ $ethiopicNumber  ⠁⠅⠔⠆ $ethiopicNumber ; # ETHIOPIC NUMBER EIGHTY
 ፺ ↔ $ethiopicNumber  ⠁⠅⠃⠆ $ethiopicNumber ; # ETHIOPIC NUMBER NINETY
-፩ ↔ $ethiopicNumber   ⠁⠁⠆ $ethiopicNumber ; # ETHIOPIC DIGIT ONE
-፪ ↔ $ethiopicNumber   ⠁⠉⠆ $ethiopicNumber ; # ETHIOPIC DIGIT TWO
-፫ ↔ $ethiopicNumber   ⠁⠒⠆ $ethiopicNumber ; # ETHIOPIC DIGIT THREE
-፬ ↔ $ethiopicNumber   ⠁⠤⠆ $ethiopicNumber ; # ETHIOPIC DIGIT FOUR
-፭ ↔ $ethiopicNumber  ⠁⠑⠆ $ethiopicNumber ; # ETHIOPIC DIGIT FIVE
-፮ ↔ $ethiopicNumber  ⠁⠢ $ethiopicNumber ; # ETHIOPIC DIGIT SIX
-፯ ↔ $ethiopicNumber  ⠁⠊⠆ $ethiopicNumber ; # ETHIOPIC DIGIT SEVEN
-፰ ↔ $ethiopicNumber  ⠁⠔⠆ $ethiopicNumber ; # ETHIOPIC DIGIT EIGHT
-፱ ↔ $ethiopicNumber  ⠁⠃⠆ $ethiopicNumber ; # ETHIOPIC DIGIT NINE
+፩ ↔ $ethiopicNumber  ⠁⠁⠆  $ethiopicNumber ; # ETHIOPIC DIGIT ONE
+፪ ↔ $ethiopicNumber  ⠁⠉⠆  $ethiopicNumber ; # ETHIOPIC DIGIT TWO
+፫ ↔ $ethiopicNumber  ⠁⠒⠆  $ethiopicNumber ; # ETHIOPIC DIGIT THREE
+፬ ↔ $ethiopicNumber  ⠁⠤⠆  $ethiopicNumber ; # ETHIOPIC DIGIT FOUR
+፭ ↔ $ethiopicNumber  ⠁⠑⠆  $ethiopicNumber ; # ETHIOPIC DIGIT FIVE
+፮ ↔ $ethiopicNumber  ⠁⠢   $ethiopicNumber ; # ETHIOPIC DIGIT SIX
+፯ ↔ $ethiopicNumber  ⠁⠊⠆  $ethiopicNumber ; # ETHIOPIC DIGIT SEVEN
+፰ ↔ $ethiopicNumber  ⠁⠔⠆  $ethiopicNumber ; # ETHIOPIC DIGIT EIGHT
+፱ ↔ $ethiopicNumber  ⠁⠃⠆  $ethiopicNumber ; # ETHIOPIC DIGIT NINE
+
 
 # Inverse Fiter : Braille-Ethiopic
 #

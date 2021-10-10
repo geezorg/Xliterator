@@ -956,11 +956,22 @@
           {
             "path": "Ethiopic-Braille-Amharic.xml",
             "source": "Ethi",
-            "target": "Amharic_Ethi_Brai",
+            "target": "Amharic_Brai",
             "name": "_base",
             "direction": "both",
             "alias": "Ethiopic-Braille/Amharic",
             "backwardAlias": "Braille-Ethiopic/Amharic"
+          }
+        ],
+        "Morse Code": [
+          {
+            "path": "Ethiopic-MorseCode-Amharic.xml",
+            "source": "Ethi",
+            "target": "Amharic_MorseCode",
+            "name": "_base",
+            "direction": "both",
+            "alias": "Ethiopic-MorseCode/Amharic",
+            "backwardAlias": "MorseCode-Ethiopic/Amharic"
           }
         ]
       },
