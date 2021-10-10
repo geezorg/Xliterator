@@ -976,13 +976,37 @@
             "backwardAlias": "Latin-Ethiopic/Aethiopica"
           },
           {
+            "path": "Ethiopic-Latin-Aethiopica-AutoGeminated.xml",
+            "source": "Ethi",
+            "target": "Aethiopica_Latn_AutoGeminated",
+            "name": "Aethiopica (Auto-Geminated)",
+            "direction": "forward",
+            "alias": "Ethiopic-Latin/Aethiopica-AutoGeminated",
+            "dependencies": [
+		"Ethi-Geminated_Ethi",
+		"Ethi-Aethiopica_Latn"
+            ]
+          },
+          {
             "path": "Ethiopic-Latin-ALA.xml",
             "source": "Ethi",
-            "target": "ALA_Ethi_Latn",
+            "target": "ALA_Latn",
             "name": "ALA",
             "direction": "both",
             "alias": "Ethiopic-Latin/ALA",
             "backwardAlias": "Latin-Ethiopic/ALA"
+          },
+          {
+            "path": "Ethiopic-Latin-ALA-AutoGeminated.xml",
+            "source": "Ethi",
+            "target": "ALA_Latn_AutoGeminated",
+            "name": "ALA (Auto-Geminated)",
+            "direction": "forward",
+            "alias": "Ethiopic-Latin/ALA-AutoGeminated",
+            "dependencies": [
+		"Ethi-Geminated_Ethi",
+		"Ethi-ALA_Latn"
+            ]
           },
           {
             "path": "Ethiopic-Latin-BetaMetsehaf.xml",
@@ -992,6 +1016,18 @@
             "direction": "both",
             "alias": "Ethiopic-Latin/BetaMetsehaf",
             "backwardAlias": "Latin-Ethiopic/Beta_Metsehaf"
+          },
+          {
+            "path": "Ethiopic-Latin-BetaMetsehaf-AutoGeminated.xml",
+            "source": "Ethi",
+            "target": "BetaMetsehaf_Latn_AutoGeminated",
+            "name": "BetaMetsehaf (Auto-Geminated)",
+            "direction": "forward",
+            "alias": "Ethiopic-Latin/BetaMetsehaf-AutoGeminated",
+            "dependencies": [
+		"Ethi-Geminated_Ethi",
+		"Ethi-BetaMetsehaf_Latn"
+            ]
           },
           {
             "path": "Ethiopic-Latin-ES3842.xml",
@@ -1039,6 +1075,14 @@
             "direction": "both",
             "alias": "Ethiopic-Ethiopic/Gurage",
             "backwardAlias": "Gurage-Ethiopic"
+          },
+          {
+            "path": "Ethiopic-Ethiopic-Geminated.xml",
+            "source": "Ethi",
+            "target": "Geminated_Ethi",
+            "name": "Geminated",
+            "direction": "forward",
+            "alias": "Ethiopic-Ethiopic/Geminated"
           }
         ],
         "Musnad": [

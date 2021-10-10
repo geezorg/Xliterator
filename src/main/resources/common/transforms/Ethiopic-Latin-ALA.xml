@@ -28,8 +28,8 @@
 #
 # MINIMAL FILTER: Ethiopic-Latin
 #
-:: [:Ethiopic:] ;
-:: NFD (NFC) ;
+::[:Ethiopic:] ;
+::NFD (NFC) ;
 #
 ########################################################################
 
@@ -52,6 +52,7 @@ $ዘመደ_ካዕብ = we ;
 $ዘመደ_ሣልስ = wi ;
 $ዘመደ_ራዕብ = wā ;  # A small break from the literal standard which appears to contain typographical errors.
 $ዘመደ_ኃምስ = wé ;
+$ዘመደ_ያ = ya ; 
 #
 # $alternate  = \`;
 #
@@ -93,7 +94,7 @@ $ፐ = p ;
 #
 $glottal    = \ʼ ;
 $pharyngeal = \ʻ;
-$አ =    a ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =  ራዕብ  ; $ኤ = $ኃምስ ; $እ = $ሳድስ ; $ኦ = $ሳብዕ ;  $ኧ = ă ;
+$አ =    a ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =  $ራዕብ  ; $ኤ = $ኃምስ ; $እ = $ሳድስ ; $ኦ = $ሳብዕ ;  $ኧ = ă ;
 $ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; $ዔ = $ኃምስ ; $ዕ = $ሳድስ  ; $ዖ = $ሳብዕ ; 
 #
 # Use this $wordBoundary until bug 2034 is fixed in ICU:
@@ -105,9 +106,6 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 ########################################################################
 #
 # Gemination Handling Rules
-#
-########################################################################
-#
 
 $ጥበቅ = \u135f ;
 
@@ -162,6 +160,11 @@ $ጥበቅ = \u135f ;
 
 $ጥበቅ → ; # remove any spurious gemination marks
 
+#
+########################################################################
+#
+
+
 ########################################################################
 # Start of Syllabic Transformations
 ########################################################################
@@ -196,6 +199,7 @@ $ጥበቅ → ; # remove any spurious gemination marks
 ም}$wordBoundary → $መ ; # ETHIOPIC SYLLABLE ME
 ም ↔ $መ $ሳድስ ; # ETHIOPIC SYLLABLE ME
 ሞ ↔ $መ $ሳብዕ ; # ETHIOPIC SYLLABLE MO
+ፙ ↔ $መ $ዘመደ_ያ ; # ETHIOPIC SYLLABLE MYA
 #
 # Gurage Labiovelars are not part of the ALA-Amharic standard
 #
@@ -225,6 +229,7 @@ $ጥበቅ → ; # remove any spurious gemination marks
 # ⶂ ↔ $ረ $ሳምን ; # ETHIOPIC SYLLABLE R0A
 ሮ ↔ $ረ $ሳብዕ ; # ETHIOPIC SYLLABLE RO
 ሯ ↔ $ረ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE RWA
+ፘ ↔ $ረ $ዘመደ_ያ ; # ETHIOPIC SYLLABLE RYA
 #
 # Bench is not supported by the ALA-Amharic standard
 #
@@ -684,6 +689,7 @@ $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 ፍ}$wordBoundary → $ፈ ; # ETHIOPIC SYLLABLE FE
 ፍ ↔ $ፈ $ሳድስ ; # ETHIOPIC SYLLABLE FE
 ፎ ↔ $ፈ $ሳብዕ ; # ETHIOPIC SYLLABLE FO
+ፚ ↔ $ፈ $ዘመደ_ያ ; # ETHIOPIC SYLLABLE FYA
 #
 # Gurage Labiovelars are not supported of the ALA-Amharic standard
 #

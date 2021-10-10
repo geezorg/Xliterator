@@ -16,7 +16,7 @@
 #
 # (3) Wikipedia contributors. "Ge'ez Braille." Wikipedia, The Free Encyclopedia. Wikipedia, The Free Encyclopedia, 5 Jul. 2019. Web. 6 Jun. 2021.
 #
-# Initial Editor: Daniel Yacob <yacob@geez.org>
+# Prepared by Daniel Yacob <yacob@geez.org>
 #
 ########################################################################
 #
@@ -102,7 +102,7 @@ $alternate  = \';
 $glottal    = \' ;
 $pharyngeal = \`;
 # $አ =    a ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =   aa ; $ኤ = $ኃምስ ; $እ =    e ; $ኦ = $ሳብዕ ; $ⶊ = $ሳምን ; $ኧ = ae ;
-$አ = $ግዕዝ ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ = $ራዕብ ; $ኤ = $ኃምስ ; $እ = ⠷ ; $ኦ = $ሳብዕ ; # $ⶊ = $ሳምን ; $ኧ = ae ;
+$አ = $ግዕዝ ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ = $ራዕብ ; $ኤ = $ኃምስ ; $እ = ⠷ ; $ኦ = $ሳብዕ ; $ኧ = ⠨ ; # $ⶊ = $ሳምን ;
 $ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; $ዔ = $ኃምስ ; $ዕ = ⠳ ; $ዖ = $ሳብዕ ; 
 #
 # Use this $wordBoundary until bug 2034 is fixed in ICU:
@@ -384,7 +384,7 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 # $wordBoundary{ⶊ ↔ $ⶊ ; # ETHIOPIC SYLLABLE GLOTTAL OA
 # $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 #
-# ኧ ↔ $glottal $ኧ ; # ETHIOPIC SYLLABLE GLOTTAL WA
+ኧ ↔ $ኧ ; # ETHIOPIC SYLLABLE GLOTTAL WA
 አ ↔ $እ $ግዕዝ ; # ETHIOPIC SYLLABLE GLOTTAL A
 ኡ ↔ $እ $ካዕብ ; # ETHIOPIC SYLLABLE GLOTTAL U
 ኢ ↔ $እ $ሣልስ ; # ETHIOPIC SYLLABLE GLOTTAL I
@@ -392,7 +392,7 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 ኤ ↔ $እ $ኃምስ ; # ETHIOPIC SYLLABLE GLOTTAL EE
 # ⶊ ↔ $glottal $ኦa ; # ETHIOPIC SYLLABLE GLOTTAL OA
 ኦ ↔ $እ $ሳብዕ ; # ETHIOPIC SYLLABLE GLOTTAL O
-እ ↔ $እ  ; # ETHIOPIC SYLLABLE GLOTTAL E
+እ ↔ $እ ; # ETHIOPIC SYLLABLE GLOTTAL E
 #
 # ⷐ ← $ⷐ $ግዕዝ ; # ETHIOPIC SYLLABLE XYA
 # ⷑ ← $ⷐ $ካዕብ ; # ETHIOPIC SYLLABLE XYU
@@ -640,27 +640,26 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 ########################################################################
 $ethiopicNumber = ⠿ ;
 $arabicNumber   = ⠼ ;
-፼ ↔ $ethiopicNumber 10000 $ethiopicNumber ; # ETHIOPIC NUMBER TEN THOUSAND
-፲፻ ↔ $ethiopicNumber 1000 $ethiopicNumber ; # One Thousand
+፼  → | ፻፻ ; # ETHIOPIC NUMBER TEN THOUSAND
 ፻ ↔ $ethiopicNumber   ⠁⠍⠁⠅ $ethiopicNumber ; # ETHIOPIC NUMBER HUNDRED
 ፲ ↔ $ethiopicNumber    ⠁⠅⠆ $ethiopicNumber ; # ETHIOPIC NUMBER TEN
 ፳ ↔ $ethiopicNumber  ⠁⠅⠉⠆ $ethiopicNumber ; # ETHIOPIC NUMBER TWENTY
 ፴ ↔ $ethiopicNumber  ⠁⠅⠒⠆ $ethiopicNumber ; # ETHIOPIC NUMBER THIRTY
 ፵ ↔ $ethiopicNumber  ⠁⠅⠤⠆ $ethiopicNumber ; # ETHIOPIC NUMBER FORTY
 ፶ ↔ $ethiopicNumber  ⠁⠅⠑⠆ $ethiopicNumber ; # ETHIOPIC NUMBER FIFTY
-፷ ↔ $ethiopicNumber ⠁⠅⠢⠆  $ethiopicNumber ; # ETHIOPIC NUMBER SIXTY
+፷ ↔ $ethiopicNumber ⠁⠅⠢⠆ $ethiopicNumber ; # ETHIOPIC NUMBER SIXTY
 ፸ ↔ $ethiopicNumber  ⠁⠅⠊⠆ $ethiopicNumber ; # ETHIOPIC NUMBER SEVENTY
 ፹ ↔ $ethiopicNumber ⠁⠅⠔⠆ $ethiopicNumber ; # ETHIOPIC NUMBER EIGHTY
-፺ ↔ $ethiopicNumber  ⠁⠅⠃⠆$ethiopicNumber ; # ETHIOPIC NUMBER NINETY
-፩ ↔ $ethiopicNumber   ⠁⠁⠆$ethiopicNumber ; # ETHIOPIC DIGIT ONE
-፪ ↔ $ethiopicNumber   ⠁⠉⠆$ethiopicNumber ; # ETHIOPIC DIGIT TWO
-፫ ↔ $ethiopicNumber   ⠁⠒⠆$ethiopicNumber ; # ETHIOPIC DIGIT THREE
-፬ ↔ $ethiopicNumber   ⠁⠤⠆$ethiopicNumber ; # ETHIOPIC DIGIT FOUR
-፭ ↔ $ethiopicNumber  ⠁⠑⠆$ethiopicNumber ; # ETHIOPIC DIGIT FIVE
-፮ ↔ $ethiopicNumber  ⠁⠢  $ethiopicNumber ; # ETHIOPIC DIGIT SIX
-፯ ↔ $ethiopicNumber  ⠁⠊⠆$ethiopicNumber ; # ETHIOPIC DIGIT SEVEN
-፰ ↔ $ethiopicNumber  ⠁⠔⠆$ethiopicNumber ; # ETHIOPIC DIGIT EIGHT
-፱ ↔ $ethiopicNumber  ⠁⠃⠆$ethiopicNumber ; # ETHIOPIC DIGIT NINE
+፺ ↔ $ethiopicNumber  ⠁⠅⠃⠆ $ethiopicNumber ; # ETHIOPIC NUMBER NINETY
+፩ ↔ $ethiopicNumber   ⠁⠁⠆ $ethiopicNumber ; # ETHIOPIC DIGIT ONE
+፪ ↔ $ethiopicNumber   ⠁⠉⠆ $ethiopicNumber ; # ETHIOPIC DIGIT TWO
+፫ ↔ $ethiopicNumber   ⠁⠒⠆ $ethiopicNumber ; # ETHIOPIC DIGIT THREE
+፬ ↔ $ethiopicNumber   ⠁⠤⠆ $ethiopicNumber ; # ETHIOPIC DIGIT FOUR
+፭ ↔ $ethiopicNumber  ⠁⠑⠆ $ethiopicNumber ; # ETHIOPIC DIGIT FIVE
+፮ ↔ $ethiopicNumber  ⠁⠢ $ethiopicNumber ; # ETHIOPIC DIGIT SIX
+፯ ↔ $ethiopicNumber  ⠁⠊⠆ $ethiopicNumber ; # ETHIOPIC DIGIT SEVEN
+፰ ↔ $ethiopicNumber  ⠁⠔⠆ $ethiopicNumber ; # ETHIOPIC DIGIT EIGHT
+፱ ↔ $ethiopicNumber  ⠁⠃⠆ $ethiopicNumber ; # ETHIOPIC DIGIT NINE
 
 # Inverse Fiter : Braille-Ethiopic
 #
