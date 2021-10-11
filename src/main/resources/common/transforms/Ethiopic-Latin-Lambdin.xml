@@ -628,6 +628,10 @@ $wordBoundary{ኧ ↔ $ግዕዝ ; # ETHIOPIC SYLLABLE GLOTTAL WA
 # Start of Punctuation Transformations
 ########################################################################
 
+#
+# Lambdin does not explicitly define punctuation mappings, but some may
+# be discerned from his text samples.
+#
 ። ↔ '.';
 ፣ ↔ ',';
 ፥ → ',';

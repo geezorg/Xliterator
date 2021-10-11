@@ -1122,7 +1122,7 @@
           {
             "path": "Ethiopic-Latin-TekieAlibekit.xml",
             "source": "Ethi",
-            "target": "TekieAlibekit_Ethi",
+            "target": "TekieAlibekit_Latn",
             "name": "Tekie Alibekit",
             "direction": "both",
             "alias": "Ethiopic-Ethiopic/TekieAlibekit",

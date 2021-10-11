@@ -42,33 +42,35 @@ $ዐይን = ʿ;  # pharyngeal
 
 $ሀ = h ;
 $ለ = l ;
-$ሐ = hʾ ;
+$ሐ = ħ ;
 $መ = m ;
 $ሠ = s ;
 $ረ = r ;
 $ሰ = s ;
-$ሸ = sh ;
+$ሸ = š ;
 $ቀ = kʾ ;
-$ቐ = q ;
+$ቈ = kʷʾ ;
+$ቐ = qʾ ;
+$ቘ = qʷʾ ;
 $በ = b ;
 $ቨ = v ;
 $ተ = t ;
-$ቸ = ch ;
+$ቸ = č ;
 $ኀ = h ;
 $ነ = n ;
 $ኘ = ñ ;
 $ከ = k ;
-$ኸ = kh ;
+$ኸ = x ;
 $ወ = w ;
 $ዘ = z ;
 $ዠ = zʾ ;
 $የ = y ;
 $ደ = d ;
-$ጀ = j ;
+$ጀ = ǧ ;
 $ገ = g ;
 $ጘ = ŋ ;
 $ጠ = tʾ ;
-$ጨ = cʾ ;
+$ጨ = č’ ;
 $ጰ = pʾ ;
 $ጸ = sʾ ;
 $ፀ = sʾ ;
@@ -79,7 +81,7 @@ $ፐ = p ;
 # Use this $wordBoundary until bug 2034 is fixed in ICU:
 # http://bugs.icu-project.org/trac/ticket/2034
 $wordBoundary = [^[:L:][:M:][:N:]] ;
-#
+ 
 #
 ########################################################################
 # Start of Syllabic Transformations
@@ -151,11 +153,11 @@ $wordBoundary = [^[:L:][:M:][:N:]] ;
 ቕ}$wordBoundary → $ቐ ; # ETHIOPIC SYLLABLE QHE
 ቕ ↔ $ቐ $ሳድስ ; # ETHIOPIC SYLLABLE QHE
 ቖ ↔ $ቐ $ሳብዕ ; # ETHIOPIC SYLLABLE QHO
-ቘ ↔ $ቐ $ዘመደ_ግዕዝ ; # ETHIOPIC SYLLABLE QHWA
-ቚ ↔ $ቐ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE QHWI
-ቛ ↔ $ቐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE QHWAA
-ቜ ↔ $ቐ $ዘመደ_ኃምስ ; # ETHIOPIC SYLLABLE QHWEE
-ቝ ↔ $ቐ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE QHWE
+ቘ ↔ $ቘ $ግዕዝ ; # ETHIOPIC SYLLABLE QHWA
+ቚ ↔ $ቘ $ሣልስ ; # ETHIOPIC SYLLABLE QHWI
+ቛ ↔ $ቘ $ራዕብ ; # ETHIOPIC SYLLABLE QHWAA
+ቜ ↔ $ቘ $ኃምስ ; # ETHIOPIC SYLLABLE QHWEE
+ቝ ↔ $ቘ $ካዕብ ; # ETHIOPIC SYLLABLE QHWE
 ቕ ← $ቐ ; # ETHIOPIC SYLLABLE QHE
 #
 ቀ ↔ $ቀ $ግዕዝ ; # ETHIOPIC SYLLABLE QA
@@ -166,11 +168,11 @@ $wordBoundary = [^[:L:][:M:][:N:]] ;
 ቅ}$wordBoundary → $ቀ ; # ETHIOPIC SYLLABLE QE
 ቅ ↔ $ቀ $ሳድስ ; # ETHIOPIC SYLLABLE QE
 ቆ ↔ $ቀ $ሳብዕ ; # ETHIOPIC SYLLABLE QO
-ቈ ↔ $ቀ $ዘመደ_ግዕዝ ; # ETHIOPIC SYLLABLE QWA
-ቍ ↔ $ቀ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE QWE
-ቋ ↔ $ቀ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE QWAA
-ቌ ↔ $ቀ $ዘመደ_ኃምስ ; # ETHIOPIC SYLLABLE QWEE
-ቊ ↔ $ቀ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE QWI
+ቈ ↔ $ቈ $ግዕዝ ; # ETHIOPIC SYLLABLE QWA
+ቍ ↔ $ቈ $ሣልስ ; # ETHIOPIC SYLLABLE QWE
+ቋ ↔ $ቈ $ራዕብ ; # ETHIOPIC SYLLABLE QWAA
+ቌ ↔ $ቈ $ኃምስ ; # ETHIOPIC SYLLABLE QWEE
+ቊ ↔ $ቈ $ካዕብ ; # ETHIOPIC SYLLABLE QWI
 ቅ ← $ቀ ; # ETHIOPIC SYLLABLE QE
 #
 በ ↔ $በ $ግዕዝ ; # ETHIOPIC SYLLABLE BA
