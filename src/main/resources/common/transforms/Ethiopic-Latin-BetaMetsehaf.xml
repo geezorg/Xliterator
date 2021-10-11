@@ -98,6 +98,19 @@ $ፀ = ḍ ;
 $ፈ = f ;
 $ፐ = p ;
 
+
+# Use this $wordBoundary until bug 2034 is fixed in ICU:
+# http://bugs.icu-project.org/trac/ticket/2034
+$wordBoundary = [^[:L:][:M:][:N:]] ;
+#
+#
+########################################################################
+#
+# Gemination Handling Rules
+#
+########################################################################
+#
+
 $ጥበቅ = \u135f ;
 
 ([ሀ-ሇ]) $ጥበቅ → $ሀ | $1 ;
@@ -149,15 +162,11 @@ $ጥበቅ = \u135f ;
 ([ፈ-ፏፚᎈ-ᎋ]) $ጥበቅ → $ፈ | $1 ;
 ([ፐ-ፗᎌ-ᎏ]) $ጥበቅ → $ፐ | $1 ;
 
-
-# Us $ግዕዝ this $wordBoundary until bug 2034 is fixed in ICU:
-# http://bugs.icu-project.org/trac/ticket/2034
-$wordBoundary = [^[:L:][:M:][:N:]] ;
-
-
+#
 ########################################################################
 # Start of Syllabic Transformations
 ########################################################################
+#
 
 ሀ → $ሀ $ራዕብ ; # ETHIOPIC SYLLABLE HA
 ሁ ↔ $ሀ $ካዕብ ; # ETHIOPIC SYLLABLE HU

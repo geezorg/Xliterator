@@ -87,20 +87,27 @@ $ጸ = ts ;
 $ፀ = ts ;
 $ፈ = f  ;
 $ፐ = p  ;
+
+
 #
-# vowels are special:
+# Vowels are special:
 #
 # $አ =    a ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =   aa ; $ኤ = $ኃምስ ; $እ =    e ; $ኦ = $ሳብዕ ; $ⶊ = $ሳምን ; $ኧ = ä ;
 $አ = $ራዕብ  ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ =  $ራዕብ ; $ኤ = $ኃምስ ; $እ = e ; $ኦ = $ሳብዕ ; # $ⶊ = $ሳምን ; $ኧ = ea ;
 $ዐ = c $ግዕዝ ; $ዑ = c $ካዕብ ; $ዒ = c $ሣልስ ; $ዓ = c $ራዕብ ; $ዔ = c $ኃምስ ; $ዕ = c ; $ዖ = $ሳብዕ ; 
+
 #
 # Use this $wordBoundary until bug 2034 is fixed in ICU:
-# http://bugs.icu-project.org/cgi-bin/icu-bugs/transliterate?id=2034;expression=boundary;user=guest
+# http://bugs.icu-project.org/trac/ticket/2034
 #
-$wordBoundary =  [^[:L:][:M:][:N:]] ;
+$wordBoundary = [^[:L:][:M:][:N:]] ;
+#
 #
 ########################################################################
+# Start of Syllabic Transformations
+########################################################################
 #
+
 ሐ → $ሐ $ግዕዝ ; # ETHIOPIC SYLLABLE HHA
 ሗ → $ሐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE HWA
 ሑ → $ሐ $ካዕብ ; # ETHIOPIC SYLLABLE HHU

@@ -21,7 +21,7 @@
 #
 # MINIMAL FILTER: Ethiopic-Latin
 #
-:: [:Ethiopic:] ;
+:: [ⷈ-ⷎⷐ-ⷖ[:Ethiopic:]];
 #
 ########################################################################
 
@@ -104,8 +104,10 @@ $ጸ = S ;
 $ፀ = $alternate S ;
 $ፈ = f ;
 $ፐ = p ;
+
+
 #
-# vowels are special:
+# Vowels are special:
 #
 $glottal    = \' ;
 $pharyngeal = \`;
@@ -116,7 +118,7 @@ $ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; 
 # Use this $wordBoundary until bug 2034 is fixed in ICU:
 # http://bugs.icu-project.org/cgi-bin/icu-bugs/transliterate?id=2034;expression=boundary;user=guest
 #
-$wordBoundary =  [^[:L:][:M:][:N:]] ;
+$wordBoundary = [^[:L:][:M:][:N:]] ;
 #
 #
 ########################################################################
@@ -177,9 +179,13 @@ $ጥበቅ = \u135f ;
 ([ፐ-ፗᎌ-ᎏ]) $ጥበቅ → $ፐ | $1 ;
 
 $ጥበቅ → ; # remove any spurious gemination marks
+
 #
 ########################################################################
+# Start of Syllabic Transformations
+########################################################################
 #
+
 ሐ ↔ $ሐ $ግዕዝ ; # ETHIOPIC SYLLABLE HHA
 ሗ ↔ $ሐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE HWA
 ሑ ↔ $ሐ $ካዕብ ; # ETHIOPIC SYLLABLE HHU
@@ -205,6 +211,7 @@ $ጥበቅ → ; # remove any spurious gemination marks
 ሚ ↔ $መ $ሣልስ ; # ETHIOPIC SYLLABLE MI
 ⶁ ↔ $መ $ሳምን ; # ETHIOPIC SYLLABLE MOA
 ሞ ↔ $መ $ሳብዕ ; # ETHIOPIC SYLLABLE MO
+ፙ ↔ $መ  Ya  ; # ETHIOPIC SYLLABLE MYA
 #
 ᎀ ↔ $መ $ዘመደ_ግዕዝ ; # ETHIOPIC SYLLABLE SEBATBEIT MWA
 ᎃ ↔ $መ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE MWE
@@ -231,6 +238,7 @@ $ጥበቅ → ; # remove any spurious gemination marks
 ሪ ↔ $ረ $ሣልስ ; # ETHIOPIC SYLLABLE RI
 ⶂ ↔ $ረ $ሳምን ; # ETHIOPIC SYLLABLE R0A
 ሮ ↔ $ረ $ሳብዕ ; # ETHIOPIC SYLLABLE RO
+ፘ ↔ $ረ Ya   ; # ETHIOPIC SYLLABLE RYA
 ር ↔ $ረ $ሳድስ ; # ETHIOPIC SYLLABLE RE
 #
 ⶠ ↔ $ⶠ $ግዕዝ ; # ETHIOPIC SYLLABLE SSA
@@ -462,13 +470,13 @@ $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 ⶊ ↔ $glottal $ኦa ; # ETHIOPIC SYLLABLE GLOTTAL OA
 ኦ ↔ $glottal $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 #
-ⷐ ← $ⷐ $ግዕዝ ; # ETHIOPIC SYLLABLE XYA
-ⷑ ← $ⷐ $ካዕብ ; # ETHIOPIC SYLLABLE XYU
-ⷔ ← $ⷐ $ኃምስ ; # ETHIOPIC SYLLABLE XYEE
-ⷒ ← $ⷐ $ሣልስ ; # ETHIOPIC SYLLABLE XYI
-ⷓ ← $ⷐ $ራዕብ ; # ETHIOPIC SYLLABLE XYAA
-ⷖ ← $ⷐ $ሳብዕ ; # ETHIOPIC SYLLABLE XYO
-ⷕ ← $ⷐ $ሳድስ ; # ETHIOPIC SYLLABLE XYE
+ⷐ ↔ $ⷐ $ግዕዝ ; # ETHIOPIC SYLLABLE XYA
+ⷑ ↔ $ⷐ $ካዕብ ; # ETHIOPIC SYLLABLE XYU
+ⷔ ↔ $ⷐ $ኃምስ ; # ETHIOPIC SYLLABLE XYEE
+ⷒ ↔ $ⷐ $ሣልስ ; # ETHIOPIC SYLLABLE XYI
+ⷓ ↔ $ⷐ $ራዕብ ; # ETHIOPIC SYLLABLE XYAA
+ⷖ ↔ $ⷐ $ሳብዕ ; # ETHIOPIC SYLLABLE XYO
+ⷕ ↔ $ⷐ $ሳድስ ; # ETHIOPIC SYLLABLE XYE
 #
 ኸ ↔ $ኸ $ግዕዝ ; # ETHIOPIC SYLLABLE KXA
 ኼ ↔ $ኸ $ኃምስ ; # ETHIOPIC SYLLABLE KXEE
@@ -484,13 +492,13 @@ $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 ኹ ↔ $ኸ $ካዕብ ; # ETHIOPIC SYLLABLE KXU
 ኽ ↔ $ኸ $ሳድስ ; # ETHIOPIC SYLLABLE KXE
 #
-ⷈ ← $ⷈ $ግዕዝ ; # ETHIOPIC SYLLABLE KYA
-ⷉ ← $ⷈ $ካዕብ ; # ETHIOPIC SYLLABLE KYU
-ⷌ ← $ⷈ $ኃምስ ; # ETHIOPIC SYLLABLE KYEE
-ⷊ ← $ⷈ $ሣልስ ; # ETHIOPIC SYLLABLE KYI
-ⷋ ← $ⷈ $ራዕብ ; # ETHIOPIC SYLLABLE KYAA
-ⷎ ← $ⷈ $ሳብዕ ; # ETHIOPIC SYLLABLE KYO
-ⷍ ← $ⷈ $ሳድስ ; # ETHIOPIC SYLLABLE KYE
+ⷈ ↔ $ⷈ $ግዕዝ ; # ETHIOPIC SYLLABLE KYA
+ⷉ ↔ $ⷈ $ካዕብ ; # ETHIOPIC SYLLABLE KYU
+ⷌ ↔ $ⷈ $ኃምስ ; # ETHIOPIC SYLLABLE KYEE
+ⷊ ↔ $ⷈ $ሣልስ ; # ETHIOPIC SYLLABLE KYI
+ⷋ ↔ $ⷈ $ራዕብ ; # ETHIOPIC SYLLABLE KYAA
+ⷎ ↔ $ⷈ $ሳብዕ ; # ETHIOPIC SYLLABLE KYO
+ⷍ ↔ $ⷈ $ሳድስ ; # ETHIOPIC SYLLABLE KYE
 #
 ከ ↔ $ከ $ግዕዝ ; # ETHIOPIC SYLLABLE KA
 ኬ ↔ $ከ $ኃምስ ; # ETHIOPIC SYLLABLE KEE
@@ -646,6 +654,7 @@ $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 ፊ ↔ $ፈ $ሣልስ ; # ETHIOPIC SYLLABLE FI
 ፋ ↔ $ፈ $ራዕብ ; # ETHIOPIC SYLLABLE FAA
 ፎ ↔ $ፈ $ሳብዕ ; # ETHIOPIC SYLLABLE FO
+ፚ ↔ $ፈ Ya   ; # ETHIOPIC SYLLABLE FYA
 #
 ᎈ ↔ $ፈ $ዘመደ_ግዕዝ ; # ETHIOPIC SYLLABLE SEBATBEIT FWA
 ᎋ ↔ $ፈ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE FWE
@@ -709,8 +718,8 @@ $wordBoundary{ኦ ↔ $ኦ ; # ETHIOPIC SYLLABLE GLOTTAL O
 ፤ ↔ \;    ;
 ፥ ↔ \-\:  ;
 ፦ ↔ \:\-  ;
-# ፨ ↔ \:\|\: ;
-# ፠ ↔ \:\+  ;
+፨ ↔ \:\|\: ;
+፠ ↔ \:\+  ;
 ፧ ↔ $alternate \?  ;
 ፡ ↔ \:    ;
 « ↔ \<\<  ;

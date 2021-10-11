@@ -21,7 +21,7 @@
 #
 # MINIMAL FILTER: Amharic-Latin
 #
-:: [ሀ-፼ⶓ-ⶖ] ;
+:: [ሀ-፼] ;
 :: NFD (NFC) ;
 #
 ########################################################################
@@ -98,10 +98,10 @@ $ፈ = f ;
 $ፐ = p ;
 
 
-# Us $ግዕዝ this $wordBoundary until bug 2034 is fixed in ICU:
+# Use this $wordBoundary until bug 2034 is fixed in ICU:
 # http://bugs.icu-project.org/trac/ticket/2034
 $wordBoundary = [^[:L:][:M:][:N:]] ;
-
+#
 #
 ########################################################################
 #
@@ -163,11 +163,12 @@ $ጥበቅ = \u135f ;
 
 $ጥበቅ → ; # remove any spurious gemination marks
 
-
+#
 ########################################################################
 # Start of Syllabic Transformations
 ########################################################################
 #
+
 ሀ → $ሀ $ራዕብ ; # ETHIOPIC SYLLABLE HA
 ሁ ↔ $ሀ $ካዕብ ; # ETHIOPIC SYLLABLE HU
 ሂ ↔ $ሀ $ሣልስ ; # ETHIOPIC SYLLABLE HI

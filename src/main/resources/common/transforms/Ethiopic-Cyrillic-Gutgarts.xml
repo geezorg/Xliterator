@@ -108,8 +108,9 @@ $ጸ = ц̣ ;
 $ፀ = $alternate ц̣ ;
 $ፈ = ф  ;
 $ፐ = п  ;
+
 #
-# vowels are special:
+# Vowels are special:
 #
 $glottal    = ͵ ;
 $pharyngeal = ʹ;
@@ -117,12 +118,16 @@ $አ = $ግዕዝ ; $ኡ = $ካዕብ ; $ኢ = $ሣልስ ; $ኣ = $ራዕብ ; 
 $ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; $ዔ = $ኃምስ ; $ዕ = $ሳድስ ; $ዖ = $ሳብዕ ; 
 #
 # Use this $wordBoundary until bug 2034 is fixed in ICU:
-# http://bugs.icu-project.org/cgi-bin/icu-bugs/transliterate?id=2034;expression=boundary;user=guest
+# http://bugs.icu-project.org/trac/ticket/2034
 #
 $wordBoundary =  [^[:L:][:M:][:N:]] ;
 #
+#
+########################################################################
+# Start of Syllabic Transformations
 ########################################################################
 #
+
 ሐ ↔ $ሐ $ግዕዝ ; # ETHIOPIC SYLLABLE HHA
 ሑ ↔ $ሐ $ካዕብ ; # ETHIOPIC SYLLABLE HHU
 ሒ ↔ $ሐ $ሣልስ ; # ETHIOPIC SYLLABLE HHI
@@ -753,7 +758,7 @@ $alternate ← $alternate $alternate;
  ← $alternate ;
 
 ########################################################################
-# Inverse Fiter : Latin-Ethiopic
+# Inverse Fiter : Cyrillic-Ethiopic
 ########################################################################
 #
 :: ([-!\u0023',.:<>?`0-9Ѐ-ӿ]) ;

@@ -105,6 +105,7 @@ $ፐ = '.--.' ;
 # Start of Syllabic Transformations
 ########################################################################
 #
+
 ሐ → | ሀ ; # ETHIOPIC SYLLABLE HHA
 ሑ → | ሁ ; # ETHIOPIC SYLLABLE HHU
 ሓ → | ሃ ; # ETHIOPIC SYLLABLE HHAA

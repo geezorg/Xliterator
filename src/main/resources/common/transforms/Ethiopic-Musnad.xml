@@ -24,14 +24,10 @@
 #
 ########################################################################
 #
-#
-$alternate  = \`;
-#
-#
 # Use this $wordBoundary until bug 2034 is fixed in ICU:
-# http://bugs.icu-project.org/cgi-bin/icu-bugs/transliterate?id=2034;expression=boundary;user=guest
+# http://bugs.icu-project.org/trac/ticket/2034
 #
-$wordBoundary =  [^[:L:][:M:][:N:]] ;
+$wordBoundary = [^[:L:][:M:][:N:]] ;
 #
 ########################################################################
 #
@@ -180,7 +176,38 @@ $wordBoundary =  [^[:L:][:M:][:N:]] ;
 ፈ ← 𐩰;
 
 ########################################################################
-# Inverse Fiter : Latin-Ethiopic
+# Start of Numeric Transformations
+########################################################################
+
+፲፻ ↔ | 𐩿𐩱𐩿 ; # ETHIOPIC NUMBER HUNDRED 
+፩ ↔ | 𐩿𐩽𐩿 ; # ETHIOPIC DIGIT ONE
+፪ ↔ | 𐩿𐩽𐩽𐩿 ; # ETHIOPIC DIGIT TWO
+፫ ↔ | 𐩿𐩽𐩽𐩽𐩿 ; # ETHIOPIC DIGIT THREE
+፬ ↔ | 𐩿𐩽𐩽𐩽𐩽𐩿 ; # ETHIOPIC DIGIT FOUR
+፭ ↔ | 𐩿𐩭𐩿 ; # ETHIOPIC DIGIT FIVE
+፮ ↔ | 𐩿𐩽𐩭𐩿 ; # ETHIOPIC DIGIT SIX
+፯ ↔ | 𐩿𐩽𐩽𐩭𐩿 ; # ETHIOPIC DIGIT SEVEN
+፰ ↔ | 𐩿𐩽𐩽𐩽𐩭𐩿 ; # ETHIOPIC DIGIT EIGHT
+፱ ↔ | 𐩿𐩽𐩽𐩽𐩽𐩭𐩿 ; # ETHIOPIC DIGIT NINE
+፲ ↔ | 𐩿𐩲𐩿 ; # ETHIOPIC NUMBER TEN
+፳ ↔ | 𐩿𐩲𐩲𐩿 ; # ETHIOPIC NUMBER TWENTY
+፴ ↔ | 𐩿𐩲𐩲𐩲𐩿 ; # ETHIOPIC NUMBER THIRTY
+፵ ↔ | 𐩿𐩲𐩲𐩲𐩲𐩿 ; # ETHIOPIC NUMBER FORTY
+፶ ↔ | 𐩿𐩾𐩿 ; # ETHIOPIC NUMBER FIFTY
+፷ ↔ | 𐩿𐩲𐩾𐩿 ; # ETHIOPIC NUMBER SIXTY
+፸ ↔ | 𐩿𐩲𐩲𐩾𐩿 ; # ETHIOPIC NUMBER SEVENTY
+፹ ↔ | 𐩿𐩲𐩲𐩲𐩾𐩿 ; # ETHIOPIC NUMBER EIGHTY
+፺ ↔ | 𐩿𐩲𐩲𐩲𐩲𐩾𐩿 ; # ETHIOPIC NUMBER NINETY
+፻ ↔ | 𐩿𐩣𐩿 ; # ETHIOPIC NUMBER HUNDRED 
+፼ ↔ | 𐩿𐩲𐩱𐩿 ; # ETHIOPIC NUMBER TEN HUNDRED
+
+𐩿𐩿 → ; # This mark stripper isn't working, perhaps because the above
+       # sequences require a → in place of ↔ . If it did work, the 
+       # the reverse conversions would break. Review the use case
+       # with Musnad writing.
+
+########################################################################
+# Inverse Fiter : Musnad-Ethiopic
 ########################################################################
 #
 :: ([:Old_South_Arabian:]) ;
