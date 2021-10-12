@@ -107,13 +107,11 @@ public class ConvertTextTab extends XliteratorTab {
 	ConvertTextString stringConverterDown = null;
 	ConvertTextString stringConverterUp = null;
 	private void initializeStringConverters() {
-		
 		try {	
 	    	if( selectedTransliteration.equals( Xliterator.useSelectedEditor ) ) {
 	    		// do not save the converter because the text may change:
 	    		// The ConvertTextString constructor needs to be reworked here, see notes within its source file:
 	    		// stringConverter = new ConvertTextString( editor.getText(), direction, true );
-	    		
 	    		EditorTab editorTab = xlit.getSelectedEditorTab();
 	    		if( editorTab == null ) {
 	    			// error alert
@@ -131,12 +129,16 @@ public class ConvertTextTab extends XliteratorTab {
 	    	}
 	    	else {
 		    	String transliterationKeyForward = ((alias == null ) ? (selectedTransliteration + "-" + transliterationDirection) : alias) ;
-		    	
 		    	if(! textStringConverts.containsKey( transliterationKeyForward ) ) {
+		    		if( (dependencies != null) ) {
+		    			// TBD: update registerDependencies to handle reverses:
+		    			xlit.getConfig().registerDependencies( dependencies );
+		    			registeredDependencies.put( selectedTransliteration , "true" );
+		    		}	    		
 		    		textStringConverts.put( transliterationKeyForward, new ConvertTextString( selectedTransliteration, transliterationDirection ) );
 		    	}
 		    	stringConverterDown = textStringConverts.get( transliterationKeyForward );
-		    	
+
 	    		if( "both".equals( transliterationDirection ) ) {
 	    			String reverseAlias = (backwardAlias == null ) ? null : backwardAlias ;
 	    			if( reverseAlias == null ) {
@@ -150,16 +152,14 @@ public class ConvertTextTab extends XliteratorTab {
 	    	    	stringConverterUp = textStringConverts.get( transliterationKeyReverse );   
 	    	    	stringConverterUp.setCaseOption( caseOption );
 	    		}
-	    		
-	    		if( (dependencies != null) && ( "false".equals( registeredDependencies.get(selectedTransliteration) ) ) ) {
-	    			// TBD: update registerDependencies to handle reverses:
-	    			xlit.getConfig().registerDependencies( dependencies );
-	    			registeredDependencies.put( selectedTransliteration , "true" );
-	    		}
 	    	}
     	
 		}
 		catch(Exception ex) {
+	    	StackTraceElement[] ste = ex.getStackTrace();
+	    	for(int i=0; i<ste.length; i++ ) {
+	    		System.err.println( ste[i] );
+	    	}
 	    	errorAlert(ex, "Transliteration Definition Error. Correct to Proceed." );
 			return;
 		}

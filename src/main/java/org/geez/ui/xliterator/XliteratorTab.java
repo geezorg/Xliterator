@@ -12,6 +12,9 @@ import de.endrullis.draggabletabs.DraggableTab;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.text.Text;
+
+import static org.apache.commons.lang3.StringEscapeUtils.unescapeJava;
 
 public abstract class XliteratorTab extends DraggableTab {
 	
@@ -207,10 +210,13 @@ public abstract class XliteratorTab extends DraggableTab {
 	
     
 	protected void errorAlert( Exception ex, String header ) {
+		System.err.println(  unescapeJava( ex.getMessage() ) );
         Alert alert = new Alert(AlertType.ERROR);
         alert.setTitle( "An Exception has occured" );
         alert.setHeaderText( header );
-        alert.setContentText( ex.getMessage() );
+        Text  message = new Text ( unescapeJava( ex.getMessage() ) );
+        message.setStyle( "-fx-font-family: Nyala;" ); // put this in an external style sheet that users can edit
+        alert.getDialogPane().setContent( message );
         alert.showAndWait();
 	}
 	
