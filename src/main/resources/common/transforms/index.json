@@ -1059,6 +1059,18 @@
             "backwardAlias": "Latin-Ethiopic/JES-IES-1964"
           },
           {
+            "path": "Ethiopic-Latin-JES_IES_1964-AutoGeminated.xml",
+            "source": "Ethi",
+            "target": "JES_IES_1964_Latn_AutoGeminated",
+            "name": "IES/JES 1964 (Auto-Geminated)",
+            "direction": "forward",
+            "alias": "Ethiopic-Latin/IES_JES_1964-AutoGeminated",
+            "dependencies": [
+		"Ethi-Geminated_Ethi",
+		"Ethi-JES_IES_1964_Latn"
+            ]
+          },
+          {
             "path": "Ethiopic-Latin-Lambdin.xml",
             "source": "Ethi",
             "target": "Lambdin_Latn",

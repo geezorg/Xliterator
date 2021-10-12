@@ -3,7 +3,7 @@
 <supplementalData>
 	<version number="$Revision$"/>
 	<transforms>
-		<transform source="Ethi" target="Xalaget_Latn" variant="Xalaget" direction="both" draft="contributed" alias="Ethiopic-Latin/Xalaget" backwardAlias="Latin-Ethiopic/Xalaget">
+		<transform source="Ethi" target="Xalaget_Latn" variant="Xalaget" direction="forward" draft="contributed" alias="Ethiopic-Latin/Xalaget" backwardAlias="Latin-Ethiopic/Xalaget">
 			<tRule><![CDATA[
 ########################################################################
 # Blina Xaleget (ብሊና ሓለገት)
