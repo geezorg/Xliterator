@@ -150,7 +150,7 @@ $ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; 
 ᎀ ↔ $መ $ዘመደ_ግዕዝ ; # ETHIOPIC SYLLABLE SEBATBEIT MWA
 ᎃ ↔ $መ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE MWE
 ᎂ ↔ $መ $ዘመደ_ኃምስ ; # ETHIOPIC SYLLABLE MWEE
-ᎁ ↔ $መ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE XWI
+ᎁ ↔ $መ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE MWI
 ሟ ↔ $መ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE MWA
 ሙ ↔ $መ $ካዕብ ; # ETHIOPIC SYLLABLE MU
 ም ↔ $መ $ሳድስ ; # ETHIOPIC SYLLABLE ME
@@ -232,9 +232,9 @@ $ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; 
 ቆ ↔ $ቀ $ሳብዕ ; # ETHIOPIC SYLLABLE QO
 #
 ቈ ↔ $ቀ $ዘመደ_ግዕዝ ; # ETHIOPIC SYLLABLE QWA
-ቊ ↔ $ቀ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE QWI
+ቍ ↔ $ቀ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE QWE
 ቌ ↔ $ቀ $ዘመደ_ኃምስ ; # ETHIOPIC SYLLABLE QWEE
-ቍ ↔ $ቀ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE QWE
+ቊ ↔ $ቀ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE QWI
 ቋ ↔ $ቀ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE QWAA
 ቁ ↔ $ቀ $ካዕብ ; # ETHIOPIC SYLLABLE QU
 ቅ ↔ $ቀ $ሳድስ ; # ETHIOPIC SYLLABLE QE
@@ -247,9 +247,9 @@ $ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; 
 ቦ ↔ $በ $ሳብዕ ; # ETHIOPIC SYLLABLE BO
 #
 ᎄ ↔ $በ $ዘመደ_ግዕዝ ; # ETHIOPIC SYLLABLE SEBATBEIT BWA
-ᎇ ↔ $በ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE BWI
+ᎇ ↔ $በ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE BWE
 ᎆ ↔ $በ $ዘመደ_ኃምስ ; # ETHIOPIC SYLLABLE BWEE 
-ᎅ ↔ $በ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE BWE
+ᎅ ↔ $በ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE BWI
 ቧ ↔ $በ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE BWA
 ቡ ↔ $በ $ካዕብ ; # ETHIOPIC SYLLABLE BU
 ብ ↔ $በ $ሳድስ ; # ETHIOPIC SYLLABLE BE
@@ -583,9 +583,9 @@ $ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; 
 ፎ ↔ $ፈ $ሳብዕ ; # ETHIOPIC SYLLABLE FO
 #
 ᎈ ↔ $ፈ $ዘመደ_ግዕዝ ; # ETHIOPIC SYLLABLE SEBATBEIT FWA
-ᎋ ↔ $ፈ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE FWI
+ᎋ ↔ $ፈ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE FWE
 ᎊ ↔ $ፈ $ዘመደ_ኃምስ ; # ETHIOPIC SYLLABLE FWEE 
-ᎉ ↔ $ፈ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE FWE
+ᎉ ↔ $ፈ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE FWI
 ፏ ↔ $ፈ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE FWA
 ፉ ↔ $ፈ $ካዕብ ; # ETHIOPIC SYLLABLE FU
 ፍ ↔ $ፈ $ሳድስ ; # ETHIOPIC SYLLABLE FE
@@ -598,9 +598,9 @@ $ዐ = $ግዕዝ ; $ዑ = $ካዕብ ; $ዒ = $ሣልስ ; $ዓ = $ራዕብ ; 
 ፖ ↔ $ፐ $ሳብዕ ; # ETHIOPIC SYLLABLE PO
 #
 ᎌ ↔ $ፐ $ዘመደ_ግዕዝ ; # ETHIOPIC SYLLABLE SEBATBEIT PWA
-ᎏ ↔ $ፐ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE PWI
+ᎏ ↔ $ፐ $ዘመደ_ካዕብ ; # ETHIOPIC SYLLABLE PWE
 ᎎ ↔ $ፐ $ዘመደ_ኃምስ ; # ETHIOPIC SYLLABLE PWEE 
-ᎍ ↔ $ፐ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE PWE
+ᎍ ↔ $ፐ $ዘመደ_ሣልስ ; # ETHIOPIC SYLLABLE PWI
 ፗ ↔ $ፐ $ዘመደ_ራዕብ ; # ETHIOPIC SYLLABLE PWA
 ፑ ↔ $ፐ $ካዕብ ; # ETHIOPIC SYLLABLE PU
 ፕ ↔ $ፐ $ሳድስ ; # ETHIOPIC SYLLABLE PE

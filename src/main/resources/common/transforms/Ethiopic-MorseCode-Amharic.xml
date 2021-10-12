@@ -478,13 +478,13 @@ $ፐ = '.--.' ;
 # ⶢ ↔ $ⶠ ' ' $ሣልስ ; # ETHIOPIC SYLLABLE SSI
 # ⶦ ↔ $ⶠ ' ' $ሳብዕ ; # ETHIOPIC SYLLABLE SSO
 # ⶥ ↔ $ⶠ ' ' $ሳድስ ; # ETHIOPIC SYLLABLE SSE
-# ⷀ ↔ $ቀy ' ' $ግዕዝ ; # ETHIOPIC SYLLABLE SA
-# ⷁ ↔ $ቀy ' ' $ካዕብ ; # ETHIOPIC SYLLABLE SU
-# ⷃ ↔ $ቀy ' ' $ራዕብ ; # ETHIOPIC SYLLABLE SAA
-# ⷄ ↔ $ቀy ' ' $ኃምስ ; # ETHIOPIC SYLLABLE SEE
-# ⷂ ↔ $ቀy ' ' $ሣልስ ; # ETHIOPIC SYLLABLE SI
-# ⷆ ↔ $ቀy ' ' $ሳብዕ ; # ETHIOPIC SYLLABLE SO
-# ⷅ ↔ $ቀy ' ' $ሳድስ ; # ETHIOPIC SYLLABLE SE
+# ⷀ ↔ $ቀy ' ' $ግዕዝ ; # ETHIOPIC SYLLABLE QYA
+# ⷁ ↔ $ቀy ' ' $ካዕብ ; # ETHIOPIC SYLLABLE QYU
+# ⷃ ↔ $ቀy ' ' $ራዕብ ; # ETHIOPIC SYLLABLE QYAA
+# ⷄ ↔ $ቀy ' ' $ኃምስ ; # ETHIOPIC SYLLABLE QYEE
+# ⷂ ↔ $ቀy ' ' $ሣልስ ; # ETHIOPIC SYLLABLE QYI
+# ⷆ ↔ $ቀy ' ' $ሳብዕ ; # ETHIOPIC SYLLABLE QYO
+# ⷅ ↔ $ቀy ' ' $ሳድስ ; # ETHIOPIC SYLLABLE QYE
 #
 # ቐ ↔ $ቐ ' ' $ግዕዝ ; # ETHIOPIC SYLLABLE QHA
 # ቔ ↔ $ቐ ' ' $ኃምስ ; # ETHIOPIC SYLLABLE QHEE
